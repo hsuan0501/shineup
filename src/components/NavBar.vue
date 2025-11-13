@@ -7,16 +7,16 @@
         <div class="flex items-center space-x-6">
           <!-- Logo -->
           <div class="flex-shrink-0">
-            <RouterLink to="/" class="text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
+            <div @click="scrollToTop" class="text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent cursor-pointer">
               ✨ ShineUp
-            </RouterLink>
+            </div>
           </div>
 
           <!-- Nav Links -->
           <div class="flex items-center space-x-3">
-            <RouterLink to="/tasks" class="px-4 py-2 rounded-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border hover:bg-light-border dark:hover:bg-dark-border transition-colors text-sm font-semibold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
+            <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border hover:bg-light-border dark:hover:bg-dark-border transition-colors text-sm font-semibold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent cursor-pointer">
               任務清單
-            </RouterLink>
+            </a>
             <RouterLink to="/rewards" class="px-4 py-2 rounded-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border hover:bg-light-border dark:hover:bg-dark-border transition-colors text-sm font-semibold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
               禮品總覽
             </RouterLink>
@@ -109,14 +109,50 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { ref } from 'vue'
 
+const router = useRouter()
 const isLoggedIn = ref(true)
 const showLevelCard = ref(false)
 
 const logout = () => {
   isLoggedIn.value = false
   showLevelCard.value = false
+}
+
+const scrollToTop = () => {
+  // 先立即滾動
+  window.scrollTo({ top: 0 })
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+
+  // 如果不在首頁，再導航
+  const currentPath = router.currentRoute.value.path
+  if (currentPath !== '/') {
+    router.push('/')
+  }
+}
+
+const scrollToTasks = async (e) => {
+  e.preventDefault()
+
+  // 如果不在首頁，先導航到首頁
+  if (router.currentRoute.value.path !== '/') {
+    await router.push('/')
+    // 等待頁面渲染
+    setTimeout(() => {
+      const element = document.getElementById('tasks')
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 100)
+  } else {
+    // 已經在首頁，直接滾動
+    const element = document.getElementById('tasks')
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
 }
 </script>

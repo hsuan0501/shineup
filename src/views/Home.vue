@@ -1,29 +1,41 @@
 <template>
-  <div class="w-full">
+  <div class="w-full" id="home-top">
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex flex-col items-center justify-start px-4 sm:px-6 lg:px-8 w-full pt-24" id="top">
-      <!-- Animated Background Circles -->
-      <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-20 left-10 w-96 h-96 bg-purple-400/20 rounded-full blur-[120px] animate-float"></div>
-        <div class="absolute bottom-20 right-10 w-[500px] h-[500px] bg-blue-400/20 rounded-full blur-[120px] animate-float" style="animation-delay: 2s;"></div>
+    <section class="relative min-h-screen flex flex-col items-center justify-start px-4 sm:px-6 lg:px-8 w-full pt-24">
+      <!-- Animated Background with Blobs -->
+      <div class="blobs absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div ref="blob1" class="blob blob-1"></div>
+        <div ref="blob2" class="blob blob-2"></div>
+        <div ref="blob3" class="blob blob-3"></div>
+        <div ref="blob4" class="blob blob-4"></div>
+        <div ref="blob5" class="blob blob-5"></div>
+        <div ref="blob6" class="blob blob-6"></div>
+        <div ref="blob7" class="blob blob-7"></div>
+      </div>
+
+      <!-- Sparkle Stars -->
+      <div class="sparkle-container absolute inset-0 pointer-events-none z-0">
+        <div v-for="n in 20" :key="n" class="sparkle" :style="{
+          top: `${Math.random() * 100}%`,
+          left: `${Math.random() * 100}%`,
+          animationDelay: `${Math.random() * 3}s`,
+          animationDuration: `${2 + Math.random() * 2}s`
+        }"></div>
       </div>
 
       <!-- Hero Content -->
       <div class="relative z-10 text-center max-w-4xl mx-auto animate-fade-in w-full">
-        <h1 style="background: linear-gradient(135deg, #8b5cf6, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" class="text-4xl sm:text-5xl lg:text-6xl font-light mb-6">
+        <h1 class="text-5xl sm:text-10xl lg:text-7xl font-light mb-3 text-white drop-shadow-lg">
           Shine Level Up
         </h1>
-        <p class="text-base sm:text-lg text-light-text-secondary dark:text-dark-text-secondary mb-12">
+        <p class="text-lg sm:text-3xl font-light text-white mb-8 drop-shadow-md">
           Keep shining, keep earning.
         </p>
-        
+
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <RouterLink to="/tasks" class="px-8 py-4 rounded-full bg-gradient-to-r from-primary-purple to-primary-blue text-white font-semibold hover:shadow-glow-lg transition-all duration-300 transform hover:scale-105">
-            開始賺取積分
-          </RouterLink>
-          <RouterLink to="/rewards" class="px-8 py-4 rounded-full border-2 border-primary-purple text-primary-purple dark:text-primary-light hover:bg-primary-purple/10 font-semibold transition-all duration-300">
-            瀏覽禮品
+          <RouterLink to="/tasks" class="px-8 py-3 rounded-full bg-gradient-to-r from-primary-purple to-primary-blue text-white text-lg font-light transition-all duration-300 hover:scale-110">
+            開始探險
           </RouterLink>
         </div>
       </div>
@@ -32,7 +44,7 @@
       <div class="relative z-10 w-full overflow-hidden mt-8">
         <!-- First Row - Left to Right -->
         <div class="flex gap-4 animate-scroll-left mb-4">
-          <div v-for="item in [...rewards, ...rewards]" :key="item.id + '-1'" class="flex-shrink-0 w-72 p-4 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:shadow-glow transition-all duration-300">
+          <div v-for="item in [...rewards, ...rewards]" :key="item.id + '-1'" class="flex-shrink-0 w-72 p-4 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300">
             <div class="aspect-square rounded-lg bg-gradient-to-br from-primary-purple/20 to-primary-blue/20 mb-3 flex items-center justify-center text-5xl">
               {{ item.emoji }}
             </div>
@@ -52,7 +64,7 @@
 
         <!-- Second Row - Right to Left -->
         <div class="flex gap-4 animate-scroll-right">
-          <div v-for="item in [...rewards2, ...rewards2]" :key="item.id + '-2'" class="flex-shrink-0 w-72 p-4 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:shadow-glow transition-all duration-300">
+          <div v-for="item in [...rewards2, ...rewards2]" :key="item.id + '-2'" class="flex-shrink-0 w-72 p-4 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300">
             <div class="aspect-square rounded-lg bg-gradient-to-br from-primary-blue/20 to-primary-purple/20 mb-3 flex items-center justify-center text-5xl">
               {{ item.emoji }}
             </div>
@@ -72,59 +84,84 @@
       </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="w-full py-12 px-4 sm:px-6 lg:px-8">
+    <!-- Tasks Section -->
+    <section id="tasks" class="w-full py-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div class="p-6 rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border text-center hover:shadow-glow transition-all duration-300">
-            <p class="text-3xl font-bold text-primary-purple mb-2">4</p>
-            <p class="text-light-text-secondary dark:text-dark-text-secondary">會員等級</p>
-          </div>
-          <div class="p-6 rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border text-center hover:shadow-glow transition-all duration-300">
-            <p class="text-3xl font-bold text-primary-blue mb-2">50+</p>
-            <p class="text-light-text-secondary dark:text-dark-text-secondary">禮品兌換</p>
-          </div>
-          <div class="p-6 rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border text-center hover:shadow-glow transition-all duration-300">
-            <p class="text-3xl font-bold text-primary-purple mb-2">∞</p>
-            <p class="text-light-text-secondary dark:text-dark-text-secondary">賺取機會</p>
-          </div>
-          <div class="p-6 rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border text-center hover:shadow-glow transition-all duration-300">
-            <p class="text-3xl font-bold text-primary-blue mb-2">24/7</p>
-            <p class="text-light-text-secondary dark:text-dark-text-secondary">AI 客服</p>
+        <!-- Filter Tabs -->
+        <div class="flex gap-2 mb-8 overflow-x-auto pb-2 justify-center">
+          <button v-for="cat in categories" :key="cat"
+            @click="selectedCategory = cat"
+            :class="[
+              'px-6 py-2 rounded-full whitespace-nowrap font-semibold transition-all duration-300',
+              selectedCategory === cat
+                ? 'bg-primary-purple text-white shadow-glow'
+                : 'bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text hover:bg-primary-purple/20'
+            ]">
+            {{ cat }}
+          </button>
+        </div>
+
+        <!-- Tasks Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div v-for="task in filteredTasks" :key="task.id"
+            class="p-6 rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300 group cursor-pointer">
+
+            <div class="flex items-start justify-between mb-4">
+              <span class="text-4xl">{{ task.icon }}</span>
+              <span v-if="task.completed" class="px-3 py-1 rounded-full bg-green-500/20 text-green-600 text-xs font-semibold">
+                ✓ 已完成
+              </span>
+              <span v-else class="px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-600 text-xs font-semibold">
+                待完成
+              </span>
+            </div>
+
+            <h3 class="text-lg font-bold text-light-text dark:text-dark-text mb-2">{{ task.title }}</h3>
+            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-4">{{ task.description }}</p>
+
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-bold text-primary-purple">+{{ task.points }} 分</span>
+              <button :disabled="task.completed"
+                :class="[
+                  'px-4 py-2 rounded-full font-semibold transition-all duration-300',
+                  task.completed
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-primary-blue text-white hover:shadow-glow'
+                ]">
+                {{ task.completed ? '已完成' : '完成' }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Levels Section -->
-    <section class="w-full py-12 px-4 sm:px-6 lg:px-8">
+    <section class="w-full py-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
-        <h2 class="text-4xl font-bold text-center mb-16 text-light-text dark:text-dark-text">
-          會員等級系統
-        </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-green-300 dark:border-green-700 text-center hover:shadow-glow transition-all duration-300">
+          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-green-300 dark:border-green-700 text-center hover:scale-105 transition-all duration-300">
             <p class="text-4xl mb-2">🌿</p>
             <h3 class="text-xl font-bold text-light-text dark:text-dark-text mb-2">探索者</h3>
             <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm mb-4">0 - 299 分</p>
             <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">開啟你的閃耀旅程</p>
           </div>
 
-          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-blue-300 dark:border-blue-700 text-center hover:shadow-glow transition-all duration-300">
+          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-blue-300 dark:border-blue-700 text-center hover:scale-105 transition-all duration-300">
             <p class="text-4xl mb-2">💠</p>
             <h3 class="text-xl font-bold text-light-text dark:text-dark-text mb-2">創造者</h3>
             <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm mb-4">300 - 799 分</p>
             <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">累積成就，創造價值</p>
           </div>
 
-          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-yellow-300 dark:border-yellow-700 text-center hover:shadow-glow transition-all duration-300">
+          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-yellow-300 dark:border-yellow-700 text-center hover:scale-105 transition-all duration-300">
             <p class="text-4xl mb-2">💎</p>
             <h3 class="text-xl font-bold text-light-text dark:text-dark-text mb-2">先行者</h3>
             <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm mb-4">800 - 1499 分</p>
             <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">前瞻視野，領航方向</p>
           </div>
 
-          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-purple-300 dark:border-purple-700 text-center hover:shadow-glow transition-all duration-300">
+          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-purple-300 dark:border-purple-700 text-center hover:scale-105 transition-all duration-300">
             <p class="text-4xl mb-2">👑</p>
             <h3 class="text-xl font-bold text-light-text dark:text-dark-text mb-2">閃耀者</h3>
             <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm mb-4">1500+ 分</p>
@@ -138,7 +175,74 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { mockTasks } from '../mock'
+
+// Blob refs
+const blob1 = ref(null)
+const blob2 = ref(null)
+const blob3 = ref(null)
+const blob4 = ref(null)
+const blob5 = ref(null)
+const blob6 = ref(null)
+const blob7 = ref(null)
+
+// Blob animation
+const MIN_SPEED = 0.5
+const MAX_SPEED = 2
+
+function randomNumber(min, max) {
+  return Math.random() * (max - min) + min
+}
+
+class Blob {
+  constructor(el) {
+    this.el = el
+    const boundingRect = this.el.getBoundingClientRect()
+    this.size = boundingRect.width
+    this.initialX = randomNumber(0, window.innerWidth - this.size)
+    this.initialY = randomNumber(0, window.innerHeight - this.size)
+    this.el.style.top = `${this.initialY}px`
+    this.el.style.left = `${this.initialX}px`
+    this.vx = randomNumber(MIN_SPEED, MAX_SPEED) * (Math.random() > 0.5 ? 1 : -1)
+    this.vy = randomNumber(MIN_SPEED, MAX_SPEED) * (Math.random() > 0.5 ? 1 : -1)
+    this.x = this.initialX
+    this.y = this.initialY
+  }
+
+  update() {
+    this.x += this.vx
+    this.y += this.vy
+    if (this.x >= window.innerWidth - this.size) {
+      this.x = window.innerWidth - this.size
+      this.vx *= -1
+    }
+    if (this.y >= window.innerHeight - this.size) {
+      this.y = window.innerHeight - this.size
+      this.vy *= -1
+    }
+    if (this.x <= 0) {
+      this.x = 0
+      this.vx *= -1
+    }
+    if (this.y <= 0) {
+      this.y = 0
+      this.vy *= -1
+    }
+    this.el.style.transform = `translate(${this.x - this.initialX}px, ${this.y - this.initialY}px)`
+  }
+}
+
+onMounted(() => {
+  const blobEls = [blob1.value, blob2.value, blob3.value, blob4.value, blob5.value, blob6.value, blob7.value].filter(Boolean)
+  const blobs = blobEls.map(el => new Blob(el))
+
+  function update() {
+    requestAnimationFrame(update)
+    blobs.forEach(blob => blob.update())
+  }
+  requestAnimationFrame(update)
+})
 
 const rewards = ref([
   { id: 1, name: 'LAMY 鋼筆禮盒', emoji: '✒️', points: 3500, category: '🧳 商務奢雅', level: '先行者', tags: ['精緻禮品'] },
@@ -157,9 +261,99 @@ const rewards2 = ref([
   { id: 11, name: '春節限定禮盒', emoji: '🎁', points: 1500, category: '🎄 節慶限定', level: '全等級', tags: ['限時活動'] },
   { id: 12, name: '精品公事包', emoji: '💼', points: 4500, category: '🧳 商務奢雅', level: '閃耀者', tags: ['精緻禮品'] },
 ])
+
+// Tasks
+const selectedCategory = ref('全部')
+const categories = ['全部', 'daily', 'banking', 'esg', 'social']
+
+const filteredTasks = computed(() => {
+  if (selectedCategory.value === '全部') return mockTasks
+  return mockTasks.filter(t => t.category === selectedCategory.value)
+})
 </script>
 
 <style scoped>
+/* Liquid Blobs */
+.blobs {
+  filter: blur(140px);
+}
+
+.blob {
+  width: max(240px, 28vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.blob-1 {
+  background: #2ac9de;
+}
+
+.blob-2 {
+  background: #f087f4;
+}
+
+.blob-3 {
+  background: color-mix(in srgb, #2ac9de, #f087f4 20%);
+}
+
+.blob-4 {
+  background: color-mix(in srgb, #2ac9de, #f087f4 35%);
+}
+
+.blob-5 {
+  background: color-mix(in srgb, #2ac9de, #f087f4 50%);
+}
+
+.blob-6 {
+  background: color-mix(in srgb, #2ac9de, #f087f4 65%);
+}
+
+.blob-7 {
+  background: color-mix(in srgb, #2ac9de, #f087f4 80%);
+}
+
+/* Sparkle Stars Animation */
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+.sparkle-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  animation: sparkle 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 2px white);
+}
+
 @keyframes scroll-left {
   0% {
     transform: translateX(0);
@@ -178,6 +372,75 @@ const rewards2 = ref([
   }
 }
 
+@keyframes glow-slow {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  25% {
+    transform: translate(200px, -150px) scale(1.2);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-100px, -200px) scale(0.9);
+    opacity: 0.6;
+  }
+  75% {
+    transform: translate(-200px, 150px) scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes glow-medium {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+  33% {
+    transform: translate(-250px, 100px) scale(1.25);
+    opacity: 0.75;
+  }
+  66% {
+    transform: translate(150px, 200px) scale(0.85);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+}
+
+@keyframes glow-fast {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.35;
+  }
+  20% {
+    transform: translate(180px, 120px) scale(1.15);
+    opacity: 0.65;
+  }
+  40% {
+    transform: translate(100px, -180px) scale(1.3);
+    opacity: 0.75;
+  }
+  60% {
+    transform: translate(-150px, -100px) scale(0.9);
+    opacity: 0.5;
+  }
+  80% {
+    transform: translate(-180px, 140px) scale(1.1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.35;
+  }
+}
+
 .animate-scroll-left {
   animation: scroll-left 30s linear infinite;
 }
@@ -189,5 +452,17 @@ const rewards2 = ref([
 .animate-scroll-left:hover,
 .animate-scroll-right:hover {
   animation-play-state: paused;
+}
+
+.animate-glow-slow {
+  animation: glow-slow 20s ease-in-out infinite;
+}
+
+.animate-glow-medium {
+  animation: glow-medium 15s ease-in-out infinite;
+}
+
+.animate-glow-fast {
+  animation: glow-fast 12s ease-in-out infinite;
 }
 </style>

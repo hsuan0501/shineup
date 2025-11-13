@@ -53,7 +53,7 @@
       <!-- Bottom -->
       <div class="border-t border-gray-300 dark:border-gray-700 pt-8 pb-8 flex flex-col sm:flex-row justify-between items-center">
         <p class="text-gray-600 dark:text-gray-400 text-sm">
-          © 2024 ShineUp. All rights reserved.
+          © 2025 MayYang. All rights reserved.
         </p>
         <div class="flex gap-6 mt-4 sm:mt-0 text-sm text-gray-600 dark:text-gray-400">
           <a href="#" class="hover:text-primary-purple transition-colors">條款</a>
