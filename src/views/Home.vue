@@ -25,18 +25,18 @@
 
       <!-- Hero Content -->
       <div class="relative z-10 text-center max-w-4xl mx-auto animate-fade-in w-full">
-        <h1 class="text-5xl sm:text-10xl lg:text-7xl font-light mb-3 text-white drop-shadow-lg">
+        <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 bg-clip-text text-transparent dark:text-white">
           Shine Level Up
         </h1>
-        <p class="text-lg sm:text-3xl font-light text-white mb-8 drop-shadow-md">
+        <p class="hero-subtitle text-lg sm:text-3xl font-light bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 bg-clip-text text-transparent dark:text-white mb-8">
           Keep shining, keep earning.
         </p>
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <RouterLink to="/tasks" class="px-8 py-3 rounded-full bg-gradient-to-r from-primary-purple to-primary-blue text-white text-lg font-light transition-all duration-300 hover:scale-110">
+          <a href="#tasks" @click="scrollToTasks" class="px-8 py-3 rounded-full bg-gradient-to-r from-primary-purple to-primary-blue text-white text-lg font-normal transition-all duration-300 hover:scale-110 cursor-pointer">
             開始探險
-          </RouterLink>
+          </a>
         </div>
       </div>
 
@@ -174,7 +174,6 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router'
 import { ref, computed, onMounted } from 'vue'
 import { mockTasks } from '../mock'
 
@@ -270,6 +269,15 @@ const filteredTasks = computed(() => {
   if (selectedCategory.value === '全部') return mockTasks
   return mockTasks.filter(t => t.category === selectedCategory.value)
 })
+
+// Scroll to tasks section
+const scrollToTasks = (e) => {
+  e.preventDefault()
+  const element = document.getElementById('tasks')
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
 </script>
 
 <style scoped>
@@ -464,5 +472,29 @@ const filteredTasks = computed(() => {
 
 .animate-glow-fast {
   animation: glow-fast 12s ease-in-out infinite;
+}
+
+/* Hero Text Breathing Animation */
+@keyframes text-breathe {
+  0%, 100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-title,
+.hero-subtitle {
+  animation: text-breathe 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.6))
+          drop-shadow(0 0 50px rgba(255, 255, 255, 0.5))
+          drop-shadow(0 0 80px rgba(255, 255, 255, 0.4));
+}
+
+/* 深色模式下移除光暈 */
+.dark .hero-title,
+.dark .hero-subtitle {
+  filter: none;
 }
 </style>

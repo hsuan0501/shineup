@@ -1,46 +1,56 @@
 <template>
-  <nav class="fixed top-0 left-0 right-0 z-40 backdrop-blur-md bg-white/70 dark:bg-dark-card/70 border-b-0 transition-all duration-300">
+  <nav class="fixed top-0 left-0 right-0 z-40 backdrop-blur-md bg-white/70 dark:bg-white/30 border-b-0 transition-all duration-300">
     <div class="w-full px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-        
+      <div class="relative flex items-center justify-between h-20">
+
         <!-- Logo + Nav Links (左邊群組) -->
-        <div class="flex items-center space-x-6">
+        <div class="flex items-center space-x-6 z-10">
           <!-- Logo -->
           <div class="flex-shrink-0">
-            <div @click="scrollToTop" class="text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent cursor-pointer">
-              ✨ ShineUp
+            <div @click="scrollToTop" class="flex items-center gap-0.5 text-2xl font-bold cursor-pointer bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent">
+              <span>Shine</span>
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <defs>
+                  <linearGradient id="star-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#a855f7" />
+                    <stop offset="100%" stop-color="#22d3ee" />
+                  </linearGradient>
+                </defs>
+                <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="url(#star-gradient)"/>
+              </svg>
+              <span>Up</span>
             </div>
           </div>
 
           <!-- Nav Links -->
           <div class="flex items-center space-x-3">
-            <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border hover:bg-light-border dark:hover:bg-dark-border transition-colors text-sm font-semibold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent cursor-pointer">
+            <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent cursor-pointer backdrop-blur-sm">
               任務清單
             </a>
-            <RouterLink to="/rewards" class="px-4 py-2 rounded-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border hover:bg-light-border dark:hover:bg-dark-border transition-colors text-sm font-semibold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
+            <RouterLink to="/rewards" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent backdrop-blur-sm">
               禮品總覽
             </RouterLink>
           </div>
         </div>
 
-        <!-- Search Bar (中間) -->
-        <div class="flex-1 max-w-xl mx-8">
+        <!-- Search Bar (中間 - 絕對置中) -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 w-full max-w-lg px-4">
           <div class="relative">
-            <input type="text" placeholder="搜尋任務或禮品..." 
-              class="w-full px-6 py-2 rounded-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border text-light-text dark:text-dark-text placeholder-light-text-secondary dark:placeholder-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-primary-purple transition-all">
-            <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-light-text-secondary dark:text-dark-text-secondary pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <input type="text" placeholder="搜尋任務或禮品..."
+              class="w-full px-6 py-2 rounded-full bg-light-bg dark:bg-gray-800/60 border border-light-border dark:border-gray-700/50 text-light-text dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none hover:scale-105 transition-all duration-300 backdrop-blur-sm">
+            <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
         </div>
 
         <!-- Right Section (登入狀態) -->
-        <div class="flex items-center space-x-3 flex-shrink-0">
+        <div class="flex items-center space-x-3 flex-shrink-0 z-10">
           <!-- 登入狀態 -->
           <div v-if="isLoggedIn" class="flex items-center space-x-3">
             <!-- 等級卡片 (點擊顯示) -->
             <div class="relative hidden md:block">
-              <button @click="showLevelCard = !showLevelCard" class="px-4 py-2 rounded-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border hover:bg-light-border dark:hover:bg-dark-border transition-colors text-sm font-semibold text-primary-purple cursor-pointer">
+              <button @click="showLevelCard = !showLevelCard" class="px-4 py-2 rounded-full bg-light-bg dark:bg-gray-800/80 border border-light-border dark:border-gray-700/70 hover:bg-light-border dark:hover:bg-gray-700/90 hover:scale-110 transition-all duration-300 text-sm font-semibold text-primary-purple dark:text-white cursor-pointer backdrop-blur-sm">
                 🌿 探索者
               </button>
 
@@ -83,22 +93,22 @@
             </div>
             
             <!-- 個人資料 -->
-            <RouterLink to="/profile" class="px-4 py-2 rounded-full bg-primary-purple text-white hover:bg-purple-700 transition-colors text-sm font-semibold">
+            <RouterLink to="/profile" class="px-4 py-2 rounded-full bg-primary-purple text-white hover:bg-purple-700 hover:scale-110 transition-all duration-300 text-sm font-semibold">
               個人資料
             </RouterLink>
 
             <!-- 登出 -->
-            <button @click="logout" class="px-4 py-2 rounded-full border-2 border-primary-purple text-primary-purple hover:bg-primary-purple/10 transition-colors text-sm font-semibold">
+            <button @click="logout" class="px-4 py-2 rounded-full border-2 border-primary-purple dark:border-white text-primary-purple dark:text-white hover:bg-primary-purple/10 dark:hover:bg-white/10 hover:scale-110 transition-all duration-300 text-sm font-semibold">
               登出
             </button>
           </div>
 
           <!-- 未登入狀態 -->
           <div v-else class="flex items-center space-x-3">
-            <RouterLink to="/auth/login" class="px-4 py-2 rounded-full border-2 border-primary-purple text-primary-purple hover:bg-primary-purple/10 transition-colors text-sm font-semibold">
+            <RouterLink to="/auth/login" class="px-4 py-2 rounded-full border-2 border-primary-purple text-primary-purple hover:bg-primary-purple/10 hover:scale-110 transition-all duration-300 text-sm font-semibold">
               登入
             </RouterLink>
-            <RouterLink to="/auth/register" class="px-4 py-2 rounded-full bg-primary-purple text-white hover:bg-purple-700 transition-colors text-sm font-semibold">
+            <RouterLink to="/auth/register" class="px-4 py-2 rounded-full bg-primary-purple text-white hover:bg-purple-700 hover:scale-110 transition-all duration-300 text-sm font-semibold">
               註冊
             </RouterLink>
           </div>
