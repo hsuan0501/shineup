@@ -1,5 +1,24 @@
 <template>
   <div class="w-full" id="home-top">
+    <!-- Scroll to Top Button -->
+    <button
+      @click="scrollToTop"
+      class="fixed bottom-8 left-8 sm:left-12 lg:left-16 z-50 h-16 w-16 flex items-center justify-center rounded-full bg-light-bg dark:bg-gray-800/80 border border-light-border dark:border-gray-700/70 hover:bg-light-border dark:hover:bg-gray-700/90 hover:scale-110 transition-all duration-300 backdrop-blur-sm"
+      aria-label="回到頂部">
+      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
+
+    <!-- Customer Service Button -->
+    <button
+      class="fixed bottom-8 right-8 sm:right-12 lg:right-16 z-50 h-16 w-16 flex items-center justify-center rounded-full bg-light-bg dark:bg-gray-800/80 border border-light-border dark:border-gray-700/70 hover:bg-light-border dark:hover:bg-gray-700/90 hover:scale-110 transition-all duration-300 backdrop-blur-sm"
+      aria-label="客服">
+      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+      </svg>
+    </button>
+
     <!-- Hero Section -->
     <section class="relative min-h-screen flex flex-col items-center justify-start px-4 sm:px-6 lg:px-8 w-full pt-24">
       <!-- Animated Background with Blobs -->
@@ -25,16 +44,18 @@
 
       <!-- Hero Content -->
       <div class="relative z-10 text-center max-w-4xl mx-auto animate-fade-in w-full">
-        <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 bg-clip-text text-transparent dark:text-white">
-          Shine Level Up
-        </h1>
-        <p class="hero-subtitle text-lg sm:text-3xl font-light bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 bg-clip-text text-transparent dark:text-white mb-8">
-          Keep shining, keep earning.
-        </p>
+        <div class="text-white drop-shadow-[0_12px_48px_rgba(34,211,238,0.8)] dark:drop-shadow-none">
+          <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3">
+            Shine Level Up
+          </h1>
+          <p class="hero-subtitle text-lg sm:text-3xl font-light mb-8">
+            Keep shining, keep earning.
+          </p>
+        </div>
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <a href="#tasks" @click="scrollToTasks" class="px-8 py-3 rounded-full bg-gradient-to-r from-primary-purple to-primary-blue text-white text-lg font-normal transition-all duration-300 hover:scale-110 cursor-pointer">
+          <a href="#tasks" @click="scrollToTasks" class="px-8 py-3 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white text-lg font-normal transition-all duration-300 hover:scale-110 cursor-pointer">
             開始探險
           </a>
         </div>
@@ -108,12 +129,6 @@
 
             <div class="flex items-start justify-between mb-4">
               <span class="text-4xl">{{ task.icon }}</span>
-              <span v-if="task.completed" class="px-3 py-1 rounded-full bg-green-500/20 text-green-600 text-xs font-semibold">
-                ✓ 已完成
-              </span>
-              <span v-else class="px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-600 text-xs font-semibold">
-                待完成
-              </span>
             </div>
 
             <h3 class="text-lg font-bold text-light-text dark:text-dark-text mb-2">{{ task.title }}</h3>
@@ -135,47 +150,26 @@
         </div>
       </div>
     </section>
-
-    <!-- Levels Section -->
-    <section class="w-full py-16 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-green-300 dark:border-green-700 text-center hover:scale-105 transition-all duration-300">
-            <p class="text-4xl mb-2">🌿</p>
-            <h3 class="text-xl font-bold text-light-text dark:text-dark-text mb-2">探索者</h3>
-            <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm mb-4">0 - 299 分</p>
-            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">開啟你的閃耀旅程</p>
-          </div>
-
-          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-blue-300 dark:border-blue-700 text-center hover:scale-105 transition-all duration-300">
-            <p class="text-4xl mb-2">💠</p>
-            <h3 class="text-xl font-bold text-light-text dark:text-dark-text mb-2">創造者</h3>
-            <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm mb-4">300 - 799 分</p>
-            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">累積成就，創造價值</p>
-          </div>
-
-          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-yellow-300 dark:border-yellow-700 text-center hover:scale-105 transition-all duration-300">
-            <p class="text-4xl mb-2">💎</p>
-            <h3 class="text-xl font-bold text-light-text dark:text-dark-text mb-2">先行者</h3>
-            <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm mb-4">800 - 1499 分</p>
-            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">前瞻視野，領航方向</p>
-          </div>
-
-          <div class="p-8 rounded-2xl bg-light-card dark:bg-dark-card border-2 border-purple-300 dark:border-purple-700 text-center hover:scale-105 transition-all duration-300">
-            <p class="text-4xl mb-2">👑</p>
-            <h3 class="text-xl font-bold text-light-text dark:text-dark-text mb-2">閃耀者</h3>
-            <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm mb-4">1500+ 分</p>
-            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">榮耀發光，驕傲登場</p>
-          </div>
-        </div>
-      </div>
-    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { mockTasks } from '../mock'
+
+// Scroll to Top
+const showScrollTop = ref(false)
+
+const handleScroll = () => {
+  showScrollTop.value = window.scrollY > 300
+}
+
+const scrollToTop = () => {
+  // 立即滾動到頂部
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+}
 
 // Blob refs
 const blob1 = ref(null)
@@ -233,6 +227,9 @@ class Blob {
 }
 
 onMounted(() => {
+  // Add scroll event listener
+  window.addEventListener('scroll', handleScroll)
+
   const blobEls = [blob1.value, blob2.value, blob3.value, blob4.value, blob5.value, blob6.value, blob7.value].filter(Boolean)
   const blobs = blobEls.map(el => new Blob(el))
 
@@ -241,6 +238,11 @@ onMounted(() => {
     blobs.forEach(blob => blob.update())
   }
   requestAnimationFrame(update)
+})
+
+onUnmounted(() => {
+  // Remove scroll event listener
+  window.removeEventListener('scroll', handleScroll)
 })
 
 const rewards = ref([
@@ -321,6 +323,31 @@ const scrollToTasks = (e) => {
 
 .blob-7 {
   background: color-mix(in srgb, #2ac9de, #f087f4 80%);
+}
+
+/* Hero Title Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.animate-scale-in {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.2) 70%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer 2s linear infinite;
 }
 
 /* Sparkle Stars Animation */

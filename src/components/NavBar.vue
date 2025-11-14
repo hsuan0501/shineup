@@ -7,7 +7,7 @@
         <div class="flex items-center space-x-6 z-10">
           <!-- Logo -->
           <div class="flex-shrink-0">
-            <div @click="scrollToTop" class="flex items-center gap-0.5 text-2xl font-bold cursor-pointer bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent">
+            <div @click="scrollToTop" class="flex items-center gap-0.5 text-2xl font-bold cursor-pointer bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent hover:scale-110 transition-all duration-300">
               <span>Shine</span>
               <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <defs>
@@ -24,10 +24,10 @@
 
           <!-- Nav Links -->
           <div class="flex items-center space-x-3">
-            <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent cursor-pointer backdrop-blur-sm">
+            <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none cursor-pointer backdrop-blur-sm">
               任務清單
             </a>
-            <RouterLink to="/rewards" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent backdrop-blur-sm">
+            <RouterLink to="/rewards" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none backdrop-blur-sm">
               禮品總覽
             </RouterLink>
           </div>
@@ -48,9 +48,42 @@
         <div class="flex items-center space-x-3 flex-shrink-0 z-10">
           <!-- 登入狀態 -->
           <div v-if="isLoggedIn" class="flex items-center space-x-3">
+            <!-- 日夜模式切換 -->
+            <button @click="toggleDarkMode" class="relative w-16 h-8 rounded-full bg-light-bg dark:bg-gray-800/80 border-2 border-light-border dark:border-gray-700/70 hover:scale-110 transition-all duration-300 backdrop-blur-sm" aria-label="切換日夜模式">
+
+              <!-- 滑動按鈕 -->
+              <div :class="[
+                'absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 transition-all duration-300 flex items-center justify-center shadow-lg',
+                isDarkMode ? 'left-[calc(100%-1.75rem)]' : 'left-0.5'
+              ]">
+                <!-- Sun Icon (亮色模式) -->
+                <svg v-if="!isDarkMode" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
+                </svg>
+                <!-- Moon Icon (暗色模式) -->
+                <svg v-else class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+                </svg>
+              </div>
+
+              <!-- 固定的太陽圖示 (左邊) -->
+              <div class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg class="w-3.5 h-3.5 text-gray-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+                </svg>
+              </div>
+
+              <!-- 固定的月亮圖示 (右邊) -->
+              <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg class="w-3.5 h-3.5 text-purple-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+                </svg>
+              </div>
+            </button>
+
             <!-- 等級卡片 (點擊顯示) -->
             <div class="relative hidden md:block">
-              <button @click="showLevelCard = !showLevelCard" class="px-4 py-2 rounded-full bg-light-bg dark:bg-gray-800/80 border border-light-border dark:border-gray-700/70 hover:bg-light-border dark:hover:bg-gray-700/90 hover:scale-110 transition-all duration-300 text-sm font-semibold text-primary-purple dark:text-white cursor-pointer backdrop-blur-sm">
+              <button @click="showLevelCard = !showLevelCard" class="px-4 py-2 rounded-full bg-light-bg dark:bg-gray-800/80 border border-light-border dark:border-gray-700/70 hover:bg-light-border dark:hover:bg-gray-700/90 hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none cursor-pointer backdrop-blur-sm">
                 🌿 探索者
               </button>
 
@@ -92,24 +125,27 @@
               </div>
             </div>
             
-            <!-- 個人資料 -->
-            <RouterLink to="/profile" class="px-4 py-2 rounded-full bg-primary-purple text-white hover:bg-purple-700 hover:scale-110 transition-all duration-300 text-sm font-semibold">
-              個人資料
+            <!-- 會員中心 -->
+            <RouterLink to="/profile" class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-90 hover:scale-110 transition-all duration-300 text-sm font-semibold">
+              會員中心
             </RouterLink>
 
             <!-- 登出 -->
-            <button @click="logout" class="px-4 py-2 rounded-full border-2 border-primary-purple dark:border-white text-primary-purple dark:text-white hover:bg-primary-purple/10 dark:hover:bg-white/10 hover:scale-110 transition-all duration-300 text-sm font-semibold">
-              登出
+            <button @click="logout" class="relative px-4 py-2 rounded-full hover:scale-110 transition-all duration-300 text-sm font-semibold group">
+              <div class="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 p-[2px]">
+                <div class="h-full w-full rounded-full bg-white dark:bg-gray-900 group-hover:bg-purple-500/10 dark:group-hover:bg-white/10 transition-colors"></div>
+              </div>
+              <span class="relative bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none">登出</span>
             </button>
           </div>
 
           <!-- 未登入狀態 -->
           <div v-else class="flex items-center space-x-3">
-            <RouterLink to="/auth/login" class="px-4 py-2 rounded-full border-2 border-primary-purple text-primary-purple hover:bg-primary-purple/10 hover:scale-110 transition-all duration-300 text-sm font-semibold">
+            <RouterLink to="/auth/login" class="px-4 py-2 rounded-full border-2 border-purple-500 dark:border-white hover:bg-purple-500/10 dark:hover:bg-white/10 hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none">
               登入
             </RouterLink>
-            <RouterLink to="/auth/register" class="px-4 py-2 rounded-full bg-primary-purple text-white hover:bg-purple-700 hover:scale-110 transition-all duration-300 text-sm font-semibold">
-              註冊
+            <RouterLink to="/auth/register" class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-90 hover:scale-110 transition-all duration-300 text-sm font-semibold">
+              開始探險
             </RouterLink>
           </div>
         </div>
@@ -120,11 +156,29 @@
 
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const router = useRouter()
 const isLoggedIn = ref(true)
 const showLevelCard = ref(false)
+const isDarkMode = ref(false)
+
+// 初始化暗色模式狀態
+onMounted(() => {
+  isDarkMode.value = document.documentElement.classList.contains('dark')
+})
+
+// 切換日夜模式
+const toggleDarkMode = () => {
+  isDarkMode.value = !isDarkMode.value
+  if (isDarkMode.value) {
+    document.documentElement.classList.add('dark')
+    localStorage.setItem('theme', 'dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+    localStorage.setItem('theme', 'light')
+  }
+}
 
 const logout = () => {
   isLoggedIn.value = false
