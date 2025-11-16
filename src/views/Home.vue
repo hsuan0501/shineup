@@ -63,42 +63,28 @@
 
       <!-- Scrolling Rewards Section -->
       <div class="relative z-10 w-full overflow-hidden mt-8">
-        <!-- First Row - Left to Right -->
+        <!-- First Row - Left to Right (Gifts 1-12) -->
         <div class="flex gap-4 animate-scroll-left mb-4">
-          <div v-for="item in [...rewards, ...rewards]" :key="item.id + '-1'" class="flex-shrink-0 w-72 p-4 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300">
-            <div class="aspect-square rounded-lg bg-gradient-to-br from-primary-purple/20 to-primary-blue/20 mb-3 flex items-center justify-center text-5xl">
-              {{ item.emoji }}
+          <div v-for="gift in [...firstRowGifts, ...firstRowGifts]" :key="gift.id + '-row1'" class="flex-shrink-0 w-60 p-2 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300">
+            <div class="aspect-square rounded-lg overflow-hidden mb-2">
+              <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
             </div>
-            <div class="flex gap-2 mb-2 flex-wrap">
-              <span class="px-2 py-1 rounded-full bg-primary-purple/10 text-primary-purple text-xs font-semibold">{{ item.level }}</span>
-              <span class="px-2 py-1 rounded-full bg-primary-blue/10 text-primary-blue text-xs">{{ item.category }}</span>
-            </div>
-            <h4 class="font-semibold text-light-text dark:text-dark-text mb-1">{{ item.name }}</h4>
-            <div class="flex items-center justify-between">
-              <p class="text-sm text-primary-purple font-bold">{{ item.points }} 積分</p>
-              <div class="flex gap-1">
-                <span v-for="tag in item.tags.slice(0, 2)" :key="tag" class="text-xs text-light-text-secondary dark:text-dark-text-secondary">{{ tag }}</span>
-              </div>
+            <div class="text-center">
+              <h4 class="text-xs font-semibold text-light-text dark:text-dark-text line-clamp-1">{{ gift.title }}</h4>
+              <p :class="getPointsColorClass(gift.level)" class="text-[10px] font-bold">{{ gift.points }} 積分</p>
             </div>
           </div>
         </div>
 
-        <!-- Second Row - Right to Left -->
+        <!-- Second Row - Right to Left (Gifts 13-24) -->
         <div class="flex gap-4 animate-scroll-right">
-          <div v-for="item in [...rewards2, ...rewards2]" :key="item.id + '-2'" class="flex-shrink-0 w-72 p-4 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300">
-            <div class="aspect-square rounded-lg bg-gradient-to-br from-primary-blue/20 to-primary-purple/20 mb-3 flex items-center justify-center text-5xl">
-              {{ item.emoji }}
+          <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'" class="flex-shrink-0 w-60 p-2 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300">
+            <div class="aspect-square rounded-lg overflow-hidden mb-2">
+              <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
             </div>
-            <div class="flex gap-2 mb-2 flex-wrap">
-              <span class="px-2 py-1 rounded-full bg-primary-purple/10 text-primary-purple text-xs font-semibold">{{ item.level }}</span>
-              <span class="px-2 py-1 rounded-full bg-primary-blue/10 text-primary-blue text-xs">{{ item.category }}</span>
-            </div>
-            <h4 class="font-semibold text-light-text dark:text-dark-text mb-1">{{ item.name }}</h4>
-            <div class="flex items-center justify-between">
-              <p class="text-sm text-primary-blue font-bold">{{ item.points }} 積分</p>
-              <div class="flex gap-1">
-                <span v-for="tag in item.tags.slice(0, 2)" :key="tag" class="text-xs text-light-text-secondary dark:text-dark-text-secondary">{{ tag }}</span>
-              </div>
+            <div class="text-center">
+              <h4 class="text-xs font-semibold text-light-text dark:text-dark-text line-clamp-1">{{ gift.title }}</h4>
+              <p :class="getPointsColorClass(gift.level)" class="text-[10px] font-bold">{{ gift.points }} 積分</p>
             </div>
           </div>
         </div>
@@ -152,80 +138,85 @@
     </section>
 
     <!-- Gifts Section -->
-    <section id="gifts" class="w-full py-12 px-4 sm:px-6 lg:px-8 bg-light-bg dark:bg-dark-bg">
+    <section class="w-full py-12 px-4 sm:px-6 lg:px-8 bg-light-bg dark:bg-dark-bg">
       <div class="max-w-7xl mx-auto">
         <!-- Gift Series Tabs -->
-        <div class="flex gap-3 mb-8 overflow-x-auto pb-2 justify-center">
+        <div id="gifts" class="flex gap-3 mb-8 overflow-x-auto pb-2 justify-center" style="scroll-margin-top: 80px;">
           <button v-for="series in giftSeries" :key="series.id"
             @click="selectSeries(series.id)"
+            type="button"
             :class="[
-              'px-6 py-2.5 rounded-full whitespace-nowrap font-semibold text-sm transition-all duration-300',
-              selectedSeries === series.id
-                ? series.activeClass.replace('shadow-glow', '')
-                : series.inactiveClass
+              'px-6 py-2.5 rounded-full whitespace-nowrap font-semibold text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95',
+              series.inactiveClass
             ]">
             {{ series.level }}
           </button>
         </div>
 
         <!-- Current Series Info -->
-        <div class="mb-6 p-3 rounded-xl" :class="currentSeriesInfo.bgClass">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <h3 class="text-base font-bold text-light-text dark:text-dark-text">
+        <div class="mb-4 p-3 rounded-xl" :class="currentSeriesInfo.bgClass">
+          <div class="flex justify-between items-center">
+            <!-- 左側：等級資訊 -->
+            <div class="flex items-center gap-4">
+              <h3 class="text-sm font-bold text-light-text dark:text-dark-text">
                 {{ currentSeriesInfo.level }}
               </h3>
-              <span class="text-xs px-2 py-1 rounded-full bg-white/50 dark:bg-gray-800/50">
+              <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">
                 {{ currentSeriesInfo.pointRange }}
               </span>
+              <div class="text-xs text-light-text dark:text-dark-text opacity-80">
+                {{ currentSeriesInfo.restriction }}
+              </div>
             </div>
-            <span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">
-              {{ currentSeriesInfo.restriction }}
-            </span>
+            <!-- 右側：庫存圖例 -->
+            <div class="flex items-center gap-3 flex-wrap">
+              <div class="flex items-center gap-1">
+                <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">充足</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">適量</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <div class="w-2 h-2 rounded-full bg-orange-500"></div>
+                <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">有限</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">稀少</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <div class="w-2 h-2 rounded-full bg-gray-500"></div>
+                <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">已售罄</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Stock Legend -->
-        <div class="mb-6 flex items-center justify-center gap-4 flex-wrap text-[10px] opacity-60">
-          <div class="flex items-center gap-1.5">
-            <div class="w-2 h-2 rounded-full bg-green-500"></div>
-            <span class="text-light-text-secondary dark:text-dark-text-secondary">充足 99+</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-            <span class="text-light-text-secondary dark:text-dark-text-secondary">適量</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <div class="w-2 h-2 rounded-full bg-orange-500"></div>
-            <span class="text-light-text-secondary dark:text-dark-text-secondary">有限</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <div class="w-2 h-2 rounded-full bg-red-500"></div>
-            <span class="text-light-text-secondary dark:text-dark-text-secondary">稀少</span>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <div class="w-2 h-2 rounded-full bg-gray-500"></div>
-            <span class="text-light-text-secondary dark:text-dark-text-secondary">已售罄</span>
-          </div>
-        </div>
+
 
         <!-- Gifts Grid -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
           <div v-for="gift in paginatedGifts" :key="gift.id"
             :class="[
-              'group rounded-lg overflow-hidden bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer',
-              !isGiftInSelectedSeries(gift) ? 'opacity-30 grayscale' : ''
+              'group rounded-lg overflow-hidden bg-light-card dark:bg-dark-card hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer',
+              !isGiftInSelectedSeries(gift) ? 'opacity-20 grayscale brightness-50 border border-gray-300 dark:border-gray-600' : `border ${getSeriesBorderClass()}`,
             ]">
 
             <!-- Gift Image -->
             <div class="relative aspect-square overflow-hidden">
               <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
 
-              <!-- Level Badge (Left Top) - Combined -->
-              <div class="absolute top-2 left-2">
-                <div :class="getLevelBadgeClass(gift.level)" class="px-3 py-1.5 rounded-lg backdrop-blur-md shadow-lg">
-                  <div class="text-[10px] font-bold leading-tight">{{ gift.level }}</div>
-                  <div class="text-[9px] font-medium leading-tight opacity-90">{{ getCategoryLabel(gift.level) }}</div>
+              <!-- Level Badges (Left Top) - Separated Design -->
+              <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
+                <!-- Main Level Badge -->
+                <div :class="getLevelBadgeClass(gift.level)" class="px-2.5 py-1.5 rounded-full backdrop-blur-md shadow-lg border border-white/20 dark:border-gray-700/50">
+                  <div class="text-[11px] font-bold leading-tight tracking-wide">{{ gift.level }}</div>
+                </div>
+                <!-- Category Label - Independent sizing -->
+                <div :class="getCategoryBadgeClass(gift.level)" class="px-3 py-2 rounded-full backdrop-blur-sm shadow-md">
+                  <div class="text-xs font-medium text-white leading-none">{{ getCategoryLabel(gift.level) }}</div>
                 </div>
               </div>
             </div>
@@ -246,17 +237,20 @@
                   <span class="text-lg font-bold text-primary-purple">{{ gift.points }}</span>
                   <span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">積分</span>
                 </div>
-                <button class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary-purple to-primary-blue text-white text-xs font-semibold hover:opacity-90 transition-all duration-300">
-                  兌換
+                <button 
+                  @click="handleExchange(gift)"
+                  :class="[
+                    'px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300',
+                    isGiftInSelectedSeries(gift) && gift.canExchange !== false
+                      ? 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90'
+                      : 'bg-gray-400 dark:bg-gray-700 text-gray-600 dark:text-gray-500 cursor-not-allowed'
+                  ]"
+                  :disabled="!isGiftInSelectedSeries(gift) || gift.canExchange === false">
+                  {{ isGiftInSelectedSeries(gift) && gift.canExchange !== false ? '兌換' : '等級不足' }}
                 </button>
               </div>
 
-              <!-- Stock Warning -->
-              <div v-if="gift.stockStatus === 'limited' || gift.stockStatus === 'rare'" class="mt-2 px-2 py-1.5 rounded-lg bg-orange-50 dark:bg-orange-900/20">
-                <p class="text-xs text-orange-600 dark:text-orange-400">
-                  {{ getStockText(gift) }}
-                </p>
-              </div>
+
             </div>
           </div>
         </div>
@@ -290,7 +284,10 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { mockTasks, mockRewards } from '../mock'
+import { mockTasks, mockRewards, mockUsers } from '../mock'
+
+// 用戶資料
+const user = ref(mockUsers[1]) // 使用第一個用戶作為範例
 
 // Scroll to Top
 const showScrollTop = ref(false)
@@ -304,6 +301,32 @@ const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
   document.documentElement.scrollTop = 0
   document.body.scrollTop = 0
+}
+
+// 處理禮品兌換
+const handleExchange = (gift) => {
+  if (gift.canExchange === false) {
+    return
+  }
+  
+  // 檢查用戶積分是否足夠
+  if (user.value.points < gift.points) {
+    alert('積分不足，無法兌換此禮品')
+    return
+  }
+  
+  // 檢查庫存狀態
+  if (gift.stockStatus === 'out') {
+    alert('此禮品已售罄')
+    return
+  }
+  
+  // 確認兌換
+  if (confirm(`確定要花費 ${gift.points} 積分兌換「${gift.title}」嗎？`)) {
+    // 扣除積分
+    user.value.points -= gift.points
+    alert(`成功兌換「${gift.title}」！剩餘積分：${user.value.points}`)
+  }
 }
 
 // Blob refs
@@ -380,23 +403,14 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-const rewards = ref([
-  { id: 1, name: 'LAMY 鋼筆禮盒', emoji: '✒️', points: 3500, category: '🧳 商務奢雅', level: '先行者', tags: ['精緻禮品'] },
-  { id: 2, name: 'Jo Malone 香氛蠟燭', emoji: '🕯️', points: 2800, category: '🕯 精品生活', level: '創造者', tags: ['品牌質感'] },
-  { id: 3, name: '環保再生後背包', emoji: '🎒', points: 1200, category: '🌿 永續綠生活', level: '探索者', tags: ['ESG', '永續'] },
-  { id: 4, name: '公益咖啡禮盒', emoji: '☕', points: 500, category: '☕ 社企手作', level: '全等級', tags: ['CSR', '社企合作'] },
-  { id: 5, name: 'Moleskine 筆記本', emoji: '📔', points: 1500, category: '🧳 商務奢雅', level: '創造者', tags: ['精緻禮品'] },
-  { id: 6, name: 'KINTO 馬克杯組', emoji: '☕', points: 800, category: '🕯 精品生活', level: '探索者', tags: ['品牌質感'] },
-])
+// 滾動展示的禮品 - 使用 mockRewards 中的前12個和後12個
+const firstRowGifts = computed(() => {
+  return mockRewards.slice(0, 12) // 禮品 1-12
+})
 
-const rewards2 = ref([
-  { id: 7, name: 'Nespresso 膠囊組', emoji: '☕', points: 1800, category: '🕯 精品生活', level: '創造者', tags: ['品牌質感'] },
-  { id: 8, name: '竹製餐具禮盒', emoji: '🥢', points: 600, category: '🌿 永續綠生活', level: '探索者', tags: ['環保', '永續'] },
-  { id: 9, name: '社企手作布包', emoji: '👜', points: 450, category: '☕ 社企手作', level: '全等級', tags: ['CSR', '公益'] },
-  { id: 10, name: '太陽能行動電源', emoji: '🔋', points: 2200, category: '🌿 永續綠生活', level: '創造者', tags: ['ESG', '綠能'] },
-  { id: 11, name: '春節限定禮盒', emoji: '🎁', points: 1500, category: '🎄 節慶限定', level: '全等級', tags: ['限時活動'] },
-  { id: 12, name: '精品公事包', emoji: '💼', points: 4500, category: '🧳 商務奢雅', level: '閃耀者', tags: ['精緻禮品'] },
-])
+const secondRowGifts = computed(() => {
+  return mockRewards.slice(12, 24) // 禮品 13-24
+})
 
 // Tasks
 const selectedCategory = ref('全部')
@@ -425,8 +439,8 @@ const giftSeries = [
   {
     id: 'all',
     level: 'ALL LEVELS',
-    activeClass: 'bg-gradient-to-r from-cyan-400 to-blue-400 text-white shadow-glow',
-    inactiveClass: 'bg-gradient-to-r from-cyan-100 to-blue-100 dark:from-cyan-900/40 dark:to-blue-900/40 text-cyan-700 dark:text-cyan-300',
+    activeClass: 'bg-gradient-to-br from-cyan-600 to-cyan-400 text-white shadow-glow',
+    inactiveClass: 'bg-gradient-to-br from-cyan-200 to-cyan-50 dark:from-cyan-900/40 dark:to-cyan-700/40 text-cyan-700 dark:text-cyan-300',
     bgClass: 'bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/30 dark:to-blue-950/30 border border-cyan-200 dark:border-cyan-800',
     pointRange: '0-5000+分',
     restriction: '包含所有等級禮物'
@@ -434,26 +448,26 @@ const giftSeries = [
   {
     id: 'sustainable',
     level: 'EXPLORER',
-    activeClass: 'bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-glow',
-    inactiveClass: 'bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/40 dark:to-teal-900/40 text-emerald-700 dark:text-emerald-300',
+    activeClass: 'bg-gradient-to-br from-emerald-600 to-emerald-400 text-white shadow-glow',
+    inactiveClass: 'bg-gradient-to-br from-emerald-200 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-700/40 text-emerald-700 dark:text-emerald-300',
     bgClass: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800',
     pointRange: '0-299分',
-    restriction: 'Lv1 專屬，升級後無法兌換'
+    restriction: 'Lv1+ 可兌換'
   },
   {
     id: 'quality',
     level: 'CREATOR',
-    activeClass: 'bg-gradient-to-r from-sky-400 to-slate-400 text-white shadow-glow',
-    inactiveClass: 'bg-gradient-to-r from-sky-100 to-slate-100 dark:from-sky-900/40 dark:to-slate-900/40 text-sky-700 dark:text-sky-300',
-    bgClass: 'bg-gradient-to-br from-sky-50 to-slate-50 dark:from-sky-950/30 dark:to-slate-950/30 border border-sky-200 dark:border-sky-800',
+    activeClass: 'bg-gradient-to-br from-indigo-600 to-blue-500 text-white shadow-glow',
+    inactiveClass: 'bg-gradient-to-br from-indigo-200 to-blue-100 dark:from-indigo-900/40 dark:to-blue-800/40 text-indigo-700 dark:text-indigo-300',
+    bgClass: 'bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/30 border border-indigo-200 dark:border-indigo-800',
     pointRange: '300-799分',
     restriction: 'Lv2+ 可兌換'
   },
   {
     id: 'aesthetic',
     level: 'VISIONARY',
-    activeClass: 'bg-gradient-to-r from-amber-300 via-yellow-200 to-slate-300 text-gray-800 shadow-glow',
-    inactiveClass: 'bg-gradient-to-r from-amber-100 via-yellow-100 to-slate-100 dark:from-amber-900/40 dark:via-yellow-900/40 dark:to-slate-900/40 text-amber-700 dark:text-amber-300',
+    activeClass: 'bg-gradient-to-br from-amber-600 to-amber-400 text-white shadow-glow',
+    inactiveClass: 'bg-gradient-to-br from-amber-200 to-amber-50 dark:from-amber-900/40 dark:to-amber-700/40 text-amber-700 dark:text-amber-300',
     bgClass: 'bg-gradient-to-br from-amber-50 via-yellow-50 to-slate-100 dark:from-amber-950/30 dark:via-yellow-950/30 dark:to-slate-900/30 border border-amber-200 dark:border-amber-800',
     pointRange: '800-1499分',
     restriction: 'Lv3+ 可兌換'
@@ -461,8 +475,8 @@ const giftSeries = [
   {
     id: 'premium',
     level: 'LUMINARY',
-    activeClass: 'bg-gradient-to-r from-purple-500 via-blue-400 to-purple-400 text-white shadow-glow',
-    inactiveClass: 'bg-gradient-to-r from-purple-100 via-blue-100 to-purple-100 dark:from-purple-900/40 dark:via-blue-900/40 dark:to-purple-900/40 text-purple-700 dark:text-purple-300',
+    activeClass: 'bg-gradient-to-br from-purple-600 to-purple-400 text-white shadow-glow',
+    inactiveClass: 'bg-gradient-to-br from-purple-200 to-purple-50 dark:from-purple-900/40 dark:to-purple-700/40 text-purple-700 dark:text-purple-300',
     bgClass: 'bg-gradient-to-br from-purple-50 via-blue-50 to-purple-100 dark:from-purple-950/30 dark:via-blue-950/30 dark:to-purple-900/30 border border-purple-200 dark:border-purple-800',
     pointRange: '1500+分',
     restriction: 'Lv4 專屬頂級禮物'
@@ -474,16 +488,40 @@ const currentSeriesInfo = computed(() => {
 })
 
 const filteredGifts = computed(() => {
-  // 永遠顯示所有禮物，但根據選擇的系列重新排序
   if (selectedSeries.value === 'all') {
     return mockRewards
   }
-
-  // 將選中等級的禮物排在前面，其他禮物排在後面
-  const selectedGifts = mockRewards.filter(gift => gift.series === selectedSeries.value)
-  const otherGifts = mockRewards.filter(gift => gift.series !== selectedSeries.value)
-
-  return [...selectedGifts, ...otherGifts]
+  
+  // 等級階層定義
+  const levelHierarchy = {
+    'sustainable': 1, // EXPLORER
+    'quality': 2,     // CREATOR
+    'aesthetic': 3,   // VISIONARY 
+    'premium': 4      // LUMINARY
+  }
+  
+  const selectedLevel = levelHierarchy[selectedSeries.value] || 0
+  
+  // 顯示所有禮品，但標記可兌換性
+  return mockRewards.map(gift => {
+    const giftLevel = levelHierarchy[gift.level] || 0
+    const canExchange = giftLevel <= selectedLevel
+    const isSelectedLevel = gift.series === selectedSeries.value
+    return { ...gift, canExchange, isSelectedLevel }
+  }).sort((a, b) => {
+    // 選中等級的禮品排在最前面
+    if (a.isSelectedLevel && !b.isSelectedLevel) return -1
+    if (!a.isSelectedLevel && b.isSelectedLevel) return 1
+    
+    // 在同樣是否為選中等級的情況下，可兌換的排在前面
+    if (a.canExchange && !b.canExchange) return -1
+    if (!a.canExchange && b.canExchange) return 1
+    
+    // 最後按等級由高到低排序
+    const aLevel = levelHierarchy[a.level] || 0
+    const bLevel = levelHierarchy[b.level] || 0
+    return bLevel - aLevel
+  })
 })
 
 const totalPages = computed(() => {
@@ -496,29 +534,48 @@ const paginatedGifts = computed(() => {
   return filteredGifts.value.slice(start, end)
 })
 
-// 檢查禮物是否屬於當前選擇的系列
+// 檢查禮物是否可以兌換（不可兌換的會暗掉）
 const isGiftInSelectedSeries = (gift) => {
   if (selectedSeries.value === 'all') {
     return true
   }
-  return gift.series === selectedSeries.value
+  
+  // 如果禮品有 canExchange 屬性，使用它來決定是否暗掉
+  if (gift.hasOwnProperty('canExchange')) {
+    return gift.canExchange
+  }
+  
+  // 如果沒有 canExchange 屬性，手動計算
+  const levelHierarchy = {
+    'sustainable': 1, // EXPLORER
+    'quality': 2,     // CREATOR
+    'aesthetic': 3,   // VISIONARY 
+    'premium': 4      // LUMINARY
+  }
+  
+  const selectedLevel = levelHierarchy[selectedSeries.value] || 0
+  const giftLevel = levelHierarchy[gift.level] || 0
+  
+  return giftLevel <= selectedLevel
 }
 
 // Reset to page 1 when changing series
 const selectSeries = (seriesId) => {
+  console.log('Selecting series:', seriesId, 'from', selectedSeries.value)
   selectedSeries.value = seriesId
   currentPage.value = 1
+  console.log('Series changed to:', selectedSeries.value)
 }
 
 // Helper functions for gift display
 const getLevelBadgeClass = (level) => {
   const classes = {
-    'EXPLORER': 'bg-gradient-to-r from-emerald-500 to-teal-400 text-white',
-    'CREATOR': 'bg-gradient-to-r from-sky-400 to-slate-400 text-white',
-    'VISIONARY': 'bg-gradient-to-r from-amber-300 via-yellow-200 to-slate-300 text-gray-800',
-    'LUMINARY': 'bg-gradient-to-r from-purple-500 via-blue-400 to-purple-400 text-white'
+    'EXPLORER': 'bg-gradient-to-br from-emerald-200/90 to-emerald-100/90 dark:from-emerald-800/70 dark:to-emerald-700/70 text-emerald-700 dark:text-emerald-300',
+    'CREATOR': 'bg-gradient-to-br from-indigo-200/90 to-blue-100/90 dark:from-indigo-800/70 dark:to-blue-700/70 text-indigo-700 dark:text-indigo-300',
+    'VISIONARY': 'bg-gradient-to-br from-amber-200/90 to-amber-100/90 dark:from-amber-800/70 dark:to-amber-700/70 text-amber-700 dark:text-amber-300',
+    'LUMINARY': 'bg-gradient-to-br from-purple-200/90 to-purple-100/90 dark:from-purple-800/70 dark:to-purple-700/70 text-purple-700 dark:text-purple-300'
   }
-  return classes[level] || 'bg-gray-500/90 text-white'
+  return classes[level] || 'bg-gray-100/90 dark:bg-gray-800/70 text-gray-600 dark:text-gray-300'
 }
 
 const getStockDotClass = (stockStatus) => {
@@ -535,11 +592,43 @@ const getStockDotClass = (stockStatus) => {
 const getCategoryLabel = (level) => {
   const labels = {
     'EXPLORER': '永續探索',
-    'CREATOR': '質感創造',
+    'CREATOR': '質感創造', 
     'VISIONARY': '美學先鋒',
     'LUMINARY': '品味閃耀'
   }
   return labels[level] || ''
+}
+
+const getCategoryBadgeClass = (level) => {
+  const classes = {
+    'EXPLORER': 'bg-gradient-to-br from-emerald-600 to-emerald-400',
+    'CREATOR': 'bg-gradient-to-br from-indigo-600 to-blue-500',
+    'VISIONARY': 'bg-gradient-to-br from-amber-600 to-amber-400',
+    'LUMINARY': 'bg-gradient-to-br from-purple-600 to-purple-400'
+  }
+  return classes[level] || 'bg-gray-500'
+}
+
+const getPointsColorClass = (level) => {
+  const classes = {
+    'EXPLORER': 'text-emerald-600 dark:text-emerald-400',
+    'CREATOR': 'text-indigo-600 dark:text-indigo-400',
+    'VISIONARY': 'text-amber-600 dark:text-amber-400',
+    'LUMINARY': 'text-purple-600 dark:text-purple-400'
+  }
+  return classes[level] || 'text-gray-600 dark:text-gray-400'
+}
+
+const getSeriesBorderClass = () => {
+  const series = selectedSeries.value
+  const borderClasses = {
+    'all': 'border-cyan-200 dark:border-cyan-800',
+    'sustainable': 'border-emerald-200 dark:border-emerald-800',
+    'quality': 'border-indigo-200 dark:border-indigo-800',
+    'aesthetic': 'border-amber-200 dark:border-amber-800',
+    'premium': 'border-purple-200 dark:border-purple-800'
+  }
+  return borderClasses[series] || 'border-light-border dark:border-dark-border'
 }
 
 const getStockText = (gift) => {
