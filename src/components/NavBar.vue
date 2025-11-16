@@ -27,9 +27,9 @@
             <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none cursor-pointer backdrop-blur-sm">
               任務清單
             </a>
-            <RouterLink to="/rewards" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none backdrop-blur-sm">
+            <a href="/#gifts" @click="scrollToGifts" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none cursor-pointer backdrop-blur-sm">
               禮品總覽
-            </RouterLink>
+            </a>
           </div>
         </div>
 
@@ -214,6 +214,28 @@ const scrollToTasks = async (e) => {
   } else {
     // 已經在首頁，直接滾動
     const element = document.getElementById('tasks')
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+}
+
+const scrollToGifts = async (e) => {
+  e.preventDefault()
+
+  // 如果不在首頁，先導航到首頁
+  if (router.currentRoute.value.path !== '/') {
+    await router.push('/')
+    // 等待頁面渲染
+    setTimeout(() => {
+      const element = document.getElementById('gifts')
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 100)
+  } else {
+    // 已經在首頁，直接滾動
+    const element = document.getElementById('gifts')
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
