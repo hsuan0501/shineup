@@ -1,5 +1,5 @@
 <template>
-  <footer class="relative z-10 mt-24 py-12 mb-24 border-t border-light-border dark:border-dark-border">
+  <footer class="relative z-10 py-12 mb-20">
     <div class="max-w-4xl mx-auto text-center">
       <!-- Social Media Icons -->
       <div class="flex justify-center gap-6 mb-6">

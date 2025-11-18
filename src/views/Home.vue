@@ -62,10 +62,10 @@
       </div>
 
       <!-- Scrolling Rewards Section -->
-      <div class="relative z-10 w-full overflow-hidden mt-8">
+      <div class="relative z-10 w-full overflow-visible mt-8">
         <!-- First Row - Left to Right (Gifts 1-12) -->
         <div class="flex gap-4 animate-scroll-left mb-4">
-          <div v-for="gift in [...firstRowGifts, ...firstRowGifts]" :key="gift.id + '-row1'" class="flex-shrink-0 w-60 p-2 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300">
+          <div v-for="gift in [...firstRowGifts, ...firstRowGifts]" :key="gift.id + '-row1'" class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
             <div class="aspect-square rounded-lg overflow-hidden mb-2">
               <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
             </div>
@@ -78,7 +78,7 @@
 
         <!-- Second Row - Right to Left (Gifts 13-24) -->
         <div class="flex gap-4 animate-scroll-right">
-          <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'" class="flex-shrink-0 w-60 p-2 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300">
+          <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'" class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
             <div class="aspect-square rounded-lg overflow-hidden mb-2">
               <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
             </div>
@@ -92,64 +92,128 @@
     </section>
 
     <!-- Tasks Section -->
-    <section id="tasks" class="w-full py-16 px-4 sm:px-6 lg:px-8">
+    <section class="w-full py-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
-        <!-- Filter Tabs -->
-        <div class="flex gap-3 mb-8 overflow-x-auto pb-2 justify-center">
-          <button v-for="cat in categories" :key="cat"
-            @click="selectedCategory = cat"
+        <!-- Task Category Tabs -->
+        <div id="tasks" class="flex gap-4 mb-4 overflow-x-auto pb-2 justify-center" style="scroll-margin-top: 80px;">
+          <button v-for="cat in taskCategories" :key="cat.id"
+            @click="selectTaskCategory(cat.id)"
+            type="button"
             :class="[
-              'px-6 py-2 rounded-full whitespace-nowrap font-semibold text-sm transition-all duration-300',
-              selectedCategory === cat
-                ? 'bg-primary-purple text-white'
-                : 'bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text hover:bg-primary-purple/20'
+              'px-6 py-2.5 rounded-full whitespace-nowrap font-semibold text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95',
+              selectedTaskCategory === cat.id
+                ? cat.activeClass
+                : cat.inactiveClass
             ]">
-            {{ cat }}
+            {{ cat.label }}
           </button>
         </div>
 
-        <!-- Tasks Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="task in filteredTasks" :key="task.id"
-            class="p-6 rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300 group cursor-pointer">
+        <!-- Current Category Info -->
+        <div class="mb-4 p-3 rounded-xl" :class="currentTaskCategoryInfo.bgClass">
+          <div class="flex justify-between items-center">
+            <!-- 左側：分類資訊 -->
+            <div class="flex items-center gap-4">
+              <h3 class="text-sm font-bold text-light-text dark:text-dark-text">
+                {{ currentTaskCategoryInfo.label }}
+              </h3>
+              <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">
+                {{ currentTaskCategoryInfo.description }}
+              </span>
+            </div>
+            <!-- 右側：任務數量 -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">任務數量</span>
+              <span class="text-sm font-bold text-light-text dark:text-dark-text">{{ filteredTasks.length }} 個</span>
+            </div>
+          </div>
+        </div>
 
-            <div class="flex items-start justify-between mb-4">
-              <span class="text-4xl">{{ task.icon }}</span>
+        <!-- Tasks Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div v-for="task in paginatedTasks" :key="task.id"
+            class="p-4 rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300 group cursor-pointer">
+
+            <div class="flex items-start justify-between mb-3">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="getTaskIconBgClass(task.category)">
+                <svg class="w-5 h-5" :class="getTaskIconColorClass(task.category)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getTaskIconPath(task.category)" />
+                </svg>
+              </div>
+              <span :class="[
+                'px-2.5 py-0.5 rounded-full text-xs font-semibold',
+                getCategoryBadgeClassForTask(task.category)
+              ]">
+                {{ getCategoryLabelForTask(task.category) }}
+              </span>
             </div>
 
-            <h3 class="text-lg font-bold text-light-text dark:text-dark-text mb-2">{{ task.title }}</h3>
-            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-4">{{ task.description }}</p>
+            <h3 class="text-base font-bold text-light-text dark:text-dark-text mb-1.5">{{ task.title }}</h3>
+            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2.5">{{ task.description }}</p>
+            
+            <div class="flex items-center gap-2 mb-3 text-xs text-light-text-secondary dark:text-dark-text-secondary">
+              <span class="px-2 py-0.5 rounded-md bg-light-bg dark:bg-dark-bg">{{ task.frequency }}</span>
+              <span class="px-2 py-0.5 rounded-md bg-light-bg dark:bg-dark-bg">{{ task.level }}</span>
+            </div>
 
             <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-primary-purple">+{{ task.points }} 分</span>
+              <span class="text-base font-bold text-primary-purple">+{{ task.points }} 分</span>
               <button :disabled="task.completed"
                 :class="[
-                  'px-4 py-2 rounded-full font-semibold transition-all duration-300',
+                  'px-3 py-1.5 rounded-full text-sm font-semibold transition-all duration-300',
                   task.completed
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-primary-blue text-white hover:shadow-glow'
+                    : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90'
                 ]">
                 {{ task.completed ? '已完成' : '完成' }}
               </button>
             </div>
           </div>
         </div>
+
+        <!-- Task Pagination (固定顯示5頁) -->
+        <div class="flex items-center justify-center gap-3">
+          <button
+            v-for="page in 5"
+            :key="page"
+            @click="isTaskPageAvailable(page) && (currentTaskPage = page)"
+            :disabled="!isTaskPageAvailable(page)"
+            :class="[
+              'w-10 h-10 rounded-full font-semibold text-sm transition-all duration-300',
+              (selectedTaskCategory === 'all' && page === 1) || (selectedTaskCategory !== 'all' && isTaskPageAvailable(page))
+                ? 'bg-gradient-to-r from-primary-purple to-primary-blue text-white'
+                : isTaskPageAvailable(page)
+                ? 'bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text hover:scale-105 border border-light-border dark:border-dark-border cursor-pointer'
+                : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 border border-gray-300 dark:border-gray-700 cursor-not-allowed opacity-50'
+            ]">
+            {{ page }}
+          </button>
+        </div>
+
+        <!-- Empty State -->
+        <div v-if="filteredTasks.length === 0" class="text-center py-12">
+          <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm">
+            此分類暫無任務
+          </p>
+        </div>
       </div>
     </section>
 
     <!-- Gifts Section -->
-    <section class="w-full py-12 px-4 sm:px-6 lg:px-8 bg-light-bg dark:bg-dark-bg">
+    <section class="w-full py-12 px-4 sm:px-6 lg:px-8 pb-16">
       <div class="max-w-7xl mx-auto">
         <!-- Gift Series Tabs -->
-        <div id="gifts" class="flex gap-3 mb-8 overflow-x-auto pb-2 justify-center" style="scroll-margin-top: 80px;">
+        <div id="gifts" class="flex gap-4 mb-4 overflow-x-auto pb-2 justify-center" style="scroll-margin-top: 80px;">
           <button v-for="series in giftSeries" :key="series.id"
             @click="selectSeries(series.id)"
             type="button"
             :class="[
               'px-6 py-2.5 rounded-full whitespace-nowrap font-semibold text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95',
-              series.inactiveClass
+              selectedSeries === series.id
+                ? series.activeClass
+                : series.inactiveClass
             ]">
-            {{ series.level }}
+            <span>{{ series.level ? series.level + ' ' + series.levelChinese : series.levelChinese }}</span>
           </button>
         </div>
 
@@ -255,17 +319,20 @@
           </div>
         </div>
 
-        <!-- Pagination -->
-        <div v-if="totalPages > 1" class="flex items-center justify-center gap-3">
+        <!-- Pagination (固定顯示4頁) -->
+        <div class="flex items-center justify-center gap-3">
           <button
-            v-for="page in totalPages"
+            v-for="page in 4"
             :key="page"
-            @click="currentPage = page"
+            @click="isPageAvailable(page) && (currentPage = page)"
+            :disabled="!isPageAvailable(page)"
             :class="[
               'w-10 h-10 rounded-full font-semibold text-sm transition-all duration-300',
-              currentPage === page
+              (selectedSeries === 'all' && page === 1) || (selectedSeries !== 'all' && isPageAvailable(page))
                 ? 'bg-gradient-to-r from-primary-purple to-primary-blue text-white'
-                : 'bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text hover:scale-105 border border-light-border dark:border-dark-border'
+                : isPageAvailable(page)
+                ? 'bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text hover:scale-105 border border-light-border dark:border-dark-border cursor-pointer'
+                : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 border border-gray-300 dark:border-gray-700 cursor-not-allowed opacity-50'
             ]">
             {{ page }}
           </button>
@@ -413,18 +480,168 @@ const secondRowGifts = computed(() => {
 })
 
 // Tasks
-const selectedCategory = ref('全部')
-const categories = ['全部', 'daily', 'banking', 'esg', 'social']
+const selectedTaskCategory = ref('all')
+const currentTaskPage = ref(1)
+const itemsPerTaskPage = 6
+
+const taskCategories = [
+  {
+    id: 'all',
+    label: '全部任務',
+    icon: '📋',
+    activeClass: 'bg-gradient-to-br from-blue-600 to-blue-400 text-white',
+    inactiveClass: 'bg-gradient-to-br from-blue-200 to-blue-50 dark:from-blue-900/40 dark:to-blue-700/40 text-blue-700 dark:text-blue-300',
+    bgClass: 'bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-800',
+    description: '查看所有類型的任務'
+  },
+  {
+    id: 'daily',
+    label: '日常互動',
+    icon: '📱',
+    activeClass: 'bg-gradient-to-br from-pink-600 to-pink-400 text-white',
+    inactiveClass: 'bg-gradient-to-br from-pink-200 to-pink-50 dark:from-pink-900/40 dark:to-pink-700/40 text-pink-700 dark:text-pink-300',
+    bgClass: 'bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/30 dark:to-rose-950/30 border border-pink-200 dark:border-pink-800',
+    description: '每日登入、分享、互動等簡單任務'
+  },
+  {
+    id: 'financial',
+    label: '理財學習',
+    icon: '💰',
+    activeClass: 'bg-gradient-to-br from-indigo-600 to-blue-500 text-white',
+    inactiveClass: 'bg-gradient-to-br from-indigo-200 to-blue-100 dark:from-indigo-900/40 dark:to-blue-800/40 text-indigo-700 dark:text-indigo-300',
+    bgClass: 'bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/30 border border-indigo-200 dark:border-indigo-800',
+    description: '閱讀文章、觀看影片、完成測驗'
+  },
+  {
+    id: 'investment',
+    label: '投資實踐',
+    icon: '📊',
+    activeClass: 'bg-gradient-to-br from-amber-600 to-amber-400 text-white',
+    inactiveClass: 'bg-gradient-to-br from-amber-200 to-amber-50 dark:from-amber-900/40 dark:to-amber-700/40 text-amber-700 dark:text-amber-300',
+    bgClass: 'bg-gradient-to-br from-amber-50 via-yellow-50 to-slate-100 dark:from-amber-950/30 dark:via-yellow-950/30 dark:to-slate-900/30 border border-amber-200 dark:border-amber-800',
+    description: '風險測驗、投資規劃、開戶諮詢'
+  },
+  {
+    id: 'esg',
+    label: '永續行動',
+    icon: '🌱',
+    activeClass: 'bg-gradient-to-br from-green-600 to-green-400 text-white',
+    inactiveClass: 'bg-gradient-to-br from-green-200 to-green-50 dark:from-green-900/40 dark:to-green-700/40 text-green-700 dark:text-green-300',
+    bgClass: 'bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-950/30 dark:to-teal-950/30 border border-green-200 dark:border-green-800',
+    description: 'ESG學習、碳足跡計算、綠色目標'
+  },
+  {
+    id: 'social',
+    label: '社群成就',
+    icon: '🎁',
+    activeClass: 'bg-gradient-to-br from-purple-600 to-purple-400 text-white',
+    inactiveClass: 'bg-gradient-to-br from-purple-200 to-purple-50 dark:from-purple-900/40 dark:to-purple-700/40 text-purple-700 dark:text-purple-300',
+    bgClass: 'bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100 dark:from-purple-950/30 dark:via-pink-950/30 dark:to-purple-900/30 border border-purple-200 dark:border-purple-800',
+    description: '邀請好友、升級獎勵、參加活動'
+  }
+]
+
+const currentTaskCategoryInfo = computed(() => {
+  return taskCategories.find(c => c.id === selectedTaskCategory.value) || taskCategories[0]
+})
 
 const filteredTasks = computed(() => {
-  if (selectedCategory.value === '全部') return mockTasks
-  return mockTasks.filter(t => t.category === selectedCategory.value)
+  if (selectedTaskCategory.value === 'all') {
+    return mockTasks
+  }
+  return mockTasks.filter(t => t.category === selectedTaskCategory.value)
 })
+
+const totalTaskPages = computed(() => {
+  return Math.ceil(filteredTasks.value.length / itemsPerTaskPage)
+})
+
+const paginatedTasks = computed(() => {
+  const start = (currentTaskPage.value - 1) * itemsPerTaskPage
+  const end = start + itemsPerTaskPage
+  return filteredTasks.value.slice(start, end)
+})
+
+const selectTaskCategory = (categoryId) => {
+  selectedTaskCategory.value = categoryId
+  currentTaskPage.value = 1
+}
+
+// 判斷任務頁碼是否可用
+const isTaskPageAvailable = (page) => {
+  if (selectedTaskCategory.value === 'all') {
+    return true // 全部任務所有頁都可用
+  }
+  // 其他分類只有對應的頁碼可用
+  const categoryPageMap = {
+    'daily': 1,      // 日常互動 - 第1頁
+    'financial': 2,  // 理財學習 - 第2頁
+    'investment': 3, // 投資實踐 - 第3頁
+    'esg': 4,        // 永續行動 - 第4頁
+    'social': 5      // 社群成就 - 第5頁
+  }
+  return categoryPageMap[selectedTaskCategory.value] === page
+}
+
+const getCategoryLabelForTask = (category) => {
+  const labels = {
+    'daily': '日常互動',
+    'financial': '理財學習',
+    'investment': '投資實踐',
+    'esg': '永續行動',
+    'social': '社群成就'
+  }
+  return labels[category] || category
+}
+
+const getCategoryBadgeClassForTask = (category) => {
+  const classes = {
+    'daily': 'bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300',
+    'financial': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300',
+    'investment': 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300',
+    'esg': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
+    'social': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+  }
+  return classes[category] || 'bg-gray-100 dark:bg-gray-900/30 text-gray-700 dark:text-gray-300'
+}
+
+const getTaskIconBgClass = (category) => {
+  const classes = {
+    'daily': 'bg-pink-100 dark:bg-pink-900/30',
+    'financial': 'bg-indigo-100 dark:bg-indigo-900/30',
+    'investment': 'bg-amber-100 dark:bg-amber-900/30',
+    'esg': 'bg-green-100 dark:bg-green-900/30',
+    'social': 'bg-purple-100 dark:bg-purple-900/30'
+  }
+  return classes[category] || 'bg-gray-100 dark:bg-gray-900/30'
+}
+
+const getTaskIconColorClass = (category) => {
+  const classes = {
+    'daily': 'text-pink-600 dark:text-pink-400',
+    'financial': 'text-indigo-600 dark:text-indigo-400',
+    'investment': 'text-amber-600 dark:text-amber-400',
+    'esg': 'text-green-600 dark:text-green-400',
+    'social': 'text-purple-600 dark:text-purple-400'
+  }
+  return classes[category] || 'text-gray-600 dark:text-gray-400'
+}
+
+const getTaskIconPath = (category) => {
+  const paths = {
+    'daily': 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', // 時鐘圖標
+    'financial': 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', // 書本圖標
+    'investment': 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', // 圖表圖標
+    'esg': 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z', // 地球圖標
+    'social': 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' // 用戶群組圖標
+  }
+  return paths[category] || 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
+}
 
 // Scroll to tasks section
 const scrollToTasks = (e) => {
   e.preventDefault()
-  const element = document.getElementById('tasks')
+  const element = document.querySelector('#tasks')
   if (element) {
     element.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
@@ -438,8 +655,9 @@ const itemsPerPage = 8
 const giftSeries = [
   {
     id: 'all',
-    level: 'ALL LEVELS',
-    activeClass: 'bg-gradient-to-br from-cyan-600 to-cyan-400 text-white shadow-glow',
+    level: '',
+    levelChinese: '全部禮品',
+    activeClass: 'bg-gradient-to-br from-cyan-600 to-cyan-400 text-white',
     inactiveClass: 'bg-gradient-to-br from-cyan-200 to-cyan-50 dark:from-cyan-900/40 dark:to-cyan-700/40 text-cyan-700 dark:text-cyan-300',
     bgClass: 'bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/30 dark:to-blue-950/30 border border-cyan-200 dark:border-cyan-800',
     pointRange: '0-5000+分',
@@ -448,7 +666,8 @@ const giftSeries = [
   {
     id: 'sustainable',
     level: 'EXPLORER',
-    activeClass: 'bg-gradient-to-br from-emerald-600 to-emerald-400 text-white shadow-glow',
+    levelChinese: '探索者',
+    activeClass: 'bg-gradient-to-br from-emerald-600 to-emerald-400 text-white',
     inactiveClass: 'bg-gradient-to-br from-emerald-200 to-emerald-50 dark:from-emerald-900/40 dark:to-emerald-700/40 text-emerald-700 dark:text-emerald-300',
     bgClass: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800',
     pointRange: '0-299分',
@@ -457,7 +676,8 @@ const giftSeries = [
   {
     id: 'quality',
     level: 'CREATOR',
-    activeClass: 'bg-gradient-to-br from-indigo-600 to-blue-500 text-white shadow-glow',
+    levelChinese: '創造者',
+    activeClass: 'bg-gradient-to-br from-indigo-600 to-blue-500 text-white',
     inactiveClass: 'bg-gradient-to-br from-indigo-200 to-blue-100 dark:from-indigo-900/40 dark:to-blue-800/40 text-indigo-700 dark:text-indigo-300',
     bgClass: 'bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/30 border border-indigo-200 dark:border-indigo-800',
     pointRange: '300-799分',
@@ -466,7 +686,8 @@ const giftSeries = [
   {
     id: 'aesthetic',
     level: 'VISIONARY',
-    activeClass: 'bg-gradient-to-br from-amber-600 to-amber-400 text-white shadow-glow',
+    levelChinese: '先行者',
+    activeClass: 'bg-gradient-to-br from-amber-600 to-amber-400 text-white',
     inactiveClass: 'bg-gradient-to-br from-amber-200 to-amber-50 dark:from-amber-900/40 dark:to-amber-700/40 text-amber-700 dark:text-amber-300',
     bgClass: 'bg-gradient-to-br from-amber-50 via-yellow-50 to-slate-100 dark:from-amber-950/30 dark:via-yellow-950/30 dark:to-slate-900/30 border border-amber-200 dark:border-amber-800',
     pointRange: '800-1499分',
@@ -475,7 +696,8 @@ const giftSeries = [
   {
     id: 'premium',
     level: 'LUMINARY',
-    activeClass: 'bg-gradient-to-br from-purple-600 to-purple-400 text-white shadow-glow',
+    levelChinese: '閃耀者',
+    activeClass: 'bg-gradient-to-br from-purple-600 to-purple-400 text-white',
     inactiveClass: 'bg-gradient-to-br from-purple-200 to-purple-50 dark:from-purple-900/40 dark:to-purple-700/40 text-purple-700 dark:text-purple-300',
     bgClass: 'bg-gradient-to-br from-purple-50 via-blue-50 to-purple-100 dark:from-purple-950/30 dark:via-blue-950/30 dark:to-purple-900/30 border border-purple-200 dark:border-purple-800',
     pointRange: '1500+分',
@@ -565,6 +787,21 @@ const selectSeries = (seriesId) => {
   selectedSeries.value = seriesId
   currentPage.value = 1
   console.log('Series changed to:', selectedSeries.value)
+}
+
+// 判斷頁碼是否可用
+const isPageAvailable = (page) => {
+  if (selectedSeries.value === 'all') {
+    return true // 全部分類所有頁都可用
+  }
+  // 其他分類只有對應的頁碼可用
+  const seriesPageMap = {
+    'sustainable': 1, // EXPLORER - 第1頁
+    'quality': 2,     // CREATOR - 第2頁
+    'aesthetic': 3,   // VISIONARY - 第3頁
+    'premium': 4      // LUMINARY - 第4頁
+  }
+  return seriesPageMap[selectedSeries.value] === page
 }
 
 // Helper functions for gift display
