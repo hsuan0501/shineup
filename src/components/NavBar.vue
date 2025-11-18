@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed top-0 left-0 right-0 z-40 backdrop-blur-md bg-white/70 dark:bg-white/30 border-b-0 transition-all duration-300">
+  <nav class="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl backdrop-saturate-150 bg-white/92 dark:bg-gray-900/88 border-b border-gray-200/20 dark:border-white/5 transition-all duration-300 shadow-[0_1px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_12px_rgba(0,0,0,0.2)]">
     <div class="w-full px-4 sm:px-6 lg:px-8">
       <div class="relative flex items-center justify-between h-20">
 
@@ -23,11 +23,11 @@
           </div>
 
           <!-- Nav Links -->
-          <div class="flex items-center space-x-3">
-            <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none cursor-pointer backdrop-blur-sm">
+          <div class="flex items-center space-x-2">
+            <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-white/75 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-gray-300 cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
               任務清單
             </a>
-            <a href="/#gifts" @click="scrollToGifts" class="px-4 py-2 rounded-full bg-light-bg dark:bg-black/95 border border-light-border dark:border-transparent hover:bg-light-border dark:hover:bg-black hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none cursor-pointer backdrop-blur-sm">
+            <a href="/#gifts" @click="scrollToGifts" class="px-4 py-2 rounded-full bg-white/75 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-gray-300 cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
               禮品總覽
             </a>
           </div>
@@ -37,7 +37,7 @@
         <div class="absolute left-1/2 transform -translate-x-1/2 w-full max-w-lg px-4">
           <div class="relative">
             <input type="text" placeholder="搜尋任務或禮品..."
-              class="w-full px-6 py-2 rounded-full bg-light-bg dark:bg-gray-800/60 border border-light-border dark:border-gray-700/50 text-light-text dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none hover:scale-105 transition-all duration-300 backdrop-blur-sm">
+              class="w-full px-6 py-2.5 rounded-full bg-white/50 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 text-light-text dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-purple-300 dark:focus:border-purple-500/50 focus:bg-white/70 dark:focus:bg-white/15 hover:bg-white/60 dark:hover:bg-white/15 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] focus:shadow-[0_4px_16px_rgba(168,85,247,0.15)] dark:focus:shadow-[0_4px_16px_rgba(168,85,247,0.3)]">
             <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -49,7 +49,7 @@
           <!-- 登入狀態 -->
           <div v-if="isLoggedIn" class="flex items-center space-x-3">
             <!-- 日夜模式切換 -->
-            <button @click="toggleDarkMode" class="relative w-16 h-8 rounded-full bg-light-bg dark:bg-gray-800/80 border-2 border-light-border dark:border-gray-700/70 hover:scale-110 transition-all duration-300 backdrop-blur-sm" aria-label="切換日夜模式">
+            <button @click="toggleDarkMode" class="relative w-16 h-8 rounded-full bg-white/90 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]" aria-label="切換日夜模式">
 
               <!-- 滑動按鈕 -->
               <div :class="[
@@ -81,9 +81,18 @@
               </div>
             </button>
 
+            <!-- 購物車按鈕 -->
+            <button class="relative p-2 rounded-full bg-white/90 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] group" aria-label="購物車">
+              <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <!-- 購物車數量小圓點 -->
+              <span class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-purple-500 to-cyan-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">3</span>
+            </button>
+
             <!-- 等級卡片 (點擊顯示) -->
             <div class="relative hidden md:block">
-              <button @click="showLevelCard = !showLevelCard" class="px-4 py-2 rounded-full bg-light-bg dark:bg-gray-800/80 border border-light-border dark:border-gray-700/70 hover:bg-light-border dark:hover:bg-gray-700/90 hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none cursor-pointer backdrop-blur-sm">
+              <button @click="showLevelCard = !showLevelCard" class="px-4 py-2 rounded-full bg-white/75 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-gray-300 cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
                 🌿 探索者
               </button>
 
@@ -126,25 +135,17 @@
             </div>
             
             <!-- 會員中心 -->
-            <RouterLink to="/profile" class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-90 hover:scale-110 transition-all duration-300 text-sm font-semibold">
+            <RouterLink to="/profile" class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-95 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_4px_12px_rgba(168,85,247,0.3)] hover:shadow-[0_6px_20px_rgba(168,85,247,0.4)]">
               會員中心
             </RouterLink>
-
-            <!-- 登出 -->
-            <button @click="logout" class="relative px-4 py-2 rounded-full hover:scale-110 transition-all duration-300 text-sm font-semibold group">
-              <div class="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 p-[2px]">
-                <div class="h-full w-full rounded-full bg-white dark:bg-gray-900 group-hover:bg-purple-500/10 dark:group-hover:bg-white/10 transition-colors"></div>
-              </div>
-              <span class="relative bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none">登出</span>
-            </button>
           </div>
 
           <!-- 未登入狀態 -->
-          <div v-else class="flex items-center space-x-3">
-            <RouterLink to="/auth/login" class="px-4 py-2 rounded-full border-2 border-purple-500 dark:border-white hover:bg-purple-500/10 dark:hover:bg-white/10 hover:scale-110 transition-all duration-300 text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none">
+          <div v-else class="flex items-center space-x-2">
+            <RouterLink to="/auth/login" class="px-4 py-2 rounded-full border-2 border-purple-400/50 dark:border-white/30 hover:bg-purple-500/10 dark:hover:bg-white/10 hover:border-purple-500 dark:hover:border-white/50 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
               登入
             </RouterLink>
-            <RouterLink to="/auth/register" class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-90 hover:scale-110 transition-all duration-300 text-sm font-semibold">
+            <RouterLink to="/auth/register" class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-95 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_4px_12px_rgba(168,85,247,0.3)] hover:shadow-[0_6px_20px_rgba(168,85,247,0.4)]">
               開始探險
             </RouterLink>
           </div>
