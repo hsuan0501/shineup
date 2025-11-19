@@ -24,11 +24,11 @@
 
           <!-- Nav Links -->
           <div class="flex items-center space-x-2">
-            <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-white/75 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-gray-300 cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-              任務清單
+            <a href="/#tasks" @click="scrollToTasks" class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+              <span class="bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white">任務清單</span>
             </a>
-            <a href="/#gifts" @click="scrollToGifts" class="px-4 py-2 rounded-full bg-white/75 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-gray-300 cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-              禮品總覽
+            <a href="/#gifts" @click="scrollToGifts" class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+              <span class="bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white">禮品總覽</span>
             </a>
           </div>
         </div>
@@ -49,7 +49,7 @@
           <!-- 登入狀態 -->
           <div v-if="isLoggedIn" class="flex items-center space-x-3">
             <!-- 日夜模式切換 -->
-            <button @click="toggleDarkMode" class="relative w-16 h-8 rounded-full bg-white/90 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]" aria-label="切換日夜模式">
+            <button @click="toggleDarkMode" class="relative w-16 h-8 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]" aria-label="切換日夜模式">
 
               <!-- 滑動按鈕 -->
               <div :class="[
@@ -82,7 +82,7 @@
             </button>
 
             <!-- 購物車按鈕 -->
-            <button class="relative p-2 rounded-full bg-white/90 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] group" aria-label="購物車">
+            <button class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] group" aria-label="購物車">
               <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
@@ -92,8 +92,8 @@
 
             <!-- 等級卡片 (點擊顯示) -->
             <div class="relative hidden md:block">
-              <button @click="showLevelCard = !showLevelCard" class="px-4 py-2 rounded-full bg-white/75 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 hover:bg-white/90 dark:hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-gray-300 cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-                🌿 探索者
+              <button @click="showLevelCard = !showLevelCard" class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+                <span class="bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white">🌿 探索者</span>
               </button>
 
               <!-- Dropdown Card -->

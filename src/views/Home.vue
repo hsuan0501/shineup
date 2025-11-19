@@ -65,7 +65,7 @@
       <div class="relative z-10 w-full overflow-visible mt-8">
         <!-- First Row - Left to Right (Gifts 1-12) -->
         <div class="flex gap-3 animate-scroll-left mb-3">
-          <div v-for="gift in [...firstRowGifts, ...firstRowGifts]" :key="gift.id + '-row1'" class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
+          <div v-for="gift in [...firstRowGifts, ...firstRowGifts]" :key="gift.id + '-row1'" class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
             <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
               <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
             </div>
@@ -78,7 +78,7 @@
 
         <!-- Second Row - Right to Left (Gifts 13-24) -->
         <div class="flex gap-3 animate-scroll-right">
-          <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'" class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
+          <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'" class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
             <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
               <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
             </div>
@@ -313,7 +313,7 @@
                         : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'
                   ]"
                   :disabled="!isGiftInSelectedSeries(gift) || gift.canExchange === false || user.points < gift.points">
-                  {{ !isGiftInSelectedSeries(gift) || gift.canExchange === false ? '等級不足' : user.points < gift.points ? '點數不足' : '立即兌換' }}
+                  {{ !isGiftInSelectedSeries(gift) || gift.canExchange === false ? '等級不足' : user.points < gift.points ? '積分不足' : '立即兌換' }}
                 </button>
               </div>
 
