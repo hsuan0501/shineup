@@ -1,5 +1,5 @@
 <template>
-  <div :class="isDark ? 'dark' : ''" class="w-screen min-h-screen overflow-x-hidden" style="margin: 0; padding: 0;">
+  <div :class="isDark ? 'dark' : ''" class="w-full min-h-screen overflow-x-hidden" style="margin: 0; padding: 0;">
     <div class="flex flex-col min-h-screen bg-light-gradient dark:bg-dark-gradient">
       <!-- NavBar -->
       <NavBar />
@@ -11,6 +11,9 @@
 
       <!-- Footer (放在這裡,讓背景連貫) -->
       <Footer />
+
+      <!-- Global ChatBox -->
+      <ChatBox />
     </div>
   </div>
 </template>
@@ -20,6 +23,7 @@ import { useStore } from './store/app'
 import { computed, onMounted } from 'vue'
 import NavBar from './components/NavBar.vue'
 import Footer from './components/Footer.vue'
+import ChatBox from './components/ChatBox.vue'
 import { RouterView } from 'vue-router'
 
 const store = useStore()
