@@ -4,53 +4,107 @@ export const mockUsers = {
     name: 'Matcha',
     email: 'matcha@example.com',
     level: 'CREATOR',
-    points: 450,
+    levelPoints: 450,    // 升級積分 - 只能加不能減，用於提升會員等級
+    rewardPoints: 680,   // 兌換積分 - 可扣除，用於兌換禮品
+    points: 450, // 保留舊字段以維持向後兼容
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=matcha',
     createdAt: '2024-01-15',
+    // 統計數據
+    stats: {
+      tasksCompleted: 23,
+      consecutiveDays: 7,
+      totalLogins: 45,
+      rewardsRedeemed: 3,
+      friendsInvited: 2
+    }
   },
 }
 
 export const mockTasks = [
   // 📱 日常互動任務 (6個)
-  { id: 1, title: '每日登入', description: '每日登入一次即可完成', points: 5, category: 'daily', level: '全等級', completed: false, icon: '🌅', frequency: '每日' },
-  { id: 2, title: '完善個人資料', description: '完整填寫個人資料可獲得積分', points: 30, category: 'daily', level: '全等級', completed: false, icon: '👤', frequency: '一次性' },
-  { id: 3, title: '連續3天登入', description: '連續3天登入系統', points: 20, category: 'daily', level: '全等級', completed: false, icon: '🔥', frequency: '可重複' },
-  { id: 4, title: '連續7天登入', description: '連續7天登入系統', points: 50, category: 'daily', level: 'Lv2+', completed: false, icon: '⭐', frequency: '可重複' },
-  { id: 5, title: '分享到社群', description: '分享內容到社群媒體', points: 15, category: 'daily', level: '全等級', completed: false, icon: '📤', frequency: '每日最多3次' },
-  { id: 6, title: '按讚或留言', description: '在內容下方互動', points: 5, category: 'daily', level: '全等級', completed: false, icon: '💬', frequency: '每日最多5次' },
+  { id: 1, title: '每日登入', description: '每日登入一次即可完成', levelPoints: 5, rewardPoints: 10, category: 'daily', level: '全等級', completed: false, icon: '🌅', frequency: '每日' },
+  { id: 2, title: '完善個人資料', description: '完整填寫個人資料可獲得積分', levelPoints: 30, rewardPoints: 50, category: 'daily', level: '全等級', completed: false, icon: '👤', frequency: '一次性' },
+  { id: 3, title: '連續3天登入', description: '連續3天登入系統', levelPoints: 20, rewardPoints: 30, category: 'daily', level: '全等級', completed: false, icon: '🔥', frequency: '可重複' },
+  { id: 4, title: '連續7天登入', description: '連續7天登入系統', levelPoints: 50, rewardPoints: 80, category: 'daily', level: 'Lv2+', completed: false, icon: '⭐', frequency: '可重複' },
+  { id: 5, title: '分享到社群', description: '分享內容到社群媒體', levelPoints: 15, rewardPoints: 20, category: 'daily', level: '全等級', completed: false, icon: '📤', frequency: '每日最多3次' },
+  { id: 6, title: '按讚或留言', description: '在內容下方互動', levelPoints: 5, rewardPoints: 8, category: 'daily', level: '全等級', completed: false, icon: '💬', frequency: '每日最多5次' },
 
   // 💰 理財學習任務 (6個)
-  { id: 7, title: '點擊閱讀文章', description: '閱讀理財相關文章', points: 10, category: 'financial', level: '全等級', completed: false, icon: '📖', frequency: '每週最多3篇' },
-  { id: 8, title: '播放影片', description: '觀看理財教學影片', points: 15, category: 'financial', level: '全等級', completed: false, icon: '🎬', frequency: '每週最多3支' },
-  { id: 9, title: '完成小測驗', description: '完成理財知識測驗', points: 25, category: 'financial', level: '全等級', completed: false, icon: '📝', frequency: '每月最多3次' },
-  { id: 10, title: '完成開戶流程說明', description: '觀看開戶說明影片', points: 50, category: 'financial', level: '全等級', completed: false, icon: '🏦', frequency: '一次性' },
-  { id: 11, title: '訂閱市場分析報告', description: '訂閱接收市場分析', points: 30, category: 'financial', level: '全等級', completed: false, icon: '📊', frequency: '一次性' },
-  { id: 12, title: '追蹤官方社群', description: '追蹤官方社群平台', points: 20, category: 'financial', level: '全等級', completed: false, icon: '👍', frequency: '一次性' },
+  { id: 7, title: '點擊閱讀文章', description: '閱讀理財相關文章', levelPoints: 10, rewardPoints: 15, category: 'financial', level: '全等級', completed: false, icon: '📖', frequency: '每週最多3篇' },
+  { id: 8, title: '播放影片', description: '觀看理財教學影片', levelPoints: 15, rewardPoints: 25, category: 'financial', level: '全等級', completed: false, icon: '🎬', frequency: '每週最多3支' },
+  { id: 9, title: '完成小測驗', description: '完成理財知識測驗', levelPoints: 25, rewardPoints: 40, category: 'financial', level: '全等級', completed: false, icon: '📝', frequency: '每月最多3次' },
+  { id: 10, title: '完成開戶流程說明', description: '觀看開戶說明影片', levelPoints: 50, rewardPoints: 80, category: 'financial', level: '全等級', completed: false, icon: '🏦', frequency: '一次性' },
+  { id: 11, title: '訂閱市場分析報告', description: '訂閱接收市場分析', levelPoints: 30, rewardPoints: 50, category: 'financial', level: '全等級', completed: false, icon: '📊', frequency: '一次性' },
+  { id: 12, title: '追蹤官方社群', description: '追蹤官方社群平台', levelPoints: 20, rewardPoints: 30, category: 'financial', level: '全等級', completed: false, icon: '👍', frequency: '一次性' },
 
   // 📊 投資實踐任務 (6個)
-  { id: 13, title: '完成風險測驗', description: '完成投資風險評估', points: 30, category: 'investment', level: '全等級', completed: false, icon: '⚖️', frequency: '一次性' },
-  { id: 14, title: '使用退休計算器', description: '計算退休所需資金', points: 20, category: 'investment', level: '全等級', completed: false, icon: '🧮', frequency: '每月最多3次' },
-  { id: 15, title: '設定儲蓄目標', description: '設定個人儲蓄目標', points: 30, category: 'investment', level: '全等級', completed: false, icon: '🎯', frequency: '一次性' },
-  { id: 16, title: '填寫開戶意向調查', description: '填寫開戶意願表單', points: 100, category: 'investment', level: '全等級', completed: false, icon: '📋', frequency: '一次性' },
-  { id: 17, title: '完善投資偏好', description: '完整填寫投資偏好', points: 60, category: 'investment', level: '全等級', completed: false, icon: '💼', frequency: '一次性' },
-  { id: 18, title: '預約理專諮詢', description: '預約專業理財諮詢', points: 150, category: 'investment', level: 'Lv2+', completed: false, icon: '🤝', frequency: '一次性' },
+  { id: 13, title: '完成風險測驗', description: '完成投資風險評估', levelPoints: 30, rewardPoints: 50, category: 'investment', level: '全等級', completed: false, icon: '⚖️', frequency: '一次性' },
+  { id: 14, title: '使用退休計算器', description: '計算退休所需資金', levelPoints: 20, rewardPoints: 35, category: 'investment', level: '全等級', completed: false, icon: '🧮', frequency: '每月最多3次' },
+  { id: 15, title: '設定儲蓄目標', description: '設定個人儲蓄目標', levelPoints: 30, rewardPoints: 50, category: 'investment', level: '全等級', completed: false, icon: '🎯', frequency: '一次性' },
+  { id: 16, title: '填寫開戶意向調查', description: '填寫開戶意願表單', levelPoints: 100, rewardPoints: 150, category: 'investment', level: '全等級', completed: false, icon: '📋', frequency: '一次性' },
+  { id: 17, title: '完善投資偏好', description: '完整填寫投資偏好', levelPoints: 60, rewardPoints: 100, category: 'investment', level: '全等級', completed: false, icon: '💼', frequency: '一次性' },
+  { id: 18, title: '預約理專諮詢', description: '預約專業理財諮詢', levelPoints: 150, rewardPoints: 200, category: 'investment', level: 'Lv2+', completed: false, icon: '🤝', frequency: '一次性' },
 
   // 🌱 永續行動任務 (6個)
-  { id: 19, title: '閱讀ESG文章', description: '閱讀永續相關文章', points: 10, category: 'esg', level: '全等級', completed: false, icon: '🌱', frequency: '每週最多3篇' },
-  { id: 20, title: 'ESG知識測驗', description: '完成ESG知識測驗', points: 20, category: 'esg', level: '全等級', completed: false, icon: '♻️', frequency: '每月最多3次' },
-  { id: 21, title: '使用碳足跡計算器', description: '計算個人碳足跡', points: 25, category: 'esg', level: '全等級', completed: false, icon: '🌍', frequency: '一次性' },
-  { id: 22, title: '設定綠色目標', description: '設定環保行動目標', points: 30, category: 'esg', level: 'Lv2+', completed: false, icon: '🎋', frequency: '一次性' },
-  { id: 23, title: '分享ESG內容', description: '分享永續相關內容', points: 15, category: 'esg', level: 'Lv2+', completed: false, icon: '🌿', frequency: '每週最多3次' },
-  { id: 24, title: '觀看ESG影片', description: '觀看永續教育影片', points: 15, category: 'esg', level: '全等級', completed: false, icon: '🎥', frequency: '每週最多3支' },
+  { id: 19, title: '閱讀ESG文章', description: '閱讀永續相關文章', levelPoints: 10, rewardPoints: 15, category: 'esg', level: '全等級', completed: false, icon: '🌱', frequency: '每週最多3篇' },
+  { id: 20, title: 'ESG知識測驗', description: '完成ESG知識測驗', levelPoints: 20, rewardPoints: 30, category: 'esg', level: '全等級', completed: false, icon: '♻️', frequency: '每月最多3次' },
+  { id: 21, title: '使用碳足跡計算器', description: '計算個人碳足跡', levelPoints: 25, rewardPoints: 40, category: 'esg', level: '全等級', completed: false, icon: '🌍', frequency: '一次性' },
+  { id: 22, title: '設定綠色目標', description: '設定環保行動目標', levelPoints: 30, rewardPoints: 50, category: 'esg', level: 'Lv2+', completed: false, icon: '🎋', frequency: '一次性' },
+  { id: 23, title: '分享ESG內容', description: '分享永續相關內容', levelPoints: 15, rewardPoints: 25, category: 'esg', level: 'Lv2+', completed: false, icon: 'star', frequency: '每週最多3次' },
+  { id: 24, title: '觀看ESG影片', description: '觀看永續教育影片', levelPoints: 15, rewardPoints: 25, category: 'esg', level: '全等級', completed: false, icon: '🎥', frequency: '每週最多3支' },
 
   // 🎁 社群成就任務 (6個)
-  { id: 25, title: '邀請好友註冊', description: '成功邀請好友加入', points: 50, category: 'social', level: 'Lv2+', completed: false, icon: '👥', frequency: '無限' },
-  { id: 26, title: '首次升級獎勵', description: '達成等級提升', points: 50, category: 'social', level: '全等級', completed: false, icon: '🎖️', frequency: '每等級一次' },
-  { id: 27, title: '參加線上說明會', description: '報名並參加說明會', points: 120, category: 'social', level: 'Lv2+', completed: false, icon: '🎤', frequency: '每次活動' },
-  { id: 28, title: '完成新手任務', description: '完成5個基礎任務', points: 80, category: 'social', level: 'Lv1', completed: false, icon: '🌟', frequency: '一次性' },
-  { id: 29, title: '連續活躍獎勵', description: '當月完成10個以上任務', points: 100, category: 'social', level: 'Lv2+', completed: false, icon: '🏆', frequency: '每月' },
-  { id: 30, title: '社群貢獻獎', description: '當月互動達20次', points: 60, category: 'social', level: 'Lv3+', completed: false, icon: '🎁', frequency: '每月' },
-]
+  { id: 25, title: '邀請好友註冊', description: '成功邀請好友加入', levelPoints: 50, rewardPoints: 100, category: 'social', level: 'Lv2+', completed: false, icon: '👥', frequency: '無限' },
+  { id: 26, title: '首次升級獎勵', description: '達成等級提升', levelPoints: 50, rewardPoints: 80, category: 'social', level: '全等級', completed: false, icon: '🎖️', frequency: '每等級一次' },
+  { id: 27, title: '參加線上說明會', description: '報名並參加說明會', levelPoints: 120, rewardPoints: 180, category: 'social', level: 'Lv2+', completed: false, icon: '🎤', frequency: '每次活動' },
+  { id: 28, title: '完成新手任務', description: '完成5個基礎任務', levelPoints: 80, rewardPoints: 120, category: 'social', level: 'Lv1', completed: false, icon: '🌟', frequency: '一次性' },
+  { id: 29, title: '連續活躍獎勵', description: '當月完成10個以上任務', levelPoints: 100, rewardPoints: 150, category: 'social', level: 'Lv2+', completed: false, icon: '🏆', frequency: '每月' },
+  { id: 30, title: '社群貢獻獎', description: '當月互動達20次', levelPoints: 60, rewardPoints: 100, category: 'social', level: 'Lv3+', completed: false, icon: '🎁', frequency: '每月' },
+].map(task => ({ ...task, points: task.levelPoints })) // 向後兼容
+
+// 任務分類配色系統
+export const categoryColors = {
+  daily: {
+    name: '日常互動',
+    icon: '📱',
+    gradient: 'from-blue-400 to-blue-600',
+    bg: 'bg-blue-50 dark:bg-blue-900/20',
+    text: 'text-blue-600 dark:text-blue-400',
+    border: 'border-blue-200 dark:border-blue-800'
+  },
+  financial: {
+    name: '理財學習',
+    icon: '💰',
+    gradient: 'from-green-400 to-green-600', 
+    bg: 'bg-green-50 dark:bg-green-900/20',
+    text: 'text-green-600 dark:text-green-400',
+    border: 'border-green-200 dark:border-green-800'
+  },
+  investment: {
+    name: '投資實踐',
+    icon: '📊',
+    gradient: 'from-purple-400 to-purple-600',
+    bg: 'bg-purple-50 dark:bg-purple-900/20', 
+    text: 'text-purple-600 dark:text-purple-400',
+    border: 'border-purple-200 dark:border-purple-800'
+  },
+  esg: {
+    name: '永續行動',
+    icon: '🌱',
+    gradient: 'from-emerald-400 to-emerald-600',
+    bg: 'bg-emerald-50 dark:bg-emerald-900/20',
+    text: 'text-emerald-600 dark:text-emerald-400', 
+    border: 'border-emerald-200 dark:border-emerald-800'
+  },
+  social: {
+    name: '社群成就',
+    icon: '🎁',
+    gradient: 'from-orange-400 to-orange-600',
+    bg: 'bg-orange-50 dark:bg-orange-900/20',
+    text: 'text-orange-600 dark:text-orange-400',
+    border: 'border-orange-200 dark:border-orange-800'
+  }
+}
 
 export const mockRewards = [
   // 🌱 永續探索系列 - Lv1 Explorer (禮品 1-8)
@@ -567,29 +621,57 @@ export const levelConfig = [
   {
     level: 'EXPLORER',
     name: '探索者',
+    levelNumber: 1,
     minPoints: 0,
+    maxPoints: 249,
+    nextLevelPoints: 250,
+    multiplier: 1.0,
     color: '#10b981',
     bgColor: '#d1fae5',
+    gradientFrom: 'from-emerald-300',
+    gradientTo: 'to-emerald-600',
+    icon: 'star'
   },
   {
     level: 'CREATOR',
     name: '創造者',
-    minPoints: 300,
+    levelNumber: 2,
+    minPoints: 250,
+    maxPoints: 749,
+    nextLevelPoints: 750,
+    multiplier: 1.15,
     color: '#3b82f6',
     bgColor: '#dbeafe',
+    gradientFrom: 'from-cyan-400',
+    gradientTo: 'to-blue-500',
+    icon: 'star'
   },
   {
     level: 'VISIONARY',
     name: '先行者',
-    minPoints: 800,
+    levelNumber: 3,
+    minPoints: 750,
+    maxPoints: 1499,
+    nextLevelPoints: 1500,
+    multiplier: 1.35,
     color: '#f59e0b',
     bgColor: '#fef3c7',
+    gradientFrom: 'from-amber-300',
+    gradientTo: 'to-amber-600',
+    icon: 'star'
   },
   {
     level: 'LUMINARY',
     name: '閃耀者',
+    levelNumber: 4,
     minPoints: 1500,
+    maxPoints: 999999,
+    nextLevelPoints: null,
+    multiplier: 1.7,
     color: '#a78bfa',
     bgColor: '#ede9fe',
+    gradientFrom: 'from-purple-300',
+    gradientTo: 'to-purple-600',
+    icon: 'star'
   },
 ]

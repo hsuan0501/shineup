@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed bottom-6 right-6 sm:right-8 lg:right-10 z-50 flex flex-col items-end">
+    <div ref="chatBoxContainer" class="fixed bottom-6 right-6 sm:right-8 lg:right-10 z-50 flex flex-col items-end">
         <!-- Chat Window -->
         <transition name="fade-slide">
             <div v-if="isOpen"
@@ -37,7 +37,7 @@
                         <div :class="[
                             'max-w-[80%] p-3 rounded-2xl text-sm',
                             msg.isUser
-                                ? 'bg-gradient-to-br from-purple-500 to-cyan-400 text-white rounded-tr-none shadow-md'
+                                ? 'bg-gradient-to-br from-cyan-100 to-blue-100 text-cyan-700 rounded-tr-none shadow-md'
                                 : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-tl-none shadow-sm'
                         ]">
                             {{ msg.text }}
@@ -82,11 +82,12 @@
 </template>
 
 <script setup>
-import { ref, nextTick, watch } from 'vue'
+import { ref, nextTick, watch, onMounted, onUnmounted } from 'vue'
 
 const isOpen = ref(false)
 const newMessage = ref('')
 const messagesContainer = ref(null)
+const chatBoxContainer = ref(null)
 
 const messages = ref([
     { text: '您好！歡迎來到 Shine Level Up。請問有什麼我可以幫您的嗎？', isUser: false }
@@ -131,11 +132,27 @@ const sendMessage = () => {
     }, 1000)
 }
 
+// 點擊外部區域關閉對話框
+const handleClickOutside = (event) => {
+    if (chatBoxContainer.value && !chatBoxContainer.value.contains(event.target) && isOpen.value) {
+        isOpen.value = false
+    }
+}
+
 // Watch for open state to scroll to bottom
 watch(isOpen, (newVal) => {
     if (newVal) {
         scrollToBottom()
     }
+})
+
+// 添加和移除事件監聽器
+onMounted(() => {
+    document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
