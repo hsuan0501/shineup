@@ -29,12 +29,12 @@
             <a href="/#tasks" @click="scrollToTasks"
               class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
               <span
-                class="bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white">任務清單</span>
+                class="bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">任務清單</span>
             </a>
             <a href="/#gifts" @click="scrollToGifts"
               class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
               <span
-                class="bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white">禮品總覽</span>
+                class="bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">禮品總覽</span>
             </a>
           </div>
         </div>
@@ -69,8 +69,7 @@
               ]">
                 <!-- Sun Icon (亮色模式) -->
                 <svg v-if="!isDarkMode" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
+                  <path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM2 13h2a1 1 0 0 0 0-2H2a1 1 0 0 0 0 2zm18 0h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2zM11 2v2a1 1 0 0 0 2 0V2a1 1 0 0 0-2 0zm0 18v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-2 0zM5.99 4.58a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06z"/>
                 </svg>
                 <!-- Moon Icon (暗色模式) -->
                 <svg v-else class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -82,7 +81,7 @@
               <!-- 固定的太陽圖示 (左邊) -->
               <div class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">
                 <svg class="w-3.5 h-3.5 text-gray-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
+                  <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
                 </svg>
               </div>
 
@@ -114,26 +113,22 @@
             <div ref="levelCardContainer" class="relative">
               <!-- Level Card Trigger -->
               <div @click="toggleLevelCard"
-                class="flex items-center gap-3 p-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:opacity-100 opacity-90 cursor-pointer hover:scale-[1.02] transition-all active:scale-95">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 dark:from-purple-500/20 dark:to-pink-500/20">
-                  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24">
-                    <defs>
-                      <linearGradient id="luminary-mini" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#a855f7" />
-                        <stop offset="100%" stop-color="#ec4899" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="url(#luminary-mini)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                class="flex items-center gap-2 px-4 py-2 rounded-3xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:opacity-100 opacity-90 cursor-pointer hover:scale-[1.02] transition-all active:scale-95">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24">
+                  <defs>
+                    <linearGradient id="luminary-mini" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#a855f7" />
+                      <stop offset="100%" stop-color="#ec4899" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="url(#luminary-mini)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="flex items-center gap-1">
+                  <span class="text-sm font-bold text-gray-900 dark:text-white">閃耀者</span>
+                  <span class="text-xs text-gray-600 dark:text-gray-400">6,000</span>
+                  <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1">
-                    閃耀者
-                    <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </p>
-                  <p class="text-xs text-gray-600 dark:text-gray-400">6,000+ 積分</p>
                 </div>
               </div>
 
@@ -208,7 +203,7 @@
 
             <!-- 會員中心 -->
             <RouterLink to="/profile"
-              class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-95 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_4px_12px_rgba(168,85,247,0.3)] hover:shadow-[0_6px_20px_rgba(168,85,247,0.4)]">
+              class="px-4 py-2 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-95 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
               會員中心
             </RouterLink>
           </div>

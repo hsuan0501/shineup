@@ -34,27 +34,25 @@
 
                     <!-- Twinkling Stars (Natural Diffusion) -->
                     <!-- Left Side (4 stars) -->
-                    <div class="absolute -top-6 -left-10 w-3.5 h-3.5 animate-twinkle-2 text-white">
+                    <div class="absolute -top-8 -left-16 w-3.5 h-3.5 animate-twinkle-2 text-white scale-y-[-1]">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
-                    <div class="absolute top-6 -left-24 w-2.5 h-2.5 animate-twinkle-4 text-white">
+                    <div class="absolute top-8 -left-28 w-2.5 h-2.5 animate-twinkle-4 text-white scale-y-[-1]">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
-                    <div class="absolute -top-12 right-1/4 w-1.5 h-1.5 animate-twinkle-3 text-white">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-                    <div class="absolute bottom-4 -left-12 w-2.5 h-2.5 animate-twinkle-5 text-white">
+
+                    <div class="absolute -bottom-4 -left-6 w-3 h-3 animate-twinkle-5 text-white scale-y-[-1]">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
 
                     <!-- Right Side (3 stars) -->
-                    <div class="absolute -top-4 -right-6 w-3.5 h-3.5 animate-twinkle-2 text-white">
+                    <div class="absolute -top-4 -right-12 w-3.5 h-3.5 animate-twinkle-2 text-white">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
-                    <div class="absolute top-6 -right-20 w-2.5 h-2.5 animate-twinkle-4 text-white">
+                    <div class="absolute top-6 -right-24 w-2.5 h-2.5 animate-twinkle-4 text-white">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
-                    <div class="absolute bottom-2 -right-10 w-3 h-3 animate-twinkle-1 text-white">
+                    <div class="absolute bottom-2 -right-16 w-3 h-3 animate-twinkle-1 text-white">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
 
@@ -74,7 +72,7 @@
                 <!-- CTA Buttons -->
                 <div class="relative z-20 flex flex-col sm:flex-row gap-4 justify-center mb-16">
                     <a href="#tasks" @click="scrollToTasks"
-                        class="px-8 py-3 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white font-semibold hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-lg">
+                        class="px-8 py-3 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white font-medium hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-lg">
                         開始探險
                     </a>
                 </div>
@@ -890,13 +888,13 @@ const getLevelBadgeClass = (level) => {
 
 const getStockDotClass = (stockStatus) => {
     const classes = {
-        'sufficient': 'bg-green-500',
-        'moderate': 'bg-yellow-500',
-        'limited': 'bg-orange-500',
-        'rare': 'bg-red-500',
+        'high': 'bg-green-500',
+        'medium': 'bg-yellow-500',
+        'low': 'bg-orange-500',
+        'critical': 'bg-red-500',
         'sold_out': 'bg-gray-500'
     }
-    return classes[stockStatus] || classes['sufficient']
+    return classes[stockStatus] || classes['high']
 }
 
 const getCategoryLabel = (level) => {
@@ -1043,11 +1041,11 @@ const getStockText = (gift) => {
     50% { opacity: 1; transform: scale(1.1) rotate(10deg); }
 }
 
-.animate-twinkle-1 { animation: twinkle 3s ease-in-out infinite; }
-.animate-twinkle-2 { animation: twinkle 4s ease-in-out infinite 1s; }
-.animate-twinkle-3 { animation: twinkle 2.5s ease-in-out infinite 0.5s; }
-.animate-twinkle-4 { animation: twinkle 3.5s ease-in-out infinite 1.5s; }
-.animate-twinkle-5 { animation: twinkle 4.5s ease-in-out infinite 0.2s; }
+.animate-twinkle-1 { animation: twinkle 3s ease-in-out infinite 0s; }
+.animate-twinkle-2 { animation: twinkle 3s ease-in-out infinite 0.6s; }
+.animate-twinkle-3 { animation: twinkle 3s ease-in-out infinite 1.2s; }
+.animate-twinkle-4 { animation: twinkle 3s ease-in-out infinite 1.8s; }
+.animate-twinkle-5 { animation: twinkle 3s ease-in-out infinite 2.4s; }
 
 /* 深色模式下移除光暈 */
 .dark .hero-title,
