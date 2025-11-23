@@ -18,6 +18,16 @@ const routes = [
     name: 'Cart',
     component: () => import('../views/Cart.vue'),
   },
+  {
+    path: '/history',
+    name: 'History',
+    component: () => import('../views/History.vue'),
+  },
+  {
+    path: '/roadmap',
+    name: 'Roadmap',
+    component: () => import('../views/Roadmap.vue'),
+  },
 ]
 
 const router = createRouter({

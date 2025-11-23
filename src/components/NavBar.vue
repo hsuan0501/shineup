@@ -110,53 +110,100 @@
                 class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-purple-500 to-cyan-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">3</span>
             </router-link>
 
-            <!-- 等級卡片 (點擊顯示) -->
-            <div class="relative hidden md:block">
-              <button @click="showLevelCard = !showLevelCard"
-                class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-                <span
-                  class="bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white">🌿
-                  探索者</span>
-              </button>
-
-              <!-- Dropdown Card -->
-              <div v-if="showLevelCard"
-                class="absolute right-0 mt-2 w-72 bg-light-card dark:bg-dark-card rounded-2xl shadow-glow-lg border border-light-border dark:border-dark-border p-6 z-50">
-                <!-- 會員卡 -->
-                <div class="text-center">
-                  <div class="mb-4 text-5xl">🌿</div>
-                  <h3 class="text-2xl font-bold text-light-text dark:text-dark-text mb-1">探索者</h3>
-                  <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm mb-4">開啟你的閃耀旅程</p>
-
-                  <!-- 積分進度 -->
-                  <div class="mb-4">
-                    <div class="flex justify-between text-sm mb-2">
-                      <span class="text-light-text-secondary dark:text-dark-text-secondary">目前積分</span>
-                      <span class="font-bold text-primary-purple">450 / 300</span>
-                    </div>
-                    <div class="w-full bg-light-bg dark:bg-dark-bg rounded-full h-2">
-                      <div class="bg-gradient-to-r from-primary-purple to-primary-blue h-2 rounded-full"
-                        style="width: 100%;"></div>
-                    </div>
-                  </div>
-
-                  <!-- 下一等級 -->
-                  <div class="p-3 rounded-lg bg-light-bg dark:bg-dark-bg mb-4 text-sm">
-                    <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">距離下一等級</p>
-                    <p class="text-2xl font-bold text-primary-blue">350 分</p>
-                  </div>
-
-                  <!-- 權益 -->
-                  <div class="text-left text-sm">
-                    <p class="font-semibold text-light-text dark:text-dark-text mb-2">權益：</p>
-                    <ul class="text-light-text-secondary dark:text-dark-text-secondary space-y-1">
-                      <li>✓ 基本兌換功能</li>
-                      <li>✓ 入門任務</li>
-                      <li>✓ ESG 公益任務</li>
-                    </ul>
-                  </div>
+            <!-- Level Card Dropdown Container -->
+            <div ref="levelCardContainer" class="relative">
+              <!-- Level Card Trigger -->
+              <div @click="toggleLevelCard"
+                class="flex items-center gap-3 p-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:opacity-100 opacity-90 cursor-pointer hover:scale-[1.02] transition-all active:scale-95">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 dark:from-purple-500/20 dark:to-pink-500/20">
+                  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24">
+                    <defs>
+                      <linearGradient id="luminary-mini" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#a855f7" />
+                        <stop offset="100%" stop-color="#ec4899" />
+                      </linearGradient>
+                    </defs>
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="url(#luminary-mini)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                    閃耀者
+                    <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </p>
+                  <p class="text-xs text-gray-600 dark:text-gray-400">6,000+ 積分</p>
                 </div>
               </div>
+
+              <!-- Dropdown Menu -->
+              <transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-in"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+              >
+                <div v-if="showLevelCard"
+                  class="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                  <!-- Header -->
+                  <div class="p-4 bg-gradient-to-br from-purple-500/5 to-pink-500/5 border-b border-gray-100 dark:border-gray-800">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-xs font-semibold text-purple-500 uppercase tracking-wider">Current Level</span>
+                      <span class="text-xs text-gray-500">Level 4</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                      <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                        <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">閃耀者</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Luminary</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Progress -->
+                  <div class="p-4 border-b border-gray-100 dark:border-gray-800">
+                    <div class="flex justify-between text-xs mb-1.5">
+                      <span class="text-gray-600 dark:text-gray-400">積分進度</span>
+                      <span class="font-medium text-purple-500">6,000 / 10,000</span>
+                    </div>
+                    <div class="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                      <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 w-[60%] rounded-full"></div>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500 text-center">
+                      再獲得 <span class="text-purple-500 font-medium">4,000</span> 積分即可升級
+                    </p>
+                  </div>
+
+                  <!-- Benefits Preview -->
+                  <div class="p-4 bg-gray-50/50 dark:bg-gray-800/30">
+                    <h4 class="text-xs font-semibold text-gray-900 dark:text-white mb-3">下個等級權益</h4>
+                    <ul class="space-y-2">
+                      <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>專屬傳奇勳章</span>
+                      </li>
+                      <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>積分加成 1.5x</span>
+                      </li>
+                    </ul>
+                    <RouterLink to="/profile" @click="showLevelCard = false" class="mt-4 block w-full py-2 text-center text-sm font-medium text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg transition-colors">
+                      查看完整權益 →
+                    </RouterLink>
+                  </div>
+                </div>
+              </transition>
             </div>
 
             <!-- 會員中心 -->
@@ -185,16 +232,35 @@
 
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const router = useRouter()
 const isLoggedIn = ref(true)
 const showLevelCard = ref(false)
 const isDarkMode = ref(false)
+const levelCardContainer = ref(null)
 
-// 初始化暗色模式狀態
+// 切換等級卡片
+const toggleLevelCard = () => {
+  showLevelCard.value = !showLevelCard.value
+}
+
+// 點擊外部關閉等級卡片
+const handleClickOutside = (event) => {
+  if (levelCardContainer.value && !levelCardContainer.value.contains(event.target)) {
+    showLevelCard.value = false
+  }
+}
+
+// 初始化暗色模式狀態和事件監聽
 onMounted(() => {
   isDarkMode.value = document.documentElement.classList.contains('dark')
+  document.addEventListener('click', handleClickOutside)
+})
+
+// 清理事件監聽
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 
 // 切換日夜模式
@@ -220,7 +286,7 @@ const scrollToTop = () => {
   document.documentElement.scrollTop = 0
   document.body.scrollTop = 0
 
-  // 如果不在首頁，再導航
+  // 如果不在首頁,再導航
   const currentPath = router.currentRoute.value.path
   if (currentPath !== '/') {
     router.push('/')
@@ -230,7 +296,7 @@ const scrollToTop = () => {
 const scrollToTasks = async (e) => {
   e.preventDefault()
 
-  // 如果不在首頁，先導航到首頁
+  // 如果不在首頁,先導航到首頁
   if (router.currentRoute.value.path !== '/') {
     await router.push('/')
     // 等待頁面渲染
@@ -241,7 +307,7 @@ const scrollToTasks = async (e) => {
       }
     }, 100)
   } else {
-    // 已經在首頁，直接滾動
+    // 已經在首頁,直接滾動
     const element = document.getElementById('tasks')
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -252,7 +318,7 @@ const scrollToTasks = async (e) => {
 const scrollToGifts = async (e) => {
   e.preventDefault()
 
-  // 如果不在首頁，先導航到首頁
+  // 如果不在首頁,先導航到首頁
   if (router.currentRoute.value.path !== '/') {
     await router.push('/')
     // 等待頁面渲染
@@ -263,7 +329,7 @@ const scrollToGifts = async (e) => {
       }
     }, 100)
   } else {
-    // 已經在首頁，直接滾動
+    // 已經在首頁,直接滾動
     const element = document.getElementById('gifts')
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })

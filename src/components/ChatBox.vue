@@ -6,7 +6,7 @@
                 class="mb-4 w-80 sm:w-96 h-[500px] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150">
                 <!-- Header -->
                 <div
-                    class="p-4 bg-gradient-to-r from-primary-purple to-primary-blue text-white flex justify-between items-center">
+                    class="p-4 bg-gradient-to-br from-sky-400 to-purple-400 text-white flex justify-between items-center">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,7 +37,7 @@
                         <div :class="[
                             'max-w-[80%] p-3 rounded-2xl text-sm',
                             msg.isUser
-                                ? 'bg-primary-purple text-white rounded-tr-none'
+                                ? 'bg-gradient-to-br from-purple-500 to-cyan-400 text-white rounded-tr-none shadow-md'
                                 : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-tl-none shadow-sm'
                         ]">
                             {{ msg.text }}
@@ -64,7 +64,7 @@
 
         <!-- Toggle Button -->
         <button @click="isOpen = !isOpen"
-            class="h-14 w-14 flex items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-purple-600 text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 z-50 group">
+            class="h-14 w-14 flex items-center justify-center rounded-full bg-gray-100/90 dark:bg-gray-800/90 border border-gray-300/50 dark:border-gray-600/50 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 hover:scale-105 active:scale-95 transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl">
             <span
                 class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-gray-800"
                 v-if="!isOpen"></span>

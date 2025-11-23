@@ -1,6 +1,6 @@
 <template>
   <div :class="isDark ? 'dark' : ''" class="w-full min-h-screen overflow-x-hidden" style="margin: 0; padding: 0;">
-    <div class="flex flex-col min-h-screen bg-light-gradient dark:bg-dark-gradient">
+    <div class="flex flex-col min-h-screen bg-light-gradient dark:bg-dark-gradient bg-cover bg-fixed bg-no-repeat">
       <!-- NavBar -->
       <NavBar />
 

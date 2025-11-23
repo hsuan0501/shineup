@@ -27,12 +27,53 @@
             </div>
 
             <!-- Hero Content -->
-            <div class="relative z-10 text-center max-w-4xl mx-auto animate-fade-in w-full">
-                <div class="text-white drop-shadow-[0_12px_48px_rgba(34,211,238,0.8)] dark:drop-shadow-none">
-                    <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3">
+                <div class="relative flex flex-col items-center justify-center text-center z-10">
+                    <!-- Subtle Gradient Background behind text (Enhanced Visibility) -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] bg-gradient-to-r from-blue-400/50 via-purple-400/50 to-cyan-400/50 blur-2xl rounded-full -z-10 pointer-events-none"></div>
+
+                    <!-- Twinkling Stars (Natural Diffusion) -->
+                    <!-- Top Left -->
+                    <div class="absolute -top-6 -left-8 w-3 h-3 animate-twinkle-1 text-white/90">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+                    <div class="absolute top-2 -left-16 w-2 h-2 animate-twinkle-3 text-cyan-200/80">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+
+                    <!-- Top Right -->
+                    <div class="absolute -top-4 -right-6 w-3.5 h-3.5 animate-twinkle-2 text-purple-200/90">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+                    <div class="absolute top-6 -right-20 w-2.5 h-2.5 animate-twinkle-4 text-white/70">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+
+                    <!-- Bottom Left -->
+                    <div class="absolute bottom-2 -left-12 w-2.5 h-2.5 animate-twinkle-5 text-blue-200/80">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+                    <!-- Extra Bottom Left for Balance -->
+                    <div class="absolute -bottom-8 -left-20 w-2 h-2 animate-twinkle-4 text-blue-300/60">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+
+                    <!-- Bottom Right -->
+                    <div class="absolute -bottom-2 -right-10 w-3 h-3 animate-twinkle-1 text-white/90">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+
+                    <!-- Far Outliers for diffusion effect -->
+                    <div class="absolute -top-12 left-1/4 w-1.5 h-1.5 animate-twinkle-3 text-white/60">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+                    <div class="absolute -bottom-8 right-1/3 w-2 h-2 animate-twinkle-5 text-cyan-100/60">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+                    
+                    <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3 relative z-10 text-white drop-shadow-lg">
                         Shine Level Up
                     </h1>
-                    <p class="hero-subtitle text-lg sm:text-3xl font-light mb-8">
+                    <p class="hero-subtitle text-lg sm:text-3xl font-light mb-8 relative z-10 text-white/90 drop-shadow-md">
                         Keep shining, keep earning.
                     </p>
                 </div>
@@ -40,18 +81,17 @@
                 <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
                     <a href="#tasks" @click="scrollToTasks"
-                        class="px-8 py-3 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white text-lg font-normal transition-all duration-300 hover:scale-110 cursor-pointer">
+                        class="px-8 py-3 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-lg font-medium backdrop-blur-sm">
                         開始探險
                     </a>
                 </div>
-            </div>
 
             <!-- Scrolling Rewards Section -->
             <div class="relative z-10 w-full overflow-visible mt-8">
                 <!-- First Row - Left to Right (Gifts 1-12) -->
                 <div class="flex gap-3 animate-scroll-left mb-3">
                     <div v-for="gift in [...firstRowGifts, ...firstRowGifts]" :key="gift.id + '-row1'"
-                        class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
+                        class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
                         <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
                             <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
                         </div>
@@ -67,7 +107,7 @@
                 <!-- Second Row - Right to Left (Gifts 13-24) -->
                 <div class="flex gap-3 animate-scroll-right">
                     <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'"
-                        class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
+                        class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
                         <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
                             <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
                         </div>
@@ -107,14 +147,14 @@
                             <h3 class="text-sm font-bold text-light-text dark:text-dark-text">
                                 {{ currentTaskCategoryInfo.label }}
                             </h3>
-                            <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">
+                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
                                 {{ currentTaskCategoryInfo.description }}
                             </span>
                         </div>
                         <!-- 右側：任務數量 -->
                         <div class="flex items-center gap-2">
                             <span
-                                class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">任務數量</span>
+                                class="text-xs font-medium text-gray-500 dark:text-gray-400">任務數量</span>
                             <span class="text-sm font-bold text-light-text dark:text-dark-text">{{ filteredTasks.length
                                 }} 個</span>
                         </div>
@@ -218,10 +258,10 @@
                             <h3 class="text-sm font-bold text-light-text dark:text-dark-text">
                                 {{ currentSeriesInfo.level }}
                             </h3>
-                            <span class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">
+                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
                                 {{ currentSeriesInfo.pointRange }}
                             </span>
-                            <div class="text-xs text-light-text dark:text-dark-text opacity-80">
+                            <div class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ currentSeriesInfo.restriction }}
                             </div>
                         </div>
@@ -230,27 +270,27 @@
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-green-500"></div>
                                 <span
-                                    class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">充足</span>
+                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">充足</span>
                             </div>
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
                                 <span
-                                    class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">適量</span>
+                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">適量</span>
                             </div>
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-orange-500"></div>
                                 <span
-                                    class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">有限</span>
+                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">有限</span>
                             </div>
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-red-500"></div>
                                 <span
-                                    class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">稀少</span>
+                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">稀少</span>
                             </div>
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-gray-500"></div>
                                 <span
-                                    class="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">已售罄</span>
+                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">已售罄</span>
                             </div>
                         </div>
                     </div>
@@ -941,33 +981,19 @@ const getStockText = (gift) => {
     left: 0;
 }
 
-.blob-1 {
-    background: #2ac9de;
-}
+.blob-1 {    background: radial-gradient(circle, rgba(42, 201, 222, 0.8) 0%, rgba(42, 201, 222, 0.4) 100%);}
 
-.blob-2 {
-    background: #f087f4;
-}
+.blob-2 {    background: radial-gradient(circle, rgba(240, 135, 244, 0.8) 0%, rgba(240, 135, 244, 0.4) 100%);}
 
-.blob-3 {
-    background: color-mix(in srgb, #2ac9de, #f087f4 20%);
-}
+.blob-3 {    background: radial-gradient(circle, rgba(42, 201, 222, 0.7) 0%, rgba(42, 201, 222, 0.3) 100%);}
 
-.blob-4 {
-    background: color-mix(in srgb, #2ac9de, #f087f4 35%);
-}
+.blob-4 {    background: radial-gradient(circle, rgba(141, 168, 233, 0.7) 0%, rgba(141, 168, 233, 0.3) 100%);}
 
-.blob-5 {
-    background: color-mix(in srgb, #2ac9de, #f087f4 50%);
-}
+.blob-5 {    background: radial-gradient(circle, rgba(191, 135, 238, 0.7) 0%, rgba(191, 135, 238, 0.3) 100%);}
 
-.blob-6 {
-    background: color-mix(in srgb, #2ac9de, #f087f4 65%);
-}
+.blob-6 {    background: radial-gradient(circle, rgba(215, 135, 241, 0.7) 0%, rgba(215, 135, 241, 0.3) 100%);}
 
-.blob-7 {
-    background: color-mix(in srgb, #2ac9de, #f087f4 80%);
-}
+.blob-7 {    background: radial-gradient(circle, rgba(227, 151, 243, 0.7) 0%, rgba(227, 151, 243, 0.3) 100%);}
 
 /* Hero Title Shimmer Animation */
 @keyframes shimmer {
@@ -1038,24 +1064,19 @@ const getStockText = (gift) => {
     animation: glow-fast 12s ease-in-out infinite;
 }
 
-/* Hero Text Breathing Animation */
-@keyframes text-breathe {
+/* Hero Text - Static white text, no animation */
 
-    0%,
-    100% {
-        opacity: 0.85;
-    }
-
-    50% {
-        opacity: 1;
-    }
+/* Twinkling Stars Animation */
+@keyframes twinkle {
+    0%, 100% { opacity: 0.5; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.1) rotate(10deg); }
 }
 
-.hero-title,
-.hero-subtitle {
-    animation: text-breathe 4s ease-in-out infinite;
-    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 80px rgba(255, 255, 255, 0.4));
-}
+.animate-twinkle-1 { animation: twinkle 3s ease-in-out infinite; }
+.animate-twinkle-2 { animation: twinkle 4s ease-in-out infinite 1s; }
+.animate-twinkle-3 { animation: twinkle 2.5s ease-in-out infinite 0.5s; }
+.animate-twinkle-4 { animation: twinkle 3.5s ease-in-out infinite 1.5s; }
+.animate-twinkle-5 { animation: twinkle 4.5s ease-in-out infinite 0.2s; }
 
 /* 深色模式下移除光暈 */
 .dark .hero-title,
