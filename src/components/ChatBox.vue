@@ -3,7 +3,7 @@
         <!-- Chat Window -->
         <transition name="fade-slide">
             <div v-if="isOpen"
-                class="mb-4 w-80 sm:w-96 h-[500px] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150">
+                class="mb-4 w-80 sm:w-96 h-[500px] bg-zinc-50 dark:bg-gray-800 rounded-2xl shadow-2xl border border-zinc-200 dark:border-gray-700 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150">
                 <!-- Header -->
                 <div
                     class="p-4 bg-gradient-to-br from-sky-400 to-purple-400 text-white flex justify-between items-center">
@@ -28,7 +28,7 @@
                 </div>
 
                 <!-- Messages Area -->
-                <div class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50 dark:bg-gray-900/50"
+                <div class="flex-1 p-4 overflow-y-auto space-y-4 bg-zinc-50 dark:bg-gray-900/50"
                     ref="messagesContainer">
                     <div v-for="(msg, index) in messages" :key="index" :class="[
                         'flex w-full',
@@ -37,7 +37,7 @@
                         <div :class="[
                             'max-w-[80%] p-3 rounded-2xl text-sm',
                             msg.isUser
-                                ? 'bg-gradient-to-br from-cyan-100 to-blue-100 text-cyan-700 rounded-tr-none shadow-md'
+                                ? 'bg-gradient-to-r from-sky-100 to-indigo-100 text-gray-900 rounded-tr-none'
                                 : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-tl-none shadow-sm'
                         ]">
                             {{ msg.text }}
@@ -46,7 +46,7 @@
                 </div>
 
                 <!-- Input Area -->
-                <div class="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+                <div class="p-4 bg-zinc-50 dark:bg-gray-800 border-t border-zinc-200 dark:border-gray-700">
                     <form @submit.prevent="sendMessage" class="flex gap-2">
                         <input v-model="newMessage" type="text" placeholder="輸入訊息..."
                             class="flex-1 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-purple/50 transition-all placeholder-gray-400 dark:placeholder-gray-500" />
@@ -63,8 +63,8 @@
         </transition>
 
         <!-- Toggle Button -->
-        <button @click="isOpen = !isOpen"
-            class="h-14 w-14 flex items-center justify-center rounded-full bg-gray-100/90 dark:bg-gray-800/90 border border-gray-300/50 dark:border-gray-600/50 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 hover:scale-105 active:scale-95 transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl">
+        <button @click="toggleChat"
+            class="h-14 w-14 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 text-zinc-600 dark:text-gray-300 hover:scale-105 active:scale-95 transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl">
             <span
                 class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-gray-800"
                 v-if="!isOpen"></span>
@@ -132,8 +132,23 @@ const sendMessage = () => {
     }, 1000)
 }
 
+// 切換聊天窗口
+const isToggling = ref(false)
+const toggleChat = async () => {
+    if (isToggling.value) return
+    
+    isToggling.value = true
+    isOpen.value = !isOpen.value
+    
+    // 防抖動延遲
+    setTimeout(() => {
+        isToggling.value = false
+    }, 300)
+}
+
 // 點擊外部區域關閉對話框
 const handleClickOutside = (event) => {
+    if (isToggling.value) return
     if (chatBoxContainer.value && !chatBoxContainer.value.contains(event.target) && isOpen.value) {
         isOpen.value = false
     }

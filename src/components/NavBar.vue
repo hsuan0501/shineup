@@ -5,7 +5,7 @@
       <div class="relative flex items-center justify-between h-20">
 
         <!-- Logo + Nav Links (左邊群組) -->
-        <div class="flex items-center space-x-4 lg:space-x-8 xl:space-x-12 z-10">
+        <div class="flex items-center space-x-3 lg:space-x-4 xl:space-x-6 z-10">
           <!-- Logo -->
           <div class="flex-shrink-0">
             <div @click="scrollToTop"
@@ -56,7 +56,7 @@
         <!-- Right Section (登入狀態) -->
         <div class="flex items-center space-x-3 flex-shrink-0 z-10">
           <!-- 登入狀態 -->
-          <div v-if="isLoggedIn" class="flex items-center space-x-2 lg:space-x-4 xl:space-x-6">
+          <div v-if="isLoggedIn" class="flex items-center space-x-2.5 lg:space-x-3 xl:space-x-3.5">
             <!-- 日夜模式切換 -->
             <button @click="toggleDarkMode"
               class="relative w-16 h-8 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]"
@@ -242,7 +242,7 @@
 
             <!-- 購物車按鈕 -->
             <router-link to="/cart"
-              class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] group"
+              class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] group mr-3 lg:mr-4 xl:mr-5"
               aria-label="購物車">
               <svg
                 class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors"
@@ -252,12 +252,12 @@
               </svg>
               <!-- 購物車數量小圓點 -->
               <span
-                class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-sky-400 to-purple-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">3</span>
+                class="absolute -top-1 -right-1 w-5 h-5 bg-pink-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">3</span>
             </router-link>
 
             <!-- 會員中心 -->
             <RouterLink to="/profile"
-              class="px-4 py-2 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-95 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+              class="px-4 py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
               會員中心
             </RouterLink>
           </div>

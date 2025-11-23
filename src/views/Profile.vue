@@ -1,5 +1,14 @@
 <template>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Scroll to Top Button -->
+    <button @click="scrollToTop"
+      class="fixed bottom-6 left-6 sm:left-8 lg:left-10 z-50 h-12 w-12 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 hover:scale-105 active:scale-95 transition-all duration-400 ease-out shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl backdrop-saturate-150 group"
+      aria-label="回到頂部">
+      <svg class="w-5 h-5 text-zinc-600 dark:text-gray-300 group-hover:text-zinc-800 dark:group-hover:text-white transition-colors duration-300"
+        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
     <!-- 會員中心標題 -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-light-text dark:text-dark-text mb-2">會員中心</h1>
@@ -42,7 +51,7 @@
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-2">
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ user.name }}</h2>
-                <span class="px-3 py-1 text-sm font-bold rounded-2xl bg-blue-500 text-white shadow-md">
+                <span :class="`px-3 py-1 text-sm font-bold rounded-2xl text-white bg-gradient-to-br ${currentLevelConfig.gradientFrom} ${currentLevelConfig.gradientTo}`">
                   {{ currentLevelConfig.name }} Lv.{{ currentLevelConfig.levelNumber }}
                 </span>
               </div>
@@ -51,29 +60,14 @@
 
               <!-- 最近成就徽章 -->
               <div class="flex flex-wrap gap-2 mb-4">
-                <div class="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-full border border-green-200 dark:border-green-800">
-                  <div class="w-4 h-4 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
-                    <svg class="w-2 h-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
-                    </svg>
-                  </div>
-                  <span class="text-xs font-medium text-green-700 dark:text-green-300">連續 7 天</span>
+                <div class="inline-flex items-center px-2.5 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs font-medium rounded-full">
+                  連續 7 天
                 </div>
-                <div class="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-blue-50 to-sky-50 dark:from-blue-900/20 dark:to-sky-900/20 rounded-full border border-blue-200 dark:border-blue-800">
-                  <div class="w-4 h-4 rounded-full bg-gradient-to-br from-blue-400 to-sky-500 flex items-center justify-center">
-                    <svg class="w-2 h-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                    </svg>
-                  </div>
-                  <span class="text-xs font-medium text-blue-700 dark:text-blue-300">新手達人</span>
+                <div class="inline-flex items-center px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs font-medium rounded-full">
+                  新手達人
                 </div>
-                <div class="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full border border-purple-200 dark:border-purple-800">
-                  <div class="w-4 h-4 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center">
-                    <svg class="w-2 h-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                  </div>
-                  <span class="text-xs font-medium text-purple-700 dark:text-purple-300">社群達人</span>
+                <div class="inline-flex items-center px-2.5 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs font-medium rounded-full">
+                  社群達人
                 </div>
               </div>
 
@@ -191,12 +185,12 @@
         </div>
 
         <!-- 活動統計 -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">活動統計</h3>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-lg flex flex-col h-80">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">活動統計</h3>
           
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 flex-1">
             <!-- 任務完成 -->
-            <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+            <div class="text-center px-4 py-3.5 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
               <svg class="w-7 h-7 mx-auto mb-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
@@ -205,16 +199,16 @@
             </div>
 
             <!-- 連續登入 -->
-            <div class="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
-              <svg class="w-7 h-7 mx-auto mb-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 716.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+            <div class="text-center px-4 py-3.5 bg-pink-50 dark:bg-pink-900/20 rounded-xl">
+              <svg class="w-7 h-7 mx-auto mb-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              <div class="text-xl font-bold text-orange-600 dark:text-orange-400 mb-1">{{ user.stats?.consecutiveDays || 0 }}</div>
-              <div class="text-xs text-orange-600/80 dark:text-orange-400/80">連續登入</div>
+              <div class="text-xl font-bold text-pink-600 dark:text-pink-400 mb-1">{{ user.stats?.consecutiveDays || 0 }}</div>
+              <div class="text-xs text-pink-600/80 dark:text-pink-400/80">連續登入</div>
             </div>
 
             <!-- 總登入次數 -->
-            <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-xl">
+            <div class="text-center px-4 py-3.5 bg-green-50 dark:bg-green-900/20 rounded-xl">
               <svg class="w-7 h-7 mx-auto mb-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
               </svg>
@@ -223,7 +217,7 @@
             </div>
 
             <!-- 已兌換禮品 -->
-            <div class="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
+            <div class="text-center px-4 py-3.5 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
               <svg class="w-7 h-7 mx-auto mb-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
               </svg>
@@ -232,16 +226,16 @@
             </div>
 
             <!-- 邀請好友 -->
-            <div class="text-center p-3 bg-pink-50 dark:bg-pink-900/20 rounded-xl">
-              <svg class="w-7 h-7 mx-auto mb-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            <div class="text-center px-4 py-3.5 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
+              <svg class="w-7 h-7 mx-auto mb-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
               </svg>
-              <div class="text-xl font-bold text-pink-600 dark:text-pink-400 mb-1">{{ user.stats?.friendsInvited || 0 }}</div>
-              <div class="text-xs text-pink-600/80 dark:text-pink-400/80">邀請好友</div>
+              <div class="text-xl font-bold text-orange-600 dark:text-orange-400 mb-1">{{ user.stats?.friendsInvited || 0 }}</div>
+              <div class="text-xs text-orange-600/80 dark:text-orange-400/80">邀請好友</div>
             </div>
 
             <!-- 會員天數 -->
-            <div class="text-center p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
+            <div class="text-center px-4 py-3.5 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
               <svg class="w-7 h-7 mx-auto mb-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
               </svg>
@@ -250,15 +244,13 @@
             </div>
           </div>
         </div>
-
-
       </div>
 
       <!-- 右側：等級說明與歷史紀錄 -->
-      <div class="lg:col-span-2 space-y-6 lg:pl-2">
+      <div class="lg:col-span-2 space-y-6">
         <!-- 等級說明 -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">等級權益說明</h3>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">等級權益說明</h3>
           
           <div class="space-y-4">
             <div v-for="levelInfo in levelConfig" :key="levelInfo.level"
@@ -302,30 +294,31 @@
           </div>
         </div>
 
-        <!-- 最近活動紀錄 -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">最近活動紀錄</h3>
+        <!-- 活動紀錄 -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-lg flex flex-col h-80">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white">活動紀錄</h3>
+            <button class="text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+              查看完整活動紀錄 →
+            </button>
+          </div>
           
-          <div class="space-y-4">
-            <div v-for="record in recentRecords.slice(0, 3)" :key="record.id"
-                 class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-              <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+          <div class="space-y-2 flex-1">
+            <div v-for="record in recentRecords.slice(0, 4)" :key="record.id"
+                 class="flex items-center gap-3 p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                    :class="getRecordStyle(record).bg">
                 <div v-html="getRecordIcon(getRecordStyle(record).icon)" :class="getRecordStyle(record).text"></div>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ record.title }}</p>
-                <p class="text-xs text-gray-600 dark:text-gray-400">{{ formatDate(record.date) }}</p>
+                <p class="text-sm font-medium text-gray-900 dark:text-white truncate leading-tight">{{ record.title }}</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400 leading-tight">{{ formatDate(record.date) }}</p>
               </div>
-              <div class="text-sm font-bold" :class="getRecordStyle(record).text">
+              <div class="text-sm font-bold flex-shrink-0" :class="getRecordStyle(record).text">
                 {{ record.type === 'task' ? '+' + record.points : '-' + record.points }}
               </div>
             </div>
           </div>
-
-          <button class="w-full mt-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-            查看完整活動紀錄 →
-          </button>
         </div>
       </div>
     </div>
@@ -333,7 +326,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { mockUsers, levelConfig } from '../mock.js'
 
 // 頭像上傳相關
@@ -376,11 +369,11 @@ const memberDays = computed(() => {
 
 // 模擬最近紀錄
 const recentRecords = computed(() => [
-  { id: 1, type: 'task', title: '完成每日登入', points: 5, date: '2024-11-24' },
-  { id: 2, type: 'reward', title: '兌換環保便攜吸管組', points: 100, date: '2024-11-23' },
-  { id: 3, type: 'task', title: '閱讀理財文章', points: 10, date: '2024-11-23' },
-  { id: 4, type: 'task', title: '分享到社群', points: 15, date: '2024-11-22' },
-  { id: 5, type: 'reward', title: '兌換種子鉛筆組', points: 100, date: '2024-11-21' }
+  { id: 1, type: 'task', title: '完成每日登入', points: 5, date: '2024-11-24T09:30:00' },
+  { id: 2, type: 'reward', title: '兌換環保便攜吸管組', points: 100, date: '2024-11-23T14:25:00' },
+  { id: 3, type: 'task', title: '閱讀理財文章', points: 10, date: '2024-11-23T10:15:00' },
+  { id: 4, type: 'task', title: '分享到社群', points: 15, date: '2024-11-22T16:45:00' },
+  { id: 5, type: 'reward', title: '兌換種子鉛筆組', points: 100, date: '2024-11-21T11:20:00' }
 ])
 
 // 獲取紀錄樣式
@@ -458,11 +451,15 @@ const formatDate = (dateString) => {
   const now = new Date()
   const diffTime = now - date
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+  const diffHours = Math.floor(diffTime / (1000 * 60 * 60))
+  const diffMinutes = Math.floor(diffTime / (1000 * 60))
   
-  if (diffDays === 0) return '今天'
-  if (diffDays === 1) return '昨天'
+  if (diffMinutes < 60) return `${diffMinutes}分鐘前`
+  if (diffHours < 24) return `${diffHours}小時前`
+  if (diffDays === 0) return '今天 ' + date.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
+  if (diffDays === 1) return '昨天 ' + date.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
   if (diffDays < 7) return `${diffDays}天前`
-  return date.toLocaleDateString('zh-TW', { month: 'short', day: 'numeric' })
+  return date.toLocaleDateString('zh-TW', { month: 'short', day: 'numeric' }) + ' ' + date.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
 }
 
 // 打開頭像上傳
@@ -502,5 +499,22 @@ const handleAvatarChange = (event) => {
     alert('頭像更新成功！')
   }
   reader.readAsDataURL(file)
+}
+
+// Scroll to Top
+const showScrollTop = ref(false)
+
+const handleScroll = () => {
+  showScrollTop.value = window.scrollY > 300
+}
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  })
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
 }
 </script>

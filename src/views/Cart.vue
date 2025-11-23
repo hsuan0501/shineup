@@ -1,16 +1,25 @@
 <template>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Scroll to Top Button -->
+        <button @click="scrollToTop"
+            class="fixed bottom-6 left-6 sm:left-8 lg:left-10 z-50 h-12 w-12 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 hover:scale-105 active:scale-95 transition-all duration-400 ease-out shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl backdrop-saturate-150 group"
+            aria-label="回到頂部">
+            <svg class="w-5 h-5 text-zinc-600 dark:text-gray-300 group-hover:text-zinc-800 dark:group-hover:text-white transition-colors duration-300"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+        </button>
         <!-- 頁面標題 -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-light-text dark:text-dark-text mb-2">購物車</h1>
             <p class="text-gray-600 dark:text-gray-400">使用兌換積分選購心儀的禮品</p>
         </div>
 
-        <div v-if="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div v-if="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <!-- 購物車商品列表 -->
-            <div class="lg:col-span-2 space-y-4">
+            <div class="lg:col-span-3 space-y-6">
                 <div v-for="item in cartItems" :key="item.id"
-                    class="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+                    class="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
                     
                     <!-- 系列標識 -->
                     <div class="absolute top-4 right-4">
@@ -95,12 +104,9 @@
             </div>
 
             <!-- 訂單摘要卡片 -->
-            <div class="lg:col-span-1">
-                <div class="sticky top-24 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                        </svg>
+            <div class="lg:col-span-2">
+                <div class="sticky top-24 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">
                         訂單摘要
                     </h2>
 
@@ -157,14 +163,11 @@
                     <button @click="checkout"
                         :disabled="totalPoints > availablePoints"
                         :class="[
-                            'w-full py-4 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2',
+                            'w-full py-4 rounded-full font-bold transition-all duration-300 flex items-center justify-center',
                             totalPoints > availablePoints 
                                 ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                                : 'bg-gradient-to-r from-sky-400 to-purple-400 text-white hover:shadow-lg hover:shadow-purple-500/25 hover:scale-[1.02] active:scale-[0.98]'
+                                : 'bg-gradient-to-r from-sky-400 to-blue-600 text-white hover:shadow-lg hover:shadow-blue-500/25 hover:scale-[1.02] active:scale-[0.98]'
                         ]">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                        </svg>
                         {{ totalPoints > availablePoints ? '積分不足' : '確認兌換' }}
                     </button>
 
@@ -214,7 +217,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { mockUsers } from '../mock.js'
 
 // 用戶積分
@@ -310,4 +313,32 @@ const getLevelStyle = (level) => {
   }
   return styles[level] || styles.EXPLORER
 }
+
+// Scroll to Top
+const showScrollTop = ref(false)
+
+const handleScroll = () => {
+  showScrollTop.value = window.scrollY > 300
+}
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  })
+  document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+}
+
+// 滾動事件監聽
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+
 </script>
