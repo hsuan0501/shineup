@@ -28,60 +28,53 @@
 
             <!-- Hero Content -->
                 <div class="relative flex flex-col items-center justify-center text-center z-10">
-                    <!-- Subtle Gradient Background behind text (Enhanced Visibility) -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] bg-gradient-to-r from-blue-400/50 via-purple-400/50 to-cyan-400/50 blur-2xl rounded-full -z-10 pointer-events-none"></div>
+
+                    <!-- Subtle Gradient Background for text visibility (behind everything) -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-3xl rounded-full -z-10 pointer-events-none"></div>
 
                     <!-- Twinkling Stars (Natural Diffusion) -->
-                    <!-- Top Left -->
-                    <div class="absolute -top-6 -left-8 w-3 h-3 animate-twinkle-1 text-white/90">
+                    <!-- Left Side (4 stars) -->
+                    <div class="absolute -top-6 -left-10 w-3.5 h-3.5 animate-twinkle-2 text-white">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
-                    <div class="absolute top-2 -left-16 w-2 h-2 animate-twinkle-3 text-cyan-200/80">
+                    <div class="absolute top-6 -left-24 w-2.5 h-2.5 animate-twinkle-4 text-white">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
-
-                    <!-- Top Right -->
-                    <div class="absolute -top-4 -right-6 w-3.5 h-3.5 animate-twinkle-2 text-purple-200/90">
+                    <div class="absolute -top-12 right-1/4 w-1.5 h-1.5 animate-twinkle-3 text-white">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
-                    <div class="absolute top-6 -right-20 w-2.5 h-2.5 animate-twinkle-4 text-white/70">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-
-                    <!-- Bottom Left -->
-                    <div class="absolute bottom-2 -left-12 w-2.5 h-2.5 animate-twinkle-5 text-blue-200/80">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-                    <!-- Extra Bottom Left for Balance -->
-                    <div class="absolute -bottom-8 -left-20 w-2 h-2 animate-twinkle-4 text-blue-300/60">
+                    <div class="absolute bottom-4 -left-12 w-2.5 h-2.5 animate-twinkle-5 text-white">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
 
-                    <!-- Bottom Right -->
-                    <div class="absolute -bottom-2 -right-10 w-3 h-3 animate-twinkle-1 text-white/90">
+                    <!-- Right Side (3 stars) -->
+                    <div class="absolute -top-4 -right-6 w-3.5 h-3.5 animate-twinkle-2 text-white">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+                    <div class="absolute top-6 -right-20 w-2.5 h-2.5 animate-twinkle-4 text-white">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
+                    </div>
+                    <div class="absolute bottom-2 -right-10 w-3 h-3 animate-twinkle-1 text-white">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
 
-                    <!-- Far Outliers for diffusion effect -->
-                    <div class="absolute -top-12 left-1/4 w-1.5 h-1.5 animate-twinkle-3 text-white/60">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-                    <div class="absolute -bottom-8 right-1/3 w-2 h-2 animate-twinkle-5 text-cyan-100/60">
+                    <!-- Top Center -->
+                    <div class="absolute -top-12 left-1/4 w-1.5 h-1.5 animate-twinkle-3 text-white">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
                     </div>
                     
-                    <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3 relative z-10 text-white drop-shadow-lg">
+                    <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3 relative z-10 text-white">
                         Shine Level Up
                     </h1>
-                    <p class="hero-subtitle text-lg sm:text-3xl font-light mb-8 relative z-10 text-white/90 drop-shadow-md">
+                    <p class="hero-subtitle text-lg sm:text-3xl font-light mb-8 relative z-10 text-white">
                         Keep shining, keep earning.
                     </p>
                 </div>
 
                 <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+                <div class="relative z-20 flex flex-col sm:flex-row gap-4 justify-center mb-16">
                     <a href="#tasks" @click="scrollToTasks"
-                        class="px-8 py-3 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-lg font-medium backdrop-blur-sm">
+                        class="px-8 py-3 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white font-semibold hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-lg">
                         開始探險
                     </a>
                 </div>
@@ -995,29 +988,7 @@ const getStockText = (gift) => {
 
 .blob-7 {    background: radial-gradient(circle, rgba(227, 151, 243, 0.7) 0%, rgba(227, 151, 243, 0.3) 100%);}
 
-/* Hero Title Shimmer Animation */
-@keyframes shimmer {
-    0% {
-        background-position: -200% center;
-    }
-
-    100% {
-        background-position: 200% center;
-    }
-}
-
-.animate-scale-in {
-    background: linear-gradient(90deg,
-            rgba(255, 255, 255, 0.2) 0%,
-            rgba(255, 255, 255, 0.2) 30%,
-            rgba(255, 255, 255, 1) 50%,
-            rgba(255, 255, 255, 0.2) 70%,
-            rgba(255, 255, 255, 0.2) 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    animation: shimmer 2s linear infinite;
-}
+/* Hero Title - No animation for stable display */
 
 @keyframes scroll-left {
     0% {
