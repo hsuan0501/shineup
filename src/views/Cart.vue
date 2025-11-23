@@ -14,7 +14,7 @@
                     
                     <!-- 系列標識 -->
                     <div class="absolute top-4 right-4">
-                        <span class="px-2 py-1 text-xs font-bold rounded-full"
+                        <span class="px-2 py-1 text-xs font-bold rounded-lg"
                               :class="getSeriesStyle(item.series)">
                             {{ getSeriesName(item.series) }}
                         </span>
@@ -28,7 +28,7 @@
                             </div>
                             
                             <!-- 等級徽章 -->
-                            <div class="absolute -top-2 -left-2 w-6 h-6 rounded-full flex items-center justify-center shadow-lg"
+                            <div class="absolute -top-2 -left-2 w-6 h-6 rounded-md flex items-center justify-center shadow-lg"
                                  :class="getLevelStyle(item.level)">
                                 <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24">
                                     <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z" fill="white"/>
@@ -131,7 +131,7 @@
                             <div class="flex justify-between items-center">
                                 <span class="text-lg font-bold text-gray-900 dark:text-white">總計</span>
                                 <div class="text-right">
-                                    <div class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                                    <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">
                                         {{ totalPoints }}
                                     </div>
                                     <div class="text-sm text-gray-500">積分</div>
@@ -160,7 +160,7 @@
                             'w-full py-4 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2',
                             totalPoints > availablePoints 
                                 ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                                : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-lg hover:shadow-purple-500/25 hover:scale-[1.02] active:scale-[0.98]'
+                                : 'bg-gradient-to-r from-sky-400 to-purple-400 text-white hover:shadow-lg hover:shadow-purple-500/25 hover:scale-[1.02] active:scale-[0.98]'
                         ]">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>

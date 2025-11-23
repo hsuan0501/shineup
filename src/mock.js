@@ -4,9 +4,9 @@ export const mockUsers = {
     name: 'Matcha',
     email: 'matcha@example.com',
     level: 'CREATOR',
-    levelPoints: 450,    // 升級積分 - 只能加不能減，用於提升會員等級
-    rewardPoints: 680,   // 兌換積分 - 可扣除，用於兌換禮品
-    points: 450, // 保留舊字段以維持向後兼容
+    levelPoints: 700,    // 升級積分 - 只能加不能減，用於提升會員等級
+    rewardPoints: 600,   // 兌換積分 - 可扣除，用於兌換禮品
+    points: 600, // 保留舊字段以維持向後兼容
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=matcha',
     createdAt: '2024-01-15',
     // 統計數據

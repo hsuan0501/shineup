@@ -5,7 +5,7 @@
       <div class="relative flex items-center justify-between h-20">
 
         <!-- Logo + Nav Links (左邊群組) -->
-        <div class="flex items-center space-x-6 z-10">
+        <div class="flex items-center space-x-4 lg:space-x-8 xl:space-x-12 z-10">
           <!-- Logo -->
           <div class="flex-shrink-0">
             <div @click="scrollToTop"
@@ -56,7 +56,7 @@
         <!-- Right Section (登入狀態) -->
         <div class="flex items-center space-x-3 flex-shrink-0 z-10">
           <!-- 登入狀態 -->
-          <div v-if="isLoggedIn" class="flex items-center space-x-3">
+          <div v-if="isLoggedIn" class="flex items-center space-x-2 lg:space-x-4 xl:space-x-6">
             <!-- 日夜模式切換 -->
             <button @click="toggleDarkMode"
               class="relative w-16 h-8 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]"
@@ -94,20 +94,7 @@
               </div>
             </button>
 
-            <!-- 購物車按鈕 -->
-            <router-link to="/cart"
-              class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] group"
-              aria-label="購物車">
-              <svg
-                class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              <!-- 購物車數量小圓點 -->
-              <span
-                class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-sky-400 to-purple-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">3</span>
-            </router-link>
+
 
             <!-- Level Card Dropdown Container -->
             <div ref="levelCardContainer" class="relative">
@@ -168,7 +155,7 @@
                       <span :class="`text-xs font-semibold uppercase tracking-wider`" :style="`color: ${currentLevel.color}`">Current Level</span>
                       <span class="text-xs text-gray-500">Lv.{{ currentLevel.levelNumber }}</span>
                     </div>
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-4 mb-4">
                       <div :class="[
                         'w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg',
                         `bg-gradient-to-br ${currentLevel.gradientFrom} ${currentLevel.gradientTo}`
@@ -179,7 +166,35 @@
                       </div>
                       <div>
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ currentLevel.name }}</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ currentLevel.level.charAt(0) + currentLevel.level.slice(1).toLowerCase() }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ currentLevel.multiplier }}x 積分倍率</p>
+                      </div>
+                    </div>
+                    
+                    <!-- 雙軌積分顯示 -->
+                    <div class="grid grid-cols-2 gap-3">
+                      <!-- 升級積分 -->
+                      <div class="bg-sky-50 dark:bg-sky-900/20 rounded-lg p-3">
+                        <div class="flex items-center gap-2 mb-1">
+                          <svg class="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24">
+                            <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z" fill="currentColor"/>
+                          </svg>
+                          <span class="text-xs font-medium text-sky-600 dark:text-sky-400">升級積分</span>
+                        </div>
+                        <div class="text-lg font-bold text-sky-700 dark:text-sky-300">{{ userLevelPoints.toLocaleString() }}</div>
+                        <div class="text-xs text-sky-600 dark:text-sky-400">用於提升等級</div>
+                      </div>
+                      
+                      <!-- 兌換積分 -->
+                      <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3">
+                        <div class="flex items-center gap-2 mb-1">
+                          <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
+                          </svg>
+                          <span class="text-xs font-medium text-purple-600 dark:text-purple-400">兌換積分</span>
+                        </div>
+                        <div class="text-lg font-bold text-purple-700 dark:text-purple-300">{{ userRewardPoints.toLocaleString() }}</div>
+                        <div class="text-xs text-purple-600 dark:text-purple-400">用於兌換禮品</div>
                       </div>
                     </div>
                   </div>
@@ -206,36 +221,39 @@
 
                   <!-- Benefits Preview -->
                   <div class="p-4 bg-gray-50/50 dark:bg-gray-800/30">
-                    <h4 class="text-xs font-semibold text-gray-900 dark:text-white mb-3">
-                      {{ nextLevel ? '下個等級權益' : '當前等級權益' }}
-                    </h4>
+                    <h4 class="text-xs font-semibold text-gray-900 dark:text-white mb-3">當前等級權益</h4>
                     <ul class="space-y-2">
                       <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>積分倍率 {{ (nextLevel || currentLevel).multiplier }}x</span>
+                        <div :class="`w-2 h-2 rounded-full ${currentLevel.gradientFrom.includes('emerald') ? 'bg-emerald-400' : currentLevel.gradientFrom.includes('cyan') ? 'bg-cyan-400' : currentLevel.gradientFrom.includes('amber') ? 'bg-amber-400' : 'bg-purple-400'}`"></div>
+                        <span>任務積分 {{ currentLevel.multiplier }} 倍加成</span>
                       </li>
                       <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>{{ (nextLevel || currentLevel).name }}專屬禮品</span>
-                      </li>
-                      <li v-if="!nextLevel" class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>VIP 專屬客服</span>
+                        <div :class="`w-2 h-2 rounded-full ${currentLevel.gradientFrom.includes('emerald') ? 'bg-emerald-400' : currentLevel.gradientFrom.includes('cyan') ? 'bg-cyan-400' : currentLevel.gradientFrom.includes('amber') ? 'bg-amber-400' : 'bg-purple-400'}`"></div>
+                        <span>可兌換<span v-if="currentLevel.level === 'EXPLORER'">「永續探索」</span><span v-else-if="currentLevel.level === 'CREATOR'">「質感創造」</span><span v-else-if="currentLevel.level === 'VISIONARY'">「美學先鋒」</span><span v-else-if="currentLevel.level === 'LUMINARY'">「品味閃耀」</span>系列禮品</span>
                       </li>
                     </ul>
                     <RouterLink to="/profile" @click="showLevelCard = false" :class="`mt-4 block w-full py-2 text-center text-sm font-medium hover:bg-opacity-10 rounded-lg transition-colors`" :style="`color: ${currentLevel.color}; background-color: ${currentLevel.color}15`">
-                      查看完整權益 →
+                      查看完整等級權益 →
                     </RouterLink>
                   </div>
                 </div>
               </transition>
             </div>
+
+            <!-- 購物車按鈕 -->
+            <router-link to="/cart"
+              class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] group"
+              aria-label="購物車">
+              <svg
+                class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <!-- 購物車數量小圓點 -->
+              <span
+                class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-sky-400 to-purple-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">3</span>
+            </router-link>
 
             <!-- 會員中心 -->
             <RouterLink to="/profile"
