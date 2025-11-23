@@ -3,7 +3,7 @@
         <!-- Chat Window -->
         <transition name="fade-slide">
             <div v-if="isOpen"
-                class="mb-4 w-80 sm:w-96 h-[500px] bg-zinc-50 dark:bg-gray-800 rounded-2xl shadow-2xl border border-zinc-200 dark:border-gray-700 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150">
+                class="mb-4 w-80 sm:w-96 h-[500px] bg-zinc-50 dark:bg-gray-700/80 rounded-2xl shadow-2xl border border-zinc-200 dark:border-gray-600/40 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150 dark:backdrop-blur-2xl">
                 <!-- Header -->
                 <div
                     class="p-4 bg-gradient-to-br from-sky-400 to-purple-400 text-white flex justify-between items-center">
@@ -46,7 +46,7 @@
                 </div>
 
                 <!-- Input Area -->
-                <div class="p-4 bg-zinc-50 dark:bg-gray-800 border-t border-zinc-200 dark:border-gray-700">
+                <div class="p-4 bg-zinc-50 dark:bg-gray-700/80 border-t border-zinc-200 dark:border-gray-600/40 backdrop-blur-xl">
                     <form @submit.prevent="sendMessage" class="flex gap-2">
                         <input v-model="newMessage" type="text" placeholder="輸入訊息..."
                             class="flex-1 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-purple/50 transition-all placeholder-gray-400 dark:placeholder-gray-500" />
@@ -64,7 +64,7 @@
 
         <!-- Toggle Button -->
         <button @click="toggleChat"
-            class="h-14 w-14 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 text-zinc-600 dark:text-gray-300 hover:scale-105 active:scale-95 transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl">
+            class="h-14 w-14 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-700/80 border border-zinc-200/50 dark:border-gray-600/40 hover:bg-zinc-200 dark:hover:bg-gray-600/70 text-zinc-600 dark:text-gray-300 hover:scale-105 active:scale-95 transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl dark:shadow-2xl">
             <span
                 class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-gray-800"
                 v-if="!isOpen"></span>
@@ -90,7 +90,7 @@ const messagesContainer = ref(null)
 const chatBoxContainer = ref(null)
 
 const messages = ref([
-    { text: '您好！歡迎來到 Shine Level Up。請問有什麼我可以幫您的嗎？', isUser: false }
+    { text: '您好！歡迎來到 ShineUp。請問有什麼可以幫忙的嗎？', isUser: false }
 ])
 
 const scrollToBottom = async () => {

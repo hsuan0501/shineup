@@ -16,26 +16,24 @@
     </div>
 
     <!-- 主要內容區域 -->
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
       <!-- 左側：用戶資訊與等級進度 -->
       <div class="lg:col-span-3 space-y-6">
         <!-- 用戶資訊卡片 -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+        <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300">
           <div class="flex items-start gap-6">
             <!-- 頭像 -->
             <div class="relative">
-              <img 
-                :src="user.avatar" 
-                :alt="user.name"
-                class="w-20 h-20 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                @click="openAvatarUpload"
-                title="點擊更換頭像"
-              >
-              <div class="absolute -top-1 -left-1 w-6 h-6 rounded-lg bg-gradient-to-br flex items-center justify-center shadow-lg"
-                   :class="currentLevelConfig.gradientFrom + ' ' + currentLevelConfig.gradientTo">
-                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24">
-                  <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z" fill="white"/>
-                </svg>
+              <!-- IG 限動風格漸層邊框 -->
+              <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-br shadow-lg"
+                   :class="`${currentLevelConfig.gradientFrom} ${currentLevelConfig.gradientTo}`">
+                <img 
+                  :src="user.avatar" 
+                  :alt="user.name"
+                  class="w-full h-full rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity bg-white dark:bg-gray-600"
+                  @click="openAvatarUpload"
+                  title="點擊更換頭像"
+                >
               </div>
               <!-- 隱藏的檔案輸入 -->
               <input 
@@ -107,7 +105,7 @@
         </div>
 
         <!-- 等級進度 -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+        <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl px-6 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300" style="padding-top: 1.875rem; padding-bottom: 1.875rem;">
           <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">等級進度</h3>
           
           <!-- 當前等級資訊 -->
@@ -185,12 +183,12 @@
         </div>
 
         <!-- 活動統計 -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-lg flex flex-col h-80">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">活動統計</h3>
+        <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-5 dark:shadow-2xl border dark:border-gray-600/30 flex flex-col h-80 hover:scale-[1.01] transition-transform duration-300">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">活動統計</h3>
           
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 flex-1">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3 flex-1 pb-2">
             <!-- 任務完成 -->
-            <div class="text-center px-4 py-3.5 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+            <div class="text-center px-3 py-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
               <svg class="w-7 h-7 mx-auto mb-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
@@ -249,12 +247,12 @@
       <!-- 右側：等級說明與歷史紀錄 -->
       <div class="lg:col-span-2 space-y-6">
         <!-- 等級說明 -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">等級權益說明</h3>
+        <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-5">等級權益說明</h3>
           
           <div class="space-y-4">
             <div v-for="levelInfo in levelConfig" :key="levelInfo.level"
-                 class="p-4 rounded-xl transition-all border"
+                 class="px-4 py-5 rounded-xl transition-all border"
                  :class="levelInfo.level === user.level ? 'bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 border-sky-200 dark:border-sky-800' : 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600'">
               <div class="flex items-start gap-3">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -295,17 +293,17 @@
         </div>
 
         <!-- 活動紀錄 -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-lg flex flex-col h-80">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white">活動紀錄</h3>
+        <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-5 dark:shadow-2xl border dark:border-gray-600/30 flex flex-col h-80 hover:scale-[1.01] transition-transform duration-300">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white">活動索錄</h3>
             <button class="text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
               查看完整活動紀錄 →
             </button>
           </div>
           
-          <div class="space-y-2 flex-1">
+          <div class="space-y-2.5 flex-1 pb-1">
             <div v-for="record in recentRecords.slice(0, 4)" :key="record.id"
-                 class="flex items-center gap-3 p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                 class="flex items-center gap-3 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
               <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                    :class="getRecordStyle(record).bg">
                 <div v-html="getRecordIcon(getRecordStyle(record).icon)" :class="getRecordStyle(record).text"></div>

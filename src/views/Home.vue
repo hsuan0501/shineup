@@ -82,7 +82,7 @@
                 <!-- First Row - Left to Right (Gifts 1-12) -->
                 <div class="flex gap-3 animate-scroll-left mb-3">
                     <div v-for="gift in [...firstRowGifts, ...firstRowGifts]" :key="gift.id + '-row1'"
-                        class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
+                        class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300">
                         <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
                             <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
                         </div>
@@ -98,7 +98,7 @@
                 <!-- Second Row - Right to Left (Gifts 13-24) -->
                 <div class="flex gap-3 animate-scroll-right">
                     <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'"
-                        class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-light-border dark:border-dark-border hover:scale-105 hover:z-50 transition-all duration-300">
+                        class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300">
                         <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
                             <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
                         </div>
@@ -155,7 +155,8 @@
                 <!-- Tasks Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
                     <div v-for="task in paginatedTasks" :key="task.id"
-                        class="p-3.5 rounded-2xl bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border hover:scale-105 transition-all duration-300 group cursor-pointer">
+                        class="p-3.5 rounded-2xl bg-light-card dark:bg-gray-700/60 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 group cursor-pointer dark:shadow-2xl border"
+                        :class="getTaskBorderClass(task.category)">
 
                         <div class="flex items-start justify-between mb-2.5">
                             <div class="flex items-center gap-2">
@@ -204,12 +205,12 @@
                 <div class="flex items-center justify-center gap-3">
                     <button v-for="page in 5" :key="page" @click="isTaskPageAvailable(page) && (currentTaskPage = page)"
                         :disabled="!isTaskPageAvailable(page)" :class="[
-                            'w-10 h-10 rounded-full font-semibold text-sm transition-all duration-300',
+                            'w-10 h-10 rounded-full font-semibold text-sm transition-colors duration-200',
                             (selectedTaskCategory === 'all' || selectedTaskCategory === '') && page === currentTaskPage || (selectedTaskCategory !== 'all' && selectedTaskCategory !== '' && isTaskPageAvailable(page))
                                 ? 'bg-gradient-to-br from-sky-400 to-purple-400 text-white'
                                 : isTaskPageAvailable(page)
-                                    ? 'bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text hover:scale-105 border border-light-border dark:border-dark-border cursor-pointer'
-                                    : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 border border-gray-300 dark:border-gray-700 cursor-not-allowed opacity-50'
+                                    ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-light-text dark:text-gray-200 cursor-pointer dark:shadow-xl'
+                                    : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
                         ]">
                         {{ page }}
                     </button>
@@ -290,7 +291,7 @@
                 <!-- Gifts Grid -->
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
                     <div v-for="gift in paginatedGifts" :key="gift.id" :class="[
-                        'group rounded-lg overflow-hidden bg-light-card dark:bg-dark-card hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer',
+                        'group rounded-lg overflow-hidden bg-light-card dark:bg-gray-600/70 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 cursor-pointer dark:shadow-2xl',
                         !isGiftInSelectedSeries(gift) ? 'opacity-20 grayscale brightness-50 border border-gray-300 dark:border-gray-600' : `border ${getSeriesBorderClass()}`,
                     ]">
 
@@ -353,12 +354,12 @@
                 <div class="flex items-center justify-center gap-3">
                     <button v-for="page in 4" :key="page" @click="isPageAvailable(page) && (currentPage = page)"
                         :disabled="!isPageAvailable(page)" :class="[
-                            'w-10 h-10 rounded-full font-semibold text-sm transition-all duration-300',
+                            'w-10 h-10 rounded-full font-semibold text-sm transition-colors duration-200',
                             (selectedSeries === 'all' || selectedSeries === '') && page === currentPage || (selectedSeries !== 'all' && selectedSeries !== '' && isPageAvailable(page))
                                 ? 'bg-gradient-to-br from-sky-400 to-purple-400 text-white'
                                 : isPageAvailable(page)
-                                    ? 'bg-light-card dark:bg-dark-card text-light-text dark:text-dark-text hover:scale-105 border border-light-border dark:border-dark-border cursor-pointer'
-                                    : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 border border-gray-300 dark:border-gray-700 cursor-not-allowed opacity-50'
+                                    ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-light-text dark:text-gray-200 cursor-pointer dark:shadow-xl'
+                                    : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
                         ]">
                         {{ page }}
                     </button>
@@ -675,6 +676,19 @@ const getTaskIconColorClass = (category) => {
         'social': 'text-purple-600 dark:text-purple-400'
     }
     return classes[category] || 'text-gray-600 dark:text-gray-400'
+}
+
+const getTaskBorderClass = (taskCategory) => {
+    // 根據當前選擇的任務分類來決定邊框顏色（與說明欄一致）
+    const borderClasses = {
+        'all': 'border-cyan-200 dark:border-cyan-800',           // 全部任務 - 淺青色
+        'daily': 'border-pink-200 dark:border-pink-800',         // 日常互動 - 淺粉紅
+        'financial': 'border-indigo-200 dark:border-indigo-800', // 理財學習 - 淺靛藍
+        'investment': 'border-orange-200 dark:border-orange-800', // 投資實踐 - 淺橘色
+        'esg': 'border-emerald-200 dark:border-emerald-800',     // 永續行動 - 淺翡翠
+        'social': 'border-violet-200 dark:border-violet-800'     // 社交分享 - 淺紫色
+    }
+    return borderClasses[selectedTaskCategory.value] || 'border-cyan-200 dark:border-cyan-800'
 }
 
 // 根據任務標題返回特定圖標

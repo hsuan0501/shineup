@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl backdrop-saturate-150 bg-white/92 dark:bg-gray-900/88 border-b border-gray-200/20 dark:border-white/5 transition-all duration-300 shadow-[0_1px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_12px_rgba(0,0,0,0.2)]">
+    class="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl backdrop-saturate-150 bg-white/92 dark:bg-gray-900/88 border-b border-gray-200/20 dark:border-white/5 transition-all duration-300">
     <div class="w-full px-4 sm:px-6 lg:px-8">
       <div class="relative flex items-center justify-between h-20">
 
@@ -27,12 +27,12 @@
           <!-- Nav Links -->
           <div class="flex items-center space-x-2">
             <a href="/#tasks" @click="scrollToTasks"
-              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer">
               <span
                 class="bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">任務清單</span>
             </a>
             <a href="/#gifts" @click="scrollToGifts"
-              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer">
               <span
                 class="bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">禮品總覽</span>
             </a>
@@ -43,7 +43,7 @@
         <div class="absolute left-1/2 transform -translate-x-1/2 w-full max-w-lg px-4">
           <div class="relative">
             <input type="text" placeholder="搜尋任務或禮品..."
-              class="w-full px-6 py-2.5 rounded-full bg-white/50 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 text-light-text dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-purple-300 dark:focus:border-purple-500/50 focus:bg-white/70 dark:focus:bg-white/15 hover:bg-white/60 dark:hover:bg-white/15 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] focus:shadow-[0_4px_16px_rgba(168,85,247,0.15)] dark:focus:shadow-[0_4px_16px_rgba(168,85,247,0.3)]">
+              class="w-full px-6 py-2.5 rounded-full bg-white/50 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 text-light-text dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-purple-300 dark:focus:border-purple-500/50 focus:bg-white/70 dark:focus:bg-white/15 hover:bg-white/60 dark:hover:bg-white/15 transition-all duration-300 ease-out">
             <svg
               class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-400 pointer-events-none"
               fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,12 +59,12 @@
           <div v-if="isLoggedIn" class="flex items-center space-x-2.5 lg:space-x-3 xl:space-x-3.5">
             <!-- 日夜模式切換 -->
             <button @click="toggleDarkMode"
-              class="relative w-16 h-8 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]"
+              class="relative w-16 h-8 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:scale-105 active:scale-95 transition-all duration-300 ease-out"
               aria-label="切換日夜模式">
 
               <!-- 滑動按鈕 -->
               <div :class="[
-                'absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 transition-all duration-300 flex items-center justify-center shadow-lg',
+                'absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 transition-all duration-300 flex items-center justify-center',
                 isDarkMode ? 'left-[calc(100%-1.75rem)]' : 'left-0.5'
               ]">
                 <!-- Sun Icon (亮色模式) -->
@@ -111,7 +111,7 @@
                   <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z" :fill="`url(#level-star-${currentLevel.levelNumber})`"/>
                 </svg>
                 <div class="flex items-center gap-2">
-                  <span class="text-sm font-bold text-gray-900 dark:text-white">{{ currentLevel.name }}</span>
+                  <span class="text-sm font-bold" :style="`color: ${currentLevel.color}`">{{ currentLevel.name }}</span>
                   <div class="flex items-center gap-1">
                     <!-- 升級積分 -->
                     <div class="flex items-center gap-1 px-2 py-1 bg-sky-100 dark:bg-sky-900/30 rounded-full">
@@ -145,7 +145,7 @@
                 leave-to-class="transform scale-95 opacity-0"
               >
                 <div v-if="showLevelCard"
-                  class="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                  class="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
                   <!-- Header -->
                   <div :class="[
                     'p-4 border-b border-gray-100 dark:border-gray-800',
@@ -157,7 +157,7 @@
                     </div>
                     <div class="flex items-center gap-4 mb-4">
                       <div :class="[
-                        'w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg',
+                        'w-16 h-16 rounded-2xl flex items-center justify-center',
                         `bg-gradient-to-br ${currentLevel.gradientFrom} ${currentLevel.gradientTo}`
                       ]">
                         <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24">
@@ -242,7 +242,7 @@
 
             <!-- 購物車按鈕 -->
             <router-link to="/cart"
-              class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] group mr-3 lg:mr-4 xl:mr-5"
+              class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out group mr-3 lg:mr-4 xl:mr-5"
               aria-label="購物車">
               <svg
                 class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors"
@@ -250,9 +250,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              <!-- 購物車數量小圓點 -->
-              <span
-                class="absolute -top-1 -right-1 w-5 h-5 bg-pink-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">3</span>
+              <!-- 購物車数量小圓點 -->
+              <span v-if="store.cartItemCount > 0"
+                class="absolute -top-1 -right-1 w-5 h-5 bg-pink-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">{{ store.cartItemCount }}</span>
             </router-link>
 
             <!-- 會員中心 -->
@@ -283,8 +283,10 @@
 import { RouterLink, useRouter } from 'vue-router'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { levelConfig, mockUsers } from '../mock.js'
+import { useStore } from '../store/app.js'
 
 const router = useRouter()
+const store = useStore()
 const isLoggedIn = ref(true)
 const showLevelCard = ref(false)
 const isDarkMode = ref(false)
