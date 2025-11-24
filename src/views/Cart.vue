@@ -21,11 +21,11 @@
             <!-- 商品列表 -->
             <div class="lg:col-span-3 space-y-4 h-[600px] overflow-y-auto pr-2">
                 <div v-for="item in cartItems" :key="item.id"
-                    class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-4 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300 group">
+                    class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-5 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300 group">
                     <div class="flex gap-6">
                         <!-- 商品圖片 -->
                         <div class="relative flex-shrink-0">
-                            <div class="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700 shadow-lg">
+                            <div class="w-28 h-28 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700 shadow-lg">
                                 <img :src="item.image" :alt="item.title"
                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                             </div>
@@ -41,71 +41,69 @@
                         </div>
 
                         <!-- 商品資訊 -->
-                        <div class="flex-1 min-w-0">
-                            <div class="flex justify-between items-start mb-3">
-                                <div class="flex-1">
-                                    <h3 class="font-bold text-lg text-gray-900 dark:text-white line-clamp-1 mb-1">
-                                        {{ item.title }}
-                                    </h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">{{ item.description }}
-                                    </p>
+                        <div class="flex-1 min-w-0 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900 dark:text-white line-clamp-1 mb-1">
+                                    {{ item.title }}
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">{{ item.description }}
+                                </p>
+                            </div>
 
-                                    <!-- 積分與數量 -->
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex items-center gap-1">
-                                                <svg class="w-4 h-4 text-purple-500" fill="currentColor"
-                                                    viewBox="0 0 20 20">
-                                                    <path
-                                                        d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                                                    <path fill-rule="evenodd"
-                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                                <span class="font-bold text-purple-600 dark:text-purple-400">{{
-                                                    item.points }}</span>
-                                            </div>
-                                            <span class="text-sm text-gray-500">積分</span>
-                                        </div>
-
-                                        <!-- 數量控制 -->
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-                                                <button @click="updateQuantity(item.id, -1)"
-                                                    class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-colors disabled:opacity-50"
-                                                    :disabled="item.quantity <= 1">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M20 12H4" />
-                                                    </svg>
-                                                </button>
-                                                <span
-                                                    class="text-sm font-bold w-8 text-center text-gray-900 dark:text-white">{{
-                                                        item.quantity }}</span>
-                                                <button @click="updateQuantity(item.id, 1)"
-                                                    class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-colors">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-
-                                            <!-- 移除按鈕 -->
-                                            <button @click="removeItem(item.id)"
-                                                class="w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </div>
+                            <!-- 積分與數量控制 -->
+                            <div class="flex items-end justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-1">
+                                        <svg class="w-4 h-4 text-purple-500" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                                            <path fill-rule="evenodd"
+                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span class="font-bold text-purple-600 dark:text-purple-400">{{
+                                            item.points }}</span>
                                     </div>
+                                    <span class="text-sm text-gray-500">積分</span>
+                                </div>
+
+                                <!-- 數量控制 -->
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                                        <button @click="updateQuantity(item.id, -1)"
+                                            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-colors disabled:opacity-50"
+                                            :disabled="item.quantity <= 1">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="M20 12H4" />
+                                            </svg>
+                                        </button>
+                                        <span
+                                            class="text-sm font-bold w-8 text-center text-gray-900 dark:text-white">{{
+                                                item.quantity }}</span>
+                                        <button @click="updateQuantity(item.id, 1)"
+                                            class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-white dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <!-- 移除按鈕 -->
+                                    <button @click="removeItem(item.id)"
+                                        class="w-8 h-8 flex items-center justify-center rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         </div>

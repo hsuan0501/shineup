@@ -15,7 +15,7 @@
 
         <!-- Instagram -->
         <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
-          class="text-gray-400 hover:text-purple-400 dark:hover:text-cyan-400 hover:scale-110 transition-all duration-300"
+          class="text-gray-400 hover:text-pink-500 hover:scale-110 transition-all duration-300"
           aria-label="Instagram">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path
@@ -25,7 +25,7 @@
 
         <!-- LinkedIn -->
         <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"
-          class="text-gray-400 hover:text-purple-400 dark:hover:text-cyan-400 hover:scale-110 transition-all duration-300"
+          class="text-gray-400 hover:text-[#0A66C2] hover:scale-110 transition-all duration-300"
           aria-label="LinkedIn">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path
@@ -35,7 +35,7 @@
 
         <!-- Facebook -->
         <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
-          class="text-gray-400 hover:text-purple-400 dark:hover:text-cyan-400 hover:scale-110 transition-all duration-300"
+          class="text-gray-400 hover:text-[#1877F2] hover:scale-110 transition-all duration-300"
           aria-label="Facebook">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path
@@ -45,7 +45,7 @@
 
         <!-- X (Twitter) -->
         <a href="https://x.com" target="_blank" rel="noopener noreferrer"
-          class="text-gray-400 hover:text-purple-400 dark:hover:text-cyan-400 hover:scale-110 transition-all duration-300"
+          class="text-gray-400 hover:text-gray-900 dark:hover:text-white hover:scale-110 transition-all duration-300"
           aria-label="X">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path
