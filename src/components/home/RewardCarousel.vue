@@ -40,13 +40,13 @@ import { mockRewards } from '../../mock'
 
 // 滾動展示的禮品 - 兩排都從最便宜的開始顯示
 // 第一排：永續探索(綠色,1-8) + 質感創造(藍色,9-16) - 向左滾動，最左邊顯示第1個
-// 第二排：品味閃耀(紫色,32-25) + 美學先鋒(橙色,24-17) - 向右滾動，最右邊顯示橙色530積分
+// 第二排：美學先鋒(橙色,17-24) + 品味閃耀(紫色,25-32) - 向右滾動，最右邊顯示第17個
 const firstRowGifts = computed(() => {
     return mockRewards.slice(0, 16) // 禮品 1-16 (100-500積分)
 })
 
 const secondRowGifts = computed(() => {
-    return mockRewards.slice(16, 32).reverse() // 禮品 32-17 反轉
+    return mockRewards.slice(16, 32) // 禮品 17-32 (550-1600積分)
 })
 
 const getPointsColorClass = (level) => {
@@ -73,20 +73,21 @@ const getPointsColorClass = (level) => {
 
 @keyframes scroll-right {
     0% {
-        transform: translateX(-100%);
+        transform: translateX(0);
     }
 
     100% {
-        transform: translateX(-50%);
+        transform: translateX(50%);
     }
 }
 
 .animate-scroll-left {
-    animation: scroll-left 30s linear infinite;
+    animation: scroll-left 40s linear infinite;
 }
 
 .animate-scroll-right {
-    animation: scroll-right 30s linear infinite;
+    animation: scroll-right 40s linear infinite;
+    direction: rtl;
 }
 
 .animate-scroll-left:hover,
