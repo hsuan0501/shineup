@@ -1,0 +1,196 @@
+<template>
+  <div ref="levelCardContainer" class="relative">
+    <!-- Level Card Trigger -->
+    <div @click="toggleLevelCard"
+      class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:opacity-100 opacity-90 cursor-pointer hover:scale-[1.02] transition-all active:scale-95">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24">
+        <defs>
+          <linearGradient :id="`level-star-${currentLevel.levelNumber}`" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"
+              :stop-color="currentLevel.gradientFrom.includes('emerald') ? '#6ee7b7' : currentLevel.gradientFrom.includes('cyan') ? '#67e8f9' : currentLevel.gradientFrom.includes('amber') ? '#fcd34d' : '#c4b5fd'" />
+            <stop offset="100%"
+              :stop-color="currentLevel.gradientTo.includes('emerald') ? '#059669' : currentLevel.gradientTo.includes('blue') ? '#1d4ed8' : currentLevel.gradientTo.includes('amber') ? '#d97706' : '#7c3aed'" />
+          </linearGradient>
+        </defs>
+        <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z"
+          :fill="`url(#level-star-${currentLevel.levelNumber})`" />
+      </svg>
+      <span class="text-sm font-bold" :style="`color: ${currentLevel.color}`">{{ currentLevel.name }}</span>
+      <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
+
+    <!-- Dropdown Menu -->
+    <transition enter-active-class="transition duration-200 ease-out" enter-from-class="transform scale-95 opacity-0"
+      enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-75 ease-in"
+      leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
+      <div v-if="showLevelCard"
+        class="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+        <!-- Header -->
+        <div :class="[
+          'p-4 border-b border-gray-100 dark:border-gray-800',
+          `bg-gradient-to-br ${currentLevel.gradientFrom}/5 ${currentLevel.gradientTo}/5`
+        ]">
+          <!-- NEW LAYOUT: Icon and Text on left, Lv Number on right (top aligned) -->
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex items-center gap-4">
+              <div :class="[
+                'w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-300 hover:scale-[1.02]',
+                `bg-gradient-to-br ${currentLevel.gradientFrom} ${currentLevel.gradientTo}`
+              ]">
+                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24">
+                  <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z" fill="white" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ currentLevel.name }}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ currentLevel.multiplier }}x 積分倍率</p>
+              </div>
+            </div>
+            <span class="text-xs text-gray-500 mt-1">Lv.{{ currentLevel.levelNumber }}</span>
+          </div>
+
+          <!-- 雙軌積分顯示 -->
+          <div class="grid grid-cols-2 gap-3">
+            <!-- 升級積分 -->
+            <div
+              class="bg-sky-50 dark:bg-sky-900/20 rounded-lg p-3 transition-transform duration-300 hover:scale-[1.02]">
+              <div class="flex items-center gap-2 mb-1">
+                <svg class="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24">
+                  <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z" fill="currentColor" />
+                </svg>
+                <span class="text-xs font-medium text-sky-600 dark:text-sky-400">升級積分</span>
+              </div>
+              <div class="text-lg font-bold text-sky-700 dark:text-sky-300">{{
+                userLevelPoints.toLocaleString() }}</div>
+              <div class="text-xs text-sky-600 dark:text-sky-400">用於提升等級</div>
+            </div>
+
+            <!-- 兌換積分 -->
+            <div
+              class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 transition-transform duration-300 hover:scale-[1.02]">
+              <div class="flex items-center gap-2 mb-1">
+                <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                  <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                    clip-rule="evenodd" />
+                </svg>
+                <span class="text-xs font-medium text-purple-600 dark:text-purple-400">兌換積分</span>
+              </div>
+              <div class="text-lg font-bold text-purple-700 dark:text-purple-300">{{
+                userRewardPoints.toLocaleString() }}</div>
+              <div class="text-xs text-purple-600 dark:text-purple-400">用於兌換禮品</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div v-if="nextLevel" class="p-4 border-b border-gray-100 dark:border-gray-800">
+          <div class="flex justify-between text-xs mb-1.5">
+            <span class="text-gray-600 dark:text-gray-400">升級進度</span>
+            <span class="font-medium" :style="`color: ${currentLevel.color}`">{{
+              userLevelPoints.toLocaleString() }} / {{ nextLevel.minPoints.toLocaleString() }}</span>
+          </div>
+          <div class="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden transition-transform duration-300 hover:scale-[1.02]">
+            <div :class="`h-full bg-gradient-to-r ${currentLevel.gradientFrom} ${currentLevel.gradientTo} rounded-full`"
+              :style="`width: ${progressPercentage}%`"></div>
+          </div>
+          <p class="mt-2 text-xs text-gray-500 text-center">
+            再獲得 <span :style="`color: ${currentLevel.color}`" class="font-medium">{{ (nextLevel.minPoints -
+              userLevelPoints).toLocaleString() }}</span> 升級積分即可升級
+          </p>
+        </div>
+        <div v-else class="p-4 border-b border-gray-100 dark:border-gray-800">
+          <div class="text-center">
+            <span :class="`text-sm font-medium`" :style="`color: ${currentLevel.color}`">🎉 已達最高等級！</span>
+            <p class="text-xs text-gray-500 mt-1">享受所有專屬權益</p>
+          </div>
+        </div>
+
+        <!-- Benefits Preview -->
+        <div class="p-4 bg-gray-50/50 dark:bg-gray-800/30">
+          <h4 class="text-xs font-semibold text-gray-900 dark:text-white mb-3">當前等級權益</h4>
+          <ul class="space-y-2">
+            <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <div
+                :class="`w-2 h-2 rounded-full ${currentLevel.gradientFrom.includes('emerald') ? 'bg-emerald-400' : currentLevel.gradientFrom.includes('cyan') ? 'bg-cyan-400' : currentLevel.gradientFrom.includes('amber') ? 'bg-amber-400' : 'bg-purple-400'}`">
+              </div>
+              <span>任務積分 {{ currentLevel.multiplier }} 倍加成</span>
+            </li>
+            <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <div
+                :class="`w-2 h-2 rounded-full ${currentLevel.gradientFrom.includes('emerald') ? 'bg-emerald-400' : currentLevel.gradientFrom.includes('cyan') ? 'bg-cyan-400' : currentLevel.gradientFrom.includes('amber') ? 'bg-amber-400' : 'bg-purple-400'}`">
+              </div>
+              <span>可兌換<span v-if="currentLevel.level === 'EXPLORER'">「永續探索」</span><span
+                  v-else-if="currentLevel.level === 'CREATOR'">「質感創造」</span><span
+                  v-else-if="currentLevel.level === 'VISIONARY'">「美學先鋒」</span><span
+                  v-else-if="currentLevel.level === 'LUMINARY'">「品味閃耀」</span>系列禮品</span>
+            </li>
+          </ul>
+          <RouterLink to="/profile" @click="showLevelCard = false"
+            :class="`mt-4 block w-full py-2 text-center text-sm font-medium hover:bg-opacity-10 rounded-lg transition-all duration-300 hover:scale-[1.02]`"
+            :style="`color: ${currentLevel.color}; background-color: ${currentLevel.color}15`">
+            查看完整等級權益 →
+          </RouterLink>
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { RouterLink } from 'vue-router'
+import { levelConfig, mockUsers } from '../../mock.js'
+
+const showLevelCard = ref(false)
+const levelCardContainer = ref(null)
+
+// 雙軌積分系統
+const userLevelPoints = computed(() => mockUsers[1]?.levelPoints || 450)
+const userRewardPoints = computed(() => mockUsers[1]?.rewardPoints || 680)
+
+// 計算當前等級
+const currentLevel = computed(() => {
+  return levelConfig.find(level =>
+    userLevelPoints.value >= level.minPoints && userLevelPoints.value <= level.maxPoints
+  ) || levelConfig[0]
+})
+
+// 計算下一等級
+const nextLevel = computed(() => {
+  const currentIndex = levelConfig.findIndex(level => level.level === currentLevel.value.level)
+  return currentIndex < levelConfig.length - 1 ? levelConfig[currentIndex + 1] : null
+})
+
+// 計算進度百分比
+const progressPercentage = computed(() => {
+  if (!nextLevel.value) return 100
+  const current = userLevelPoints.value - currentLevel.value.minPoints
+  const total = nextLevel.value.minPoints - currentLevel.value.minPoints
+  return Math.min((current / total) * 100, 100)
+})
+
+// 切換等級卡片
+const toggleLevelCard = () => {
+  showLevelCard.value = !showLevelCard.value
+}
+
+// 點擊外部關閉等級卡片
+const handleClickOutside = (event) => {
+  if (levelCardContainer.value && !levelCardContainer.value.contains(event.target)) {
+    showLevelCard.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+</script>
