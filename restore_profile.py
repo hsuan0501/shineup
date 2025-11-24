@@ -1,4 +1,7 @@
-<template>
+
+import os
+
+content = r"""<template>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Scroll to Top Button -->
     <button @click="scrollToTop"
@@ -499,3 +502,7 @@ const scrollToTop = () => {
   document.body.scrollTop = 0
 }
 </script>
+"""
+
+with open(r"c:\Users\USER\Desktop\shineup-history\src\views\Profile.vue", "w", encoding="utf-8") as f:
+    f.write(content)

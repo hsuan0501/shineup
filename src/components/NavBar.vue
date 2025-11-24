@@ -9,7 +9,7 @@
           <!-- Logo -->
           <div class="flex-shrink-0">
             <div @click="scrollToTop"
-              class="flex items-center gap-0.5 text-2xl font-bold cursor-pointer bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent hover:scale-110 transition-all duration-300">
+              class="flex items-center gap-0.5 text-2xl font-bold cursor-pointer bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent hover:scale-[1.02] transition-all duration-300">
               <span>Shine</span>
               <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <defs>
@@ -27,11 +27,11 @@
           <!-- Nav Links -->
           <div class="flex items-center space-x-2">
             <a href="/#tasks" @click="scrollToTasks"
-              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer">
+              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer">
               <span class="bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">任務清單</span>
             </a>
             <a href="/#gifts" @click="scrollToGifts"
-              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer">
+              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer">
               <span class="bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">禮品總覽</span>
             </a>
           </div>
@@ -57,7 +57,7 @@
           <div v-if="isLoggedIn" class="flex items-center space-x-2.5 lg:space-x-3 xl:space-x-3.5">
             <!-- 日夜模式切換 -->
             <button @click="toggleDarkMode"
-              class="relative w-16 h-8 rounded-full bg-gray-200/50 dark:bg-gray-800/50 shadow-inner border border-gray-200/30 dark:border-white/10 hover:scale-105 active:scale-95 transition-all duration-300 ease-out"
+              class="relative w-16 h-8 rounded-full bg-gray-200/50 dark:bg-gray-800/50 shadow-inner border border-gray-200/30 dark:border-white/10 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out"
               aria-label="切換日夜模式">
 
               <!-- 滑動按鈕 -->
@@ -135,7 +135,7 @@
                     <div class="flex justify-between items-start mb-4">
                       <div class="flex items-center gap-4">
                         <div :class="[
-                          'w-16 h-16 rounded-2xl flex items-center justify-center',
+                          'w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-300 hover:scale-[1.02]',
                           `bg-gradient-to-br ${currentLevel.gradientFrom} ${currentLevel.gradientTo}`
                         ]">
                           <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24">
@@ -154,7 +154,7 @@
                     <!-- 雙軌積分顯示 -->
                     <div class="grid grid-cols-2 gap-3">
                       <!-- 升級積分 -->
-                      <div class="bg-sky-50 dark:bg-sky-900/20 rounded-lg p-3">
+                      <div class="bg-sky-50 dark:bg-sky-900/20 rounded-lg p-3 transition-transform duration-300 hover:scale-[1.02]">
                         <div class="flex items-center gap-2 mb-1">
                           <svg class="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24">
                             <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z"
@@ -168,7 +168,7 @@
                       </div>
 
                       <!-- 兌換積分 -->
-                      <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3">
+                      <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 transition-transform duration-300 hover:scale-[1.02]">
                         <div class="flex items-center gap-2 mb-1">
                           <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
                             <path
@@ -193,7 +193,7 @@
                       <span class="font-medium" :style="`color: ${currentLevel.color}`">{{
                         userLevelPoints.toLocaleString() }} / {{ nextLevel.minPoints.toLocaleString() }}</span>
                     </div>
-                    <div class="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden transition-transform duration-300 hover:scale-[1.02]">
                       <div
                         :class="`h-full bg-gradient-to-r ${currentLevel.gradientFrom} ${currentLevel.gradientTo} rounded-full`"
                         :style="`width: ${progressPercentage}%`"></div>
@@ -231,7 +231,7 @@
                       </li>
                     </ul>
                     <RouterLink to="/profile" @click="showLevelCard = false"
-                      :class="`mt-4 block w-full py-2 text-center text-sm font-medium hover:bg-opacity-10 rounded-lg transition-colors`"
+                      :class="`mt-4 block w-full py-2 text-center text-sm font-medium hover:bg-opacity-10 rounded-lg transition-all duration-300 hover:scale-[1.02]`"
                       :style="`color: ${currentLevel.color}; background-color: ${currentLevel.color}15`">
                       查看完整等級權益 →
                     </RouterLink>
@@ -242,7 +242,7 @@
 
             <!-- 購物車按鈕 -->
             <router-link to="/cart"
-              class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-105 active:scale-95 transition-all duration-300 ease-out group mr-3 lg:mr-4 xl:mr-5"
+              class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out group mr-3 lg:mr-4 xl:mr-5"
               aria-label="購物車">
               <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24"
                 fill="none">
@@ -263,7 +263,7 @@
 
             <!-- 會員中心 -->
             <RouterLink to="/profile"
-              class="px-4 py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-transparent">
+              class="px-4 py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-transparent">
               會員中心
             </RouterLink>
           </div>
@@ -271,11 +271,11 @@
           <!-- 未登入狀態 -->
           <div v-else class="flex items-center space-x-2">
             <RouterLink to="/auth/login"
-              class="px-4 py-2 rounded-full border-2 border-purple-400/50 dark:border-white/30 hover:bg-purple-500/10 dark:hover:bg-white/10 hover:border-purple-500 dark:hover:border-white/50 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+              class="px-4 py-2 rounded-full border-2 border-purple-400/50 dark:border-white/30 hover:bg-purple-500/10 dark:hover:bg-white/10 hover:border-purple-500 dark:hover:border-white/50 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
               登入
             </RouterLink>
             <RouterLink to="/auth/register"
-              class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-95 hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_4px_12px_rgba(168,85,247,0.3)] hover:shadow-[0_6px_20px_rgba(168,85,247,0.4)]">
+              class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_4px_12px_rgba(168,85,247,0.3)] hover:shadow-[0_6px_20px_rgba(168,85,247,0.4)]">
               開始探險
             </RouterLink>
           </div>
