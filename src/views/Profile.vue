@@ -22,10 +22,10 @@
       <div class="lg:col-span-3 space-y-5">
         <!-- 用戶資訊卡片 -->
         <div
-          class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300">
+          class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
           <div class="flex items-start gap-6">
             <!-- 頭像 -->
-            <div class="relative">
+            <div class="relative hover:scale-105 transition-transform duration-300">
               <!-- 淺色系漸層邊框 -->
               <div class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-br from-sky-300 to-blue-400">
                 <img :src="user.avatar" :alt="user.name"
@@ -41,7 +41,7 @@
               <div class="flex items-center gap-3 mb-2">
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ user.name }}</h2>
                 <span
-                  :class="`px-3 py-1 text-sm font-bold rounded-2xl text-white bg-gradient-to-br ${currentLevelConfig.gradientFrom} ${currentLevelConfig.gradientTo}`">
+                  :class="`px-3 py-1 text-sm font-bold rounded-2xl text-white bg-gradient-to-br ${currentLevelConfig.gradientFrom} ${currentLevelConfig.gradientTo} hover:scale-105 transition-transform duration-300 cursor-default`">
                   {{ currentLevelConfig.name }} Lv.{{ currentLevelConfig.levelNumber }}
                 </span>
               </div>
@@ -51,15 +51,15 @@
               <!-- 最近成就徽章 -->
               <div class="flex justify-between gap-2 mb-4 md:w-1/2 md:pr-2">
                 <div
-                  class="inline-flex items-center px-2.5 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs font-medium rounded-full">
+                  class="inline-flex items-center px-2.5 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs font-medium rounded-full hover:scale-110 transition-transform duration-300 cursor-default">
                   連續 7 天
                 </div>
                 <div
-                  class="inline-flex items-center px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs font-medium rounded-full">
+                  class="inline-flex items-center px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs font-medium rounded-full hover:scale-110 transition-transform duration-300 cursor-default">
                   新手達人
                 </div>
                 <div
-                  class="inline-flex items-center px-2.5 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs font-medium rounded-full">
+                  class="inline-flex items-center px-2.5 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs font-medium rounded-full hover:scale-110 transition-transform duration-300 cursor-default">
                   社群達人
                 </div>
               </div>
@@ -68,7 +68,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- 升級積分 -->
                 <div
-                  class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 rounded-xl p-4">
+                  class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 rounded-xl p-4 hover:scale-[1.02] transition-transform duration-300">
                   <div class="flex items-center justify-between mb-2">
                     <span class="text-sm font-medium text-sky-600 dark:text-sky-400">升級積分</span>
                     <div class="flex items-center gap-1 text-sky-600 dark:text-sky-400">
@@ -84,7 +84,7 @@
 
                 <!-- 兌換積分 -->
                 <div
-                  class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-4">
+                  class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-4 hover:scale-[1.02] transition-transform duration-300">
                   <div class="flex items-center justify-between mb-2">
                     <span class="text-sm font-medium text-purple-600 dark:text-purple-400">兌換積分</span>
                     <div class="flex items-center gap-1 text-purple-600 dark:text-purple-400">
@@ -107,14 +107,14 @@
 
         <!-- 等級進度 -->
         <div
-          class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl px-6 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300"
+          class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl px-6 dark:shadow-2xl border dark:border-gray-600/30"
           style="padding-top: 1.875rem; padding-bottom: 1.875rem;">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">等級進度</h3>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">等級進度</h3>
 
           <!-- 當前等級資訊 -->
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center"
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center hover:scale-110 transition-transform duration-300"
                 :class="`bg-gradient-to-br ${currentLevelConfig.gradientFrom} ${currentLevelConfig.gradientTo}`">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24">
                   <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z" fill="white" />
@@ -127,15 +127,21 @@
             </div>
 
             <div class="text-right">
-              <div class="text-lg font-bold text-gray-900 dark:text-white">{{ user.levelPoints }} / {{ nextLevelPoints
-                || '∞' }}</div>
+              <div class="text-lg font-bold" :class="
+                currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-700 dark:text-emerald-300' :
+                currentLevelConfig.level === 'CREATOR' ? 'text-sky-700 dark:text-sky-300' :
+                currentLevelConfig.level === 'VISIONARY' ? 'text-amber-700 dark:text-amber-300' :
+                'text-purple-700 dark:text-purple-300'
+              ">
+                {{ user.levelPoints }} / {{ nextLevelPoints || '∞' }}
+              </div>
               <div class="text-sm text-gray-600 dark:text-gray-400">升級積分</div>
             </div>
           </div>
 
           <!-- 進度條 -->
           <div class="mb-4">
-            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 hover:scale-[1.01] transition-transform duration-300">
               <div class="h-3 rounded-full transition-all duration-500"
                 :class="`bg-gradient-to-r ${currentLevelConfig.gradientFrom} ${currentLevelConfig.gradientTo}`"
                 :style="`width: ${levelProgress}%`"></div>
@@ -147,19 +153,24 @@
           </div>
 
           <!-- 升級提醒 -->
-          <div v-if="nextLevelPoints && nextLevelPoints !== '∞'" class="mb-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/30 rounded-xl">
+          <div v-if="nextLevelPoints && nextLevelPoints !== '∞'" class="mb-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/30 rounded-xl hover:scale-[1.02] transition-transform duration-300">
             <p class="text-sm text-amber-800 dark:text-amber-300">
-              再獲得 <span class="font-bold">{{ nextLevelPoints - user.levelPoints }}</span> 積分即可升級為「{{ nextLevelConfig.name }}」！
+              再獲得 <span class="font-bold" :class="
+                currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-700 dark:text-emerald-300' :
+                currentLevelConfig.level === 'CREATOR' ? 'text-sky-700 dark:text-sky-300' :
+                currentLevelConfig.level === 'VISIONARY' ? 'text-amber-700 dark:text-amber-300' :
+                'text-purple-700 dark:text-purple-300'
+              ">{{ nextLevelPoints - user.levelPoints }}</span> 積分即可升級為「{{ nextLevelConfig.name }}」！
             </p>
           </div>
-          <div v-else-if="!nextLevelPoints || nextLevelPoints === '∞'" class="mb-4 px-4 py-3 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800/30 rounded-xl">
+          <div v-else-if="!nextLevelPoints || nextLevelPoints === '∞'" class="mb-4 px-4 py-3 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800/30 rounded-xl hover:scale-[1.02] transition-transform duration-300">
             <p class="text-sm text-purple-800 dark:text-purple-300 font-medium">
               🎉 恭喜！您已達到最高等級
             </p>
           </div>
 
           <!-- 當前等級權益 -->
-          <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 border border-sky-200 dark:border-sky-800 rounded-xl px-4" style="padding-top: 1rem; padding-bottom: 1rem;">
+          <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 border border-sky-200 dark:border-sky-800 rounded-xl px-4 hover:scale-[1.02] transition-transform duration-300" style="padding-top: 1rem; padding-bottom: 1rem;">
             <h5 class="font-bold text-gray-900 dark:text-white mb-2">當前等級權益</h5>
             <div class="space-y-1.5">
               <div class="flex items-center gap-2">
@@ -189,12 +200,12 @@
       <div class="lg:col-span-2">
         <!-- 等級說明 -->
         <div
-          class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-5">等級權益說明</h3>
+          class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-5">等級權益說明</h3>
 
           <div class="space-y-3">
             <div v-for="levelInfo in levelConfig" :key="levelInfo.level"
-              class="px-4 py-4 rounded-xl transition-all border"
+              class="px-4 py-4 rounded-xl transition-all border hover:scale-[1.02]"
               :class="levelInfo.level === user.level ? 'bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 border-sky-200 dark:border-sky-800' : 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600'">
               <div class="flex items-start gap-3">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -207,7 +218,13 @@
                   <div class="flex items-center justify-between mb-2">
                     <h4 class="text-lg font-bold text-gray-900 dark:text-white">{{ levelInfo.name }}</h4>
                     <span class="text-sm font-bold px-2 py-1 rounded-full"
-                      :class="`bg-gradient-to-r ${levelInfo.gradientFrom}/20 ${levelInfo.gradientTo}/20 text-gray-700 dark:text-gray-300`">
+                      :class="[
+                        `bg-gradient-to-r ${levelInfo.gradientFrom}/20 ${levelInfo.gradientTo}/20`,
+                        levelInfo.level === 'EXPLORER' ? 'text-emerald-600 dark:text-emerald-400' :
+                        levelInfo.level === 'CREATOR' ? 'text-sky-600 dark:text-sky-400' :
+                        levelInfo.level === 'VISIONARY' ? 'text-amber-600 dark:text-amber-400' :
+                        'text-purple-600 dark:text-purple-400'
+                      ]">
                       {{ levelInfo.multiplier }}x
                     </span>
                   </div>
@@ -242,86 +259,57 @@
     </div>
 
     <!-- 活動統計與記錄 -->
-    <div class="mt-5 bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300">
-      <div class="flex items-center justify-between mb-6">
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white">活動統計與記錄</h3>
-        <button
-          class="text-sm font-medium text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-          查看完整活動紀錄 →
-        </button>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
-        <!-- 任務完成 -->
-        <div class="h-35 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 rounded-2xl p-4 flex flex-col items-center justify-center border border-blue-200/50 dark:border-blue-700/30 transition-all duration-300 hover:scale-105">
-          <div class="text-3xl font-semibold text-blue-700 dark:text-blue-300 mb-1">{{ user.stats?.tasksCompleted || 0 }}</div>
-          <div class="text-sm font-medium text-blue-600 dark:text-blue-400">已完成任務</div>
-        </div>
-
-        <!-- 連續登入 -->
-        <div class="h-35 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/30 dark:to-pink-800/20 rounded-2xl p-4 flex flex-col items-center justify-center border border-pink-200/50 dark:border-pink-700/30 transition-all duration-300 hover:scale-105">
-          <div class="text-3xl font-semibold text-pink-700 dark:text-pink-300 mb-1">{{ user.stats?.consecutiveDays || 0 }}</div>
-          <div class="text-sm font-medium text-pink-600 dark:text-pink-400">連續登入天數</div>
-        </div>
-
-        <!-- 總登入次數 -->
-        <div class="h-35 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20 rounded-2xl p-4 flex flex-col items-center justify-center border border-green-200/50 dark:border-green-700/30 transition-all duration-300 hover:scale-105">
-          <div class="text-3xl font-semibold text-green-700 dark:text-green-300 mb-1">{{ user.stats?.totalLogins || 0 }}</div>
-          <div class="text-sm font-medium text-green-600 dark:text-green-400">總登入次數</div>
-        </div>
-
-        <!-- 已兌換禮品 -->
-        <div class="h-35 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/20 rounded-2xl p-4 flex flex-col items-center justify-center border border-purple-200/50 dark:border-purple-700/30 transition-all duration-300 hover:scale-105">
-          <div class="text-3xl font-semibold text-purple-700 dark:text-purple-300 mb-1">{{ user.stats?.rewardsRedeemed || 0 }}</div>
-          <div class="text-sm font-medium text-purple-600 dark:text-purple-400">已兌換禮品</div>
-        </div>
-
-        <!-- 邀請好友 -->
-        <div class="h-35 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/20 rounded-2xl p-4 flex flex-col items-center justify-center border border-orange-200/50 dark:border-orange-700/30 transition-all duration-300 hover:scale-105">
-          <div class="text-3xl font-semibold text-orange-700 dark:text-orange-300 mb-1">{{ user.stats?.friendsInvited || 0 }}</div>
-          <div class="text-sm font-medium text-orange-600 dark:text-orange-400">邀請好友</div>
-        </div>
-
-        <!-- 會員天數 -->
-        <div class="h-35 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/30 dark:to-indigo-800/20 rounded-2xl p-4 flex flex-col items-center justify-center border border-indigo-200/50 dark:border-indigo-700/30 transition-all duration-300 hover:scale-105">
-          <div class="text-3xl font-semibold text-indigo-700 dark:text-indigo-300 mb-1">{{ memberDays }}</div>
-          <div class="text-sm font-medium text-indigo-600 dark:text-indigo-400">會員天數</div>
-        </div>
-      </div>
-
-      <!-- 活動記錄 -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="space-y-2.5">
-          <div v-for="record in recentRecords.slice(0, 3)" :key="record.id"
-            class="flex items-center gap-3 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-            <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-              :class="getRecordStyle(record).bg">
-              <div v-html="getRecordIcon(getRecordStyle(record).icon)" :class="getRecordStyle(record).text"></div>
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-900 dark:text-white truncate leading-tight">{{ record.title }}
-              </p>
-              <p class="text-xs text-gray-600 dark:text-gray-400 leading-tight">{{ formatDate(record.date) }}</p>
-            </div>
-            <div class="text-sm font-bold flex-shrink-0" :class="getRecordStyle(record).text">
-              {{ record.type === 'task' ? '+' + record.points : '-' + record.points }}
-            </div>
+    <div class="mt-5 bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
+      <!-- 活動統計 -->
+      <div class="mb-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6">活動統計</h3>
+        <div class="grid grid-cols-3 md:grid-cols-5 gap-6">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">{{ user.stats?.tasksCompleted || 0 }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">已完成任務</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-rose-600 dark:text-rose-400 mb-1">{{ user.stats?.consecutiveDays || 0 }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">連續登入天數</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">{{ user.stats?.totalLogins || 0 }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">總登入次數</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">{{ user.stats?.rewardsRedeemed || 0 }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">已兌換禮品</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">{{ user.stats?.friendsInvited || 0 }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">邀請好友</div>
           </div>
         </div>
-        <div class="space-y-2.5">
-          <div v-for="record in recentRecords.slice(3, 6)" :key="record.id"
-            class="flex items-center gap-3 p-2 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-            <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-              :class="getRecordStyle(record).bg">
-              <div v-html="getRecordIcon(getRecordStyle(record).icon)" :class="getRecordStyle(record).text"></div>
+      </div>
+
+      <!-- 分隔線 -->
+      <div class="border-t border-gray-200 dark:border-gray-600 mb-6"></div>
+
+      <!-- 活動記錄 -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">最近活動記錄</h3>
+          <button
+            class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+            查看完整記錄 →
+          </button>
+        </div>
+        <div class="space-y-2">
+          <div v-for="record in recentRecords.slice(0, 8)" :key="record.id"
+            class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-600/30 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors rounded px-2">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+              <span class="text-sm text-gray-600 dark:text-gray-400 truncate">{{ record.title }}</span>
             </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-900 dark:text-white truncate leading-tight">{{ record.title }}
-              </p>
-              <p class="text-xs text-gray-600 dark:text-gray-400 leading-tight">{{ formatDate(record.date) }}</p>
-            </div>
-            <div class="text-sm font-bold flex-shrink-0" :class="getRecordStyle(record).text">
-              {{ record.type === 'task' ? '+' + record.points : '-' + record.points }}
+            <div class="flex items-center gap-4 flex-shrink-0">
+              <span class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">{{ formatDate(record.date) }}</span>
+              <span class="text-sm font-medium w-12 text-right" :class="record.type === 'task' ? 'text-green-600 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'">
+                {{ record.type === 'task' ? '+' + record.points : '-' + record.points }}
+              </span>
             </div>
           </div>
         </div>
@@ -362,14 +350,6 @@ const levelProgress = computed(() => {
   const current = user.value.levelPoints - currentLevelConfig.value.minPoints
   const total = nextLevelPoints.value - currentLevelConfig.value.minPoints
   return Math.min((current / total) * 100, 100)
-})
-
-// 會員天數
-const memberDays = computed(() => {
-  const joinDate = new Date(user.value.createdAt)
-  const now = new Date()
-  const diffTime = Math.abs(now - joinDate)
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 })
 
 // 模擬最近紀錄
@@ -453,18 +433,14 @@ const getRecordIcon = (iconType) => {
 // 格式化日期
 const formatDate = (dateString) => {
   const date = new Date(dateString)
-  const now = new Date()
-  const diffTime = now - date
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
-  const diffHours = Math.floor(diffTime / (1000 * 60 * 60))
-  const diffMinutes = Math.floor(diffTime / (1000 * 60))
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  const period = date.getHours() < 12 ? '上午' : '下午'
+  const displayHours = date.getHours() % 12 || 12
+  const displayHoursStr = displayHours.toString().padStart(2, '0')
 
-  if (diffMinutes < 60) return `${diffMinutes}分鐘前`
-  if (diffHours < 24) return `${diffHours}小時前`
-  if (diffDays === 0) return '今天 ' + date.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
-  if (diffDays === 1) return '昨天 ' + date.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
-  if (diffDays < 7) return `${diffDays}天前`
-  return date.toLocaleDateString('zh-TW', { month: 'short', day: 'numeric' }) + ' ' + date.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
+  return `${month}月${day}日 ${period}${displayHoursStr}:${minutes}`
 }
 
 // 打開頭像上傳

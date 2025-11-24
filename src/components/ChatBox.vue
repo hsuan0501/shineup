@@ -3,7 +3,7 @@
         <!-- Chat Window -->
         <transition name="fade-slide">
             <div v-if="isOpen"
-                class="mb-4 w-80 sm:w-96 h-[500px] bg-zinc-50 dark:bg-gray-700/80 rounded-2xl shadow-2xl border border-zinc-200 dark:border-gray-600/40 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150 dark:backdrop-blur-2xl">
+                class="mb-4 w-72 sm:w-80 h-[420px] bg-zinc-50 dark:bg-gray-700/80 rounded-2xl shadow-2xl border border-zinc-200 dark:border-gray-600/40 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150 dark:backdrop-blur-2xl">
                 <!-- Header -->
                 <div
                     class="p-4 bg-gradient-to-br from-sky-400 to-purple-400 text-white flex justify-between items-center">

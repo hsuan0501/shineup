@@ -19,8 +19,8 @@
         <div v-if="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
             <!-- 購物車商品列表 -->
             <div
-                class="lg:col-span-3 bg-white dark:bg-gray-800/50 rounded-2xl p-6 dark:backdrop-blur-xl border dark:border-gray-600/30 h-[600px] overflow-hidden flex flex-col hover:scale-[1.01] transition-transform duration-300">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">禮品清單</h2>
+                class="lg:col-span-3 bg-white dark:bg-gray-700/70 rounded-2xl p-6 dark:backdrop-blur-xl dark:shadow-2xl border dark:border-gray-600/30 h-[600px] overflow-hidden flex flex-col">
+                <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-6">禮品清單</h2>
                 <div
                     class="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
                     <div v-for="item in cartItems" :key="item.id"
@@ -129,15 +129,15 @@
             <!-- 訂單摘要卡片 -->
             <div class="lg:col-span-2">
                 <div
-                    class="sticky top-24 bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300 h-[600px] flex flex-col">
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                    class="sticky top-24 bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30 h-[600px] flex flex-col">
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-6">
                         訂單摘要
                     </h2>
 
                     <div class="flex-1 flex flex-col">
                         <!-- 積分餘額 -->
                         <div
-                            class="mb-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl">
+                            class="mb-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl hover:scale-[1.02] transition-transform duration-300">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-sm font-medium text-purple-600 dark:text-purple-400">可用兌換積分</span>
                                 <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
@@ -153,7 +153,7 @@
                         </div>
 
                         <!-- 兌換說明 -->
-                        <div class="mb-6 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <div class="mb-6 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:scale-[1.02] transition-transform duration-300">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-sm font-medium text-blue-700 dark:text-blue-300">兌換後積分將被扣除</span>
                                 <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
