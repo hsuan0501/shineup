@@ -39,13 +39,13 @@ export const useStore = defineStore('app', () => {
       quantity: 1
     },
     {
-      id: 6,
-      title: '簡約托特包',
-      description: '市價NT$450',
-      image: '/images/gifts/gift-6.jpg',
-      points: 150,
-      level: 'EXPLORER',
-      series: 'sustainable',
+      id: 9,
+      title: 'ekax 雲朵筆電包',
+      description: '市價NT$650',
+      image: '/images/gifts/gift-9.jpg',
+      points: 220,
+      level: 'CREATOR',
+      series: 'quality',
       quantity: 1
     }
   ])

@@ -38,24 +38,25 @@
 import { computed } from 'vue'
 import { mockRewards } from '../../mock'
 
-// 滾動展示的禮品 - 使用 mockRewards 中的前12個和後12個
+// 滾動展示的禮品 - 兩排都從最便宜的開始顯示
+// 第一排：永續探索(綠色,1-8) + 質感創造(藍色,9-16) - 向左滾動，最左邊顯示第1個
+// 第二排：品味閃耀(紫色,32-25) + 美學先鋒(橙色,24-17) - 向右滾動，最右邊顯示橙色530積分
 const firstRowGifts = computed(() => {
-    return mockRewards.slice(0, 12) // 禮品 1-12
+    return mockRewards.slice(0, 16) // 禮品 1-16 (100-500積分)
 })
 
 const secondRowGifts = computed(() => {
-    return mockRewards.slice(12, 24) // 禮品 13-24
+    return mockRewards.slice(16, 32).reverse() // 禮品 32-17 反轉
 })
 
-const getPointsColorClass = (category) => {
+const getPointsColorClass = (level) => {
     const classes = {
-        'daily': 'text-pink-500 dark:text-pink-400',
-        'financial': 'text-indigo-500 dark:text-indigo-400',
-        'investment': 'text-amber-500 dark:text-amber-400',
-        'esg': 'text-green-500 dark:text-green-400',
-        'social': 'text-purple-500 dark:text-purple-400'
+        'EXPLORER': 'text-emerald-600 dark:text-emerald-400',
+        'CREATOR': 'text-indigo-600 dark:text-indigo-400',
+        'VISIONARY': 'text-orange-600 dark:text-orange-400',
+        'LUMINARY': 'text-violet-600 dark:text-violet-400'
     }
-    return classes[category] || 'text-primary-purple'
+    return classes[level] || 'text-primary-purple'
 }
 </script>
 
@@ -72,11 +73,11 @@ const getPointsColorClass = (category) => {
 
 @keyframes scroll-right {
     0% {
-        transform: translateX(-50%);
+        transform: translateX(-100%);
     }
 
     100% {
-        transform: translateX(0);
+        transform: translateX(-50%);
     }
 }
 

@@ -129,7 +129,7 @@
             <div class="text-right">
               <div class="text-lg font-bold" :class="
                 currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-700 dark:text-emerald-300' :
-                currentLevelConfig.level === 'CREATOR' ? 'text-sky-700 dark:text-sky-300' :
+                currentLevelConfig.level === 'CREATOR' ? 'text-cyan-500 dark:text-cyan-400' :
                 currentLevelConfig.level === 'VISIONARY' ? 'text-amber-700 dark:text-amber-300' :
                 'text-purple-700 dark:text-purple-300'
               ">
@@ -157,7 +157,7 @@
             <p class="text-sm text-amber-800 dark:text-amber-300">
               再獲得 <span class="font-bold" :class="
                 currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-700 dark:text-emerald-300' :
-                currentLevelConfig.level === 'CREATOR' ? 'text-sky-700 dark:text-sky-300' :
+                currentLevelConfig.level === 'CREATOR' ? 'text-cyan-500 dark:text-cyan-400' :
                 currentLevelConfig.level === 'VISIONARY' ? 'text-amber-700 dark:text-amber-300' :
                 'text-purple-700 dark:text-purple-300'
               ">{{ nextLevelPoints - user.levelPoints }}</span> 積分即可升級為「{{ nextLevelConfig.name }}」！
@@ -281,7 +281,7 @@
             <div class="text-xs text-gray-500 dark:text-gray-400">已兌換禮品</div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">{{ user.stats?.friendsInvited || 0 }}</div>
+            <div class="text-2xl font-bold text-amber-600 dark:text-amber-400 mb-1">{{ user.stats?.friendsInvited || 0 }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400">邀請好友</div>
           </div>
         </div>

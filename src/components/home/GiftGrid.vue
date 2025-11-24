@@ -108,7 +108,7 @@
                                     : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'
                             ]"
                                 :disabled="!isGiftInSelectedSeries(gift) || gift.canExchange === false">
-                                {{ !isGiftInSelectedSeries(gift) || gift.canExchange === false ? '等級不足' : '加入購物車' }} </button>
+                                {{ !isGiftInSelectedSeries(gift) || gift.canExchange === false ? '積分不足' : '立即兌換' }} </button>
                         </div>
                     </div>
                 </div>
