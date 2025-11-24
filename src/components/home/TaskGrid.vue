@@ -30,8 +30,7 @@
                     <!-- 右側：任務數量 -->
                     <div class="flex items-center gap-2">
                         <span class="text-xs font-medium text-gray-500 dark:text-gray-400">任務數量</span>
-                        <span class="text-sm font-bold text-light-text dark:text-dark-text">{{ filteredTasks.length
-                            }} 個</span>
+                        <span class="text-sm font-bold" :class="getTaskCountColorClass">{{ filteredTasks.length }} 個</span>
                     </div>
                 </div>
             </div>
@@ -319,4 +318,17 @@ const getPointsColorClass = (category) => {
     }
     return classes[category] || 'text-primary-purple'
 }
+
+// 根據當前選擇的分類返回任務數量的顏色
+const getTaskCountColorClass = computed(() => {
+    const classes = {
+        'all': 'text-cyan-600 dark:text-cyan-400',
+        'daily': 'text-pink-600 dark:text-pink-400',
+        'financial': 'text-indigo-600 dark:text-indigo-400',
+        'investment': 'text-amber-600 dark:text-amber-400',
+        'esg': 'text-emerald-600 dark:text-emerald-400',
+        'social': 'text-violet-600 dark:text-violet-400'
+    }
+    return classes[selectedTaskCategory.value] || classes['all']
+})
 </script>

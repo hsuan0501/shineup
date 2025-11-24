@@ -17,7 +17,7 @@
         </div>
 
         <!-- 購物車列表 -->
-        <div v-if="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div v-if="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-5 gap-6">
             <!-- 商品列表 -->
             <div class="lg:col-span-3 space-y-4 h-[600px] overflow-y-auto pr-2">
                 <div v-for="item in cartItems" :key="item.id"
@@ -117,7 +117,7 @@
             <div class="lg:col-span-2">
                 <div
                     class="sticky top-24 bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30 h-[600px] flex flex-col">
-                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-6">
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
                         訂單摘要
                     </h2>
 

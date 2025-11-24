@@ -69,36 +69,36 @@
                 <!-- 升級積分 -->
                 <div
                   class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 rounded-xl p-4 hover:scale-[1.02] transition-transform duration-300">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-medium text-sky-600 dark:text-sky-400">升級積分</span>
+                  <div class="flex items-center mb-2">
                     <div class="flex items-center gap-1 text-sky-600 dark:text-sky-400">
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24">
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
                         <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z"
                           fill="currentColor" />
                       </svg>
+                      <span class="text-sm font-medium">升級積分</span>
                     </div>
                   </div>
-                  <div class="text-2xl font-bold text-sky-700 dark:text-sky-300">{{ user.levelPoints }}</div>
-                  <div class="text-sm text-sky-600 dark:text-sky-400">用於提升等級</div>
+                  <div class="text-2xl font-bold text-sky-700 dark:text-sky-300 leading-tight">{{ user.levelPoints }}</div>
+                  <div class="text-sm text-sky-600 dark:text-sky-400 mt-1">用於提升等級</div>
                 </div>
 
                 <!-- 兌換積分 -->
                 <div
                   class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-4 hover:scale-[1.02] transition-transform duration-300">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-medium text-purple-600 dark:text-purple-400">兌換積分</span>
+                  <div class="flex items-center mb-2">
                     <div class="flex items-center gap-1 text-purple-600 dark:text-purple-400">
-                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                         <path
                           d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                         <path fill-rule="evenodd"
                           d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
                           clip-rule="evenodd" />
                       </svg>
+                      <span class="text-sm font-medium">兌換積分</span>
                     </div>
                   </div>
-                  <div class="text-2xl font-bold text-purple-700 dark:text-purple-300">{{ user.rewardPoints }}</div>
-                  <div class="text-sm text-purple-600 dark:text-purple-400">用於兌換禮品</div>
+                  <div class="text-2xl font-bold text-purple-700 dark:text-purple-300 leading-tight">{{ user.rewardPoints }}</div>
+                  <div class="text-sm text-purple-600 dark:text-purple-400 mt-1">用於兌換禮品</div>
                 </div>
               </div>
             </div>
@@ -107,8 +107,7 @@
 
         <!-- 等級進度 -->
         <div
-          class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl px-6 dark:shadow-2xl border dark:border-gray-600/30"
-          style="padding-top: 1.875rem; padding-bottom: 1.875rem;">
+          class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">等級進度</h3>
 
           <!-- 當前等級資訊 -->
@@ -128,10 +127,10 @@
 
             <div class="text-right">
               <div class="text-lg font-bold" :class="
-                currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-700 dark:text-emerald-300' :
+                currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-500 dark:text-emerald-400' :
                 currentLevelConfig.level === 'CREATOR' ? 'text-cyan-500 dark:text-cyan-400' :
-                currentLevelConfig.level === 'VISIONARY' ? 'text-amber-700 dark:text-amber-300' :
-                'text-purple-700 dark:text-purple-300'
+                currentLevelConfig.level === 'VISIONARY' ? 'text-amber-500 dark:text-amber-400' :
+                'text-purple-500 dark:text-purple-400'
               ">
                 {{ user.levelPoints }} / {{ nextLevelPoints || '∞' }}
               </div>
@@ -156,10 +155,10 @@
           <div v-if="nextLevelPoints && nextLevelPoints !== '∞'" class="mb-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/30 rounded-xl hover:scale-[1.02] transition-transform duration-300">
             <p class="text-sm text-amber-800 dark:text-amber-300">
               再獲得 <span class="font-bold" :class="
-                currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-700 dark:text-emerald-300' :
+                currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-500 dark:text-emerald-400' :
                 currentLevelConfig.level === 'CREATOR' ? 'text-cyan-500 dark:text-cyan-400' :
-                currentLevelConfig.level === 'VISIONARY' ? 'text-amber-700 dark:text-amber-300' :
-                'text-purple-700 dark:text-purple-300'
+                currentLevelConfig.level === 'VISIONARY' ? 'text-amber-500 dark:text-amber-400' :
+                'text-purple-500 dark:text-purple-400'
               ">{{ nextLevelPoints - user.levelPoints }}</span> 積分即可升級為「{{ nextLevelConfig.name }}」！
             </p>
           </div>
@@ -170,7 +169,7 @@
           </div>
 
           <!-- 當前等級權益 -->
-          <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 border border-sky-200 dark:border-sky-800 rounded-xl px-4 hover:scale-[1.02] transition-transform duration-300" style="padding-top: 1rem; padding-bottom: 1rem;">
+          <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 border border-sky-200 dark:border-sky-800 rounded-xl px-5 py-[19px] hover:scale-[1.02] transition-transform duration-300">
             <h5 class="font-bold text-gray-900 dark:text-white mb-2">當前等級權益</h5>
             <div class="space-y-1.5">
               <div class="flex items-center gap-2">
@@ -201,7 +200,7 @@
         <!-- 等級說明 -->
         <div
           class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-5">等級權益說明</h3>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">等級權益說明</h3>
 
           <div class="space-y-3">
             <div v-for="levelInfo in levelConfig" :key="levelInfo.level"
@@ -217,14 +216,13 @@
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between mb-2">
                     <h4 class="text-lg font-bold text-gray-900 dark:text-white">{{ levelInfo.name }}</h4>
-                    <span class="text-sm font-bold px-2 py-1 rounded-full"
-                      :class="[
-                        `bg-gradient-to-r ${levelInfo.gradientFrom}/20 ${levelInfo.gradientTo}/20`,
-                        levelInfo.level === 'EXPLORER' ? 'text-emerald-600 dark:text-emerald-400' :
-                        levelInfo.level === 'CREATOR' ? 'text-sky-600 dark:text-sky-400' :
-                        levelInfo.level === 'VISIONARY' ? 'text-amber-600 dark:text-amber-400' :
-                        'text-purple-600 dark:text-purple-400'
-                      ]">
+                    <span class="text-sm font-bold"
+                      :class="
+                        levelInfo.level === 'EXPLORER' ? 'text-emerald-500 dark:text-emerald-400' :
+                        levelInfo.level === 'CREATOR' ? 'text-indigo-500 dark:text-indigo-400' :
+                        levelInfo.level === 'VISIONARY' ? 'text-amber-500 dark:text-amber-400' :
+                        'text-purple-500 dark:text-purple-400'
+                      ">
                       {{ levelInfo.multiplier }}x
                     </span>
                   </div>
@@ -262,26 +260,26 @@
     <div class="mt-5 bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
       <!-- 活動統計 -->
       <div class="mb-6">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6">活動統計</h3>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">活動統計</h3>
         <div class="grid grid-cols-3 md:grid-cols-5 gap-6">
           <div class="text-center">
-            <div class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">{{ user.stats?.tasksCompleted || 0 }}</div>
+            <div class="text-2xl font-bold text-indigo-500 dark:text-indigo-400 mb-1">{{ user.stats?.tasksCompleted || 0 }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400">已完成任務</div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-rose-600 dark:text-rose-400 mb-1">{{ user.stats?.consecutiveDays || 0 }}</div>
+            <div class="text-2xl font-bold text-pink-500 dark:text-pink-400 mb-1">{{ user.stats?.consecutiveDays || 0 }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400">連續登入天數</div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">{{ user.stats?.totalLogins || 0 }}</div>
+            <div class="text-2xl font-bold text-purple-500 dark:text-purple-400 mb-1">{{ user.stats?.totalLogins || 0 }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400">總登入次數</div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">{{ user.stats?.rewardsRedeemed || 0 }}</div>
+            <div class="text-2xl font-bold text-green-500 dark:text-green-400 mb-1">{{ user.stats?.rewardsRedeemed || 0 }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400">已兌換禮品</div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-amber-600 dark:text-amber-400 mb-1">{{ user.stats?.friendsInvited || 0 }}</div>
+            <div class="text-2xl font-bold text-amber-500 dark:text-amber-400 mb-1">{{ user.stats?.friendsInvited || 0 }}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400">邀請好友</div>
           </div>
         </div>
