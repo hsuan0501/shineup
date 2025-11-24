@@ -2,7 +2,7 @@
     <div class="w-full" id="home-top">
         <!-- Scroll to Top Button -->
         <button @click="scrollToTop"
-            class="fixed bottom-6 left-4 sm:left-6 lg:left-8 z-50 h-12 w-12 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 hover:scale-105 active:scale-95 transition-all duration-400 ease-out shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl backdrop-saturate-150 group"
+            class="fixed bottom-6 left-4 sm:left-6 lg:left-8 z-50 h-14 w-14 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 hover:scale-105 active:scale-95 transition-all duration-400 ease-out shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl backdrop-saturate-150 group"
             aria-label="回到頂部">
             <svg class="w-5 h-5 text-zinc-600 dark:text-gray-300 group-hover:text-zinc-800 dark:group-hover:text-white transition-colors duration-300"
                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,7 +162,7 @@
                         <div class="flex items-center gap-2">
                             <span class="text-xs font-medium text-gray-500 dark:text-gray-400">任務數量</span>
                             <span class="text-sm font-bold text-light-text dark:text-dark-text">{{ filteredTasks.length
-                                }} 個</span>
+                            }} 個</span>
                         </div>
                     </div>
                 </div>
@@ -191,7 +191,7 @@
                                 </span>
                             </div>
                             <span :class="['text-base font-bold', getPointsColorClass(task.category)]">+{{ task.points
-                                }} 分</span>
+                            }} 分</span>
                         </div>
 
                         <h3 class="text-base font-bold text-light-text dark:text-dark-text mb-1">{{ task.title }}</h3>
@@ -202,7 +202,7 @@
                             <div
                                 class="flex items-center gap-2 text-xs text-light-text-secondary dark:text-dark-text-secondary">
                                 <span class="px-2 py-0.5 rounded-md bg-light-bg dark:bg-dark-bg">{{ task.frequency
-                                    }}</span>
+                                }}</span>
                                 <span class="px-2 py-0.5 rounded-md bg-light-bg dark:bg-dark-bg">{{ task.level }}</span>
                             </div>
                             <button :disabled="task.completed" :class="[
@@ -221,11 +221,11 @@
                 <div class="flex items-center justify-center gap-3">
                     <button v-for="page in 5" :key="page" @click="isTaskPageAvailable(page) && (currentTaskPage = page)"
                         :disabled="!isTaskPageAvailable(page)" :class="[
-                            'w-10 h-10 rounded-full font-semibold text-sm transition-colors duration-200',
+                            'w-10 h-10 rounded-full font-semibold text-sm',
                             (selectedTaskCategory === 'all' || selectedTaskCategory === '') && page === currentTaskPage || (selectedTaskCategory !== 'all' && selectedTaskCategory !== '' && isTaskPageAvailable(page))
                                 ? 'bg-gradient-to-br from-sky-400 to-purple-400 text-white'
                                 : isTaskPageAvailable(page)
-                                    ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-light-text dark:text-gray-200 cursor-pointer dark:shadow-xl'
+                                    ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-gray-600 dark:text-gray-400 cursor-pointer dark:shadow-xl'
                                     : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
                         ]">
                         {{ page }}
@@ -365,11 +365,11 @@
                 <div class="flex items-center justify-center gap-3">
                     <button v-for="page in 4" :key="page" @click="isPageAvailable(page) && (currentPage = page)"
                         :disabled="!isPageAvailable(page)" :class="[
-                            'w-10 h-10 rounded-full font-semibold text-sm transition-colors duration-200',
+                            'w-10 h-10 rounded-full font-semibold text-sm',
                             (selectedSeries === 'all' || selectedSeries === '') && page === currentPage || (selectedSeries !== 'all' && selectedSeries !== '' && isPageAvailable(page))
                                 ? 'bg-gradient-to-br from-sky-400 to-purple-400 text-white'
                                 : isPageAvailable(page)
-                                    ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-light-text dark:text-gray-200 cursor-pointer dark:shadow-xl'
+                                    ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-gray-600 dark:text-gray-400 cursor-pointer dark:shadow-xl'
                                     : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
                         ]">
                         {{ page }}
