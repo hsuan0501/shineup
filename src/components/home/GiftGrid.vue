@@ -101,17 +101,14 @@
                                 <span class="text-lg font-bold text-primary-purple">{{ gift.points }}</span>
                                 <span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">積分</span>
                             </div>
-                            <button @click="handleExchange(gift)" :class="[
+                            <button @click="handleAddToCart(gift)" :class="[
                                 'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300',
                                 !isGiftInSelectedSeries(gift) || gift.canExchange === false
                                     ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                                    : user.points < gift.points
-                                        ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                                        : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'
+                                    : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'
                             ]"
-                                :disabled="!isGiftInSelectedSeries(gift) || gift.canExchange === false || user.points < gift.points">
-                                {{ !isGiftInSelectedSeries(gift) || gift.canExchange === false ? '等級不足' :
-                                    user.points < gift.points ? '積分不足' : '立即兌換' }} </button>
+                                :disabled="!isGiftInSelectedSeries(gift) || gift.canExchange === false">
+                                {{ !isGiftInSelectedSeries(gift) || gift.canExchange === false ? '等級不足' : '加入購物車' }} </button>
                         </div>
                     </div>
                 </div>
@@ -145,7 +142,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { mockRewards, mockUsers } from '../../mock'
+import { useStore } from '../../store/app'
 
+const store = useStore()
 // 用戶資料
 const user = ref(mockUsers[1]) // 使用第一個用戶作為範例
 
@@ -355,15 +354,9 @@ const getSeriesBorderClass = () => {
     return borderClasses[series] || 'border-light-border dark:border-dark-border'
 }
 
-// 處理禮品兌換
-const handleExchange = (gift) => {
+// 處理加入購物車
+const handleAddToCart = (gift) => {
     if (gift.canExchange === false) {
-        return
-    }
-
-    // 檢查用戶積分是否足夠
-    if (user.value.points < gift.points) {
-        alert('積分不足，無法兌換此禮品')
         return
     }
 
@@ -373,11 +366,7 @@ const handleExchange = (gift) => {
         return
     }
 
-    // 確認兌換
-    if (confirm(`確定要花費 ${gift.points} 積分兌換「${gift.title}」嗎？`)) {
-        // 扣除積分
-        user.value.points -= gift.points
-        alert(`成功兌換「${gift.title}」！剩餘積分：${user.value.points}`)
-    }
+    store.addToCart(gift)
+    alert(`已將「${gift.title}」加入購物車！`)
 }
 </script>

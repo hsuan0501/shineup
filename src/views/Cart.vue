@@ -19,7 +19,7 @@
         <!-- 購物車列表 -->
         <div v-if="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <!-- 商品列表 -->
-            <div class="lg:col-span-3 space-y-4">
+            <div class="lg:col-span-3 space-y-4 h-[600px] overflow-y-auto pr-2">
                 <div v-for="item in cartItems" :key="item.id"
                     class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-4 dark:shadow-2xl border dark:border-gray-600/30 hover:scale-[1.01] transition-transform duration-300 group">
                     <div class="flex gap-6">
