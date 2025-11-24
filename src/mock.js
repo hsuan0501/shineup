@@ -7,7 +7,7 @@ export const mockUsers = {
     levelPoints: 700,    // 升級積分 - 只能加不能減，用於提升會員等級
     rewardPoints: 600,   // 兌換積分 - 可扣除，用於兌換禮品
     points: 600, // 保留舊字段以維持向後兼容
-    avatar: 'https://api.dicebear.com/9.x/thumbs/svg?seed=Adrian&scale=80',
+    avatar: 'https://api.dicebear.com/9.x/thumbs/svg?seed=Sarah&backgroundColor=f1f4dc',
     createdAt: '2024-01-15',
     // 統計數據
     stats: {
@@ -75,7 +75,7 @@ export const categoryColors = {
   financial: {
     name: '理財學習',
     icon: '💰',
-    gradient: 'from-green-400 to-green-600', 
+    gradient: 'from-green-400 to-green-600',
     bg: 'bg-green-50 dark:bg-green-900/20',
     text: 'text-green-600 dark:text-green-400',
     border: 'border-green-200 dark:border-green-800'
@@ -84,7 +84,7 @@ export const categoryColors = {
     name: '投資實踐',
     icon: '📊',
     gradient: 'from-purple-400 to-purple-600',
-    bg: 'bg-purple-50 dark:bg-purple-900/20', 
+    bg: 'bg-purple-50 dark:bg-purple-900/20',
     text: 'text-purple-600 dark:text-purple-400',
     border: 'border-purple-200 dark:border-purple-800'
   },
@@ -93,7 +93,7 @@ export const categoryColors = {
     icon: '🌱',
     gradient: 'from-emerald-400 to-emerald-600',
     bg: 'bg-emerald-50 dark:bg-emerald-900/20',
-    text: 'text-emerald-600 dark:text-emerald-400', 
+    text: 'text-emerald-600 dark:text-emerald-400',
     border: 'border-emerald-200 dark:border-emerald-800'
   },
   social: {

@@ -1,5 +1,5 @@
 <template>
-    <div ref="chatBoxContainer" class="fixed bottom-6 right-6 sm:right-8 lg:right-10 z-50 flex flex-col items-end">
+    <div ref="chatBoxContainer" class="fixed bottom-6 right-4 sm:right-6 lg:right-8 z-50 flex flex-col items-end">
         <!-- Chat Window -->
         <transition name="fade-slide">
             <div v-if="isOpen"
@@ -46,7 +46,8 @@
                 </div>
 
                 <!-- Input Area -->
-                <div class="p-4 bg-zinc-50 dark:bg-gray-700/80 border-t border-zinc-200 dark:border-gray-600/40 backdrop-blur-xl">
+                <div
+                    class="p-4 bg-zinc-50 dark:bg-gray-700/80 border-t border-zinc-200 dark:border-gray-600/40 backdrop-blur-xl">
                     <form @submit.prevent="sendMessage" class="flex gap-2">
                         <input v-model="newMessage" type="text" placeholder="輸入訊息..."
                             class="flex-1 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-purple/50 transition-all placeholder-gray-400 dark:placeholder-gray-500" />
@@ -136,10 +137,10 @@ const sendMessage = () => {
 const isToggling = ref(false)
 const toggleChat = async () => {
     if (isToggling.value) return
-    
+
     isToggling.value = true
     isOpen.value = !isOpen.value
-    
+
     // 防抖動延遲
     setTimeout(() => {
         isToggling.value = false

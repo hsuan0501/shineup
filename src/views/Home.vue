@@ -2,7 +2,7 @@
     <div class="w-full" id="home-top">
         <!-- Scroll to Top Button -->
         <button @click="scrollToTop"
-            class="fixed bottom-6 left-6 sm:left-8 lg:left-10 z-50 h-12 w-12 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 hover:scale-105 active:scale-95 transition-all duration-400 ease-out shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl backdrop-saturate-150 group"
+            class="fixed bottom-6 left-4 sm:left-6 lg:left-8 z-50 h-12 w-12 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 hover:scale-105 active:scale-95 transition-all duration-400 ease-out shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl backdrop-saturate-150 group"
             aria-label="回到頂部">
             <svg class="w-5 h-5 text-zinc-600 dark:text-gray-300 group-hover:text-zinc-800 dark:group-hover:text-white transition-colors duration-300"
                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,55 +27,71 @@
             </div>
 
             <!-- Hero Content -->
-                <div class="relative flex flex-col items-center justify-center text-center z-10">
+            <div class="relative flex flex-col items-center justify-center text-center z-10">
 
-                    <!-- Subtle Gradient Background for text visibility (behind everything) -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-3xl rounded-full -z-10 pointer-events-none"></div>
-
-                    <!-- Twinkling Stars (Natural Diffusion) -->
-                    <!-- Left Side (4 stars) -->
-                    <div class="absolute -top-8 -left-16 w-3.5 h-3.5 animate-twinkle-2 text-white scale-y-[-1]">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-                    <div class="absolute top-8 -left-28 w-2.5 h-2.5 animate-twinkle-4 text-white scale-y-[-1]">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-
-                    <div class="absolute -bottom-4 -left-6 w-3 h-3 animate-twinkle-5 text-white scale-y-[-1]">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-
-                    <!-- Right Side (3 stars) -->
-                    <div class="absolute -top-4 -right-12 w-3.5 h-3.5 animate-twinkle-2 text-white">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-                    <div class="absolute top-6 -right-24 w-2.5 h-2.5 animate-twinkle-4 text-white">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-                    <div class="absolute bottom-2 -right-16 w-3 h-3 animate-twinkle-1 text-white">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-
-                    <!-- Top Center -->
-                    <div class="absolute -top-12 left-1/4 w-1.5 h-1.5 animate-twinkle-3 text-white">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z"/></svg>
-                    </div>
-                    
-                    <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3 relative z-10 text-white">
-                        Shine Level Up
-                    </h1>
-                    <p class="hero-subtitle text-lg sm:text-3xl font-light mb-8 relative z-10 text-white">
-                        Keep shining, keep earning.
-                    </p>
+                <!-- Subtle Gradient Background for text visibility (behind everything) -->
+                <div
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-3xl rounded-full -z-10 pointer-events-none">
                 </div>
 
-                <!-- CTA Buttons -->
-                <div class="relative z-20 flex flex-col sm:flex-row gap-4 justify-center mb-16">
-                    <a href="#tasks" @click="scrollToTasks"
-                        class="px-8 py-3 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white font-medium hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-lg">
-                        開始探險
-                    </a>
+                <!-- Twinkling Stars (Natural Diffusion) -->
+                <!-- Left Side (4 stars) -->
+                <div class="absolute -top-8 -left-16 w-3.5 h-3.5 animate-twinkle-2 text-white scale-y-[-1]">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
+                    </svg>
                 </div>
+                <div class="absolute top-8 -left-28 w-2.5 h-2.5 animate-twinkle-4 text-white scale-y-[-1]">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
+                    </svg>
+                </div>
+
+                <div class="absolute -bottom-4 -left-6 w-3 h-3 animate-twinkle-5 text-white scale-y-[-1]">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
+                    </svg>
+                </div>
+
+                <!-- Right Side (3 stars) -->
+                <div class="absolute -top-4 -right-12 w-3.5 h-3.5 animate-twinkle-2 text-white">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
+                    </svg>
+                </div>
+                <div class="absolute top-6 -right-24 w-2.5 h-2.5 animate-twinkle-4 text-white">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
+                    </svg>
+                </div>
+                <div class="absolute bottom-2 -right-16 w-3 h-3 animate-twinkle-1 text-white">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
+                    </svg>
+                </div>
+
+                <!-- Top Center -->
+                <div class="absolute -top-12 left-1/4 w-1.5 h-1.5 animate-twinkle-3 text-white">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
+                    </svg>
+                </div>
+
+                <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3 relative z-10 text-white">
+                    Shine Level Up
+                </h1>
+                <p class="hero-subtitle text-lg sm:text-3xl font-light mb-8 relative z-10 text-white">
+                    Keep shining, keep earning.
+                </p>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="relative z-20 flex flex-col sm:flex-row gap-4 justify-center mb-16">
+                <a href="#tasks" @click="scrollToTasks"
+                    class="px-8 py-3 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white font-medium hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-lg">
+                    開始探險
+                </a>
+            </div>
 
             <!-- Scrolling Rewards Section -->
             <div class="relative z-10 w-full overflow-visible mt-8">
@@ -144,8 +160,7 @@
                         </div>
                         <!-- 右側：任務數量 -->
                         <div class="flex items-center gap-2">
-                            <span
-                                class="text-xs font-medium text-gray-500 dark:text-gray-400">任務數量</span>
+                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">任務數量</span>
                             <span class="text-sm font-bold text-light-text dark:text-dark-text">{{ filteredTasks.length
                                 }} 個</span>
                         </div>
@@ -175,7 +190,8 @@
                                     {{ getCategoryLabelForTask(task.category) }}
                                 </span>
                             </div>
-                            <span class="text-base font-bold text-primary-purple">+{{ task.points }} 分</span>
+                            <span :class="['text-base font-bold', getPointsColorClass(task.category)]">+{{ task.points
+                                }} 分</span>
                         </div>
 
                         <h3 class="text-base font-bold text-light-text dark:text-dark-text mb-1">{{ task.title }}</h3>
@@ -261,28 +277,23 @@
                         <div class="flex items-center gap-3 flex-wrap">
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                                <span
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">充足</span>
+                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">充足</span>
                             </div>
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                <span
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">適量</span>
+                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">適量</span>
                             </div>
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-orange-500"></div>
-                                <span
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">有限</span>
+                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">有限</span>
                             </div>
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                                <span
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">稀少</span>
+                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">稀少</span>
                             </div>
                             <div class="flex items-center gap-1">
                                 <div class="w-2 h-2 rounded-full bg-gray-500"></div>
-                                <span
-                                    class="text-xs font-medium text-gray-500 dark:text-gray-400">已售罄</span>
+                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">已售罄</span>
                             </div>
                         </div>
                     </div>
@@ -737,6 +748,18 @@ const getTaskIconPath = (category) => {
         'social': 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' // 用戶群組圖標
     }
     return paths[category] || 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
+
+}
+
+const getPointsColorClass = (category) => {
+    const classes = {
+        'daily': 'text-pink-500 dark:text-pink-400',
+        'financial': 'text-indigo-500 dark:text-indigo-400',
+        'investment': 'text-amber-500 dark:text-amber-400',
+        'esg': 'text-green-500 dark:text-green-400',
+        'social': 'text-purple-500 dark:text-purple-400'
+    }
+    return classes[category] || 'text-primary-purple'
 }
 
 const giftSeries = [
@@ -931,15 +954,7 @@ const getCategoryBadgeClass = (level) => {
     return classes[level] || 'bg-gray-500'
 }
 
-const getPointsColorClass = (level) => {
-    const classes = {
-        'EXPLORER': 'text-emerald-600 dark:text-emerald-400',
-        'CREATOR': 'text-indigo-600 dark:text-indigo-400',
-        'VISIONARY': 'text-orange-600 dark:text-orange-400',
-        'LUMINARY': 'text-violet-600 dark:text-violet-400'
-    }
-    return classes[level] || 'text-gray-600 dark:text-gray-400'
-}
+
 
 const getSeriesBorderClass = () => {
     const series = selectedSeries.value
@@ -986,19 +1001,33 @@ const getStockText = (gift) => {
     left: 0;
 }
 
-.blob-1 {    background: radial-gradient(circle, rgba(42, 201, 222, 0.8) 0%, rgba(42, 201, 222, 0.4) 100%);}
+.blob-1 {
+    background: radial-gradient(circle, rgba(42, 201, 222, 0.8) 0%, rgba(42, 201, 222, 0.4) 100%);
+}
 
-.blob-2 {    background: radial-gradient(circle, rgba(240, 135, 244, 0.8) 0%, rgba(240, 135, 244, 0.4) 100%);}
+.blob-2 {
+    background: radial-gradient(circle, rgba(240, 135, 244, 0.8) 0%, rgba(240, 135, 244, 0.4) 100%);
+}
 
-.blob-3 {    background: radial-gradient(circle, rgba(42, 201, 222, 0.7) 0%, rgba(42, 201, 222, 0.3) 100%);}
+.blob-3 {
+    background: radial-gradient(circle, rgba(42, 201, 222, 0.7) 0%, rgba(42, 201, 222, 0.3) 100%);
+}
 
-.blob-4 {    background: radial-gradient(circle, rgba(141, 168, 233, 0.7) 0%, rgba(141, 168, 233, 0.3) 100%);}
+.blob-4 {
+    background: radial-gradient(circle, rgba(141, 168, 233, 0.7) 0%, rgba(141, 168, 233, 0.3) 100%);
+}
 
-.blob-5 {    background: radial-gradient(circle, rgba(191, 135, 238, 0.7) 0%, rgba(191, 135, 238, 0.3) 100%);}
+.blob-5 {
+    background: radial-gradient(circle, rgba(191, 135, 238, 0.7) 0%, rgba(191, 135, 238, 0.3) 100%);
+}
 
-.blob-6 {    background: radial-gradient(circle, rgba(215, 135, 241, 0.7) 0%, rgba(215, 135, 241, 0.3) 100%);}
+.blob-6 {
+    background: radial-gradient(circle, rgba(215, 135, 241, 0.7) 0%, rgba(215, 135, 241, 0.3) 100%);
+}
 
-.blob-7 {    background: radial-gradient(circle, rgba(227, 151, 243, 0.7) 0%, rgba(227, 151, 243, 0.3) 100%);}
+.blob-7 {
+    background: radial-gradient(circle, rgba(227, 151, 243, 0.7) 0%, rgba(227, 151, 243, 0.3) 100%);
+}
 
 /* Hero Title - No animation for stable display */
 
@@ -1051,15 +1080,38 @@ const getStockText = (gift) => {
 
 /* Twinkling Stars Animation */
 @keyframes twinkle {
-    0%, 100% { opacity: 0.5; transform: scale(0.9); }
-    50% { opacity: 1; transform: scale(1.1) rotate(10deg); }
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(0.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1) rotate(10deg);
+    }
 }
 
-.animate-twinkle-1 { animation: twinkle 3s ease-in-out infinite 0s; }
-.animate-twinkle-2 { animation: twinkle 3s ease-in-out infinite 0.6s; }
-.animate-twinkle-3 { animation: twinkle 3s ease-in-out infinite 1.2s; }
-.animate-twinkle-4 { animation: twinkle 3s ease-in-out infinite 1.8s; }
-.animate-twinkle-5 { animation: twinkle 3s ease-in-out infinite 2.4s; }
+.animate-twinkle-1 {
+    animation: twinkle 3s ease-in-out infinite 0s;
+}
+
+.animate-twinkle-2 {
+    animation: twinkle 3s ease-in-out infinite 0.6s;
+}
+
+.animate-twinkle-3 {
+    animation: twinkle 3s ease-in-out infinite 1.2s;
+}
+
+.animate-twinkle-4 {
+    animation: twinkle 3s ease-in-out infinite 1.8s;
+}
+
+.animate-twinkle-5 {
+    animation: twinkle 3s ease-in-out infinite 2.4s;
+}
 
 /* 深色模式下移除光暈 */
 .dark .hero-title,
