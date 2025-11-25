@@ -2,7 +2,8 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Scroll to Top Button -->
         <button @click="scrollToTop"
-            class="fixed bottom-6 left-4 sm:left-6 lg:left-8 z-50 h-12 w-12 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 hover:scale-105 active:scale-95 transition-all duration-400 ease-out shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl backdrop-saturate-150 group"
+            class="fixed bottom-6 z-40 h-12 w-12 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 hover:scale-105 active:scale-95 transition-all duration-400 ease-out shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl backdrop-saturate-150 group"
+            style="left: max(1rem, calc((100vw - 72rem) / 2 - 1rem))"
             aria-label="回到頂部">
             <svg class="w-5 h-5 text-zinc-600 dark:text-gray-300 group-hover:text-zinc-800 dark:group-hover:text-white transition-colors duration-300"
                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -10,14 +11,29 @@
             </svg>
         </button>
 
-        <!-- 購物車標題 -->
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">購物車</h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400">使用兌換積分選購心儀的禮品</p>
+        <!-- 購物車/心願清單 標題與切換 -->
+        <div class="mb-8 flex items-end justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    {{ activeTab === 'cart' ? '購物車' : '心願清單' }}
+                </h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ activeTab === 'cart' ? '使用兌換積分選購心儀的禮品' : '收藏您喜愛的禮品' }}
+                </p>
+            </div>
+            <!-- 心願清單按鈕 -->
+            <button @click="activeTab = activeTab === 'cart' ? 'wishlist' : 'cart'"
+                class="px-5 py-2.5 rounded-full bg-pink-50/80 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/30 border border-pink-200 dark:border-pink-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                {{ activeTab === 'cart' ? '心願清單' : '購物車' }}
+            </button>
         </div>
 
         <!-- 購物車列表 -->
-        <div v-if="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <div v-if="activeTab === 'cart' && cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-5 gap-6">
             <!-- 商品列表 -->
             <div class="lg:col-span-3 space-y-4 h-[600px] overflow-y-auto pr-2">
                 <div v-for="item in cartItems" :key="item.id"
@@ -209,8 +225,41 @@
             </div>
         </div>
 
+        <!-- 心願清單 -->
+        <div v-if="activeTab === 'wishlist' && store.wishlistItems.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div v-for="item in store.wishlistItems" :key="item.id"
+                class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl overflow-hidden border dark:border-gray-600/30 hover:scale-105 transition-transform duration-300 group">
+                <div class="relative aspect-[4/3] overflow-hidden">
+                    <img :src="item.image" :alt="item.title"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                    <!-- 移除愛心按鈕 -->
+                    <button @click="store.removeFromWishlist(item.id)"
+                        class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 border border-white/50 dark:border-gray-600/50">
+                        <svg class="w-5 h-5 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-3">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-2 line-clamp-1">{{ item.title }}</h3>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-lg font-bold text-purple-600 dark:text-purple-400">{{ item.points }}</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">積分</span>
+                        </div>
+                        <button @click="handleAddFromWishlist(item)"
+                            class="px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-300">
+                            加入購物車
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 空購物車狀態 -->
-        <div v-else class="text-center py-24">
+        <div v-else-if="activeTab === 'cart' && cartItems.length === 0" class="text-center py-24">
             <div
                 class="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-full flex items-center justify-center">
                 <svg class="w-16 h-16 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -224,13 +273,35 @@
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <router-link to="/rewards"
-                    class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105">
+                <router-link to="/"
+                    class="px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-3xl font-medium hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105">
                     瀏覽禮品商城
                 </router-link>
-                <router-link to="/tasks"
-                    class="px-6 py-3 border-2 border-purple-300 dark:border-purple-600 text-purple-600 dark:text-purple-400 rounded-xl font-medium hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-300">
+                <router-link to="/#tasks"
+                    class="px-6 py-3 border-2 border-pink-300 dark:border-pink-600 text-pink-600 dark:text-pink-400 rounded-3xl font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300">
                     完成任務賺積分
+                </router-link>
+            </div>
+        </div>
+
+        <!-- 空心願清單狀態 -->
+        <div v-else-if="activeTab === 'wishlist' && store.wishlistItems.length === 0" class="text-center py-24">
+            <div
+                class="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 rounded-full flex items-center justify-center">
+                <svg class="w-16 h-16 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">心願清單是空的</h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                還沒有收藏任何禮品嗎？快去瀏覽精選商品，收藏您喜愛的禮品吧！
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <router-link to="/"
+                    class="px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-3xl font-medium hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105">
+                    瀏覽禮品商城
                 </router-link>
             </div>
         </div>
@@ -244,6 +315,21 @@ import { useStore } from '../store/app.js'
 
 // 使用全局 store
 const store = useStore()
+
+// 頁籤切換
+const activeTab = ref('cart')
+
+// 檢測登入modal是否開啟
+const isLoginModalOpen = ref(false)
+
+// 監聽 document 上的 modal 變化
+if (typeof document !== 'undefined') {
+  const observer = new MutationObserver(() => {
+    const modal = document.querySelector('.fixed.inset-0.z-50')
+    isLoginModalOpen.value = !!modal
+  })
+  observer.observe(document.body, { childList: true, subtree: true })
+}
 
 // 用戶積分
 const availablePoints = computed(() => mockUsers[1]?.rewardPoints || 0)
@@ -332,8 +418,15 @@ const scrollToTop = () => {
     document.body.scrollTop = 0
 }
 
-// 滾動事件監聽
+// 從心願清單加入購物車
+const handleAddFromWishlist = (item) => {
+    store.addToCart(item)
+    alert(`已將「${item.title}」加入購物車！`)
+}
+
+// 初始化：載入心願清單和滾動事件監聽
 onMounted(() => {
+    store.loadWishlist()
     window.addEventListener('scroll', handleScroll)
 })
 

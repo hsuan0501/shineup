@@ -1,5 +1,7 @@
 <template>
-    <div ref="chatBoxContainer" class="fixed bottom-6 right-4 sm:right-6 lg:right-8 z-50 flex flex-col items-end">
+    <div ref="chatBoxContainer"
+        class="fixed bottom-6 z-40 flex flex-col items-end"
+        style="right: max(1rem, calc((100vw - 72rem) / 2 - 1rem))">
         <!-- Chat Window -->
         <transition name="fade-slide">
             <div v-if="isOpen"
@@ -63,8 +65,9 @@
         </transition>
 
         <!-- Toggle Button -->
-        <button @click="toggleChat"
-            class="relative h-14 w-14 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-700/80 border border-zinc-200/50 dark:border-gray-600/40 hover:bg-zinc-200 dark:hover:bg-gray-600/70 text-zinc-600 dark:text-gray-300 hover:scale-105 active:scale-95 transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl dark:shadow-2xl">
+        <button @click="toggleChat" :class="[
+            'relative h-14 w-14 flex items-center justify-center rounded-full border transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl dark:shadow-2xl bg-zinc-100/90 dark:bg-gray-700/80 border-zinc-200/50 dark:border-gray-600/40 hover:bg-zinc-200 dark:hover:bg-gray-600/70 text-zinc-600 dark:text-gray-300 hover:scale-105 active:scale-95'
+        ]">
             <span
                 class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full"
                 v-if="!isOpen"></span>
@@ -82,12 +85,29 @@
 </template>
 
 <script setup>
-import { ref, nextTick, watch, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick, watch, onMounted, onUnmounted, computed } from 'vue'
+import { useStore } from '../store/app'
 
+const store = useStore()
 const isOpen = ref(false)
 const newMessage = ref('')
 const messagesContainer = ref(null)
 const chatBoxContainer = ref(null)
+
+// 檢查是否登入
+const isLoggedIn = computed(() => store.isAuthenticated)
+
+// 檢測登入modal是否開啟
+const isLoginModalOpen = ref(false)
+
+// 監聽 document 上的 modal 變化
+if (typeof document !== 'undefined') {
+  const observer = new MutationObserver(() => {
+    const modal = document.querySelector('.fixed.inset-0.z-50')
+    isLoginModalOpen.value = !!modal
+  })
+  observer.observe(document.body, { childList: true, subtree: true })
+}
 
 const messages = ref([
     { text: '您好！歡迎來到 ShineUp。請問有什麼可以幫忙的嗎？', isUser: false }
@@ -136,6 +156,12 @@ const sendMessage = () => {
 const isToggling = ref(false)
 const toggleChat = async () => {
     if (isToggling.value) return
+
+    // 如果未登入，提示先登入
+    if (!isLoggedIn.value) {
+        alert('請先登入以開啟您的旅程，體驗智能客服功能！')
+        return
+    }
 
     isToggling.value = true
     isOpen.value = !isOpen.value

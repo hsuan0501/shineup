@@ -51,6 +51,9 @@ export const useStore = defineStore('app', () => {
     }
   ])
 
+  // 心願清單狀態管理
+  const wishlistItems = ref([])
+
   // 計算購物車總数量
   const cartItemCount = computed(() => {
     return cartItems.value.reduce((total, item) => total + item.quantity, 0)
@@ -76,6 +79,46 @@ export const useStore = defineStore('app', () => {
       item.quantity += change
       if (item.quantity <= 0) {
         removeFromCart(itemId)
+      }
+    }
+  }
+
+  // 心願清單操作函數
+  const addToWishlist = (gift) => {
+    const exists = wishlistItems.value.find(item => item.id === gift.id)
+    if (!exists) {
+      wishlistItems.value.push(gift)
+      // 儲存到 localStorage
+      localStorage.setItem('wishlist', JSON.stringify(wishlistItems.value))
+    }
+  }
+
+  const removeFromWishlist = (giftId) => {
+    wishlistItems.value = wishlistItems.value.filter(item => item.id !== giftId)
+    // 更新 localStorage
+    localStorage.setItem('wishlist', JSON.stringify(wishlistItems.value))
+  }
+
+  const isInWishlist = (giftId) => {
+    return wishlistItems.value.some(item => item.id === giftId)
+  }
+
+  const toggleWishlist = (gift) => {
+    if (isInWishlist(gift.id)) {
+      removeFromWishlist(gift.id)
+    } else {
+      addToWishlist(gift)
+    }
+  }
+
+  const loadWishlist = () => {
+    const saved = localStorage.getItem('wishlist')
+    if (saved) {
+      try {
+        wishlistItems.value = JSON.parse(saved)
+      } catch (e) {
+        console.error('Failed to load wishlist', e)
+        wishlistItems.value = []
       }
     }
   }
@@ -135,6 +178,12 @@ export const useStore = defineStore('app', () => {
     addToCart,
     removeFromCart,
     updateCartItemQuantity,
+    wishlistItems,
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+    toggleWishlist,
+    loadWishlist,
     toggleDarkMode,
     initDarkMode,
     login,

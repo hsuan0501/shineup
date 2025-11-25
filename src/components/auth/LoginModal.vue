@@ -17,15 +17,21 @@
 
                 <!-- Header with Tabs -->
                 <div class="bg-gradient-to-r from-cyan-500 to-blue-500 p-6 pb-0">
-                    <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                        開始您的旅程
-                        <svg class="w-5 h-5" viewBox="0 0 24 24">
-                            <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="white" />
-                        </svg>
-                    </h2>
-                    <div class="flex gap-4 border-b border-white/20">
+                    <!-- Icon and Title in same row - Left Aligned -->
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24">
+                                <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="white" />
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white">
+                            開始您的旅程
+                        </h2>
+                    </div>
+                    <!-- Left Aligned Tab Buttons -->
+                    <div class="flex gap-8 border-b border-white/20">
                         <button @click="activeTab = 'login'" :class="[
-                            'pb-3 px-2 text-sm font-semibold transition-all relative',
+                            'pb-3 px-4 text-sm font-semibold transition-all relative',
                             activeTab === 'login' ? 'text-white' : 'text-white/60 hover:text-white/80'
                         ]">
                             登入
@@ -33,7 +39,7 @@
                                 class="absolute bottom-0 left-0 w-full h-0.5 bg-white rounded-t-full"></div>
                         </button>
                         <button @click="activeTab = 'register'" :class="[
-                            'pb-3 px-2 text-sm font-semibold transition-all relative',
+                            'pb-3 px-4 text-sm font-semibold transition-all relative',
                             activeTab === 'register' ? 'text-white' : 'text-white/60 hover:text-white/80'
                         ]">
                             註冊
