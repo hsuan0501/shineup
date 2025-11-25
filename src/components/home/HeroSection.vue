@@ -1,21 +1,8 @@
 <template>
-    <section class="relative flex flex-col items-center justify-between px-4 sm:px-6 lg:px-8 w-full py-12 sm:py-16 md:py-20 min-h-[600px] sm:min-h-[700px] md:min-h-[800px] lg:min-h-screen">
-        <!-- Animated Background with Blobs -->
-        <div class="blobs absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-            <div ref="blob1" class="blob blob-1"></div>
-            <div ref="blob2" class="blob blob-2"></div>
-            <div ref="blob3" class="blob blob-3"></div>
-            <div ref="blob4" class="blob blob-4"></div>
-            <div ref="blob5" class="blob blob-5"></div>
-            <div ref="blob6" class="blob blob-6"></div>
-            <div ref="blob7" class="blob blob-7"></div>
-        </div>
-
-        <!-- Spacer for top -->
-        <div class="flex-1"></div>
+    <section class="relative flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 w-full py-24 bg-gradient-to-br from-sky-400 via-purple-400 to-pink-400">
 
         <!-- Hero Content -->
-        <div class="relative flex flex-col items-center justify-center text-center z-10 max-w-5xl mx-auto w-full">
+        <div class="relative flex flex-col items-center justify-center text-center z-10 max-w-5xl mx-auto w-full mb-16">
 
             <!-- Subtle Gradient Background for text visibility (behind everything) -->
             <div
@@ -24,35 +11,35 @@
 
             <!-- Twinkling Stars (Natural Diffusion) -->
             <!-- Left Side (4 stars) -->
-            <div class="absolute -top-8 -left-16 w-3.5 h-3.5 animate-twinkle-2 text-white scale-y-[-1]">
+            <div class="absolute -top-8 left-36 w-3.5 h-3.5 animate-twinkle-2 text-white scale-y-[-1]">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
-            <div class="absolute top-8 -left-28 w-2.5 h-2.5 animate-twinkle-4 text-white scale-y-[-1]">
+            <div class="absolute top-8 left-28 w-2.5 h-2.5 animate-twinkle-4 text-white scale-y-[-1]">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
 
-            <div class="absolute -bottom-4 -left-6 w-3 h-3 animate-twinkle-5 text-white scale-y-[-1]">
+            <div class="absolute -bottom-4 left-44 w-3 h-3 animate-twinkle-5 text-white scale-y-[-1]">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
 
             <!-- Right Side (3 stars) -->
-            <div class="absolute -top-4 -right-12 w-3.5 h-3.5 animate-twinkle-2 text-white">
+            <div class="absolute -top-4 right-36 w-3.5 h-3.5 animate-twinkle-2 text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
-            <div class="absolute top-6 -right-24 w-2.5 h-2.5 animate-twinkle-4 text-white">
+            <div class="absolute top-6 right-28 w-2.5 h-2.5 animate-twinkle-4 text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
-            <div class="absolute bottom-2 -right-16 w-3 h-3 animate-twinkle-1 text-white">
+            <div class="absolute bottom-2 right-40 w-3 h-3 animate-twinkle-1 text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
@@ -80,9 +67,6 @@
                 </a>
             </div>
         </div>
-
-        <!-- Spacer for bottom -->
-        <div class="flex-1"></div>
 
         <!-- Scrolling Rewards Section -->
         <div class="w-full">
