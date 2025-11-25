@@ -36,7 +36,7 @@
                         <div :class="[
                             'max-w-[80%] p-3 rounded-2xl text-sm',
                             msg.isUser
-                                ? 'bg-gradient-to-r from-cyan-100 to-blue-100 dark:from-cyan-800/40 dark:to-blue-800/40 text-gray-900 dark:text-white rounded-tr-none border border-cyan-200 dark:border-cyan-700/50 shadow-sm'
+                                ? 'bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-700/50 dark:to-blue-700/50 text-gray-900 dark:text-white rounded-tr-none border border-cyan-200 dark:border-cyan-600/50 shadow-sm'
                                 : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-tl-none shadow-sm'
                         ]">
                             {{ msg.text }}
@@ -64,9 +64,9 @@
 
         <!-- Toggle Button -->
         <button @click="toggleChat"
-            class="h-14 w-14 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-700/80 border border-zinc-200/50 dark:border-gray-600/40 hover:bg-zinc-200 dark:hover:bg-gray-600/70 text-zinc-600 dark:text-gray-300 hover:scale-105 active:scale-95 transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl dark:shadow-2xl">
+            class="relative h-14 w-14 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-700/80 border border-zinc-200/50 dark:border-gray-600/40 hover:bg-zinc-200 dark:hover:bg-gray-600/70 text-zinc-600 dark:text-gray-300 hover:scale-105 active:scale-95 transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl dark:shadow-2xl">
             <span
-                class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-gray-800"
+                class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full"
                 v-if="!isOpen"></span>
             <svg v-if="!isOpen" class="w-7 h-7 group-hover:rotate-12 transition-transform duration-300" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">

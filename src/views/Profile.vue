@@ -11,14 +11,14 @@
     </button>
 
     <!-- 會員中心標題 -->
-    <div class="mb-8 flex items-start justify-between">
+    <div class="mb-8 flex items-end justify-between">
       <div>
         <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">會員中心</h1>
         <p class="text-sm text-gray-600 dark:text-gray-400">管理您的積分、等級與獎勵</p>
       </div>
       <!-- 登出按鈕 -->
       <button @click="handleLogout"
-        class="px-5 py-2.5 rounded-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm">
+        class="px-5 py-2.5 rounded-full bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -329,10 +329,12 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { mockUsers, levelConfig } from '../mock.js'
 import { useStore } from '../store/app.js'
 
 const store = useStore()
+const router = useRouter()
 
 // 頭像上傳相關
 const avatarInput = ref(null)
@@ -515,9 +517,13 @@ const scrollToTop = () => {
 const handleLogout = () => {
   if (confirm('確定要登出嗎？')) {
     store.logout()
-    alert('已成功登出')
-    // 可以選擇跳轉到首頁
-    // router.push('/')
+    router.push('/')
+    // 延遲顯示登入彈窗，讓路由先導航
+    setTimeout(() => {
+      // 觸發登入彈窗需要通過事件或全域狀態
+      // 這裡直接跳轉到首頁後，用戶會看到「登入 / 註冊」按鈕
+      alert('已成功登出')
+    }, 100)
   }
 }
 </script>

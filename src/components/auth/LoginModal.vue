@@ -2,7 +2,7 @@
     <!-- Modal Overlay -->
     <Transition name="modal">
         <div v-if="modelValue" @click.self="closeModal"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xl backdrop-saturate-150 px-4">
             <!-- Modal Card -->
             <div
                 class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden transform transition-all">
@@ -82,11 +82,13 @@
                         <!-- Demo Hint -->
                         <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                             <p class="text-xs text-blue-600 dark:text-blue-400">
-                                <strong>測試帳號：</strong> matcha@example.com<br>
-                                <strong>測試密碼：</strong> 20001108
+                                <strong>測試帳號：</strong>matcha@example.com<br>
+                                <strong>測試密碼：</strong>20001108
                             </p>
                         </div>
                     </form>
+
+
 
                     <!-- Register Form -->
                     <form v-if="activeTab === 'register'" @submit.prevent="handleRegister" class="space-y-4">
