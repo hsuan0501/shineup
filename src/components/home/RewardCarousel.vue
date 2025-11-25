@@ -1,9 +1,9 @@
 <template>
-    <div class="relative z-10 w-full overflow-visible mt-8">
+    <div class="relative z-10 w-full overflow-hidden">
         <!-- First Row - Left to Right (Gifts 1-12) -->
-        <div class="flex gap-3 animate-scroll-left mb-3">
+        <div class="flex gap-2 sm:gap-3 animate-scroll-left mb-2 sm:mb-3">
             <div v-for="gift in [...firstRowGifts, ...firstRowGifts]" :key="gift.id + '-row1'"
-                class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300">
+                class="relative flex-shrink-0 w-40 sm:w-48 md:w-52 lg:w-60 p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300">
                 <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
                     <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
                 </div>
@@ -17,9 +17,9 @@
         </div>
 
         <!-- Second Row - Right to Left (Gifts 13-24) -->
-        <div class="flex gap-3 animate-scroll-right">
+        <div class="flex gap-2 sm:gap-3 animate-scroll-right">
             <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'"
-                class="relative flex-shrink-0 w-60 p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300">
+                class="relative flex-shrink-0 w-40 sm:w-48 md:w-52 lg:w-60 p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300">
                 <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
                     <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
                 </div>

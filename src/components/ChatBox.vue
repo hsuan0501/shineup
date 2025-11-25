@@ -1,7 +1,6 @@
 <template>
     <div ref="chatBoxContainer"
-        class="fixed bottom-6 z-40 flex flex-col items-end"
-        style="right: max(1rem, calc((100vw - 72rem) / 2 - 1rem))">
+        class="fixed bottom-6 right-6 z-40 flex flex-col items-end">
         <!-- Chat Window -->
         <transition name="fade-slide">
             <div v-if="isOpen"

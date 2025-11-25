@@ -1,16 +1,5 @@
 <template>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Scroll to Top Button -->
-        <button @click="scrollToTop"
-            class="fixed bottom-6 z-40 h-12 w-12 flex items-center justify-center rounded-full bg-zinc-100/90 dark:bg-gray-800/90 border border-zinc-200/50 dark:border-gray-600/50 hover:bg-zinc-200 dark:hover:bg-gray-700 hover:scale-105 active:scale-95 transition-all duration-400 ease-out shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl backdrop-saturate-150 group"
-            style="left: max(1rem, calc((100vw - 72rem) / 2 - 1rem))"
-            aria-label="回到頂部">
-            <svg class="w-5 h-5 text-zinc-600 dark:text-gray-300 group-hover:text-zinc-800 dark:group-hover:text-white transition-colors duration-300"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-            </svg>
-        </button>
-
         <!-- 購物車/心願清單 標題與切換 -->
         <div class="mb-8 flex items-end justify-between">
             <div>
@@ -21,10 +10,20 @@
                     {{ activeTab === 'cart' ? '使用兌換積分選購心儀的禮品' : '收藏您喜愛的禮品' }}
                 </p>
             </div>
-            <!-- 心願清單按鈕 -->
-            <button @click="activeTab = activeTab === 'cart' ? 'wishlist' : 'cart'"
-                class="px-5 py-2.5 rounded-full bg-pink-50/80 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/30 border border-pink-200 dark:border-pink-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- 心願清單/購物車切換按鈕 -->
+            <button @click="activeTab = activeTab === 'cart' ? 'wishlist' : 'cart'" :class="[
+                'px-5 py-2.5 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl',
+                activeTab === 'cart'
+                    ? 'bg-pink-50/80 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/30 border border-pink-200 dark:border-pink-800'
+                    : 'bg-sky-50/80 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800'
+            ]">
+                <!-- 購物車圖案（當在心願清單時顯示） -->
+                <svg v-if="activeTab === 'wishlist'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <!-- 愛心圖案（當在購物車時顯示） -->
+                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
@@ -261,55 +260,31 @@
         <!-- 空購物車狀態 -->
         <div v-else-if="activeTab === 'cart' && cartItems.length === 0" class="text-center py-24">
             <div
-                class="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-full flex items-center justify-center">
-                <svg class="w-16 h-16 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-sky-100 to-blue-100 dark:from-sky-900/30 dark:to-blue-900/30 rounded-full flex items-center justify-center">
+                <svg class="w-16 h-16 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
             </div>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">購物車是空的</h2>
-            <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
-                還沒有選擇任何禮品嗎？快去瀏覽精選商品，找到您心儀的獎勵吧！
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <router-link to="/"
-                    class="px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-3xl font-medium hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105">
-                    瀏覽禮品商城
-                </router-link>
-                <router-link to="/#tasks"
-                    class="px-6 py-3 border-2 border-pink-300 dark:border-pink-600 text-pink-600 dark:text-pink-400 rounded-3xl font-medium hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300">
-                    完成任務賺積分
-                </router-link>
-            </div>
+            <h2 class="text-lg font-normal text-gray-600 dark:text-gray-400">購物車是空的</h2>
         </div>
 
         <!-- 空心願清單狀態 -->
         <div v-else-if="activeTab === 'wishlist' && store.wishlistItems.length === 0" class="text-center py-24">
             <div
-                class="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 rounded-full flex items-center justify-center">
+                class="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 rounded-full flex items-center justify-center">
                 <svg class="w-16 h-16 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
             </div>
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">心願清單是空的</h2>
-            <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
-                還沒有收藏任何禮品嗎？快去瀏覽精選商品，收藏您喜愛的禮品吧！
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <router-link to="/"
-                    class="px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-3xl font-medium hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105">
-                    瀏覽禮品商城
-                </router-link>
-            </div>
+            <h2 class="text-lg font-normal text-gray-600 dark:text-gray-400">心願清單是空的</h2>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { mockUsers } from '../mock.js'
 import { useStore } from '../store/app.js'
 
@@ -401,36 +376,14 @@ const getLevelStyle = (level) => {
     return styles[level] || styles.EXPLORER
 }
 
-// Scroll to Top
-const showScrollTop = ref(false)
-
-const handleScroll = () => {
-    showScrollTop.value = window.scrollY > 300
-}
-
-const scrollToTop = () => {
-    window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-    })
-    document.documentElement.scrollTop = 0
-    document.body.scrollTop = 0
-}
-
 // 從心願清單加入購物車
 const handleAddFromWishlist = (item) => {
     store.addToCart(item)
     alert(`已將「${item.title}」加入購物車！`)
 }
 
-// 初始化：載入心願清單和滾動事件監聽
+// 初始化：載入心願清單
 onMounted(() => {
     store.loadWishlist()
-    window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll)
 })
 </script>

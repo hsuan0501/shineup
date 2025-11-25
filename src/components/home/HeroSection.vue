@@ -1,7 +1,7 @@
 <template>
-    <section class="relative min-h-screen flex flex-col items-center justify-start px-4 sm:px-6 lg:px-8 w-full pt-24">
+    <section class="relative flex flex-col items-center justify-between px-4 sm:px-6 lg:px-8 w-full py-12 sm:py-16 md:py-20 min-h-[600px] sm:min-h-[700px] md:min-h-[800px] lg:min-h-screen">
         <!-- Animated Background with Blobs -->
-        <div class="blobs absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="blobs absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
             <div ref="blob1" class="blob blob-1"></div>
             <div ref="blob2" class="blob blob-2"></div>
             <div ref="blob3" class="blob blob-3"></div>
@@ -11,8 +11,11 @@
             <div ref="blob7" class="blob blob-7"></div>
         </div>
 
+        <!-- Spacer for top -->
+        <div class="flex-1"></div>
+
         <!-- Hero Content -->
-        <div class="relative flex flex-col items-center justify-center text-center z-10">
+        <div class="relative flex flex-col items-center justify-center text-center z-10 max-w-5xl mx-auto w-full">
 
             <!-- Subtle Gradient Background for text visibility (behind everything) -->
             <div
@@ -62,24 +65,29 @@
                 </svg>
             </div>
 
-            <h1 class="hero-title text-5xl sm:text-10xl lg:text-7xl font-light mb-3 relative z-10 text-white">
+            <h1 class="hero-title text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-2 sm:mb-3 relative z-10 text-white">
                 Shine Level Up
             </h1>
-            <p class="hero-subtitle text-lg sm:text-3xl font-light mb-8 relative z-10 text-white">
+            <p class="hero-subtitle text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-light mb-6 sm:mb-8 relative z-10 text-white">
                 Keep shining, keep earning.
             </p>
+
+            <!-- CTA Buttons -->
+            <div class="relative z-20 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-4 sm:mb-6">
+                <a href="#tasks" @click="scrollToTasks"
+                    class="px-5 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white font-medium hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-sm sm:text-base md:text-lg">
+                    開始探險
+                </a>
+            </div>
         </div>
 
-        <!-- CTA Buttons -->
-        <div class="relative z-20 flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <a href="#tasks" @click="scrollToTasks"
-                class="px-8 py-3 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white font-medium hover:scale-105 active:scale-95 transition-all duration-300 ease-out text-lg">
-                開始探險
-            </a>
-        </div>
+        <!-- Spacer for bottom -->
+        <div class="flex-1"></div>
 
         <!-- Scrolling Rewards Section -->
-        <RewardCarousel />
+        <div class="w-full">
+            <RewardCarousel />
+        </div>
     </section>
 </template>
 
