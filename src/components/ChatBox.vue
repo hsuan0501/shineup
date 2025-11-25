@@ -6,16 +6,15 @@
                 class="mb-4 w-72 sm:w-80 h-[420px] bg-zinc-50 dark:bg-gray-700/80 rounded-2xl shadow-2xl border border-zinc-200 dark:border-gray-600/40 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150 dark:backdrop-blur-2xl">
                 <!-- Header -->
                 <div
-                    class="p-4 bg-gradient-to-br from-sky-400 to-purple-400 text-white flex justify-between items-center">
+                    class="p-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex justify-between items-center">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="white" />
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-bold text-sm">線上客服</h3>
+                            <h3 class="font-bold text-sm">ShineUp 智能客服</h3>
                             <p class="text-xs text-white/80">通常在幾分鐘內回覆</p>
                         </div>
                     </div>
@@ -37,7 +36,7 @@
                         <div :class="[
                             'max-w-[80%] p-3 rounded-2xl text-sm',
                             msg.isUser
-                                ? 'bg-gradient-to-r from-sky-100 to-indigo-100 text-gray-900 rounded-tr-none'
+                                ? 'bg-gradient-to-r from-cyan-100 to-blue-100 dark:from-cyan-800/40 dark:to-blue-800/40 text-gray-900 dark:text-white rounded-tr-none border border-cyan-200 dark:border-cyan-700/50 shadow-sm'
                                 : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-tl-none shadow-sm'
                         ]">
                             {{ msg.text }}

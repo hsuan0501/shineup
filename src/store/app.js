@@ -5,6 +5,7 @@ export const useStore = defineStore('app', () => {
   const isDark = ref(false)
   const currentUser = ref(null)
   const currentLevel = ref('EXPLORER')
+  const isAuthenticated = ref(false)
 
   // 購物車狀態管理
   const cartItems = ref([
@@ -95,10 +96,40 @@ export const useStore = defineStore('app', () => {
     }
   }
 
+  // 認證相關函數
+  const login = (user) => {
+    isAuthenticated.value = true
+    currentUser.value = user
+    currentLevel.value = user.level || 'EXPLORER'
+  }
+
+  const logout = () => {
+    isAuthenticated.value = false
+    currentUser.value = null
+    currentLevel.value = 'EXPLORER'
+    localStorage.removeItem('auth')
+  }
+
+  const checkAuth = () => {
+    const authData = localStorage.getItem('auth')
+    if (authData) {
+      try {
+        const parsed = JSON.parse(authData)
+        if (parsed.isAuthenticated && parsed.user) {
+          login(parsed.user)
+        }
+      } catch (e) {
+        console.error('Failed to parse auth data', e)
+        localStorage.removeItem('auth')
+      }
+    }
+  }
+
   return {
     isDark,
     currentUser,
     currentLevel,
+    isAuthenticated,
     cartItems,
     cartItemCount,
     addToCart,
@@ -106,5 +137,8 @@ export const useStore = defineStore('app', () => {
     updateCartItemQuantity,
     toggleDarkMode,
     initDarkMode,
+    login,
+    logout,
+    checkAuth,
   }
 })

@@ -51,111 +51,118 @@
           </div>
         </div>
 
-        <!-- Right Section (登入狀態) -->
-        <div class="flex items-center space-x-3 flex-shrink-0 z-10">
-          <!-- 登入狀態 -->
-          <div v-if="isLoggedIn" class="flex items-center space-x-2.5 lg:space-x-3 xl:space-x-3.5">
-            <!-- 日夜模式切換 -->
-            <button @click="toggleDarkMode"
-              class="relative w-16 h-8 rounded-full bg-gray-200/50 dark:bg-gray-800/50 shadow-inner border border-gray-200/30 dark:border-white/10 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out"
-              aria-label="切換日夜模式">
+        <!-- Right Section -->
+        <div class="flex items-center space-x-2.5 lg:space-x-3 xl:space-x-3.5 flex-shrink-0 z-10">
+          <!-- 日夜模式切換 -->
+          <button @click="toggleDarkMode"
+            class="relative w-16 h-8 rounded-full bg-gray-200/50 dark:bg-gray-800/50 shadow-inner border border-gray-200/30 dark:border-white/10 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out"
+            aria-label="切換日夜模式">
 
-              <!-- 滑動按鈕 -->
-              <div :class="[
-                'absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 transition-all duration-300 flex items-center justify-center shadow-md',
-                isDarkMode ? 'left-[calc(100%-1.75rem)]' : 'left-0.5'
-              ]">
-                <!-- Sun Icon (亮色模式) -->
-                <svg v-if="!isDarkMode" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM2 13h2a1 1 0 0 0 0-2H2a1 1 0 0 0 0 2zm18 0h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2zM11 2v2a1 1 0 0 0 2 0V2a1 1 0 0 0-2 0zm0 18v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-2 0zM5.99 4.58a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06z" />
-                </svg>
-                <!-- Moon Icon (暗色模式) -->
-                <svg v-else class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" />
-                </svg>
-              </div>
-
-              <!-- 固定的太陽圖示 (左邊) -->
-              <div class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg class="w-3.5 h-3.5 text-gray-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
-                </svg>
-              </div>
-
-              <!-- 固定的月亮圖示 (右邊) -->
-              <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg class="w-3.5 h-3.5 text-purple-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" />
-                </svg>
-              </div>
-            </button>
-
-            <!-- Level Card Component -->
-            <LevelCard />
-
-            <!-- 購物車按鈕 -->
-            <router-link to="/cart"
-              class="relative p-2 rounded-full bg-white/90 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out group mr-3 lg:mr-4 xl:mr-5"
-              aria-label="購物車">
-              <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24"
-                fill="none">
-                <defs>
-                  <linearGradient id="cart-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#38bdf8" />
-                    <stop offset="100%" stop-color="#a855f7" />
-                  </linearGradient>
-                </defs>
-                <path stroke="url(#cart-gradient)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            <!-- 滑動按鈕 -->
+            <div :class="[
+              'absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 transition-all duration-300 flex items-center justify-center shadow-md',
+              isDarkMode ? 'left-[calc(100%-1.75rem)]' : 'left-0.5'
+            ]">
+              <!-- Sun Icon (亮色模式) -->
+              <svg v-if="!isDarkMode" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM2 13h2a1 1 0 0 0 0-2H2a1 1 0 0 0 0 2zm18 0h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2zM11 2v2a1 1 0 0 0 2 0V2a1 1 0 0 0-2 0zm0 18v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-2 0zM5.99 4.58a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06z" />
               </svg>
-              <!-- 購物車数量小圓點 -->
-              <span v-if="store.cartItemCount > 0"
-                class="absolute -top-1 -right-1 w-5 h-5 bg-pink-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">{{
-                  store.cartItemCount }}</span>
-            </router-link>
+              <!-- Moon Icon (暗色模式) -->
+              <svg v-else class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" />
+              </svg>
+            </div>
 
-            <!-- 會員中心 -->
-            <RouterLink to="/profile"
-              class="px-4 py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-transparent">
-              會員中心
-            </RouterLink>
+            <!-- 固定的太陽圖示 (左邊) -->
+            <div class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg class="w-3.5 h-3.5 text-gray-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
+              </svg>
+            </div>
+
+            <!-- 固定的月亮圖示 (右邊) -->
+            <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg class="w-3.5 h-3.5 text-purple-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" />
+              </svg>
+            </div>
+          </button>
+
+          <!-- Level Card Component (灰色顯示於未登入) -->
+          <div :class="{ 'opacity-50 pointer-events-none grayscale': !isLoggedIn }">
+            <LevelCard />
           </div>
 
-          <!-- 未登入狀態 -->
-          <div v-else class="flex items-center space-x-2">
-            <RouterLink to="/auth/login"
-              class="px-4 py-2 rounded-full border-2 border-purple-400/50 dark:border-white/30 hover:bg-purple-500/10 dark:hover:bg-white/10 hover:border-purple-500 dark:hover:border-white/50 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold bg-gradient-to-br from-purple-500 to-cyan-400 bg-clip-text text-transparent dark:text-white dark:bg-none shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
-              登入
-            </RouterLink>
-            <RouterLink to="/auth/register"
-              class="px-4 py-2 rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_4px_12px_rgba(168,85,247,0.3)] hover:shadow-[0_6px_20px_rgba(168,85,247,0.4)]">
-              開始探險
-            </RouterLink>
-          </div>
+          <!-- 購物車按鈕 (灰色顯示於未登入) -->
+          <router-link to="/cart" :class="[
+            'relative p-2 rounded-full backdrop-blur-sm border hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out group mr-3 lg:mr-4 xl:mr-5',
+            isLoggedIn
+              ? 'bg-white/90 dark:bg-gray-900/30 border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40'
+              : 'bg-gray-200/50 dark:bg-gray-700/30 border-gray-300/30 dark:border-gray-600/30 opacity-50 pointer-events-none grayscale'
+          ]" aria-label="購物車">
+            <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24"
+              fill="none">
+              <defs>
+                <linearGradient id="cart-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#38bdf8" />
+                  <stop offset="100%" stop-color="#a855f7" />
+                </linearGradient>
+              </defs>
+              <path stroke="url(#cart-gradient)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <!-- 購物車数量小圓點 -->
+            <span v-if="store.cartItemCount > 0 && isLoggedIn"
+              class="absolute -top-1 -right-1 w-5 h-5 bg-pink-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">{{
+                store.cartItemCount }}</span>
+          </router-link>
+
+          <!-- 會員中心按鈕（已登入） / 登入按鈕（未登入） -->
+          <RouterLink v-if="isLoggedIn" to="/profile"
+            class="px-4 py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-transparent">
+            會員中心
+          </RouterLink>
+          <button v-else @click="openLoginModal"
+            class="px-4 py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-transparent">
+            登入 / 註冊
+          </button>
         </div>
       </div>
     </div>
   </nav>
+
+  <!-- Login Modal -->
+  <LoginModal v-model="showLoginModal" />
 </template>
 
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useStore } from '../store/app.js'
 import LevelCard from './nav/LevelCard.vue'
+import LoginModal from './auth/LoginModal.vue'
 
 const router = useRouter()
 const store = useStore()
-const isLoggedIn = ref(true)
 const isDarkMode = ref(false)
+const showLoginModal = ref(false)
 
-// 初始化暗色模式狀態
+// 使用 store 的認證狀態
+const isLoggedIn = computed(() => store.isAuthenticated)
+
+// 打開登入彈窗
+const openLoginModal = () => {
+  showLoginModal.value = true
+}
+
+// 初始化暗色模式狀態和檢查登入狀態
 onMounted(() => {
   isDarkMode.value = document.documentElement.classList.contains('dark')
+  store.checkAuth() // 檢查是否已登入
 })
 
 // 切換日夜模式

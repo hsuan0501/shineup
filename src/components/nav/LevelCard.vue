@@ -145,16 +145,43 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { levelConfig, mockUsers } from '../../mock.js'
+import { useStore } from '../../store/app.js'
 
 const showLevelCard = ref(false)
 const levelCardContainer = ref(null)
+const store = useStore()
 
-// 雙軌積分系統
-const userLevelPoints = computed(() => mockUsers[1]?.levelPoints || 450)
-const userRewardPoints = computed(() => mockUsers[1]?.rewardPoints || 680)
+// 檢查是否登入
+const isLoggedIn = computed(() => store.isAuthenticated)
+
+// 雙軌積分系統 - 根據登入狀態決定
+const userLevelPoints = computed(() => {
+  if (!isLoggedIn.value) return 0
+  return store.currentUser?.levelPoints || mockUsers[1]?.levelPoints || 0
+})
+
+const userRewardPoints = computed(() => {
+  if (!isLoggedIn.value) return 0
+  return store.currentUser?.rewardPoints || mockUsers[1]?.rewardPoints || 0
+})
+
+// 未登入時的預設等級配置
+const defaultUnstartedLevel = {
+  level: 'UNSTARTED',
+  name: '未啟程',
+  levelNumber: 0,
+  minPoints: 0,
+  maxPoints: 0,
+  multiplier: 1.0,
+  color: '#9ca3af', // gray-400
+  gradientFrom: 'from-gray-300',
+  gradientTo: 'to-gray-500'
+}
 
 // 計算當前等級
 const currentLevel = computed(() => {
+  if (!isLoggedIn.value) return defaultUnstartedLevel
+
   return levelConfig.find(level =>
     userLevelPoints.value >= level.minPoints && userLevelPoints.value <= level.maxPoints
   ) || levelConfig[0]

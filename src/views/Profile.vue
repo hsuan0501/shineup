@@ -11,9 +11,20 @@
     </button>
 
     <!-- 會員中心標題 -->
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">會員中心</h1>
-      <p class="text-sm text-gray-600 dark:text-gray-400">管理您的積分、等級與獎勵</p>
+    <div class="mb-8 flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">會員中心</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400">管理您的積分、等級與獎勵</p>
+      </div>
+      <!-- 登出按鈕 -->
+      <button @click="handleLogout"
+        class="px-5 py-2.5 rounded-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        登出
+      </button>
     </div>
 
     <!-- 主要內容區域 -->
@@ -319,6 +330,9 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { mockUsers, levelConfig } from '../mock.js'
+import { useStore } from '../store/app.js'
+
+const store = useStore()
 
 // 頭像上傳相關
 const avatarInput = ref(null)
@@ -495,5 +509,15 @@ const scrollToTop = () => {
   })
   document.documentElement.scrollTop = 0
   document.body.scrollTop = 0
+}
+
+// 登出功能
+const handleLogout = () => {
+  if (confirm('確定要登出嗎？')) {
+    store.logout()
+    alert('已成功登出')
+    // 可以選擇跳轉到首頁
+    // router.push('/')
+  }
 }
 </script>
