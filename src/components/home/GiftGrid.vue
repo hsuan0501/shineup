@@ -103,12 +103,12 @@
                             </div>
                             <button @click="handleAddToCart(gift)" :class="[
                                 'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300',
-                                !isGiftInSelectedSeries(gift) || gift.canExchange === false
+                                !isGiftInSelectedSeries(gift) || gift.canExchange === false || gift.points > user.rewardPoints
                                     ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                     : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'
                             ]"
-                                :disabled="!isGiftInSelectedSeries(gift) || gift.canExchange === false">
-                                {{ !isGiftInSelectedSeries(gift) || gift.canExchange === false ? '積分不足' : '立即兌換' }} </button>
+                                :disabled="!isGiftInSelectedSeries(gift) || gift.canExchange === false || gift.points > user.rewardPoints">
+                                {{ !isGiftInSelectedSeries(gift) || gift.canExchange === false || gift.points > user.rewardPoints ? '積分不足' : '立即兌換' }} </button>
                         </div>
                     </div>
                 </div>
@@ -357,6 +357,12 @@ const getSeriesBorderClass = () => {
 // 處理加入購物車
 const handleAddToCart = (gift) => {
     if (gift.canExchange === false) {
+        return
+    }
+
+    // 檢查積分是否足夠
+    if (gift.points > user.value.rewardPoints) {
+        alert('您的積分不足，無法兌換此禮品')
         return
     }
 
