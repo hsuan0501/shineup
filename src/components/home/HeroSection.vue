@@ -4,12 +4,12 @@
         <div class="relative flex flex-col items-center justify-center text-center z-10 max-w-5xl mx-auto w-full mb-16">
             <!-- Twinkling Stars (Natural Diffusion) -->
             <!-- Left Side (2 stars) -->
-            <div class="absolute -top-8 left-[23%] w-3.5 h-3.5 animate-twinkle-2 text-white scale-y-[-1]">
+            <div class="absolute -top-6 left-[22%] w-3.5 h-3.5 animate-twinkle-2 text-white scale-y-[-1]">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
-            <div class="absolute top-8 left-[18%] w-2.5 h-2.5 animate-twinkle-4 text-white scale-y-[-1]">
+            <div class="absolute top-6 left-[18%] w-2.5 h-2.5 animate-twinkle-4 text-white scale-y-[-1]">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
