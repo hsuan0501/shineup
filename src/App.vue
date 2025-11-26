@@ -30,6 +30,9 @@
       <!-- Global ChatBox -->
       <ChatBox />
     </div>
+
+    <!-- Mouse Trail Effect -->
+    <MouseTrail />
   </div>
 </template>
 
@@ -39,6 +42,7 @@ import { computed, onMounted, ref } from 'vue'
 import NavBar from './components/NavBar.vue'
 import Footer from './components/Footer.vue'
 import ChatBox from './components/ChatBox.vue'
+import MouseTrail from './components/MouseTrail.vue'
 import { RouterView } from 'vue-router'
 
 const store = useStore()
@@ -50,11 +54,14 @@ const isLoginModalOpen = ref(false)
 // 監聽 document 上的 modal 變化
 if (typeof document !== 'undefined') {
   const observer = new MutationObserver(() => {
-    // 找所有 fixed + inset-0 + z-50 的元素（不管 class 順序）
+    // 找所有 fixed + inset-0 + z-50 的元素（排除 canvas 和 pointer-events-none）
     const modals = document.querySelectorAll('.fixed')
     let hasModal = false
     modals.forEach(el => {
-      if (el.classList.contains('inset-0') && el.classList.contains('z-50')) {
+      if (el.classList.contains('inset-0') &&
+          el.classList.contains('z-50') &&
+          el.tagName !== 'CANVAS' &&
+          !el.classList.contains('pointer-events-none')) {
         hasModal = true
       }
     })
