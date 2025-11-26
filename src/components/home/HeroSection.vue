@@ -1,5 +1,5 @@
 <template>
-    <section class="relative flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 w-full py-24 overflow-hidden">
+    <section class="relative flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 w-full pt-24 pb-8 overflow-hidden">
         <!-- Hero Content -->
         <div class="relative flex flex-col items-center justify-center text-center z-10 max-w-5xl mx-auto w-full mb-16">
             <!-- Twinkling Stars (Natural Diffusion) -->

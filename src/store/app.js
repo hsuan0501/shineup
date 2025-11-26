@@ -51,8 +51,57 @@ export const useStore = defineStore('app', () => {
     }
   ])
 
-  // 心願清單狀態管理
-  const wishlistItems = ref([])
+  // 心願清單狀態管理 - 預設收藏項目
+  const wishlistItems = ref([
+    {
+      id: 2,
+      title: 'UiU 環保便攜吸管組',
+      points: 100,
+      image: '/images/gifts/gift-2.jpg',
+      level: 'EXPLORER',
+      series: 'sustainable'
+    },
+    {
+      id: 8,
+      title: 'SUCCULAND 多肉植物',
+      points: 200,
+      image: '/images/gifts/gift-8.jpg',
+      level: 'EXPLORER',
+      series: 'sustainable'
+    },
+    {
+      id: 16,
+      title: 'MOMOCONCEPT 保溫杯',
+      points: 500,
+      image: '/images/gifts/gift-16.jpg',
+      level: 'CREATOR',
+      series: 'quality'
+    },
+    {
+      id: 17,
+      title: 'mordeco 轉轉零錢筒',
+      points: 530,
+      image: '/images/gifts/gift-17.jpg',
+      level: 'VISIONARY',
+      series: 'aesthetic'
+    },
+    {
+      id: 24,
+      title: 'Wanu 銜月床頭燈',
+      points: 1200,
+      image: '/images/gifts/gift-24.jpg',
+      level: 'VISIONARY',
+      series: 'aesthetic'
+    },
+    {
+      id: 28,
+      title: 'AirPods Pro 3',
+      points: 2500,
+      image: '/images/gifts/gift-28.jpg',
+      level: 'LUMINARY',
+      series: 'premium'
+    }
+  ])
 
   // 計算購物車總数量
   const cartItemCount = computed(() => {
@@ -115,11 +164,22 @@ export const useStore = defineStore('app', () => {
     const saved = localStorage.getItem('wishlist')
     if (saved) {
       try {
-        wishlistItems.value = JSON.parse(saved)
+        const parsed = JSON.parse(saved)
+        // 如果 localStorage 有資料，使用它
+        if (parsed && parsed.length > 0) {
+          wishlistItems.value = parsed
+        } else {
+          // 如果是空陣列，使用預設值並儲存
+          localStorage.setItem('wishlist', JSON.stringify(wishlistItems.value))
+        }
       } catch (e) {
         console.error('Failed to load wishlist', e)
-        wishlistItems.value = []
+        // 如果讀取失敗，保持預設收藏並儲存
+        localStorage.setItem('wishlist', JSON.stringify(wishlistItems.value))
       }
+    } else {
+      // 如果沒有 saved，儲存預設值到 localStorage
+      localStorage.setItem('wishlist', JSON.stringify(wishlistItems.value))
     }
   }
 

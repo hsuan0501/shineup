@@ -76,5 +76,6 @@ const scrollToTop = () => {
 
 onMounted(() => {
   store.initDarkMode()
+  store.loadWishlist()
 })
 </script>
