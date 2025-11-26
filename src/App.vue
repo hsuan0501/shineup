@@ -1,6 +1,9 @@
 <template>
   <div :class="isDark ? 'dark' : ''" class="w-full min-h-screen overflow-x-hidden" style="margin: 0; padding: 0;">
-    <div class="flex flex-col min-h-screen w-full bg-zinc-50 dark:bg-dark-gradient bg-cover bg-fixed bg-no-repeat">
+    <!-- Whitesmoke background for blob effect -->
+    <div class="fixed inset-0 -z-50 bg-[whitesmoke] dark:bg-gray-900"></div>
+
+    <div class="flex flex-col min-h-screen w-full bg-transparent dark:bg-transparent bg-cover bg-fixed bg-no-repeat">
       <!-- NavBar -->
       <NavBar />
 

@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl backdrop-saturate-150 bg-white/92 dark:bg-gray-900/88 border-b border-gray-200/20 dark:border-white/5 transition-all duration-300">
+    class="fixed top-0 left-0 right-0 z-40 backdrop-blur-md backdrop-saturate-150 bg-white/40 dark:bg-gray-900/40 transition-all duration-300">
     <div class="w-full px-4 sm:px-6 lg:px-8">
       <div class="relative flex items-center justify-between h-20">
 
