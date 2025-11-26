@@ -1,5 +1,5 @@
 <template>
-    <canvas ref="canvas" class="fixed inset-0 pointer-events-none z-50" :class="{ 'hidden': isMobile }"></canvas>
+    <canvas ref="canvas" class="fixed inset-0 pointer-events-none z-10" :class="{ 'hidden': isMobile }"></canvas>
 </template>
 
 <script setup>
@@ -29,46 +29,17 @@ const resizeCanvas = () => {
     canvas.value.height = window.innerHeight
 }
 
-// 繪製帶光暈的四芒星
-const drawStar = (x, y, size, opacity, rotation, withGlow = false) => {
-    // 如果有光暈效果（主星星）
-    if (withGlow) {
-        ctx.save()
-        // 繪製圓形光暈底座
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, size * 2)
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${opacity * 0.3})`)
-        gradient.addColorStop(0.5, `rgba(255, 255, 255, ${opacity * 0.15})`)
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
-
-        ctx.fillStyle = gradient
-        ctx.beginPath()
-        ctx.arc(x, y, size * 2, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.restore()
-    }
-
-    // 繪製四芒星（確保置中）
+// 繪製光暈
+const drawGlow = (x, y, size, opacity) => {
     ctx.save()
-    ctx.translate(x, y)
-    ctx.rotate((rotation * Math.PI) / 180)
-    ctx.globalAlpha = opacity
+    const gradient = ctx.createRadialGradient(x, y, 0, x, y, size * 2)
+    gradient.addColorStop(0, `rgba(255, 255, 255, ${opacity * 0.3})`)
+    gradient.addColorStop(0.5, `rgba(255, 255, 255, ${opacity * 0.15})`)
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
 
-    ctx.fillStyle = 'white'
+    ctx.fillStyle = gradient
     ctx.beginPath()
-
-    // 使用與 Hero SVG 相同的路徑，但要置中
-    const scale = size / 24
-    const offset = -12 * scale // 置中偏移
-    ctx.moveTo(12 * scale + offset, 0 + offset)
-    ctx.lineTo(14 * scale + offset, 10 * scale + offset)
-    ctx.lineTo(24 * scale + offset, 12 * scale + offset)
-    ctx.lineTo(14 * scale + offset, 14 * scale + offset)
-    ctx.lineTo(12 * scale + offset, 24 * scale + offset)
-    ctx.lineTo(10 * scale + offset, 14 * scale + offset)
-    ctx.lineTo(0 + offset, 12 * scale + offset)
-    ctx.lineTo(10 * scale + offset, 10 * scale + offset)
-    ctx.closePath()
-
+    ctx.arc(x, y, size * 2, 0, Math.PI * 2)
     ctx.fill()
     ctx.restore()
 }
@@ -91,27 +62,9 @@ const animate = () => {
     currentX += (mouseX - currentX) * easing
     currentY += (mouseY - currentY) * easing
 
-    // 計算當前位置與目標位置的距離
-    const dx = mouseX - currentX
-    const dy = mouseY - currentY
-
-    // 根據距離動態生成殘影位置（5個殘影點）
-    const trailCount = 5
-    for (let i = 1; i <= trailCount; i++) {
-        const ratio = i / trailCount
-        const trailX = currentX - dx * ratio * 0.3 // 殘影在後方
-        const trailY = currentY - dy * ratio * 0.3
-
-        const progress = 1 - ratio
-        const opacity = progress * 0.3 // 漸弱透明度
-        const size = 18 + progress * 6 // 18 ~ 24px
-
-        drawStar(trailX, trailY, size, opacity, 0, false)
-    }
-
-    // 繪製主星星（帶光暈效果）
+    // 繪製主光暈（只繪製光暈，不繪製星星和殘影）
     if (mouseX !== 0 || mouseY !== 0) {
-        drawStar(currentX, currentY, 24, 0.9, 0, true) // 更大尺寸 + 光暈
+        drawGlow(currentX, currentY, 20, 0.9)
     }
 
     animationId = requestAnimationFrame(animate)
