@@ -4,7 +4,8 @@
       "Bash(npm run dev:*)",
       "Bash(git checkout:*)",
       "Bash(mkdir:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(git rebase:*)"
     ],
     "deny": [],
     "ask": []
