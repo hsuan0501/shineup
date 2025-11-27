@@ -1,57 +1,50 @@
 <template>
-    <section class="w-full pt-12 pb-6 px-4 sm:px-6 lg:px-8">
+    <section class="w-full pt-6 sm:pt-8 md:pt-10 lg:pt-12 pb-6 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <!-- Gift Series Tabs -->
-            <div id="gifts" class="flex gap-4 mb-4 overflow-x-auto pb-2 justify-center"
+            <div id="gifts" class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 pb-2 justify-items-center"
                 style="scroll-margin-top: 80px;">
                 <button v-for="series in giftSeries" :key="series.id" @click="selectSeries(series.id)" type="button"
                     :class="[
-                        'px-6 py-2.5 rounded-full whitespace-nowrap font-semibold text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95',
+                        'px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 rounded-full whitespace-nowrap font-semibold text-[10px] sm:text-xs md:text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 w-full',
                         selectedSeries === series.id
                             ? series.activeClass
                             : series.inactiveClass
                     ]">
-                    <span>{{ series.level ? series.level + ' ' + series.levelChinese : series.levelChinese }}</span>
+                    <!-- 手機：只顯示中文 -->
+                    <span class="sm:hidden">{{ series.levelChinese }}</span>
+                    <!-- 平板：顯示 Lv編號 + 英文 (除了全部禮品) -->
+                    <span class="hidden sm:inline md:hidden">
+                        <template v-if="series.levelNumber">Lv{{ series.levelNumber }} {{ series.level }}</template>
+                        <template v-else>{{ series.levelChinese }}</template>
+                    </span>
+                    <!-- 桌面：顯示英文 + 中文 -->
+                    <span class="hidden md:inline">{{ series.level ? series.level + ' ' + series.levelChinese : series.levelChinese }}</span>
                 </button>
             </div>
 
             <!-- Current Series Info -->
-            <div class="mb-4 p-3 rounded-xl" :class="currentSeriesInfo.bgClass">
-                <div class="flex justify-between items-center">
+            <div class="mb-3 sm:mb-4 p-2 sm:p-3 rounded-lg sm:rounded-xl" :class="currentSeriesInfo.bgClass">
+                <div class="flex justify-between items-start sm:items-center gap-2">
                     <!-- 左側：等級資訊 -->
-                    <div class="flex items-center gap-4">
-                        <h3 class="text-sm font-bold text-light-text dark:text-dark-text">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-4 flex-1 min-w-0">
+                        <h3 class="text-xs sm:text-sm font-bold text-light-text dark:text-dark-text whitespace-nowrap">
                             {{ currentSeriesInfo.level }}
                         </h3>
-                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                        <span class="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400 truncate">
                             {{ currentSeriesInfo.pointRange }}
                         </span>
-                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                        <div class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">
                             {{ currentSeriesInfo.restriction }}
                         </div>
                     </div>
-                    <!-- 右側：庫存圖例 -->
-                    <div class="flex items-center gap-3 flex-wrap">
-                        <div class="flex items-center gap-1">
-                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">充足</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">適量</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <div class="w-2 h-2 rounded-full bg-orange-500"></div>
-                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">有限</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">稀少</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <div class="w-2 h-2 rounded-full bg-gray-500"></div>
-                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">已售罄</span>
-                        </div>
+                    <!-- 右側：庫存圖例（簡化版） -->
+                    <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"></div>
+                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-500"></div>
+                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-orange-500"></div>
+                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500"></div>
+                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gray-500"></div>
                     </div>
                 </div>
             </div>
@@ -173,6 +166,7 @@ const giftSeries = [
     {
         id: 'all',
         level: 'ALL',
+        levelNumber: null,
         levelChinese: '全部禮品',
         activeClass: 'bg-gradient-to-br from-cyan-500 to-cyan-300 text-white',
         inactiveClass: 'bg-gradient-to-br from-cyan-200 to-cyan-50 dark:from-cyan-900/40 dark:to-cyan-700/40 text-cyan-700 dark:text-cyan-300',
@@ -183,6 +177,7 @@ const giftSeries = [
     {
         id: 'sustainable',
         level: 'EXPLORER',
+        levelNumber: 1,
         levelChinese: '探索者',
         activeClass: 'bg-gradient-to-br from-emerald-600 to-teal-400 text-white',
         inactiveClass: 'bg-gradient-to-br from-emerald-200 to-teal-50 dark:from-emerald-900/40 dark:to-teal-700/40 text-emerald-700 dark:text-emerald-300',
@@ -193,6 +188,7 @@ const giftSeries = [
     {
         id: 'quality',
         level: 'CREATOR',
+        levelNumber: 2,
         levelChinese: '創造者',
         activeClass: 'bg-gradient-to-br from-indigo-600 to-blue-400 text-white',
         inactiveClass: 'bg-gradient-to-br from-indigo-200 to-blue-100 dark:from-indigo-900/40 dark:to-blue-800/40 text-indigo-700 dark:text-indigo-300',
@@ -203,6 +199,7 @@ const giftSeries = [
     {
         id: 'aesthetic',
         level: 'VISIONARY',
+        levelNumber: 3,
         levelChinese: '先行者',
         activeClass: 'bg-gradient-to-br from-orange-500 to-yellow-300 text-white',
         inactiveClass: 'bg-gradient-to-br from-orange-200 to-amber-100 dark:from-orange-900/40 dark:to-amber-800/40 text-orange-700 dark:text-orange-300',
@@ -213,6 +210,7 @@ const giftSeries = [
     {
         id: 'premium',
         level: 'LUMINARY',
+        levelNumber: 4,
         levelChinese: '閃耀者',
         activeClass: 'bg-gradient-to-br from-violet-600 to-fuchsia-400 text-white',
         inactiveClass: 'bg-gradient-to-br from-violet-200 to-fuchsia-100 dark:from-violet-900/40 dark:to-fuchsia-800/40 text-violet-700 dark:text-violet-300',

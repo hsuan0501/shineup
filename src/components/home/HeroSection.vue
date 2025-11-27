@@ -1,45 +1,38 @@
 <template>
-    <section class="relative flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 w-full pt-24 pb-8 overflow-hidden">
+    <section class="relative flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 w-full pt-24 pb-6 overflow-hidden">
         <!-- Hero Content -->
         <div class="relative flex flex-col items-center justify-center text-center z-10 max-w-5xl mx-auto w-full mb-16">
             <!-- Twinkling Stars (Natural Diffusion) -->
             <!-- Left Side (3 stars) -->
-            <div class="absolute -top-10 left-[23%] w-3.5 h-3.5 animate-twinkle-2 text-white scale-y-[-1]">
+            <div class="absolute -top-10 left-[15%] sm:left-[18%] md:left-[20%] lg:left-[23%] w-3.5 h-3.5 animate-twinkle-2 text-white scale-y-[-1]">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
-            <div class="absolute top-6 left-[18%] w-2.5 h-2.5 animate-twinkle-4 text-white scale-y-[-1]">
+            <div class="absolute top-6 left-[10%] sm:left-[13%] md:left-[15%] lg:left-[18%] w-2.5 h-2.5 animate-twinkle-4 text-white scale-y-[-1]">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
 
-            <div class="absolute bottom-12 left-[26%] w-3 h-3 animate-twinkle-5 text-white scale-y-[-1]">
+            <div class="absolute bottom-12 left-[18%] sm:left-[21%] md:left-[23%] lg:left-[26%] w-3 h-3 animate-twinkle-5 text-white scale-y-[-1]">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
 
             <!-- Right Side (3 stars) -->
-            <div class="absolute -top-8 right-[23%] w-3.5 h-3.5 animate-twinkle-2 text-white">
+            <div class="absolute -top-8 right-[15%] sm:right-[18%] md:right-[20%] lg:right-[23%] w-3.5 h-3.5 animate-twinkle-2 text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
-            <div class="absolute top-2 right-[19%] w-2.5 h-2.5 animate-twinkle-4 text-white">
+            <div class="absolute top-2 right-[11%] sm:right-[14%] md:right-[16%] lg:right-[19%] w-2.5 h-2.5 animate-twinkle-4 text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
-            <div class="absolute bottom-16 right-[26%] w-3 h-3 animate-twinkle-1 text-white">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
-                </svg>
-            </div>
-
-            <!-- Top Center -->
-            <div class="absolute -top-12 left-[38%] w-1.5 h-1.5 animate-twinkle-3 text-white">
+            <div class="absolute bottom-16 right-[18%] sm:right-[21%] md:right-[23%] lg:right-[26%] w-3 h-3 animate-twinkle-1 text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>

@@ -1,12 +1,12 @@
 <template>
-    <section class="w-full pt-20 pb-8 px-4 sm:px-6 lg:px-8">
+    <section class="w-full pt-8 sm:pt-12 md:pt-16 lg:pt-20 pb-6 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <!-- Task Category Tabs -->
-            <div id="tasks" class="flex gap-4 mb-4 overflow-x-auto pb-2 justify-center"
+            <div id="tasks" class="grid grid-cols-3 sm:flex sm:flex-wrap gap-2 sm:gap-4 mb-3 sm:mb-4 pb-2 justify-center"
                 style="scroll-margin-top: 80px;">
                 <button v-for="cat in taskCategories" :key="cat.id" @click="selectTaskCategory(cat.id)" type="button"
                     :class="[
-                        'px-6 py-2.5 rounded-full whitespace-nowrap font-semibold text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95',
+                        'px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-full whitespace-nowrap font-semibold text-[10px] sm:text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95',
                         selectedTaskCategory === cat.id
                             ? cat.activeClass
                             : cat.inactiveClass
@@ -16,21 +16,21 @@
             </div>
 
             <!-- Current Category Info -->
-            <div class="mb-4 p-3 rounded-xl" :class="currentTaskCategoryInfo.bgClass">
-                <div class="flex justify-between items-center">
+            <div class="mb-3 sm:mb-4 p-2 sm:p-3 rounded-lg sm:rounded-xl" :class="currentTaskCategoryInfo.bgClass">
+                <div class="flex justify-between items-center gap-2">
                     <!-- 左側：分類資訊 -->
-                    <div class="flex items-center gap-4">
-                        <h3 class="text-sm font-bold text-light-text dark:text-dark-text">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-4 flex-1 min-w-0">
+                        <h3 class="text-xs sm:text-sm font-bold text-light-text dark:text-dark-text whitespace-nowrap">
                             {{ currentTaskCategoryInfo.label }}
                         </h3>
-                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                        <span class="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400 truncate">
                             {{ currentTaskCategoryInfo.description }}
                         </span>
                     </div>
                     <!-- 右側：任務數量 -->
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">任務數量</span>
-                        <span class="text-sm font-bold" :class="getTaskCountColorClass">{{ filteredTasks.length }} 個</span>
+                    <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                        <span class="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400 hidden sm:inline">任務數量</span>
+                        <span class="text-xs sm:text-sm font-bold" :class="getTaskCountColorClass">{{ filteredTasks.length }}</span>
                     </div>
                 </div>
             </div>

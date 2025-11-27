@@ -2,16 +2,16 @@
   <nav
     class="fixed top-0 left-0 right-0 z-40 backdrop-blur-md backdrop-saturate-150 bg-white/40 dark:bg-gray-900/40 transition-all duration-300">
     <div class="w-full px-4 sm:px-6 lg:px-8">
-      <div class="relative flex items-center justify-between h-20">
-
+      <!-- 第一列：主導航 -->
+      <div class="relative flex items-center justify-between h-16 md:h-20">
         <!-- Logo + Nav Links (左邊群組) -->
-        <div class="flex items-center space-x-3 lg:space-x-4 xl:space-x-6 z-10">
+        <div class="flex items-center space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6 z-10">
           <!-- Logo -->
           <div class="flex-shrink-0">
             <div @click="scrollToTop"
-              class="flex items-center gap-0.5 text-2xl font-bold cursor-pointer bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent hover:scale-[1.02] transition-all duration-300">
+              class="flex items-center gap-0.5 text-xl md:text-2xl font-bold cursor-pointer bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent hover:scale-[1.02] transition-all duration-300">
               <span>Shine</span>
-              <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <svg class="w-3.5 h-3.5 md:w-4 md:h-4" viewBox="0 0 24 24">
                 <defs>
                   <linearGradient id="star-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stop-color="#38bdf8" />
@@ -25,19 +25,43 @@
           </div>
 
           <!-- Nav Links -->
-          <div class="flex items-center space-x-2">
+          <div class="flex items-center space-x-1.5 md:space-x-2">
             <a href="/#tasks" @click="scrollToTasks"
-              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer">
-              <span class="bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">任務清單</span>
+              class="p-2 md:px-4 md:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out cursor-pointer group"
+              aria-label="任務清單">
+              <!-- Icon for mobile -->
+              <svg class="w-4 h-4 md:hidden" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <defs>
+                  <linearGradient id="task-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#38bdf8" />
+                    <stop offset="100%" stop-color="#a855f7" />
+                  </linearGradient>
+                </defs>
+                <path stroke="url(#task-gradient)" stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+              <!-- Text for desktop -->
+              <span class="hidden md:inline text-sm font-semibold bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">任務清單</span>
             </a>
             <a href="/#gifts" @click="scrollToGifts"
-              class="px-4 py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold cursor-pointer">
-              <span class="bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">禮品總覽</span>
+              class="p-2 md:px-4 md:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out cursor-pointer group"
+              aria-label="禮品總覽">
+              <!-- Icon for mobile -->
+              <svg class="w-4 h-4 md:hidden" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <defs>
+                  <linearGradient id="gift-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#38bdf8" />
+                    <stop offset="100%" stop-color="#a855f7" />
+                  </linearGradient>
+                </defs>
+                <path stroke="url(#gift-gradient)" stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+              </svg>
+              <!-- Text for desktop -->
+              <span class="hidden md:inline text-sm font-semibold bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">禮品總覽</span>
             </a>
           </div>
         </div>
 
-        <!-- Search Bar (中間 - Flex 佈局) -->
+        <!-- Search Bar (中間 - Desktop only) -->
         <div class="hidden md:flex flex-1 max-w-lg mx-4 lg:mx-8">
           <div class="relative w-full">
             <input type="text" placeholder="搜尋任務或禮品..."
@@ -52,40 +76,40 @@
         </div>
 
         <!-- Right Section -->
-        <div class="flex items-center space-x-2.5 lg:space-x-3 xl:space-x-3.5 flex-shrink-0 z-10">
+        <div class="flex items-center space-x-1.5 md:space-x-2.5 lg:space-x-3 xl:space-x-3.5 flex-shrink-0 z-10">
           <!-- 日夜模式切換 -->
           <button @click="toggleDarkMode"
-            class="relative w-16 h-8 rounded-full bg-gray-200/50 dark:bg-gray-800/50 shadow-inner border border-gray-200/30 dark:border-white/10 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out"
+            class="relative w-14 h-7 md:w-16 md:h-8 rounded-full bg-gray-200/50 dark:bg-gray-800/50 shadow-inner border border-gray-200/30 dark:border-white/10 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out"
             aria-label="切換日夜模式">
 
             <!-- 滑動按鈕 -->
             <div :class="[
-              'absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 transition-all duration-300 flex items-center justify-center shadow-md',
-              isDarkMode ? 'left-[calc(100%-1.75rem)]' : 'left-0.5'
+              'absolute top-1/2 -translate-y-1/2 w-6 h-6 md:w-7 md:h-7 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 transition-all duration-300 flex items-center justify-center shadow-md',
+              isDarkMode ? 'left-[calc(100%-1.5rem)] md:left-[calc(100%-1.75rem)]' : 'left-0.5'
             ]">
               <!-- Sun Icon (亮色模式) -->
-              <svg v-if="!isDarkMode" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <svg v-if="!isDarkMode" class="w-3.5 h-3.5 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM2 13h2a1 1 0 0 0 0-2H2a1 1 0 0 0 0 2zm18 0h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2zM11 2v2a1 1 0 0 0 2 0V2a1 1 0 0 0-2 0zm0 18v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-2 0zM5.99 4.58a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06z" />
               </svg>
               <!-- Moon Icon (暗色模式) -->
-              <svg v-else class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <svg v-else class="w-3.5 h-3.5 md:w-4 md:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" />
               </svg>
             </div>
 
             <!-- 固定的太陽圖示 (左邊) -->
-            <div class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg class="w-3.5 h-3.5 text-gray-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+            <div class="absolute left-1.5 md:left-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg class="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
               </svg>
             </div>
 
             <!-- 固定的月亮圖示 (右邊) -->
-            <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg class="w-3.5 h-3.5 text-purple-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
+            <div class="absolute right-1.5 md:right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg class="w-3 h-3 md:w-3.5 md:h-3.5 text-purple-400 opacity-50" fill="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" />
               </svg>
@@ -93,18 +117,18 @@
           </button>
 
           <!-- Level Card Component (灰色顯示於未登入) -->
-          <div :class="{ 'opacity-50 pointer-events-none grayscale': !isLoggedIn }">
+          <div :class="{ 'opacity-50 pointer-events-none grayscale': !isLoggedIn }" class="hidden sm:block">
             <LevelCard />
           </div>
 
           <!-- 購物車按鈕 (灰色顯示於未登入) -->
           <router-link to="/cart" :class="[
-            'relative p-2 rounded-full backdrop-blur-sm border hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out group mr-3 lg:mr-4 xl:mr-5',
+            'relative p-2 rounded-full backdrop-blur-sm border hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out group',
             isLoggedIn
               ? 'bg-white/90 dark:bg-gray-900/30 border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40'
               : 'bg-gray-200/50 dark:bg-gray-700/30 border-gray-300/30 dark:border-gray-600/30 opacity-50 pointer-events-none grayscale'
           ]" aria-label="購物車">
-            <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24"
+            <svg class="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24"
               fill="none">
               <defs>
                 <linearGradient id="cart-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -117,19 +141,45 @@
             </svg>
             <!-- 購物車数量小圓點 -->
             <span v-if="store.cartItemCount > 0 && isLoggedIn"
-              class="absolute -top-1 -right-1 w-5 h-5 bg-pink-400 rounded-full flex items-center justify-center text-[10px] text-white font-bold shadow-lg">{{
+              class="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-pink-400 rounded-full flex items-center justify-center text-[9px] md:text-[10px] text-white font-bold shadow-lg">{{
                 store.cartItemCount }}</span>
           </router-link>
 
           <!-- 會員中心按鈕（已登入） / 登入按鈕（未登入） -->
           <RouterLink v-if="isLoggedIn" to="/profile"
-            class="px-4 py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-transparent">
-            會員中心
+            class="p-2 sm:px-4 sm:py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-transparent flex items-center justify-center"
+            aria-label="會員中心">
+            <!-- Icon for mobile -->
+            <svg class="w-4 h-4 sm:hidden" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <!-- Text for desktop -->
+            <span class="hidden sm:inline text-sm font-semibold whitespace-nowrap">會員中心</span>
           </RouterLink>
           <button v-else @click="openLoginModal"
-            class="px-4 py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out text-sm font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-transparent">
-            登入 / 註冊
+            class="p-2 sm:px-4 sm:py-2 rounded-full bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-transparent flex items-center justify-center"
+            aria-label="登入">
+            <!-- Icon for mobile -->
+            <svg class="w-4 h-4 sm:hidden" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <!-- Text for desktop -->
+            <span class="hidden sm:inline text-sm font-semibold whitespace-nowrap">登入 / 註冊</span>
           </button>
+        </div>
+      </div>
+
+      <!-- 第二列：搜尋欄 (Mobile only) -->
+      <div class="md:hidden pb-3">
+        <div class="relative w-full">
+          <input type="text" placeholder="搜尋任務或禮品..."
+            class="w-full px-5 py-2 rounded-full bg-white/50 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 text-light-text dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-purple-300 dark:focus:border-purple-500/50 focus:bg-white/70 dark:focus:bg-white/15 hover:bg-white/60 dark:hover:bg-white/15 transition-all duration-300 ease-out text-sm">
+          <svg
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-400 pointer-events-none"
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </div>
       </div>
     </div>
