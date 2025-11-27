@@ -29,7 +29,7 @@
                     </div>
                     <!-- 右側：任務數量 -->
                     <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                        <span class="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400 hidden sm:inline">任務數量</span>
+                        <span class="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400">任務數量</span>
                         <span class="text-xs sm:text-sm font-bold" :class="getTaskCountColorClass">{{ filteredTasks.length }}</span>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                             <span class="px-2 py-0.5 rounded-md bg-light-bg dark:bg-dark-bg">{{ task.level }}</span>
                         </div>
                         <button :disabled="task.completed" :class="[
-                            'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300',
+                            'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 pointer-events-auto',
                             task.completed
                                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                 : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'

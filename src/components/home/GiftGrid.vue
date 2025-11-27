@@ -2,49 +2,102 @@
     <section class="w-full pt-6 sm:pt-8 md:pt-10 lg:pt-12 pb-6 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <!-- Gift Series Tabs -->
-            <div id="gifts" class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 pb-2 justify-items-center"
+            <div id="gifts" class="grid grid-cols-3 lg:grid-cols-5 gap-2 lg:gap-4 mb-3 sm:mb-4 pb-2 justify-items-center"
                 style="scroll-margin-top: 80px;">
                 <button v-for="series in giftSeries" :key="series.id" @click="selectSeries(series.id)" type="button"
                     :class="[
-                        'px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 rounded-full whitespace-nowrap font-semibold text-[10px] sm:text-xs md:text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 w-full',
+                        'px-3 lg:px-6 py-1.5 lg:py-2.5 rounded-full font-semibold text-[10px] lg:text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 w-full',
                         selectedSeries === series.id
                             ? series.activeClass
                             : series.inactiveClass
                     ]">
-                    <!-- 手機：只顯示中文 -->
-                    <span class="sm:hidden">{{ series.levelChinese }}</span>
-                    <!-- 平板：顯示 Lv編號 + 英文 (除了全部禮品) -->
-                    <span class="hidden sm:inline md:hidden">
+                    <!-- 手機/平板 (< 1024px)：顯示 Lv編號 + 英文 (除了全部禮品) -->
+                    <span class="lg:hidden truncate block">
                         <template v-if="series.levelNumber">Lv{{ series.levelNumber }} {{ series.level }}</template>
                         <template v-else>{{ series.levelChinese }}</template>
                     </span>
-                    <!-- 桌面：顯示英文 + 中文 -->
-                    <span class="hidden md:inline">{{ series.level ? series.level + ' ' + series.levelChinese : series.levelChinese }}</span>
+                    <!-- 桌面 (≥ 1024px)：顯示英文 + 中文 -->
+                    <span class="hidden lg:block whitespace-nowrap">{{ series.level ? series.level + ' ' + series.levelChinese : series.levelChinese }}</span>
                 </button>
             </div>
 
             <!-- Current Series Info -->
             <div class="mb-3 sm:mb-4 p-2 sm:p-3 rounded-lg sm:rounded-xl" :class="currentSeriesInfo.bgClass">
-                <div class="flex justify-between items-start sm:items-center gap-2">
+                <!-- 桌面版：橫向排列 -->
+                <div class="hidden lg:flex justify-between items-center gap-2">
                     <!-- 左側：等級資訊 -->
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-4 flex-1 min-w-0">
-                        <h3 class="text-xs sm:text-sm font-bold text-light-text dark:text-dark-text whitespace-nowrap">
+                    <div class="flex items-center gap-4 flex-1 min-w-0">
+                        <h3 class="text-sm font-bold text-light-text dark:text-dark-text whitespace-nowrap">
                             {{ currentSeriesInfo.level }}
                         </h3>
-                        <span class="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400 truncate">
+                        <span class="text-xs font-medium text-gray-500 dark:text-gray-400 truncate">
                             {{ currentSeriesInfo.pointRange }}
                         </span>
-                        <div class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">
+                        <div class="text-xs text-gray-500 dark:text-gray-400 truncate">
                             {{ currentSeriesInfo.restriction }}
                         </div>
                     </div>
-                    <!-- 右側：庫存圖例（簡化版） -->
-                    <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"></div>
-                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-500"></div>
-                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-orange-500"></div>
-                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500"></div>
-                        <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gray-500"></div>
+                    <!-- 右側：庫存圖例 -->
+                    <div class="flex items-center gap-3 flex-shrink-0">
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span class="text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap">99+</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                            <span class="text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap">50-99</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-orange-500"></div>
+                            <span class="text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap">10-49</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                            <span class="text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap">&lt;10</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-gray-500"></div>
+                            <span class="text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 手機/平板版：左右排列，庫存固定右側垂直置中 -->
+                <div class="lg:hidden flex justify-between items-center gap-2">
+                    <!-- 左側：等級資訊 -->
+                    <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                        <h3 class="text-xs sm:text-sm font-bold text-light-text dark:text-dark-text">
+                            {{ currentSeriesInfo.level }}
+                        </h3>
+                        <span class="text-[10px] sm:text-xs font-medium text-gray-500 dark:text-gray-400">
+                            {{ currentSeriesInfo.pointRange }}
+                        </span>
+                        <div class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
+                            {{ currentSeriesInfo.restriction }}
+                        </div>
+                    </div>
+                    <!-- 右下：庫存圖例 -->
+                    <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                        <div class="flex items-center gap-1">
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"></div>
+                            <span class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-300 whitespace-nowrap">99+</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-500"></div>
+                            <span class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-300 whitespace-nowrap">50-99</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-orange-500"></div>
+                            <span class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-300 whitespace-nowrap">10-49</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500"></div>
+                            <span class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-300 whitespace-nowrap">&lt;10</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gray-500"></div>
+                            <span class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-300 whitespace-nowrap">0</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -111,7 +164,7 @@
                                 <span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">積分</span>
                             </div>
                             <button @click="handleAddToCart(gift)" :class="[
-                                'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300',
+                                'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 pointer-events-auto',
                                 !isGiftInSelectedSeries(gift) || gift.canExchange === false || gift.points > user.rewardPoints
                                     ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                     : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'

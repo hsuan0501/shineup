@@ -27,10 +27,10 @@
           <!-- Nav Links -->
           <div class="flex items-center space-x-1.5 md:space-x-2">
             <a href="/#tasks" @click="scrollToTasks"
-              class="p-2 md:px-4 md:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out cursor-pointer group"
+              class="p-2 lg:px-4 lg:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out cursor-pointer group"
               aria-label="任務清單">
-              <!-- Icon for mobile -->
-              <svg class="w-4 h-4 md:hidden" viewBox="0 0 24 24" fill="none" stroke-width="2">
+              <!-- Icon for mobile/tablet -->
+              <svg class="w-4 h-4 lg:hidden" viewBox="0 0 24 24" fill="none" stroke-width="2">
                 <defs>
                   <linearGradient id="task-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stop-color="#38bdf8" />
@@ -40,13 +40,13 @@
                 <path stroke="url(#task-gradient)" stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
               <!-- Text for desktop -->
-              <span class="hidden md:inline text-sm font-semibold bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">任務清單</span>
+              <span class="hidden lg:inline text-sm font-semibold bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">任務清單</span>
             </a>
             <a href="/#gifts" @click="scrollToGifts"
-              class="p-2 md:px-4 md:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out cursor-pointer group"
+              class="p-2 lg:px-4 lg:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out cursor-pointer group"
               aria-label="禮品總覽">
-              <!-- Icon for mobile -->
-              <svg class="w-4 h-4 md:hidden" viewBox="0 0 24 24" fill="none" stroke-width="2">
+              <!-- Icon for mobile/tablet -->
+              <svg class="w-4 h-4 lg:hidden" viewBox="0 0 24 24" fill="none" stroke-width="2">
                 <defs>
                   <linearGradient id="gift-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stop-color="#38bdf8" />
@@ -56,7 +56,7 @@
                 <path stroke="url(#gift-gradient)" stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
               </svg>
               <!-- Text for desktop -->
-              <span class="hidden md:inline text-sm font-semibold bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">禮品總覽</span>
+              <span class="hidden lg:inline text-sm font-semibold bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">禮品總覽</span>
             </a>
           </div>
         </div>
@@ -116,8 +116,8 @@
             </div>
           </button>
 
-          <!-- Level Card Component (灰色顯示於未登入) -->
-          <div :class="{ 'opacity-50 pointer-events-none grayscale': !isLoggedIn }" class="hidden sm:block">
+          <!-- Level Card Component (灰色顯示於未登入) - Show on all devices -->
+          <div :class="{ 'opacity-50 pointer-events-none grayscale': !isLoggedIn }">
             <LevelCard />
           </div>
 
