@@ -165,7 +165,7 @@
                                 <span class="text-lg font-bold" :class="getPointsColorByLevel(gift.level)">{{ gift.points }}</span>
                                 <span class="text-xs text-gray-500 dark:text-gray-400">積分</span>
                             </div>
-                            <button @click="handleAddToCart(gift)" :class="[
+                            <button @click.stop="handleAddToCart(gift)" :class="[
                                 'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 pointer-events-auto',
                                 !isGiftInSelectedSeries(gift) || gift.canExchange === false || gift.points > user.rewardPoints
                                     ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
