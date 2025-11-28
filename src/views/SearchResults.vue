@@ -66,7 +66,7 @@
               <div class="absolute top-2 left-2">
                 <div :class="getLevelBadgeClass(gift.level)"
                   class="px-2.5 py-1.5 rounded-full backdrop-blur-md shadow-lg border border-white/20 dark:border-gray-700/50">
-                  <div class="text-[11px] font-bold leading-tight tracking-wide">{{ gift.level }}</div>
+                  <div class="text-[11px] font-bold leading-tight tracking-wide">{{ getLevelWithNumber(gift.level) }}</div>
                 </div>
               </div>
             </div>
@@ -174,17 +174,27 @@ const getPointsColorClass = (category) => {
 const getLevelBadgeClass = (level) => {
   const classes = {
     'EXPLORER': 'bg-emerald-500/90 text-white',
-    'CREATOR': 'bg-cyan-500/90 text-white',
+    'CREATOR': 'bg-indigo-500/90 text-white',
     'VISIONARY': 'bg-amber-500/90 text-white',
     'LUMINARY': 'bg-purple-500/90 text-white'
   }
   return classes[level] || 'bg-gray-500/90 text-white'
 }
 
+const getLevelWithNumber = (level) => {
+  const levelNumbers = {
+    'EXPLORER': 'Lv1 EXPLORER',
+    'CREATOR': 'Lv2 CREATOR',
+    'VISIONARY': 'Lv3 VISIONARY',
+    'LUMINARY': 'Lv4 LUMINARY'
+  }
+  return levelNumbers[level] || level
+}
+
 const getPointsColorByLevel = (level) => {
   const colors = {
     'EXPLORER': 'text-emerald-600 dark:text-emerald-400',
-    'CREATOR': 'text-cyan-600 dark:text-cyan-400',
+    'CREATOR': 'text-indigo-600 dark:text-indigo-400',
     'VISIONARY': 'text-amber-600 dark:text-amber-400',
     'LUMINARY': 'text-purple-600 dark:text-purple-400'
   }

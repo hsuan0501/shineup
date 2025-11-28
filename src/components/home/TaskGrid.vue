@@ -63,15 +63,13 @@
                     </div>
 
                     <h3 class="text-base font-bold text-light-text dark:text-dark-text mb-1">{{ task.title }}</h3>
-                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">{{
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">{{
                         task.description }}</p>
 
                     <div class="flex items-center justify-between">
-                        <div
-                            class="flex items-center gap-2 text-xs text-light-text-secondary dark:text-dark-text-secondary">
-                            <span class="px-2 py-0.5 rounded-md bg-light-bg dark:bg-dark-bg">{{ task.frequency
-                                }}</span>
-                            <span class="px-2 py-0.5 rounded-md bg-light-bg dark:bg-dark-bg">{{ task.level }}</span>
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="px-2 py-0.5 rounded-md" :class="getFrequencyBadgeClass(task.category)">{{ task.frequency }}</span>
+                            <span class="px-2 py-0.5 rounded-md" :class="getLevelBadgeClass(task.category)">{{ task.level }}</span>
                         </div>
                         <button :disabled="task.completed" :class="[
                             'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 pointer-events-auto',
@@ -320,6 +318,28 @@ const getPointsColorClass = (category) => {
         'social': 'text-purple-500 dark:text-purple-400'
     }
     return classes[category] || 'text-primary-purple'
+}
+
+const getFrequencyBadgeClass = (category) => {
+    const classes = {
+        'daily': 'bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-400',
+        'financial': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400',
+        'investment': 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
+        'esg': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+        'social': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+    }
+    return classes[category] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
+}
+
+const getLevelBadgeClass = (category) => {
+    const classes = {
+        'daily': 'bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-400',
+        'financial': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400',
+        'investment': 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
+        'esg': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+        'social': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+    }
+    return classes[category] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
 }
 
 // 根據當前選擇的分類返回任務數量的顏色

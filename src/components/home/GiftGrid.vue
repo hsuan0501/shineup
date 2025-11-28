@@ -160,8 +160,8 @@
 
                         <div class="flex items-center justify-between mb-1.5">
                             <div class="flex items-baseline gap-1">
-                                <span class="text-lg font-bold text-primary-purple">{{ gift.points }}</span>
-                                <span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">積分</span>
+                                <span class="text-lg font-bold" :class="getPointsColorByLevel(gift.level)">{{ gift.points }}</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">積分</span>
                             </div>
                             <button @click="handleAddToCart(gift)" :class="[
                                 'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 pointer-events-auto',
@@ -419,6 +419,16 @@ const getSeriesBorderClass = () => {
         'premium': 'border-violet-200 dark:border-violet-800'
     }
     return borderClasses[series] || 'border-light-border dark:border-dark-border'
+}
+
+const getPointsColorByLevel = (level) => {
+    const colors = {
+        'EXPLORER': 'text-emerald-600 dark:text-emerald-400',
+        'CREATOR': 'text-indigo-600 dark:text-indigo-400',
+        'VISIONARY': 'text-amber-600 dark:text-amber-400',
+        'LUMINARY': 'text-purple-600 dark:text-purple-400'
+    }
+    return colors[level] || 'text-purple-600 dark:text-purple-400'
 }
 
 // 處理加入購物車
