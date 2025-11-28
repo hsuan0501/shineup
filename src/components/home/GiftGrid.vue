@@ -104,8 +104,10 @@
 
             <!-- Gifts Grid -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
-                <div v-for="gift in paginatedGifts" :key="gift.id" :class="[
-                    'group rounded-lg overflow-hidden bg-light-card dark:bg-gray-600/70 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 dark:shadow-2xl',
+                <div v-for="gift in paginatedGifts" :key="gift.id"
+                    @click="openGiftModal(gift)"
+                    :class="[
+                    'group rounded-lg overflow-hidden bg-light-card dark:bg-gray-600/70 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 dark:shadow-2xl cursor-pointer',
                     !isGiftInSelectedSeries(gift) ? 'opacity-20 grayscale brightness-50 border border-gray-300 dark:border-gray-600' : `border ${getSeriesBorderClass()}`,
                 ]">
 
@@ -198,6 +200,9 @@
                 </p>
             </div>
         </div>
+
+        <!-- Gift Detail Modal -->
+        <GiftDetailModal :isOpen="isGiftModalOpen" :gift="selectedGift" @close="closeGiftModal" />
     </section>
 </template>
 
@@ -205,10 +210,24 @@
 import { ref, computed } from 'vue'
 import { mockRewards, mockUsers } from '../../mock'
 import { useStore } from '../../store/app'
+import GiftDetailModal from '../modals/GiftDetailModal.vue'
 
 const store = useStore()
 // 用戶資料
 const user = ref(mockUsers[1]) // 使用第一個用戶作為範例
+
+// Gift Modal State
+const isGiftModalOpen = ref(false)
+const selectedGift = ref({})
+
+const openGiftModal = (gift) => {
+    selectedGift.value = gift
+    isGiftModalOpen.value = true
+}
+
+const closeGiftModal = () => {
+    isGiftModalOpen.value = false
+}
 
 // Gifts
 const selectedSeries = ref('')

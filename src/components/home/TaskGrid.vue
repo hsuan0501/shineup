@@ -38,7 +38,8 @@
             <!-- Tasks Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
                 <div v-for="task in paginatedTasks" :key="task.id"
-                    class="p-3.5 rounded-2xl bg-light-card dark:bg-gray-700/60 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 group dark:shadow-2xl border"
+                    @click="openTaskModal(task)"
+                    class="p-3.5 rounded-2xl bg-light-card dark:bg-gray-700/60 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 group dark:shadow-2xl border cursor-pointer"
                     :class="getTaskBorderClass(task.category)">
 
                     <div class="flex items-start justify-between mb-2.5">
@@ -102,6 +103,9 @@
                 </p>
             </div>
         </div>
+
+        <!-- Task Detail Modal -->
+        <TaskDetailModal :isOpen="isTaskModalOpen" :task="selectedTask" @close="closeTaskModal" />
     </section>
 </template>
 
@@ -109,8 +113,22 @@
 import { ref, computed } from 'vue'
 import { mockTasks } from '../../mock'
 import { useStore } from '../../store/app'
+import TaskDetailModal from '../modals/TaskDetailModal.vue'
 
 const store = useStore()
+
+// Task Modal State
+const isTaskModalOpen = ref(false)
+const selectedTask = ref({})
+
+const openTaskModal = (task) => {
+    selectedTask.value = task
+    isTaskModalOpen.value = true
+}
+
+const closeTaskModal = () => {
+    isTaskModalOpen.value = false
+}
 
 // Tasks
 const selectedTaskCategory = ref('')
