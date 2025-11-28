@@ -113,6 +113,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { mockTasks } from '../../mock'
+import { useStore } from '../../store/app'
+
+const store = useStore()
 
 // Tasks
 const selectedTaskCategory = ref('')

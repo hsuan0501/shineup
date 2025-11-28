@@ -28,6 +28,11 @@ const routes = [
     name: 'Roadmap',
     component: () => import('../views/Roadmap.vue'),
   },
+  {
+    path: '/search',
+    name: 'Search',
+    component: () => import('../views/SearchResults.vue'),
+  },
 ]
 
 const router = createRouter({

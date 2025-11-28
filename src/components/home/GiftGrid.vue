@@ -278,16 +278,16 @@ const currentSeriesInfo = computed(() => {
 })
 
 const filteredGifts = computed(() => {
-    if (selectedSeries.value === 'all' || selectedSeries.value === '') {
-        return mockRewards
-    }
-
     // 等級階層定義
     const levelHierarchy = {
         'sustainable': 1, // EXPLORER
         'quality': 2,     // CREATOR
-        'aesthetic': 3,   // VISIONARY 
+        'aesthetic': 3,   // VISIONARY
         'premium': 4      // LUMINARY
+    }
+
+    if (selectedSeries.value === 'all' || selectedSeries.value === '') {
+        return mockRewards
     }
 
     const selectedLevel = levelHierarchy[selectedSeries.value] || 0

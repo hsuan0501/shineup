@@ -7,6 +7,9 @@ export const useStore = defineStore('app', () => {
   const currentLevel = ref('EXPLORER')
   const isAuthenticated = ref(false)
 
+  // 搜尋狀態
+  const searchQuery = ref('')
+
   // 購物車狀態管理
   const cartItems = ref([
     {
@@ -228,6 +231,15 @@ export const useStore = defineStore('app', () => {
     }
   }
 
+  // 搜尋功能
+  const setSearchQuery = (query) => {
+    searchQuery.value = query
+  }
+
+  const clearSearch = () => {
+    searchQuery.value = ''
+  }
+
   return {
     isDark,
     currentUser,
@@ -249,5 +261,8 @@ export const useStore = defineStore('app', () => {
     login,
     logout,
     checkAuth,
+    searchQuery,
+    setSearchQuery,
+    clearSearch,
   }
 })

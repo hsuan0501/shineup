@@ -64,14 +64,38 @@
         <!-- Search Bar (中間 - Desktop only) -->
         <div class="hidden md:flex flex-1 max-w-lg mx-4 lg:mx-8">
           <div class="relative w-full">
-            <input type="text" placeholder="搜尋任務或禮品..."
+            <input type="text" placeholder="搜尋任務或禮品..." :value="store.searchQuery"
+              @input="handleSearch"
+              @keyup.enter="goToSearch"
+              @focus="showSearchSuggestions = true"
+              @blur="hideSearchSuggestions"
               class="w-full px-6 py-2.5 rounded-full bg-white/50 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 text-light-text dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-purple-300 dark:focus:border-purple-500/50 focus:bg-white/70 dark:focus:bg-white/15 hover:bg-white/60 dark:hover:bg-white/15 transition-all duration-300 ease-out">
-            <svg
+            <svg v-if="!store.searchQuery"
               class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-400 pointer-events-none"
               fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
+            <button v-else @click="clearSearch"
+              class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <!-- 搜尋建議下拉 -->
+            <div v-if="showSearchSuggestions && store.searchQuery && searchSuggestions.length > 0"
+              class="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden z-50">
+              <div v-for="(suggestion, index) in searchSuggestions" :key="index"
+                @mousedown="selectSuggestion(suggestion)"
+                class="px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors flex items-center gap-3">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span class="text-sm text-light-text dark:text-dark-text">{{ suggestion }}</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -172,14 +196,38 @@
       <!-- 第二列：搜尋欄 (Mobile only) -->
       <div class="md:hidden pb-3">
         <div class="relative w-full">
-          <input type="text" placeholder="搜尋任務或禮品..."
+          <input type="text" placeholder="搜尋任務或禮品..." :value="store.searchQuery"
+            @input="handleSearch"
+            @keyup.enter="goToSearch"
+            @focus="showSearchSuggestionsMobile = true"
+            @blur="hideSearchSuggestionsMobile"
             class="w-full px-5 py-2 rounded-full bg-white/50 dark:bg-white/10 border border-gray-200/30 dark:border-white/10 text-light-text dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:border-purple-300 dark:focus:border-purple-500/50 focus:bg-white/70 dark:focus:bg-white/15 hover:bg-white/60 dark:hover:bg-white/15 transition-all duration-300 ease-out text-sm">
-          <svg
+          <svg v-if="!store.searchQuery"
             class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-400 pointer-events-none"
             fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
+          <button v-else @click="clearSearch"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <!-- 搜尋建議下拉 (Mobile) -->
+          <div v-if="showSearchSuggestionsMobile && store.searchQuery && searchSuggestions.length > 0"
+            class="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden z-50">
+            <div v-for="(suggestion, index) in searchSuggestions" :key="index"
+              @mousedown="selectSuggestion(suggestion)"
+              class="px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors flex items-center gap-3">
+              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <span class="text-sm text-light-text dark:text-dark-text">{{ suggestion }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -195,11 +243,14 @@ import { ref, onMounted, computed } from 'vue'
 import { useStore } from '../store/app.js'
 import LevelCard from './nav/LevelCard.vue'
 import LoginModal from './auth/LoginModal.vue'
+import { mockTasks, mockRewards } from '../mock'
 
 const router = useRouter()
 const store = useStore()
 const isDarkMode = ref(false)
 const showLoginModal = ref(false)
+const showSearchSuggestions = ref(false)
+const showSearchSuggestionsMobile = ref(false)
 
 // 使用 store 的認證狀態
 const isLoggedIn = computed(() => store.isAuthenticated)
@@ -282,5 +333,71 @@ const scrollToGifts = async (e) => {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
+}
+
+// 搜尋建議
+const searchSuggestions = computed(() => {
+  if (!store.searchQuery || store.searchQuery.trim() === '') {
+    return []
+  }
+
+  const query = store.searchQuery.toLowerCase().trim()
+  const suggestions = new Set()
+
+  // 從任務中找建議
+  mockTasks.forEach(task => {
+    if (task.title.toLowerCase().includes(query)) {
+      suggestions.add(task.title)
+    }
+  })
+
+  // 從禮品中找建議
+  mockRewards.forEach(gift => {
+    if (gift.title.toLowerCase().includes(query)) {
+      suggestions.add(gift.title)
+    }
+  })
+
+  // 最多顯示 5 個建議
+  return Array.from(suggestions).slice(0, 5)
+})
+
+// 搜尋功能
+const handleSearch = (event) => {
+  const value = event.target.value
+  store.searchQuery = value
+}
+
+const goToSearch = () => {
+  if (store.searchQuery && store.searchQuery.trim() !== '') {
+    showSearchSuggestions.value = false
+    showSearchSuggestionsMobile.value = false
+    router.push('/search')
+  }
+}
+
+const selectSuggestion = (suggestion) => {
+  store.searchQuery = suggestion
+  showSearchSuggestions.value = false
+  showSearchSuggestionsMobile.value = false
+  router.push('/search')
+}
+
+const hideSearchSuggestions = () => {
+  setTimeout(() => {
+    showSearchSuggestions.value = false
+  }, 200)
+}
+
+const hideSearchSuggestionsMobile = () => {
+  setTimeout(() => {
+    showSearchSuggestionsMobile.value = false
+  }, 200)
+}
+
+const clearSearch = () => {
+  store.searchQuery = ''
+  showSearchSuggestions.value = false
+  showSearchSuggestionsMobile.value = false
 }
 </script>
