@@ -77,11 +77,22 @@
                 }}</h3>
               <p class="text-xs text-gray-500 dark:text-gray-400 mb-3 line-clamp-1">{{ gift.description }}</p>
 
-              <!-- Exchange Button -->
-              <button @click.stop="handleAddToCart(gift)"
-                class="w-full px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 pointer-events-auto bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-90 hover:scale-105 active:scale-95">
-                立即兌換
-              </button>
+              <!-- Points and Exchange Button -->
+              <div class="flex items-center justify-between">
+                <div class="flex items-baseline gap-1">
+                  <span class="text-lg font-bold" :class="getPointsColorByLevel(gift.level)">{{ gift.points }}</span>
+                  <span class="text-xs text-gray-500 dark:text-gray-400">積分</span>
+                </div>
+                <button @click.stop="handleAddToCart(gift)" :class="[
+                  'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 pointer-events-auto',
+                  gift.points > user.rewardPoints
+                    ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                    : 'bg-gradient-to-br from-sky-400 to-purple-400 text-white hover:opacity-90 hover:scale-105 active:scale-95'
+                ]"
+                  :disabled="gift.points > user.rewardPoints">
+                  {{ gift.points > user.rewardPoints ? '積分不足' : '立即兌換' }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -111,13 +122,13 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useStore } from '../store/app'
-import { mockTasks } from '../mock'
-import { mockRewards } from '../mock'
+import { mockTasks, mockRewards, mockUsers } from '../mock'
 
 const store = useStore()
+const user = ref(mockUsers[1]) // 使用第一個用戶作為範例
 
 // 搜尋過濾任務
 const filteredTasks = computed(() => {
@@ -140,9 +151,10 @@ const filteredGifts = computed(() => {
 
   const query = store.searchQuery.toLowerCase().trim()
   return mockRewards.filter(gift =>
-    gift.title.toLowerCase().includes(query) ||
+    (gift.title && gift.title.toLowerCase().includes(query)) ||
     (gift.description && gift.description.toLowerCase().includes(query)) ||
-    (gift.brand && gift.brand.toLowerCase().includes(query))
+    (gift.category && gift.category.toLowerCase().includes(query)) ||
+    (gift.level && gift.level.toLowerCase().includes(query))
   )
 })
 
@@ -167,6 +179,16 @@ const getLevelBadgeClass = (level) => {
     'LUMINARY': 'bg-purple-500/90 text-white'
   }
   return classes[level] || 'bg-gray-500/90 text-white'
+}
+
+const getPointsColorByLevel = (level) => {
+  const colors = {
+    'EXPLORER': 'text-emerald-600 dark:text-emerald-400',
+    'CREATOR': 'text-cyan-600 dark:text-cyan-400',
+    'VISIONARY': 'text-amber-600 dark:text-amber-400',
+    'LUMINARY': 'text-purple-600 dark:text-purple-400'
+  }
+  return colors[level] || 'text-purple-600 dark:text-purple-400'
 }
 
 const handleAddToCart = (gift) => {
