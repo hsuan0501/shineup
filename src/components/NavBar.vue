@@ -27,7 +27,7 @@
           <!-- Nav Links -->
           <div class="flex items-center space-x-1.5 md:space-x-2">
             <a href="/#tasks" @click="scrollToTasks"
-              class="p-2 lg:px-4 lg:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out cursor-pointer group"
+              class="p-2 lg:px-4 lg:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out group"
               aria-label="任務清單">
               <!-- Icon for mobile/tablet -->
               <svg class="w-4 h-4 lg:hidden" viewBox="0 0 24 24" fill="none" stroke-width="2">
@@ -43,7 +43,7 @@
               <span class="hidden lg:inline text-sm font-semibold bg-gradient-to-br from-sky-400 to-purple-400 bg-clip-text text-transparent">任務清單</span>
             </a>
             <a href="/#gifts" @click="scrollToGifts"
-              class="p-2 lg:px-4 lg:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out cursor-pointer group"
+              class="p-2 lg:px-4 lg:py-2 rounded-full bg-white/80 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/30 dark:border-white/10 hover:bg-white dark:hover:bg-gray-900/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 ease-out group"
               aria-label="禮品總覽">
               <!-- Icon for mobile/tablet -->
               <svg class="w-4 h-4 lg:hidden" viewBox="0 0 24 24" fill="none" stroke-width="2">

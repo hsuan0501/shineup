@@ -30,9 +30,6 @@
       <!-- Global ChatBox -->
       <ChatBox />
     </div>
-
-    <!-- Mouse Trail Effect -->
-    <MouseTrail />
   </div>
 </template>
 
@@ -42,7 +39,6 @@ import { computed, onMounted, ref } from 'vue'
 import NavBar from './components/NavBar.vue'
 import Footer from './components/Footer.vue'
 import ChatBox from './components/ChatBox.vue'
-import MouseTrail from './components/MouseTrail.vue'
 import { RouterView } from 'vue-router'
 
 const store = useStore()
@@ -86,3 +82,4 @@ onMounted(() => {
   store.loadWishlist()
 })
 </script>
+

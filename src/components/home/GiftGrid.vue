@@ -2,11 +2,11 @@
     <section class="w-full pt-6 sm:pt-8 md:pt-10 lg:pt-12 pb-6 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <!-- Gift Series Tabs -->
-            <div id="gifts" class="grid grid-cols-3 lg:grid-cols-5 gap-2 lg:gap-4 mb-3 sm:mb-4 pb-2 justify-items-center"
+            <div id="gifts" class="flex flex-wrap gap-2 sm:gap-4 mb-3 sm:mb-4 pb-2 justify-center"
                 style="scroll-margin-top: 80px;">
                 <button v-for="series in giftSeries" :key="series.id" @click="selectSeries(series.id)" type="button"
                     :class="[
-                        'px-3 lg:px-6 py-1.5 lg:py-2.5 rounded-full font-semibold text-[10px] lg:text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 w-full',
+                        'px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-full whitespace-nowrap font-semibold text-[10px] sm:text-sm transition-all duration-300 hover:scale-105 active:scale-95',
                         selectedSeries === series.id
                             ? series.activeClass
                             : series.inactiveClass
@@ -105,7 +105,7 @@
             <!-- Gifts Grid -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
                 <div v-for="gift in paginatedGifts" :key="gift.id" :class="[
-                    'group rounded-lg overflow-hidden bg-light-card dark:bg-gray-600/70 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 cursor-pointer dark:shadow-2xl',
+                    'group rounded-lg overflow-hidden bg-light-card dark:bg-gray-600/70 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 dark:shadow-2xl',
                     !isGiftInSelectedSeries(gift) ? 'opacity-20 grayscale brightness-50 border border-gray-300 dark:border-gray-600' : `border ${getSeriesBorderClass()}`,
                 ]">
 
@@ -180,11 +180,11 @@
             <div class="flex items-center justify-center gap-3">
                 <button v-for="page in 4" :key="page" @click="isPageAvailable(page) && (currentPage = page)"
                     :disabled="!isPageAvailable(page)" :class="[
-                        'w-10 h-10 rounded-full font-semibold text-sm',
+                        'w-10 h-10 rounded-full font-semibold text-sm transition-all duration-300',
                         (selectedSeries === 'all' || selectedSeries === '') && page === currentPage || (selectedSeries !== 'all' && selectedSeries !== '' && isPageAvailable(page))
                             ? 'bg-gradient-to-br from-sky-400 to-purple-400 text-white'
                             : isPageAvailable(page)
-                                ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-gray-600 dark:text-gray-400 cursor-pointer dark:shadow-xl'
+                                ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-gray-600 dark:text-gray-400 dark:shadow-xl'
                                 : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
                     ]">
                     {{ page }}
@@ -232,9 +232,9 @@ const giftSeries = [
         level: 'EXPLORER',
         levelNumber: 1,
         levelChinese: '探索者',
-        activeClass: 'bg-gradient-to-br from-emerald-600 to-teal-400 text-white',
-        inactiveClass: 'bg-gradient-to-br from-emerald-200 to-teal-50 dark:from-emerald-900/40 dark:to-teal-700/40 text-emerald-700 dark:text-emerald-300',
-        bgClass: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800',
+        activeClass: 'bg-gradient-to-br from-emerald-500 to-teal-300 text-white',
+        inactiveClass: 'bg-gradient-to-br from-emerald-100 to-teal-50 dark:from-emerald-900/40 dark:to-teal-700/40 text-emerald-600 dark:text-emerald-300',
+        bgClass: 'bg-gradient-to-br from-emerald-50/80 to-teal-50/80 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-100 dark:border-emerald-800',
         pointRange: '0-299分',
         restriction: 'Lv1+ 可兌換'
     },
@@ -413,7 +413,7 @@ const getSeriesBorderClass = () => {
     const borderClasses = {
         '': 'border-cyan-200 dark:border-cyan-800',
         'all': 'border-cyan-200 dark:border-cyan-800',
-        'sustainable': 'border-emerald-200 dark:border-emerald-800',
+        'sustainable': 'border-emerald-100 dark:border-emerald-800',
         'quality': 'border-indigo-200 dark:border-indigo-800',
         'aesthetic': 'border-orange-200 dark:border-orange-800',
         'premium': 'border-violet-200 dark:border-violet-800'
@@ -425,7 +425,7 @@ const getPointsColorByLevel = (level) => {
     const colors = {
         'EXPLORER': 'text-emerald-600 dark:text-emerald-400',
         'CREATOR': 'text-indigo-600 dark:text-indigo-400',
-        'VISIONARY': 'text-amber-600 dark:text-amber-400',
+        'VISIONARY': 'text-amber-500 dark:text-amber-400',
         'LUMINARY': 'text-purple-600 dark:text-purple-400'
     }
     return colors[level] || 'text-purple-600 dark:text-purple-400'

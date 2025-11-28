@@ -6,7 +6,7 @@
                 style="scroll-margin-top: 80px;">
                 <button v-for="cat in taskCategories" :key="cat.id" @click="selectTaskCategory(cat.id)" type="button"
                     :class="[
-                        'px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-full whitespace-nowrap font-semibold text-[10px] sm:text-sm transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95',
+                        'px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-full whitespace-nowrap font-semibold text-[10px] sm:text-sm transition-all duration-300 hover:scale-105 active:scale-95',
                         selectedTaskCategory === cat.id
                             ? cat.activeClass
                             : cat.inactiveClass
@@ -38,7 +38,7 @@
             <!-- Tasks Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
                 <div v-for="task in paginatedTasks" :key="task.id"
-                    class="p-3.5 rounded-2xl bg-light-card dark:bg-gray-700/60 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 group cursor-pointer dark:shadow-2xl border"
+                    class="p-3.5 rounded-2xl bg-light-card dark:bg-gray-700/60 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 group dark:shadow-2xl border"
                     :class="getTaskBorderClass(task.category)">
 
                     <div class="flex items-start justify-between mb-2.5">
@@ -51,10 +51,7 @@
                                         :d="getTaskIconPathByTitle(task.title)" />
                                 </svg>
                             </div>
-                            <span :class="[
-                                'px-2.5 py-0.5 rounded-full text-xs font-semibold',
-                                getCategoryBadgeClassForTask(task.category)
-                            ]">
+                            <span class="text-sm font-semibold" :class="getTaskIconColorClass(task.category)">
                                 {{ getCategoryLabelForTask(task.category) }}
                             </span>
                         </div>
@@ -68,8 +65,8 @@
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2 text-xs">
-                            <span class="px-2 py-0.5 rounded-md" :class="getFrequencyBadgeClass(task.category)">{{ task.frequency }}</span>
-                            <span class="px-2 py-0.5 rounded-md" :class="getLevelBadgeClass(task.category)">{{ task.level }}</span>
+                            <span class="px-2 py-0.5 rounded-full font-medium" :class="getFrequencyBadgeClass(task.category)">{{ task.frequency }}</span>
+                            <span class="px-2 py-0.5 rounded-full font-medium" :class="getLevelBadgeClass(task.category)">{{ task.level }}</span>
                         </div>
                         <button :disabled="task.completed" :class="[
                             'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 pointer-events-auto',
@@ -87,11 +84,11 @@
             <div class="flex items-center justify-center gap-3">
                 <button v-for="page in 5" :key="page" @click="isTaskPageAvailable(page) && (currentTaskPage = page)"
                     :disabled="!isTaskPageAvailable(page)" :class="[
-                        'w-10 h-10 rounded-full font-semibold text-sm',
+                        'w-10 h-10 rounded-full font-semibold text-sm transition-all duration-300',
                         (selectedTaskCategory === 'all' || selectedTaskCategory === '') && page === currentTaskPage || (selectedTaskCategory !== 'all' && selectedTaskCategory !== '' && isTaskPageAvailable(page))
                             ? 'bg-gradient-to-br from-sky-400 to-purple-400 text-white'
                             : isTaskPageAvailable(page)
-                                ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-gray-600 dark:text-gray-400 cursor-pointer dark:shadow-xl'
+                                ? 'bg-gray-100 dark:bg-gray-700/60 dark:backdrop-blur-xl text-gray-600 dark:text-gray-400 dark:shadow-xl'
                                 : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
                     ]">
                     {{ page }}
@@ -161,9 +158,9 @@ const taskCategories = [
         id: 'esg',
         label: '永續行動',
         icon: '🌱',
-        activeClass: 'bg-gradient-to-br from-emerald-600 to-teal-400 text-white',
-        inactiveClass: 'bg-gradient-to-br from-emerald-200 to-teal-50 dark:from-emerald-900/40 dark:to-teal-700/40 text-emerald-700 dark:text-emerald-300',
-        bgClass: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800',
+        activeClass: 'bg-gradient-to-br from-emerald-500 to-teal-300 text-white',
+        inactiveClass: 'bg-gradient-to-br from-emerald-100 to-teal-50 dark:from-emerald-900/40 dark:to-teal-700/40 text-emerald-600 dark:text-emerald-300',
+        bgClass: 'bg-gradient-to-br from-emerald-50/80 to-teal-50/80 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-100 dark:border-emerald-800',
         description: 'ESG學習、碳足跡計算、綠色目標'
     },
     {
@@ -242,7 +239,7 @@ const getTaskIconBgClass = (category) => {
         'daily': 'bg-pink-100 dark:bg-pink-900/30',
         'financial': 'bg-indigo-100 dark:bg-indigo-900/30',
         'investment': 'bg-amber-100 dark:bg-amber-900/30',
-        'esg': 'bg-green-100 dark:bg-green-900/30',
+        'esg': 'bg-emerald-100 dark:bg-emerald-900/30',
         'social': 'bg-purple-100 dark:bg-purple-900/30'
     }
     return classes[category] || 'bg-gray-100 dark:bg-gray-900/30'
@@ -253,7 +250,7 @@ const getTaskIconColorClass = (category) => {
         'daily': 'text-pink-600 dark:text-pink-400',
         'financial': 'text-indigo-600 dark:text-indigo-400',
         'investment': 'text-amber-600 dark:text-amber-400',
-        'esg': 'text-green-600 dark:text-green-400',
+        'esg': 'text-emerald-600 dark:text-emerald-400',
         'social': 'text-purple-600 dark:text-purple-400'
     }
     return classes[category] || 'text-gray-600 dark:text-gray-400'
@@ -266,7 +263,7 @@ const getTaskBorderClass = (taskCategory) => {
         'daily': 'border-pink-200 dark:border-pink-800',         // 日常互動 - 淺粉紅
         'financial': 'border-indigo-200 dark:border-indigo-800', // 理財學習 - 淺靛藍
         'investment': 'border-orange-200 dark:border-orange-800', // 投資實踐 - 淺橘色
-        'esg': 'border-emerald-200 dark:border-emerald-800',     // 永續行動 - 淺翡翠
+        'esg': 'border-emerald-100 dark:border-emerald-800',     // 永續行動 - 淺翡翠
         'social': 'border-violet-200 dark:border-violet-800'     // 社交分享 - 淺紫色
     }
     return borderClasses[selectedTaskCategory.value] || 'border-cyan-200 dark:border-cyan-800'
@@ -314,7 +311,7 @@ const getPointsColorClass = (category) => {
         'daily': 'text-pink-500 dark:text-pink-400',
         'financial': 'text-indigo-500 dark:text-indigo-400',
         'investment': 'text-amber-500 dark:text-amber-400',
-        'esg': 'text-green-500 dark:text-green-400',
+        'esg': 'text-emerald-500 dark:text-emerald-400',
         'social': 'text-purple-500 dark:text-purple-400'
     }
     return classes[category] || 'text-primary-purple'
@@ -322,22 +319,22 @@ const getPointsColorClass = (category) => {
 
 const getFrequencyBadgeClass = (category) => {
     const classes = {
-        'daily': 'bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-400',
-        'financial': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400',
-        'investment': 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
-        'esg': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
-        'social': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+        'daily': 'bg-pink-100 dark:bg-pink-900/30 text-pink-500 dark:text-pink-400',
+        'financial': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-500 dark:text-indigo-400',
+        'investment': 'bg-amber-100 dark:bg-amber-900/30 text-amber-500 dark:text-amber-400',
+        'esg': 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 dark:text-emerald-400',
+        'social': 'bg-purple-100 dark:bg-purple-900/30 text-purple-500 dark:text-purple-400'
     }
     return classes[category] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
 }
 
 const getLevelBadgeClass = (category) => {
     const classes = {
-        'daily': 'bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-400',
-        'financial': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400',
-        'investment': 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
-        'esg': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
-        'social': 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+        'daily': 'bg-pink-100 dark:bg-pink-900/30 text-pink-500 dark:text-pink-400',
+        'financial': 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-500 dark:text-indigo-400',
+        'investment': 'bg-amber-100 dark:bg-amber-900/30 text-amber-500 dark:text-amber-400',
+        'esg': 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 dark:text-emerald-400',
+        'social': 'bg-purple-100 dark:bg-purple-900/30 text-purple-500 dark:text-purple-400'
     }
     return classes[category] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
 }
@@ -349,7 +346,7 @@ const getTaskCountColorClass = computed(() => {
         'daily': 'text-pink-600 dark:text-pink-400',
         'financial': 'text-indigo-600 dark:text-indigo-400',
         'investment': 'text-amber-600 dark:text-amber-400',
-        'esg': 'text-emerald-600 dark:text-emerald-400',
+        'esg': 'text-emerald-500 dark:text-emerald-400',
         'social': 'text-violet-600 dark:text-violet-400'
     }
     return classes[selectedTaskCategory.value] || classes['all']

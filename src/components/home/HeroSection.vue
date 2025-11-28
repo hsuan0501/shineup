@@ -22,17 +22,17 @@
             </div>
 
             <!-- Right Side (3 stars) -->
-            <div class="absolute -top-8 right-[15%] sm:right-[18%] md:right-[20%] lg:right-[23%] w-3.5 h-3.5 animate-twinkle-2 text-white">
+            <div class="absolute -top-8 right-[15%] sm:right-[18%] md:right-[20%] lg:right-[23%] w-3.5 h-3.5 animate-twinkle-2-mirror text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
-            <div class="absolute top-2 right-[11%] sm:right-[14%] md:right-[16%] lg:right-[19%] w-2.5 h-2.5 animate-twinkle-4 text-white">
+            <div class="absolute top-2 right-[11%] sm:right-[14%] md:right-[16%] lg:right-[19%] w-2.5 h-2.5 animate-twinkle-4-mirror text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
             </div>
-            <div class="absolute bottom-16 right-[18%] sm:right-[21%] md:right-[23%] lg:right-[26%] w-3 h-3 animate-twinkle-1 text-white">
+            <div class="absolute bottom-16 right-[18%] sm:right-[21%] md:right-[23%] lg:right-[26%] w-3 h-3 animate-twinkle-5-mirror text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10Z" />
                 </svg>
@@ -124,6 +124,19 @@ const scrollToTasks = async (e) => {
 
 .animate-twinkle-5 {
     animation: twinkle 3s ease-in-out infinite 2.4s;
+}
+
+/* Mirror animations for right side stars (opposite timing) */
+.animate-twinkle-2-mirror {
+    animation: twinkle 3s ease-in-out infinite 2.1s;
+}
+
+.animate-twinkle-4-mirror {
+    animation: twinkle 3s ease-in-out infinite 0.3s;
+}
+
+.animate-twinkle-5-mirror {
+    animation: twinkle 3s ease-in-out infinite 1.2s;
 }
 
 /* 深色模式下移除光暈 */

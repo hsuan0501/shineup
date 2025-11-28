@@ -17,7 +17,7 @@
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div v-for="task in filteredTasks" :key="task.id"
-            class="group bg-light-card dark:bg-gray-700/60 dark:backdrop-blur-xl rounded-xl p-4 border border-gray-200 dark:border-gray-600 hover:scale-[1.02] transition-all duration-300 cursor-pointer dark:shadow-xl">
+            class="group bg-light-card dark:bg-gray-700/60 dark:backdrop-blur-xl rounded-xl p-4 border border-gray-200 dark:border-gray-600 hover:scale-[1.02] transition-all duration-300 dark:shadow-xl">
             <!-- Task Header -->
             <div class="flex items-start justify-between mb-3">
               <h3 class="font-semibold text-light-text dark:text-dark-text flex-1">{{ task.title }}</h3>
@@ -55,7 +55,7 @@
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           <div v-for="gift in filteredGifts" :key="gift.id"
-            class="group rounded-lg overflow-hidden bg-light-card dark:bg-gray-600/70 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 cursor-pointer dark:shadow-2xl border border-gray-200 dark:border-gray-600">
+            class="group rounded-lg overflow-hidden bg-light-card dark:bg-gray-600/70 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 dark:shadow-2xl border border-gray-200 dark:border-gray-600">
 
             <!-- Gift Image -->
             <div class="relative aspect-[4/3] overflow-hidden">
@@ -109,13 +109,9 @@
         <p class="text-xl font-semibold text-light-text dark:text-dark-text mb-2">
           找不到符合「{{ store.searchQuery }}」的結果
         </p>
-        <p class="text-gray-500 dark:text-gray-400 mb-6">
+        <p class="text-gray-500 dark:text-gray-400">
           試試其他關鍵字或瀏覽所有內容
         </p>
-        <RouterLink to="/"
-          class="inline-block px-6 py-3 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
-          返回首頁
-        </RouterLink>
       </div>
     </div>
   </div>
@@ -123,7 +119,6 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { RouterLink } from 'vue-router'
 import { useStore } from '../store/app'
 import { mockTasks, mockRewards, mockUsers } from '../mock'
 
@@ -195,7 +190,7 @@ const getPointsColorByLevel = (level) => {
   const colors = {
     'EXPLORER': 'text-emerald-600 dark:text-emerald-400',
     'CREATOR': 'text-indigo-600 dark:text-indigo-400',
-    'VISIONARY': 'text-amber-600 dark:text-amber-400',
+    'VISIONARY': 'text-amber-500 dark:text-amber-400',
     'LUMINARY': 'text-purple-600 dark:text-purple-400'
   }
   return colors[level] || 'text-purple-600 dark:text-purple-400'
