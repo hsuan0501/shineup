@@ -18,10 +18,23 @@
       <!-- 左右排列內容 -->
       <div class="flex flex-col sm:flex-row gap-6">
         <!-- 左側：圖片區 -->
-        <div class="flex-shrink-0">
+        <div class="flex-shrink-0 relative">
           <div class="relative w-48 h-48 rounded-2xl overflow-hidden">
             <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover">
           </div>
+          <!-- 收藏愛心按鈕 -->
+          <button @click="handleToggleWishlist"
+            class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 border border-white/50 dark:border-gray-600/50">
+            <svg v-if="store.isInWishlist(gift.id)" class="w-4 h-4 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                clip-rule="evenodd" />
+            </svg>
+            <svg v-else class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
         </div>
 
         <!-- 右側：說明區 -->
@@ -55,30 +68,26 @@
             </p>
           </div>
 
-          <!-- 底部區域：積分 + 按鈕 -->
-          <div class="space-y-2.5">
+          <!-- 底部區域：積分 + 按鈕（同行） -->
+          <div class="flex gap-2.5">
             <!-- 積分顯示 -->
-            <div class="flex items-center justify-between px-4 py-2.5 rounded-lg bg-gradient-to-r from-purple-50 to-cyan-50 dark:from-purple-900/20 dark:to-cyan-900/20">
+            <div class="flex-1 flex items-center justify-between px-4 py-2.5 rounded-lg bg-gradient-to-r from-purple-50 to-cyan-50 dark:from-purple-900/20 dark:to-cyan-900/20">
               <span class="text-sm font-medium text-light-text dark:text-dark-text">所需積分</span>
-              <span :class="getPointsColorClass(gift.series)" class="text-lg font-bold">
+              <span :class="getPointsColorClass(gift.level)" class="text-lg font-bold">
                 {{ gift.points }}
               </span>
             </div>
 
-            <!-- 按鈕區 -->
-            <div class="flex gap-2.5">
-              <button
-                class="flex-1 px-5 py-2.5 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-400 hover:from-purple-600 hover:to-cyan-500 text-white font-medium shadow-md transition-all duration-300 hover:scale-[1.02]">
-                立即兌換
-              </button>
-              <button
-                class="w-10 h-10 flex items-center justify-center rounded-lg border-2 border-purple-300 dark:border-purple-600 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-300">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </button>
-            </div>
+            <!-- 兌換按鈕 -->
+            <button @click="handleAddToCart" :class="[
+              'flex-1 px-5 py-2.5 rounded-lg text-white font-medium shadow-md transition-all duration-300',
+              gift.canExchange === false || gift.points > user.rewardPoints || gift.stockStatus === 'out'
+                ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-br from-cyan-400 to-blue-500 hover:opacity-90 hover:scale-[1.02]'
+            ]"
+              :disabled="gift.canExchange === false || gift.points > user.rewardPoints || gift.stockStatus === 'out'">
+              {{ gift.canExchange === false || gift.points > user.rewardPoints || gift.stockStatus === 'out' ? '積分不足' : '立即兌換' }}
+            </button>
           </div>
         </div>
       </div>
@@ -88,6 +97,12 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue'
+import { useStore } from '../../store/app'
+import { mockUsers } from '../../mock'
+import { ref } from 'vue'
+
+const store = useStore()
+const user = ref(mockUsers[1])
 
 const props = defineProps({
   isOpen: {
@@ -127,14 +142,14 @@ const getSeriesBadgeClass = (series) => {
   return classes[series] || 'bg-gray-100/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200'
 }
 
-const getPointsColorClass = (series) => {
-  const classes = {
-    'sustainable': 'text-emerald-600 dark:text-emerald-400',
-    'quality': 'text-indigo-600 dark:text-indigo-400',
-    'aesthetic': 'text-orange-600 dark:text-orange-400',
-    'premium': 'text-violet-600 dark:text-violet-400'
+const getPointsColorClass = (level) => {
+  const colors = {
+    'EXPLORER': 'text-emerald-600 dark:text-emerald-400',
+    'CREATOR': 'text-indigo-600 dark:text-indigo-400',
+    'VISIONARY': 'text-amber-500 dark:text-amber-400',
+    'LUMINARY': 'text-purple-600 dark:text-purple-400'
   }
-  return classes[series] || 'text-gray-600 dark:text-gray-400'
+  return colors[level] || 'text-purple-600 dark:text-purple-400'
 }
 
 const getSeriesName = (series) => {
@@ -162,5 +177,50 @@ const formatPrice = (price) => {
 
   const formatted = number.toLocaleString('en-US')
   return `NT$${formatted}`
+}
+
+// 處理加入購物車
+const handleAddToCart = () => {
+  // 檢查是否已登入
+  if (!store.isAuthenticated) {
+    store.showToast('請先登入以使用購物車功能', 'error')
+    return
+  }
+
+  if (props.gift.canExchange === false) {
+    return
+  }
+
+  if (props.gift.points > user.value.rewardPoints) {
+    store.showToast('您的積分不足，無法兌換此禮品', 'error')
+    return
+  }
+
+  if (props.gift.stockStatus === 'out') {
+    store.showToast('此禮品已售罄', 'error')
+    return
+  }
+
+  store.addToCart(props.gift)
+  store.showToast(`已將「${props.gift.title}」加入購物車！`, 'success')
+  closeModal()
+}
+
+// 處理收藏/取消收藏
+const handleToggleWishlist = () => {
+  // 檢查是否已登入
+  if (!store.isAuthenticated) {
+    store.showToast('請先登入以使用收藏功能', 'error')
+    return
+  }
+
+  const wasInWishlist = store.isInWishlist(props.gift.id)
+  store.toggleWishlist(props.gift)
+
+  if (wasInWishlist) {
+    store.showToast(`已將「${props.gift.title}」從收藏清單移除`, 'wishlist-remove')
+  } else {
+    store.showToast(`已將「${props.gift.title}」加入收藏清單`, 'wishlist-add')
+  }
 }
 </script>

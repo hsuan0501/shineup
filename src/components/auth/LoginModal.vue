@@ -217,10 +217,10 @@ const handleLogin = () => {
         // 更新 store
         store.login(authData.user)
 
-        alert('登入成功！')
+        store.showToast('登入成功！', 'success')
         closeModal()
     } else {
-        alert('帳號或密碼錯誤')
+        store.showToast('帳號或密碼錯誤', 'error')
     }
 }
 
@@ -228,12 +228,12 @@ const handleLogin = () => {
 const handleRegister = () => {
     // 驗證密碼
     if (registerForm.value.password !== registerForm.value.confirmPassword) {
-        alert('密碼不一致，請重新輸入')
+        store.showToast('密碼不一致，請重新輸入', 'error')
         return
     }
 
     if (registerForm.value.password.length < 6) {
-        alert('密碼至少需要 6 個字元')
+        store.showToast('密碼至少需要 6 個字元', 'error')
         return
     }
 
@@ -261,7 +261,7 @@ const handleRegister = () => {
     // 更新 store
     store.login(authData.user)
 
-    alert('註冊成功！贈送您 100 積分')
+    store.showToast('註冊成功！贈送您 100 積分', 'success')
     closeModal()
 }
 </script>

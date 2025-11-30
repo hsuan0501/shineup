@@ -10,6 +10,10 @@ export const useStore = defineStore('app', () => {
   // 搜尋狀態
   const searchQuery = ref('')
 
+  // Toast 通知狀態
+  const toasts = ref([])
+  let toastId = 0
+
   // 購物車狀態管理
   const cartItems = ref([
     {
@@ -240,6 +244,27 @@ export const useStore = defineStore('app', () => {
     searchQuery.value = ''
   }
 
+  // Toast 通知功能
+  const showToast = (message, type = 'info', duration = 3000) => {
+    const id = ++toastId
+    const toast = { id, message, type }
+    toasts.value.push(toast)
+
+    // 自動移除 toast
+    setTimeout(() => {
+      removeToast(id)
+    }, duration)
+
+    return id
+  }
+
+  const removeToast = (id) => {
+    const index = toasts.value.findIndex(t => t.id === id)
+    if (index > -1) {
+      toasts.value.splice(index, 1)
+    }
+  }
+
   return {
     isDark,
     currentUser,
@@ -264,5 +289,8 @@ export const useStore = defineStore('app', () => {
     searchQuery,
     setSearchQuery,
     clearSearch,
+    toasts,
+    showToast,
+    removeToast,
   }
 })

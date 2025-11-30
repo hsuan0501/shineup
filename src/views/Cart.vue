@@ -335,11 +335,11 @@ const removeItem = (itemId) => {
 // 結帳
 const checkout = () => {
     if (totalPoints.value > availablePoints.value) {
-        alert('積分不足，無法完成兌換')
+        store.showToast('積分不足，無法完成兌換', 'error')
         return
     }
 
-    alert(`兌換成功！共使用 ${totalPoints.value} 積分`)
+    store.showToast(`兌換成功！共使用 ${totalPoints.value} 積分`, 'success')
     // 實際應用中這裡會調用API
 }
 
@@ -378,8 +378,14 @@ const getLevelStyle = (level) => {
 
 // 從心願清單加入購物車
 const handleAddFromWishlist = (item) => {
+    // 檢查是否已登入
+    if (!store.isAuthenticated) {
+        store.showToast('請先登入以使用購物車功能', 'error')
+        return
+    }
+
     store.addToCart(item)
-    alert(`已將「${item.title}」加入購物車！`)
+    store.showToast(`已將「${item.title}」加入購物車！`, 'success')
 }
 
 // 初始化：載入心願清單

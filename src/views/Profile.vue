@@ -460,13 +460,13 @@ const handleAvatarChange = (event) => {
 
   // 檢查檔案類型
   if (!file.type.startsWith('image/')) {
-    alert('請選擇圖片檔案')
+    store.showToast('請選擇圖片檔案', 'error')
     return
   }
 
   // 檢查檔案大小 (5MB 限制)
   if (file.size > 5 * 1024 * 1024) {
-    alert('圖片大小不能超過 5MB')
+    store.showToast('圖片大小不能超過 5MB', 'error')
     return
   }
 
@@ -482,7 +482,7 @@ const handleAvatarChange = (event) => {
       mockUsers[1].avatar = e.target?.result
     }
 
-    alert('頭像更新成功！')
+    store.showToast('頭像更新成功！', 'success')
   }
   reader.readAsDataURL(file)
 }
@@ -496,7 +496,7 @@ const handleLogout = () => {
     setTimeout(() => {
       // 觸發登入彈窗需要通過事件或全域狀態
       // 這裡直接跳轉到首頁後，用戶會看到「登入 / 註冊」按鈕
-      alert('已成功登出')
+      store.showToast('已成功登出', 'info')
     }, 100)
   }
 }

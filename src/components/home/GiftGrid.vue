@@ -452,28 +452,47 @@ const getPointsColorByLevel = (level) => {
 
 // 處理加入購物車
 const handleAddToCart = (gift) => {
+    // 檢查是否已登入
+    if (!store.isAuthenticated) {
+        store.showToast('請先登入以使用購物車功能', 'error')
+        return
+    }
+
     if (gift.canExchange === false) {
         return
     }
 
     // 檢查積分是否足夠
     if (gift.points > user.value.rewardPoints) {
-        alert('您的積分不足，無法兌換此禮品')
+        store.showToast('您的積分不足，無法兌換此禮品', 'error')
         return
     }
 
     // 檢查庫存狀態
     if (gift.stockStatus === 'out') {
-        alert('此禮品已售罄')
+        store.showToast('此禮品已售罄', 'error')
         return
     }
 
     store.addToCart(gift)
-    alert(`已將「${gift.title}」加入購物車！`)
+    store.showToast(`已將「${gift.title}」加入購物車！`, 'success')
 }
 
 // 處理收藏/取消收藏
 const handleToggleWishlist = (gift) => {
+    // 檢查是否已登入
+    if (!store.isAuthenticated) {
+        store.showToast('請先登入以使用收藏功能', 'error')
+        return
+    }
+
+    const wasInWishlist = store.isInWishlist(gift.id)
     store.toggleWishlist(gift)
+
+    if (wasInWishlist) {
+        store.showToast(`已將「${gift.title}」從收藏清單移除`, 'wishlist-remove')
+    } else {
+        store.showToast(`已將「${gift.title}」加入收藏清單`, 'wishlist-add')
+    }
 }
 </script>

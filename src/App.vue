@@ -29,6 +29,9 @@
 
       <!-- Global ChatBox -->
       <ChatBox />
+
+      <!-- Global Toast Notifications -->
+      <Toast />
     </div>
   </div>
 </template>
@@ -39,6 +42,7 @@ import { computed, onMounted, ref } from 'vue'
 import NavBar from './components/NavBar.vue'
 import Footer from './components/Footer.vue'
 import ChatBox from './components/ChatBox.vue'
+import Toast from './components/Toast.vue'
 import { RouterView } from 'vue-router'
 
 const store = useStore()

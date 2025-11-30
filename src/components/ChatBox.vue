@@ -158,7 +158,7 @@ const toggleChat = async () => {
 
     // 如果未登入，提示先登入
     if (!isLoggedIn.value) {
-        alert('請先登入以開啟您的旅程，體驗智能客服功能！')
+        store.showToast('請先登入以開啟您的旅程，體驗智能客服功能！', 'info')
         return
     }
 
