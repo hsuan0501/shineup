@@ -27,8 +27,8 @@ import GiftGrid from '../components/home/GiftGrid.vue'
 const blob1 = ref(null)
 const blob2 = ref(null)
 
-const MIN_SPEED = 0.2
-const MAX_SPEED = 0.5
+const MIN_SPEED = 0.1
+const MAX_SPEED = 0.3
 
 function randomNumber(min, max) {
     return Math.random() * (max - min) + min
@@ -39,8 +39,8 @@ class Blob {
         this.el = el
         this.index = index
 
-        const rangeX = 80
-        const rangeY = 50
+        const rangeX = 120
+        const rangeY = 80
 
         this.x = 0
         this.y = 0
@@ -137,18 +137,18 @@ onMounted(() => {
 }
 
 .blob-blue {
-    background: #2ac9de;
-    width: 700px;
-    height: 700px;
-    top: 146px; /* 50px + 96px (offset for navbar) */
-    left: calc(50% - 350px);
+    background: linear-gradient(135deg, #60a5fa 0%, #7cb8f7 100%);
+    width: 900px;
+    height: 900px;
+    top: 96px;
+    left: calc(50% - 600px);
 }
 
 .blob-purple {
-    background: #f087f4;
-    width: 550px;
-    height: 550px;
-    top: 196px; /* 100px + 96px (offset for navbar) */
-    left: calc(50% - 50px);
+    background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
+    width: 850px;
+    height: 850px;
+    top: 146px;
+    left: calc(50% - 100px);
 }
 </style>

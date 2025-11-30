@@ -82,4 +82,3 @@ onMounted(() => {
   store.loadWishlist()
 })
 </script>
-
