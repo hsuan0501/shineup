@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS user_levels (
     INDEX idx_currentLevel (currentLevel),
     INDEX idx_levelPoints (levelPoints),
     CONSTRAINT chk_levelPoints CHECK (levelPoints >= 0),
-    CONSTRAINT chk_rewardPoints CHECK (rewardPoints >= 0)
+    CONSTRAINT chk_userLevel_rewardPoints CHECK (rewardPoints >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================================
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS rewards (
     INDEX idx_level (level),
     INDEX idx_points (points),
     INDEX idx_active (active),
-    CONSTRAINT chk_rewardPoints CHECK (points > 0),
+    CONSTRAINT chk_rewards_points CHECK (points > 0),
     CONSTRAINT chk_stock CHECK (stock >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
