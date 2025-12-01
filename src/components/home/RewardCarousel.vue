@@ -13,7 +13,7 @@
                 <div class="text-center">
                     <h4 class="text-xs font-semibold text-light-text dark:text-dark-text line-clamp-1">{{
                         gift.title }}</h4>
-                    <p :class="getPointsColorClass(gift.level)" class="text-[10px] font-bold">{{ gift.points }}
+                    <p :class="getPointsColorClass(gift.level)" class="text-[10px] font-bold">{{ formatPoints(gift.points) }}
                         積分</p>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 <div class="text-center">
                     <h4 class="text-xs font-semibold text-light-text dark:text-dark-text line-clamp-1">{{
                         gift.title }}</h4>
-                    <p :class="getPointsColorClass(gift.level)" class="text-[10px] font-bold">{{ gift.points }}
+                    <p :class="getPointsColorClass(gift.level)" class="text-[10px] font-bold">{{ formatPoints(gift.points) }}
                         積分</p>
                 </div>
             </div>
@@ -41,6 +41,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { mockRewards } from '../../mock'
+import { formatPoints } from '../../utils/formatPoints'
 import GiftDetailModal from '../modals/GiftDetailModal.vue'
 
 // Gift Modal State

@@ -475,7 +475,6 @@ const handleAvatarChange = (event) => {
   reader.onload = (e) => {
     // 這裡可以更新用戶頭像
     // 如果有後端 API，可以在這裡上傳到伺服器
-    console.log('新頭像:', e.target?.result)
 
     // 暫時更新本地顯示 (實際使用時需要更新 mockUsers 或呼叫 API)
     if (mockUsers[1]) {

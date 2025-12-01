@@ -10,10 +10,8 @@
       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24">
         <defs>
           <linearGradient :id="`level-star-${currentLevel.levelNumber}`" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%"
-              :stop-color="currentLevel.gradientFrom.includes('emerald') ? '#6ee7b7' : currentLevel.gradientFrom.includes('cyan') ? '#67e8f9' : currentLevel.gradientFrom.includes('amber') ? '#fcd34d' : '#c4b5fd'" />
-            <stop offset="100%"
-              :stop-color="currentLevel.gradientTo.includes('emerald') ? '#059669' : currentLevel.gradientTo.includes('blue') ? '#1d4ed8' : currentLevel.gradientTo.includes('amber') ? '#d97706' : '#7c3aed'" />
+            <stop offset="0%" :stop-color="currentLevel.gradientFromHex || '#c4b5fd'" />
+            <stop offset="100%" :stop-color="currentLevel.gradientToHex || '#7c3aed'" />
           </linearGradient>
         </defs>
         <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z"
@@ -68,7 +66,7 @@
                 <span class="text-[10px] md:text-xs font-medium text-sky-600 dark:text-sky-400">升級積分</span>
               </div>
               <div class="text-base md:text-lg font-bold text-sky-700 dark:text-sky-300">{{
-                userLevelPoints.toLocaleString() }}</div>
+                formatPoints(userLevelPoints) }}</div>
               <div class="text-[10px] md:text-xs text-sky-600 dark:text-sky-400">用於提升等級</div>
             </div>
 
@@ -86,7 +84,7 @@
                 <span class="text-[10px] md:text-xs font-medium text-purple-600 dark:text-purple-400">兌換積分</span>
               </div>
               <div class="text-base md:text-lg font-bold text-purple-700 dark:text-purple-300">{{
-                userRewardPoints.toLocaleString() }}</div>
+                formatPoints(userRewardPoints) }}</div>
               <div class="text-[10px] md:text-xs text-purple-600 dark:text-purple-400">用於兌換禮品</div>
             </div>
           </div>
@@ -97,15 +95,15 @@
           <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
             <span class="text-gray-600 dark:text-gray-400">升級進度</span>
             <span class="font-medium" :style="`color: ${currentLevel.color}`">{{
-              userLevelPoints.toLocaleString() }} / {{ nextLevel.minPoints.toLocaleString() }}</span>
+              formatPoints(userLevelPoints) }} / {{ formatPoints(nextLevel.minPoints) }}</span>
           </div>
           <div class="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden transition-transform duration-300 hover:scale-[1.02]">
             <div :class="`h-full bg-gradient-to-r ${currentLevel.gradientFrom} ${currentLevel.gradientTo} rounded-full`"
               :style="`width: ${progressPercentage}%`"></div>
           </div>
           <p class="mt-2 text-[10px] md:text-xs text-gray-500 text-center">
-            再獲得 <span :style="`color: ${currentLevel.color}`" class="font-medium">{{ (nextLevel.minPoints -
-              userLevelPoints).toLocaleString() }}</span> 升級積分即可升級
+            再獲得 <span :style="`color: ${currentLevel.color}`" class="font-medium">{{ formatPoints(nextLevel.minPoints -
+              userLevelPoints) }}</span> 升級積分即可升級
           </p>
         </div>
         <div v-else class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800">
@@ -151,6 +149,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { levelConfig, mockUsers } from '../../mock.js'
 import { useStore } from '../../store/app.js'
+import { formatPoints } from '../../utils/formatPoints.js'
 
 const showLevelCard = ref(false)
 const levelCardContainer = ref(null)

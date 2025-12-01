@@ -162,7 +162,7 @@
 
                         <div class="flex items-center justify-between mb-1.5">
                             <div class="flex items-baseline gap-1">
-                                <span class="text-lg font-bold" :class="getPointsColorByLevel(gift.level)">{{ gift.points }}</span>
+                                <span class="text-lg font-bold" :class="getPointsColorByLevel(gift.level)">{{ formatPoints(gift.points) }}</span>
                                 <span class="text-xs text-gray-500 dark:text-gray-400">積分</span>
                             </div>
                             <button @click.stop="handleAddToCart(gift)" :class="[
@@ -210,6 +210,7 @@
 import { ref, computed } from 'vue'
 import { mockRewards, mockUsers } from '../../mock'
 import { useStore } from '../../store/app'
+import { formatPoints } from '../../utils/formatPoints'
 import GiftDetailModal from '../modals/GiftDetailModal.vue'
 
 const store = useStore()
@@ -274,7 +275,7 @@ const giftSeries = [
         levelNumber: 3,
         levelChinese: '先行者',
         activeClass: 'bg-gradient-to-br from-orange-500 to-yellow-300 text-white',
-        inactiveClass: 'bg-gradient-to-br from-orange-200 to-amber-100 dark:from-orange-900/40 dark:to-amber-800/40 text-orange-700 dark:text-orange-300',
+        inactiveClass: 'bg-gradient-to-br from-orange-200 to-amber-100 dark:from-orange-900/40 dark:to-amber-800/40 text-amber-600 dark:text-amber-400',
         bgClass: 'bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-orange-950/30 dark:via-amber-950/30 dark:to-yellow-950/30 border border-orange-200 dark:border-orange-800',
         pointRange: '800-1499分',
         restriction: 'Lv3+ 可兌換'
@@ -292,18 +293,19 @@ const giftSeries = [
     }
 ]
 
+// 等級階層定義 - 所有地方共用
+const levelHierarchy = {
+    'sustainable': 1, // EXPLORER
+    'quality': 2,     // CREATOR
+    'aesthetic': 3,   // VISIONARY
+    'premium': 4      // LUMINARY
+}
+
 const currentSeriesInfo = computed(() => {
     return giftSeries.find(s => s.id === selectedSeries.value) || giftSeries[0]
 })
 
 const filteredGifts = computed(() => {
-    // 等級階層定義
-    const levelHierarchy = {
-        'sustainable': 1, // EXPLORER
-        'quality': 2,     // CREATOR
-        'aesthetic': 3,   // VISIONARY
-        'premium': 4      // LUMINARY
-    }
 
     if (selectedSeries.value === 'all' || selectedSeries.value === '') {
         return mockRewards
@@ -351,13 +353,6 @@ const isGiftInSelectedSeries = (gift) => {
     }
 
     // 如果沒有 canExchange 屬性，手動計算
-    const levelHierarchy = {
-        'sustainable': 1, // EXPLORER
-        'quality': 2,     // CREATOR
-        'aesthetic': 3,   // VISIONARY 
-        'premium': 4      // LUMINARY
-    }
-
     const selectedLevel = levelHierarchy[selectedSeries.value] || 0
     const giftLevel = levelHierarchy[gift.level] || 0
 
@@ -390,7 +385,7 @@ const getLevelBadgeClass = (level) => {
     const classes = {
         'EXPLORER': 'bg-gradient-to-br from-emerald-200/90 to-emerald-100/90 dark:from-emerald-800/70 dark:to-emerald-700/70 text-emerald-700 dark:text-emerald-300',
         'CREATOR': 'bg-gradient-to-br from-indigo-200/90 to-blue-100/90 dark:from-indigo-800/70 dark:to-blue-700/70 text-indigo-700 dark:text-indigo-300',
-        'VISIONARY': 'bg-gradient-to-br from-orange-200/90 to-amber-100/90 dark:from-orange-800/70 dark:to-amber-700/70 text-orange-700 dark:text-orange-300',
+        'VISIONARY': 'bg-gradient-to-br from-orange-200/90 to-amber-100/90 dark:from-orange-800/70 dark:to-amber-700/70 text-amber-600 dark:text-amber-400',
         'LUMINARY': 'bg-gradient-to-br from-violet-200/90 to-fuchsia-100/90 dark:from-violet-800/70 dark:to-fuchsia-700/70 text-violet-700 dark:text-violet-300'
     }
     return classes[level] || 'bg-gray-100/90 dark:bg-gray-800/70 text-gray-600 dark:text-gray-300'

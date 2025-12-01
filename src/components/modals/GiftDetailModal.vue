@@ -45,11 +45,11 @@
               {{ gift.title }}
             </h2>
             <div class="flex gap-2">
-              <span :class="getLevelBadgeClass(gift.level)"
+              <span :class="getLevelBadgeClassLight(gift.level)"
                 class="px-3 py-1 rounded-full text-xs font-semibold">
                 {{ gift.level }}
               </span>
-              <span :class="getSeriesBadgeClass(gift.series)"
+              <span :class="getSeriesBadgeClassLight(gift.series)"
                 class="px-3 py-1 rounded-full text-xs font-semibold">
                 {{ getSeriesName(gift.series) }}
               </span>
@@ -71,10 +71,10 @@
           <!-- 底部區域：積分 + 按鈕（同行） -->
           <div class="flex gap-2.5">
             <!-- 積分顯示 -->
-            <div class="flex-1 flex items-center justify-between px-4 py-2.5 rounded-lg bg-gradient-to-r from-purple-50 to-cyan-50 dark:from-purple-900/20 dark:to-cyan-900/20">
+            <div :class="getPointsBgClass(gift.level)" class="flex-1 flex items-center justify-between px-4 py-2.5 rounded-lg">
               <span class="text-sm font-medium text-light-text dark:text-dark-text">所需積分</span>
               <span :class="getPointsColorClass(gift.level)" class="text-lg font-bold">
-                {{ gift.points }}
+                {{ formatPoints(gift.points) }}
               </span>
             </div>
 
@@ -100,6 +100,7 @@ import { defineProps, defineEmits } from 'vue'
 import { useStore } from '../../store/app'
 import { mockUsers } from '../../mock'
 import { ref } from 'vue'
+import { formatPoints } from '../../utils/formatPoints'
 
 const store = useStore()
 const user = ref(mockUsers[1])
@@ -122,24 +123,26 @@ const closeModal = () => {
 }
 
 // Helper functions matching GiftGrid.vue styling
-const getLevelBadgeClass = (level) => {
+const getLevelBadgeClassLight = (level) => {
+  // 淺色背景 (詳細頁標籤)
   const classes = {
-    'EXPLORER': 'bg-emerald-500/90 text-white',
-    'CREATOR': 'bg-indigo-500/90 text-white',
-    'VISIONARY': 'bg-orange-500/90 text-white',
-    'LUMINARY': 'bg-violet-500/90 text-white'
+    'EXPLORER': 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-200',
+    'CREATOR': 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-200',
+    'VISIONARY': 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-200',
+    'LUMINARY': 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-200'
   }
-  return classes[level] || 'bg-gray-500/90 text-white'
+  return classes[level] || 'bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-200'
 }
 
-const getSeriesBadgeClass = (series) => {
+const getSeriesBadgeClassLight = (series) => {
+  // 淺色背景 (詳細頁系列標籤)
   const classes = {
-    'sustainable': 'bg-emerald-100/90 dark:bg-emerald-800/90 text-emerald-700 dark:text-emerald-200',
-    'quality': 'bg-indigo-100/90 dark:bg-indigo-800/90 text-indigo-700 dark:text-indigo-200',
-    'aesthetic': 'bg-orange-100/90 dark:bg-orange-800/90 text-orange-700 dark:text-orange-200',
-    'premium': 'bg-violet-100/90 dark:bg-violet-800/90 text-violet-700 dark:text-violet-200'
+    'sustainable': 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-200',
+    'quality': 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-200',
+    'aesthetic': 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-200',
+    'premium': 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-200'
   }
-  return classes[series] || 'bg-gray-100/90 dark:bg-gray-800/90 text-gray-700 dark:text-gray-200'
+  return classes[series] || 'bg-gray-50 dark:bg-gray-900/20 text-gray-700 dark:text-gray-200'
 }
 
 const getPointsColorClass = (level) => {
@@ -152,12 +155,22 @@ const getPointsColorClass = (level) => {
   return colors[level] || 'text-purple-600 dark:text-purple-400'
 }
 
+const getPointsBgClass = (level) => {
+  const classes = {
+    'EXPLORER': 'bg-emerald-50 dark:bg-emerald-900/20',
+    'CREATOR': 'bg-indigo-50 dark:bg-indigo-900/20',
+    'VISIONARY': 'bg-amber-50 dark:bg-amber-900/20',
+    'LUMINARY': 'bg-purple-50 dark:bg-purple-900/20'
+  }
+  return classes[level] || 'bg-purple-50 dark:bg-purple-900/20'
+}
+
 const getSeriesName = (series) => {
   const names = {
-    'sustainable': '永續環保',
-    'quality': '品質生活',
-    'aesthetic': '美學設計',
-    'premium': '尊榮精選'
+    'sustainable': '永續探索',
+    'quality': '質感創造',
+    'aesthetic': '美學先鋒',
+    'premium': '品味閃耀'
   }
   return names[series] || '未分類'
 }

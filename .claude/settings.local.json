@@ -10,7 +10,10 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git rebase:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(dir:*)",
+      "Bash(git reset:*)",
+      "Bash(git rev-parse:*)"
     ],
     "deny": [],
     "ask": []

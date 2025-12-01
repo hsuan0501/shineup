@@ -22,44 +22,44 @@ export const mockUsers = {
 
 export const mockTasks = [
   // 📱 日常互動任務 (6個)
-  { id: 1, title: '每日登入', description: '每日登入一次即可完成', levelPoints: 5, rewardPoints: 10, category: 'daily', level: '全等級', completed: false, icon: '🌅', frequency: '每日' },
-  { id: 2, title: '完善個人資料', description: '完整填寫個人資料可獲得積分', levelPoints: 30, rewardPoints: 50, category: 'daily', level: '全等級', completed: false, icon: '👤', frequency: '一次性' },
-  { id: 3, title: '連續3天登入', description: '連續3天登入系統', levelPoints: 20, rewardPoints: 30, category: 'daily', level: '全等級', completed: false, icon: '🔥', frequency: '可重複' },
-  { id: 4, title: '連續7天登入', description: '連續7天登入系統', levelPoints: 50, rewardPoints: 80, category: 'daily', level: 'Lv2+', completed: false, icon: '⭐', frequency: '可重複' },
-  { id: 5, title: '分享到社群', description: '分享內容到社群媒體', levelPoints: 15, rewardPoints: 20, category: 'daily', level: '全等級', completed: false, icon: '📤', frequency: '每日最多3次' },
-  { id: 6, title: '按讚或留言', description: '在內容下方互動', levelPoints: 5, rewardPoints: 8, category: 'daily', level: '全等級', completed: false, icon: '💬', frequency: '每日最多5次' },
+  { id: 1, title: '每日登入', description: '每日登入一次即可完成', details: '每天登入一次完成此任務。後端將記錄您的登入時間至用戶活動日誌表，用於計算日活躍度。系統自動檢測新登入記錄並更新用戶的最後登入時間欄位。完成後立即獲得基礎積分獎勵，後端同步更新用戶的積分餘額。', levelPoints: 5, rewardPoints: 10, category: 'daily', level: '全等級', completed: false, icon: '🌅', frequency: '每日', image: '/images/tasks/task-1.jpg' },
+  { id: 2, title: '完善身份驗證資料', description: '完整填寫身份基本資訊', details: '在個人檔案頁面填寫身份證字號、出生年月、居住地址等欄位。後端驗證身份證字號格式，將資料加密存儲至用戶資料表。完成後系統自動更新用戶的「KYC認證」狀態欄位，解鎖更多功能。此資料將被存儲於PostgreSQL安全資料庫中。', levelPoints: 40, rewardPoints: 60, category: 'daily', level: '全等級', completed: false, icon: '👤', frequency: '一次性', image: '/images/tasks/task-2.jpg' },
+  { id: 3, title: '綁定銀行帳戶', description: '關聯銀行帳戶資訊', details: '填寫銀行名稱、帳戶號碼等資訊並提交。後端驗證帳戶號碼格式（16-17碼），將銀行資訊加密存儲至用戶銀行帳戶表。綁定成功後自動更新用戶的綁定狀態欄位，解鎖「提現」和「自動扣款」功能。', levelPoints: 50, rewardPoints: 75, category: 'daily', level: '全等級', completed: false, icon: '🏦', frequency: '一次性', image: '/images/tasks/task-3.jpg' },
+  { id: 4, title: '設定理財目標', description: '建立個人理財目標', details: '在理財面板輸入目標名稱（如購房、教育基金）、目標金額、完成期限。後端將目標資料存儲至用戶目標表，並計算每月需儲蓄額度。系統自動生成目標進度追蹤記錄。目標可重複設定，每筆目標記錄都有唯一ID便於查詢和更新。', levelPoints: 30, rewardPoints: 45, category: 'daily', level: '全等級', completed: false, icon: '🎯', frequency: '可重複', image: '/images/tasks/task-4.jpg' },
+  { id: 5, title: '邀請好友開戶', description: '透過邀請碼邀請朋友註冊', details: '複製您的邀請碼分享給朋友。當朋友完成註冊和身份驗證後，後端自動在用戶推薦關係表中記錄此邀請關係。系統自動為您和被邀請者各增加50積分獎勵，記錄至積分歷史表。最多可邀請無限位好友。', levelPoints: 60, rewardPoints: 90, category: 'daily', level: '全等級', completed: false, icon: '👥', frequency: '無限', image: '/images/tasks/task-5.jpg' },
+  { id: 6, title: '完成個人檔案設置', description: '設定個人檔案完整性', details: '填寫頭像、暱稱、個性標籤、風險偏好等檔案資訊。後端驗證並存儲至用戶檔案表。系統計算檔案完整度百分比，完整度達80%以上時自動發放「檔案完善」成就徽章。所有檔案資訊都可透過個人頁面API查詢和更新。', levelPoints: 25, rewardPoints: 38, category: 'daily', level: '全等級', completed: false, icon: '📲', frequency: '一次性', image: '/images/tasks/task-6.jpg' },
 
   // 💰 理財學習任務 (6個)
-  { id: 7, title: '點擊閱讀文章', description: '閱讀理財相關文章', levelPoints: 10, rewardPoints: 15, category: 'financial', level: '全等級', completed: false, icon: '📖', frequency: '每週最多3篇' },
-  { id: 8, title: '播放影片', description: '觀看理財教學影片', levelPoints: 15, rewardPoints: 25, category: 'financial', level: '全等級', completed: false, icon: '🎬', frequency: '每週最多3支' },
-  { id: 9, title: '完成小測驗', description: '完成理財知識測驗', levelPoints: 25, rewardPoints: 40, category: 'financial', level: '全等級', completed: false, icon: '📝', frequency: '每月最多3次' },
-  { id: 10, title: '完成開戶流程說明', description: '觀看開戶說明影片', levelPoints: 50, rewardPoints: 80, category: 'financial', level: '全等級', completed: false, icon: '🏦', frequency: '一次性' },
-  { id: 11, title: '訂閱市場分析報告', description: '訂閱接收市場分析', levelPoints: 30, rewardPoints: 50, category: 'financial', level: '全等級', completed: false, icon: '📊', frequency: '一次性' },
-  { id: 12, title: '追蹤官方社群', description: '追蹤官方社群平台', levelPoints: 20, rewardPoints: 30, category: 'financial', level: '全等級', completed: false, icon: '👍', frequency: '一次性' },
+  { id: 7, title: '完成金融知識測驗', description: '通過基礎理財知識測試', details: '完成10題金融知識測驗題目。後端計算測驗得分，若達70分以上則記錄「已通過測驗」狀態至用戶資料表。系統在用戶檔案中保存最高成績和測驗參加次數（每月限3次）。通過者的財務素養等級會被更新至檔案中，用於後續個性化推薦。', levelPoints: 35, rewardPoints: 52, category: 'financial', level: '全等級', completed: false, icon: '📝', frequency: '每月最多3次', image: '/images/tasks/task-7.jpg' },
+  { id: 8, title: '觀看線上課程視頻', description: '完成理財教育課程學習', details: '在課程平台觀看理財教育視頻（「基金投資入門」、「資產配置原理」等），每個課程15分鐘。後端追蹤您的觀看進度，完成率達90%以上時自動標記課程為「已完成」並存儲至用戶學習紀錄表。系統自動計算您的學習時數統計。', levelPoints: 45, rewardPoints: 68, category: 'financial', level: '全等級', completed: false, icon: '🎓', frequency: '每週最多2個', image: '/images/tasks/task-8.jpg' },
+  { id: 9, title: '建立借貸需求檔案', description: '填寫貸款需求基本資訊', details: '在借貸評估頁面填寫年收入、負債情況、借貸目的等資訊。後端驗證並將資訊存儲至用戶借貸檔案表。系統根據您提供的資料計算簡單的借貸風險評分（0-100分），並將評分存儲供後續查詢。此資料用於個性化的借貸產品推薦。', levelPoints: 80, rewardPoints: 120, category: 'financial', level: 'Lv2+', completed: false, icon: '💳', frequency: '一次性', image: '/images/tasks/task-9.jpg' },
+  { id: 10, title: '建立投資組合記錄', description: '記錄您的首個虛擬投資組合', details: '在投資組合面板建立一個虛擬投資組合（選擇3-5檔基金，虛擬分配資金比例）。後端存儲該組合至投資組合表，並為其生成唯一的組合ID。系統定期計算該組合的虛擬淨值變化，用於教學演示目的。組合資料可被查詢、編輯和刪除。', levelPoints: 150, rewardPoints: 225, category: 'financial', level: 'Lv2+', completed: false, icon: '📈', frequency: '一次性', image: '/images/tasks/task-10.jpg' },
+  { id: 11, title: '設定投資提醒規則', description: '配置投資市場提醒', details: '設定投資提醒規則，如「當指定股票價格下跌5%時提醒我」。後端將提醒規則存儲至用戶提醒配置表。系統每日檢查市場數據（使用模擬數據），若觸發規則條件則在用戶帳戶中生成通知記錄。提醒可被啟用、禁用或刪除。', levelPoints: 120, rewardPoints: 180, category: 'financial', level: 'Lv2+', completed: false, icon: '⚙️', frequency: '一次性', image: '/images/tasks/task-11.jpg' },
+  { id: 12, title: '參與線上學習論壇', description: '在討論區發表理財心得', details: '在學習論壇發表理財相關心得文章或評論（至少150字）。後端驗證內容後將其存儲至論壇貼文表，並與用戶帳戶關聯。系統記錄發文者和評論互動數據。活躍參與者的發言將顯示在社群推薦版面。', levelPoints: 70, rewardPoints: 105, category: 'financial', level: '全等級', completed: false, icon: '🎤', frequency: '每月最多2場', image: '/images/tasks/task-12.jpg' },
 
   // 📊 投資實踐任務 (6個)
-  { id: 13, title: '完成風險測驗', description: '完成投資風險評估', levelPoints: 30, rewardPoints: 50, category: 'investment', level: '全等級', completed: false, icon: '⚖️', frequency: '一次性' },
-  { id: 14, title: '使用退休計算器', description: '計算退休所需資金', levelPoints: 20, rewardPoints: 35, category: 'investment', level: '全等級', completed: false, icon: '🧮', frequency: '每月最多3次' },
-  { id: 15, title: '設定儲蓄目標', description: '設定個人儲蓄目標', levelPoints: 30, rewardPoints: 50, category: 'investment', level: '全等級', completed: false, icon: '🎯', frequency: '一次性' },
-  { id: 16, title: '填寫開戶意向調查', description: '填寫開戶意願表單', levelPoints: 100, rewardPoints: 150, category: 'investment', level: '全等級', completed: false, icon: '📋', frequency: '一次性' },
-  { id: 17, title: '完善投資偏好', description: '完整填寫投資偏好', levelPoints: 60, rewardPoints: 100, category: 'investment', level: '全等級', completed: false, icon: '💼', frequency: '一次性' },
-  { id: 18, title: '預約理專諮詢', description: '預約專業理財諮詢', levelPoints: 150, rewardPoints: 200, category: 'investment', level: 'Lv2+', completed: false, icon: '🤝', frequency: '一次性' },
+  { id: 13, title: '完成風險承受能力評估', description: '填寫投資風險問卷', details: '完成15題風險評估問卷。後端根據您的答案計算風險等級（低/中/高），並將結果存儲至用戶風險檔案表。系統根據風險等級在資料庫中記錄對應的推薦產品類型。評估結果可隨時被查詢和更新。', levelPoints: 60, rewardPoints: 90, category: 'investment', level: '全等級', completed: false, icon: '⚖️', frequency: '一次性', image: '/images/tasks/task-13.jpg' },
+  { id: 14, title: '建立定期定額投資計畫', description: '設定月定投計畫參數', details: '在投資計畫頁面設定月定投參數（每月金額、投資週期、目標資產等）。後端將計畫資料存儲至用戶投資計畫表，產生計畫ID。系統根據計畫生成預期投資時程表並存儲至排程表。計畫可被隨時修改或停止，所有修改記錄保留於審計日誌。', levelPoints: 100, rewardPoints: 150, category: 'investment', level: 'Lv2+', completed: false, icon: '💰', frequency: '一次性', image: '/images/tasks/task-14.jpg' },
+  { id: 15, title: '建立投資帳戶記錄', description: '在系統中註冊投資帳戶', details: '填寫並提交投資帳戶資訊（帳戶類型、帳戶號碼、金融機構）。後端驗證帳戶號碼格式，將帳戶資訊加密存儲至用戶帳戶表。系統為帳戶產生唯一編號和建立日期戳記。帳戶狀態被設定為「已驗證」，解鎖交易記錄功能。', levelPoints: 120, rewardPoints: 180, category: 'investment', level: 'Lv2+', completed: false, icon: '📊', frequency: '一次性', image: '/images/tasks/task-15.jpg' },
+  { id: 16, title: '記錄虛擬投資交易', description: '記錄一筆虛擬投資交易', details: '在交易記錄頁面輸入虛擬交易資訊（買入股票代號、數量、虛擬價格、交易日期）。後端驗證輸入資料並存儲至用戶交易紀錄表。系統根據買入和當前虛擬市價計算虛擬損益，並將損益資料存儲至投資績效表供統計查詢。', levelPoints: 200, rewardPoints: 300, category: 'investment', level: 'Lv2+', completed: false, icon: '📈', frequency: '一次性', image: '/images/tasks/task-16.jpg' },
+  { id: 17, title: '設定投資限制和額度', description: '配置個人投資風險限制', details: '設定您的投資限制參數，如「單次最大投資額NT$100,000」、「單一股票最高持股比例30%」。後端將限制規則存儲至用戶風控規則表。系統在用戶進行交易時檢查這些規則，若違反規則則拒絕交易並提示原因。所有規則修改記錄保留在稽核日誌中。', levelPoints: 180, rewardPoints: 270, category: 'investment', level: 'Lv3+', completed: false, icon: '💳', frequency: '一次性', image: '/images/tasks/task-17.jpg' },
+  { id: 18, title: '建立個人投資日誌', description: '記錄投資心得和分析', details: '在投資日誌區域撰寫投資心得、市場分析或交易總結（至少200字）。後端驗證內容後存儲至用戶投資日誌表，並與相關交易記錄關聯。系統記錄日誌建立日期、最後編輯時間，並支援日誌的搜尋和標籤分類功能。', levelPoints: 200, rewardPoints: 300, category: 'investment', level: 'Lv3+', completed: false, icon: '🤝', frequency: '無限', image: '/images/tasks/task-18.jpg' },
 
   // 🌱 永續行動任務 (6個)
-  { id: 19, title: '閱讀ESG文章', description: '閱讀永續相關文章', levelPoints: 10, rewardPoints: 15, category: 'esg', level: '全等級', completed: false, icon: '🌱', frequency: '每週最多3篇' },
-  { id: 20, title: 'ESG知識測驗', description: '完成ESG知識測驗', levelPoints: 20, rewardPoints: 30, category: 'esg', level: '全等級', completed: false, icon: '♻️', frequency: '每月最多3次' },
-  { id: 21, title: '使用碳足跡計算器', description: '計算個人碳足跡', levelPoints: 25, rewardPoints: 40, category: 'esg', level: '全等級', completed: false, icon: '🌍', frequency: '一次性' },
-  { id: 22, title: '設定綠色目標', description: '設定環保行動目標', levelPoints: 30, rewardPoints: 50, category: 'esg', level: 'Lv2+', completed: false, icon: '🎋', frequency: '一次性' },
-  { id: 23, title: '分享ESG內容', description: '分享永續相關內容', levelPoints: 15, rewardPoints: 25, category: 'esg', level: 'Lv2+', completed: false, icon: 'star', frequency: '每週最多3次' },
-  { id: 24, title: '觀看ESG影片', description: '觀看永續教育影片', levelPoints: 15, rewardPoints: 25, category: 'esg', level: '全等級', completed: false, icon: '🎥', frequency: '每週最多3支' },
+  { id: 19, title: '完成ESG價值觀評估', description: '填寫永續投資偏好問卷', details: '完成ESG相關問卷（涵蓋環保態度、社會責任偏好、公司治理認知）。後端根據答案計算ESG偏好評分並存儲至用戶ESG檔案表。系統根據評分在資料庫中關聯推薦的永續投資產品類型供使用者後續查詢。', levelPoints: 45, rewardPoints: 68, category: 'esg', level: '全等級', completed: false, icon: '🌱', frequency: '一次性', image: '/images/tasks/task-19.jpg' },
+  { id: 20, title: '記錄永續投資組合', description: '建立永續主題投資組合記錄', details: '在投資組合頁面建立一個永續主題虛擬投資組合（選擇環保、社會責任或治理相關基金）。後端存儲該永續組合至投資組合表，標籤標記為「ESG」。系統定期計算該組合的虛擬績效並存儲至績效歷史表，便於追蹤永續投資成果。', levelPoints: 140, rewardPoints: 210, category: 'esg', level: 'Lv2+', completed: false, icon: '🌿', frequency: '一次性', image: '/images/tasks/task-20.jpg' },
+  { id: 21, title: '設定永續投資目標', description: '建立個人永續投資目標', details: '設定個人永續投資目標（如「未來2年投資淨值100萬至永續基金」）。後端將目標存儲至用戶永續目標表，產生進度追蹤ID。系統定期比對您的永續投資額度與目標，計算進度百分比並存儲至目標進度表供查詢。', levelPoints: 120, rewardPoints: 180, category: 'esg', level: 'Lv2+', completed: false, icon: '🌍', frequency: '一次性', image: '/images/tasks/task-21.jpg' },
+  { id: 22, title: '建立慈善捐款記錄', description: '記錄個人慈善捐款計畫', details: '在慈善管理頁面建立捐款記錄（選擇慈善機構、捐款金額、捐款目的）。後端將捐款記錄存儲至用戶捐款表，產生捐款收據編號。系統累計用戶的年度捐款總額並存儲統計數據，供用戶查詢捐款歷史和稅務申報之用。', levelPoints: 130, rewardPoints: 195, category: 'esg', level: 'Lv2+', completed: false, icon: '❤️', frequency: '一次性', image: '/images/tasks/task-22.jpg' },
+  { id: 23, title: '撰寫永續投資文章', description: '發表ESG投資心得文章', details: '在永續投資論壇撰寫文章分享您的ESG投資心得（至少300字）。後端驗證內容後將其存儲至論壇貼文表，並標籤標記為「ESG」。系統記錄文章點擊數、按讚數、評論數等互動指標，定期統計最受歡迎的文章作者。', levelPoints: 80, rewardPoints: 120, category: 'esg', level: 'Lv2+', completed: false, icon: '📢', frequency: '每月最多2次', image: '/images/tasks/task-23.jpg' },
+  { id: 24, title: '參與永續投資討論', description: '在論壇參與ESG投資討論', details: '在永續投資討論區提出見解、評論或提問（至少150字），參與關於ESG投資的社群討論。後端驗證內容後存儲至論壇評論表。系統記錄您的參與次數和互動評分，積極參與者將被邀請為社群版主或參與特別活動。', levelPoints: 150, rewardPoints: 225, category: 'esg', level: 'Lv3+', completed: false, icon: '🎓', frequency: '每季1次', image: '/images/tasks/task-24.jpg' },
 
   // 🎁 社群成就任務 (6個)
-  { id: 25, title: '邀請好友註冊', description: '成功邀請好友加入', levelPoints: 50, rewardPoints: 100, category: 'social', level: 'Lv2+', completed: false, icon: '👥', frequency: '無限' },
-  { id: 26, title: '首次升級獎勵', description: '達成等級提升', levelPoints: 50, rewardPoints: 80, category: 'social', level: '全等級', completed: false, icon: '🎖️', frequency: '每等級一次' },
-  { id: 27, title: '參加線上說明會', description: '報名並參加說明會', levelPoints: 120, rewardPoints: 180, category: 'social', level: 'Lv2+', completed: false, icon: '🎤', frequency: '每次活動' },
-  { id: 28, title: '完成新手任務', description: '完成5個基礎任務', levelPoints: 80, rewardPoints: 120, category: 'social', level: 'Lv1', completed: false, icon: '🌟', frequency: '一次性' },
-  { id: 29, title: '連續活躍獎勵', description: '當月完成10個以上任務', levelPoints: 100, rewardPoints: 150, category: 'social', level: 'Lv2+', completed: false, icon: '🏆', frequency: '每月' },
-  { id: 30, title: '社群貢獻獎', description: '當月互動達20次', levelPoints: 60, rewardPoints: 100, category: 'social', level: 'Lv3+', completed: false, icon: '🎁', frequency: '每月' },
+  { id: 25, title: '邀請3位朋友完成認證', description: '成功推薦朋友註冊帳戶', details: '透過邀請碼邀請3位朋友完成帳戶註冊和身份驗證。後端在用戶推薦關係表中記錄這3位被邀請者的資訊。系統自動為您記錄「推薦人數：3」成就。當被邀請者完成首筆交易後，系統自動為您和被邀請者各增加50積分獎勵。', levelPoints: 100, rewardPoints: 150, category: 'social', level: '全等級', completed: false, icon: '👥', frequency: '一次性', image: '/images/tasks/task-25.jpg' },
+  { id: 26, title: '達成 Creator 等級升級', description: '累積升級點數至250點', details: '通過完成日常、理財和投資任務，累積升級點數達250點。後端自動檢測用戶升級點數並比對升級條件。達成250點時，系統自動在用戶檔案表中將等級更新為「Creator」，並發送升級通知。Creator等級用戶將在檔案中被標記為「創造者」身份。', levelPoints: 100, rewardPoints: 150, category: 'social', level: '全等級', completed: false, icon: '⭐', frequency: '每等級一次', image: '/images/tasks/task-26.jpg' },
+  { id: 27, title: '達成 Visionary 等級升級', description: '累積升級點數至750點', details: '通過持續完成各類任務，特別是理財和投資任務，累積升級點數達750點。後端自動檢測升級點數並確認所有升級條件。達成750點時，系統自動更新用戶等級為「Visionary」，並在檔案中記錄升級時間戳記。Visionary等級用戶可解鎖進階投資功能。', levelPoints: 200, rewardPoints: 300, category: 'social', level: '全等級', completed: false, icon: '🌟', frequency: '每等級一次', image: '/images/tasks/task-27.jpg' },
+  { id: 28, title: '達成 Luminary 等級升級', description: '累積升級點數至1500點', details: '通過長期投資參與和高頻交易，累積升級點數達1500點。後端自動驗證升級點數並檢查所有先決條件。達成1500點時，系統自動將用戶等級升級至「Luminary」（最高等級），並在檔案中記錄升級成就。Luminary等級用戶將獲得特殊的VIP功能標籤。', levelPoints: 300, rewardPoints: 450, category: 'social', level: '全等級', completed: false, icon: '👑', frequency: '每等級一次', image: '/images/tasks/task-28.jpg' },
+  { id: 29, title: '累積月度交易額到100萬', description: '單月虛擬投資成交額突破', details: '在系統中記錄的虛擬投資交易單月總額達NT$1,000,000以上。後端自動累計用戶的月度交易額，當達到100萬時自動在成就紀錄表中記錄「月度百萬交易達成」。系統將此成就儲存於用戶檔案中並可被查詢統計。', levelPoints: 250, rewardPoints: 375, category: 'social', level: 'Lv3+', completed: false, icon: '💎', frequency: '每月', image: '/images/tasks/task-29.jpg' },
+  { id: 30, title: '累積社群貢獻成為大使', description: '累積社群互動和推薦成就', details: '透過完成推薦任務、發表論壇文章、參與討論等社群活動，累積貢獻值達100分。後端綜合統計您的推薦人數、論壇發文數、互動評分等數據。達成100分時，系統自動在用戶成就表中記錄「社群大使」成就，並在檔案中標記此身份供應用展示。', levelPoints: 350, rewardPoints: 525, category: 'social', level: 'Lv3+', completed: false, icon: '🏅', frequency: '一次性', image: '/images/tasks/task-30.jpg' },
 ].map(task => ({ ...task, points: task.levelPoints })) // 向後兼容
 
 // 任務分類配色系統
@@ -186,7 +186,7 @@ export const mockRewards = [
     description: '市價NT$400',
     marketPrice: 'NT$400',
     levelRestriction: 'lv1_only',
-    details: '台灣品牌沐muhair研發的無塑包裝固態洗髮精，蘊含天然植物萃取成分，溫和不刺激頭皮。每塊重量約80克，相當於400ml液態洗髮精使用量。固態設計方便攜帶，適合旅行或健身使用。泡沫豐富細緻，清潔力佳且易沖洗，完全零塑膠包裝，實踐無塑生活理念。',
+    details: '無塑包裝固態洗髮精蘊含天然植物萃取成分，溫和不刺激頭皮。每塊重量約80克，相當於400ml液態洗髮精使用量。固態設計方便攜帶，適合旅行或健身使用。泡沫豐富細緻，清潔力佳且易沖洗，零塑膠包裝，實踐無塑生活理念。',
   },
   {
     id: 6,
@@ -202,7 +202,7 @@ export const mockRewards = [
     description: '市價NT$450',
     marketPrice: 'NT$450',
     levelRestriction: 'lv1_only',
-    details: '經典百搭設計的托特包，厚磅數帆布材質製作，耐磨耐用且容量充足。內層附有拉鍊口袋與多格收納設計，方便整理隨身物品。提把加厚處理，長時間揹負也不勒手。中性色調適合各種穿搭風格，是日常通勤、購物、休閒外出的最佳選擇。',
+    details: '採用厚磅環保帆布製作，耐磨耐用、容量充足，足以容納日常通勤或購物所需。加厚提把設計減輕長時間揹負的負擔，內層簡易口袋便於整理小物。簡約百搭的風格，從通勤到休閒外出都能輕鬆駕馭。',
   },
   {
     id: 7,
@@ -218,7 +218,7 @@ export const mockRewards = [
     description: '市價NT$450',
     marketPrice: 'NT$450',
     levelRestriction: 'lv1_only',
-    details: 'Re-ing品牌推出的環保便當盒，結合天然竹纖維與玉米澱粉複合材料，可完全生物降解。雙層設計附有密封蓋與分隔餐盤，容量約800ml。耐熱溫度達120度，可微波加熱使用。輕量化設計方便攜帶，是上班族與學生族群的環保餐具首選。',
+    details: '環保便當盒結合天然竹纖維與玉米澱粉複合材料，可完全生物降解。雙層設計附有密封蓋與分隔餐盤，容量約800ml。耐熱溫度達120度，可微波加熱使用。輕量化設計方便攜帶，是上班族與學生族群的環保餐具首選。',
   },
   {
     id: 8,
@@ -234,7 +234,7 @@ export const mockRewards = [
     description: '市價NT$590',
     marketPrice: 'NT$590',
     levelRestriction: 'lv1_only',
-    details: '來自SUCCULAND精選的多肉植物盆栽，包含陶瓷盆器與優質培養土。每株植物經過專業園藝師悉心照料，健康茁壯。多肉植物易於照顧，適合辦公桌或居家擺設，能淨化空氣並增添綠意。附贈基礎養護說明卡，即使是園藝新手也能輕鬆上手。',
+    details: '來自SUCCULAND精選的多肉植物盆栽，包含陶瓷盆器與培養土。每株經過專業園藝師悉心照料，健康茁壯。多肉植物易於照顧，適合辦公桌或居家擺設，能淨化空氣並增添綠意。附贈養護說明卡，即使是園藝新手也能輕鬆上手。',
   },
 
   // 🪴 質感創造系列 - Lv2 Creator (禮品 9-16)
@@ -252,7 +252,7 @@ export const mockRewards = [
     description: '市價NT$650',
     marketPrice: 'NT$650',
     levelRestriction: 'lv2_plus',
-    details: 'ekax設計的雲朵造型筆電包，防潑水尼龍布料外層，內裡為柔軟絨布保護層。適用13-14吋筆電，輕量化設計僅重300克。前方拉鍊袋可收納滑鼠、充電線等配件。簡約圓潤的外型搭配多色選擇，兼具實用性與時尚感，是數位工作者的貼心配件。',
+    details: '雲朵造型筆電包採用防潑水尼龍布料外層，內裡為柔軟絨布保護層。適用13-14吋筆電，輕量化設計僅重300克。前方拉鍊袋可收納滑鼠、充電線等配件。簡約圓潤的外型搭配多色選擇，兼具實用性與時尚感，是數位工作者的貼心配件。',
   },
   {
     id: 10,
@@ -268,7 +268,7 @@ export const mockRewards = [
     description: '市價NT$700',
     marketPrice: 'NT$700',
     levelRestriction: 'lv2_plus',
-    details: 'smellscape香氛品牌的擴香石禮盒，內含手工製作的石膏擴香座與10ml天然精油。擴香石運用吸水性佳的石膏材質，滴入精油後能持續散發香氛達3-5天。無需插電或點火，安全環保。精油選用薰衣草、柑橘或檀木等天然配方，為居家空間營造放鬆氛圍。',
+    details: '擴香石禮盒內含手工製作的石膏擴香座與10ml天然精油。擴香石運用吸水性佳的石膏材質，滴入精油後能持續散發香氛達3-5天。無需插電或點火，安全環保。精油選用薰衣草、柑橘或檀木等天然配方，為居家空間營造放鬆氛圍。',
   },
   {
     id: 11,
@@ -284,7 +284,7 @@ export const mockRewards = [
     description: '市價NT$890',
     marketPrice: 'NT$890',
     levelRestriction: 'lv2_plus',
-    details: 'MOFT創新設計的磁吸式卡包支架，優質PU皮革與強力磁鐵製成。可吸附於手機背面，收納3-5張卡片。內建隱藏式支架功能，可調整多種觀看角度。厚度僅5mm，不影響手機握感。適用於支援MagSafe的iPhone機型，是極簡主義者的理想選擇。',
+    details: '磁吸式卡包支架以優質PU皮革與強力磁鐵製成，可吸附於手機背面收納3-5張卡片。內建隱藏式支架功能，可調整多種觀看角度。厚度僅5mm，不影響手機握感。適用於支援MagSafe的iPhone機型，是極簡主義者的理想選擇。',
   },
   {
     id: 12,
@@ -300,7 +300,7 @@ export const mockRewards = [
     description: '市價NT$930',
     marketPrice: 'NT$930',
     levelRestriction: 'lv2_plus',
-    details: '職人手工縫製的真皮名片夾，嚴選義大利植鞣牛皮製作，隨使用時間會呈現獨特光澤與色澤變化。內部雙層設計可收納約30張名片，另有暗袋可放置重要卡片。精緻車縫線展現工藝細節，適合商務場合使用，彰顯專業品味與個人風格。',
+    details: '職人手工縫製的真皮名片夾，嚴選義大利植鞣牛皮製作，隨使用時間呈現獨特光澤與色澤變化。內部雙層設計可收納約30張名片，另有暗袋放置重要卡片。精緻車縫線展現工藝細節，適合商務場合使用，彰顯專業品味與個人風格。',
   },
   {
     id: 13,
@@ -316,7 +316,7 @@ export const mockRewards = [
     description: '市價NT$930',
     marketPrice: 'NT$930',
     levelRestriction: 'lv2_plus',
-    details: 'Umbra設計的創意臘腸狗造型戒指收納座，樹脂材質製成，表面經拋光處理呈現溫潤質感。狗狗身體各部位設計為戒指收納柱，可同時收納多枚戒指、手鍊等飾品。可愛療癒的造型兼具實用功能，擺放於梳妝台或床頭櫃，為生活空間增添趣味與溫度。',
+    details: '創意臘腸狗造型戒指收納座，樹脂材質製成，表面拋光呈現溫潤質感。狗狗身體各部位設計為戒指收納柱，可同時收納多枚戒指、手鍊等飾品。可愛療癒的造型兼具實用功能，擺放於梳妝台或床頭櫃，為生活空間增添趣味與溫度。',
   },
   {
     id: 14,
@@ -332,7 +332,7 @@ export const mockRewards = [
     description: '市價NT$959',
     marketPrice: 'NT$959',
     levelRestriction: 'lv2_plus',
-    details: 'ROOMMI智能充電式感應垃圾桶，採用紅外線感應技術，手靠近即自動開蓋，3秒後自動關閉。內建USB充電式鋰電池，充電一次可使用約60天。容量10公升，適合臥室、書房或浴室使用。桶身採用ABS材質，防水易清潔，配備垃圾袋固定環設計，實用便利。',
+    details: '採用紅外線感應技術，手靠近即自動開蓋，3秒後自動關閉。內建USB充電式鋰電池，充電一次可使用約60天。容量10公升，適合臥室、書房或浴室使用。桶身採用ABS材質，防水易清潔，配備垃圾袋固定環設計，實用便利。',
   },
   {
     id: 15,
@@ -348,7 +348,7 @@ export const mockRewards = [
     description: '市價NT$1,148',
     marketPrice: 'NT$1,148',
     levelRestriction: 'lv2_plus',
-    details: '日本KINTO品牌的提式保溫瓶，雙層真空不鏽鋼結構，保溫效果達6小時、保冷效果達12小時。容量500ml，瓶口寬度適中便於清洗與加冰塊。獨特提把設計方便攜帶，啞光霧面塗層質感細膩。簡約俐落的外型適合各種場合使用，是質感生活的日常良伴。',
+    details: '提式保溫瓶採用雙層真空不鏽鋼結構，保溫效果達6小時、保冷效果達12小時。容量500ml，瓶口寬度適中便於清洗與加冰塊。獨特提把設計方便攜帶，啞光霧面塗層質感細膩。簡約俐落的外型適合各種場合，是質感生活的日常良伴。',
   },
   {
     id: 16,
@@ -364,7 +364,7 @@ export const mockRewards = [
     description: '市價NT$1,501',
     marketPrice: 'NT$1,501',
     levelRestriction: 'lv2_plus',
-    details: 'MOMOCONCEPT設計的陶瓷保溫杯，優質陶瓷材質搭配食品級不鏽鋼內膽，保溫保冷效果俱佳。容量350ml，單手可握的尺寸設計。附有防漏矽膠密封圈與茶隔設計，適合沖泡茶飲。外觀呈現溫潤的陶瓷質感，多款素雅配色可選，展現獨特美學品味。',
+    details: '優質陶瓷材質搭配食品級不鏽鋼內膽，保溫保冷效果俱佳。容量350ml，單手可握的尺寸設計。附有防漏矽膠密封圈與茶隔設計，適合沖泡茶飲。外觀呈現溫潤的陶瓷質感，多款素雅配色可選，展現獨特美學品味。',
   },
 
   // 🕯️ 美學先鋒系列 - Lv3 Visionary (禮品 17-24)
@@ -382,7 +382,7 @@ export const mockRewards = [
     description: '市價NT$1,580',
     marketPrice: 'NT$1,580',
     levelRestriction: 'lv3_plus',
-    details: 'mordeco設計的創意轉轉零錢筒，透明壓克力材質製成，內部設有螺旋軌道。投入硬幣後會沿著軌道旋轉滑落，過程療癒有趣。上方開口設計方便投幣，底部可旋轉開啟取出零錢。容量可存放約500枚硬幣，不僅是實用的儲蓄工具，更是桌面上的趣味擺飾。',
+    details: '採用山毛櫸木與鋁合金製成，內部設有螺旋軌道。投入硬幣後沿著軌道旋轉滑落，過程療癒有趣。上方開口方便投幣，底部可旋轉開啟取出零錢。容量可存放約3000元零錢，不僅是實用的儲蓄工具，更是桌面趣味擺飾。',
   },
   {
     id: 18,
@@ -398,7 +398,7 @@ export const mockRewards = [
     description: '市價NT$1,790',
     marketPrice: 'NT$1,790',
     levelRestriction: 'lv3_plus',
-    details: 'Vana香氛蠟燭暖燈，結合蠟燭香氛與暖燈功能的創新設計。鹵素燈泡加熱方式，無明火更安全，可調節亮度營造氛圍。適用於各種香氛蠟燭罐，透過溫熱使香氛均勻擴散。燈罩採用金屬與玻璃材質，外型典雅現代，為居家空間增添溫馨質感與嗅覺享受。',
+    details: '瑞典設計香氛蠟燭暖燈，北歐極簡風格搭配春夏粉嫩色系。採鹵素燈加熱，無煙無焰無火方式融化蠟燭，避免隧道現象並延長蠟燭壽命(+20%)。可調光功能營造氛圍，適用高度11cm、直徑10cm以內的蠟燭。輕量金屬設計耐用易用，內附2顆鹵素燈泡，為居家增添溫馨與香氛享受。',
   },
   {
     id: 19,
@@ -414,7 +414,7 @@ export const mockRewards = [
     description: '市價NT$1,790',
     marketPrice: 'NT$1,790',
     levelRestriction: 'lv3_plus',
-    details: 'MUJI無印良品的超音波芬香噴霧器，超音波震盪技術將水與精油霧化噴出。水箱容量100ml，可持續運作約4小時，具備自動斷電安全設計。兩段式噴霧量調節，可依空間大小調整。簡約圓潤的白色外型，適合各種居家風格，為空間帶來舒適香氛與濕度調節。',
+    details: '超音波震盪技術將水與精油霧化噴出，適用3～4坪空間。可調式定時功能(180/120/60/30分鐘)，自動斷電安全設計。續航約3小時，簡約圓潤白色外型適合各種居家風格。適用於客廳、寢室、邊桌擺放，內附專用AC轉接器，為空間帶來舒適香氛與濕度調節。',
   },
   {
     id: 20,
@@ -430,7 +430,7 @@ export const mockRewards = [
     description: '市價NT$1,980',
     marketPrice: 'NT$1,980',
     levelRestriction: 'lv3_plus',
-    details: 'MOMAX無線充電行動電源，容量10000mAh，支援Qi無線充電與USB-C/USB-A有線充電。可同時為3台裝置充電，無線充電功率達15W。輕薄設計厚度僅15mm，重量約200克。LED電量顯示清楚易讀，內建多重安全保護機制，是外出必備的充電利器。',
+    details: '容量10000mAh，支援Qi無線充電(10W)與USB-C/USB-A有線充電。可同時為3台裝置充電，支援快充協議。輕薄設計厚度19mm，重量231克。LED電量顯示清楚易讀，內建多重安全保護機制，是外出必備的充電利器。',
   },
   {
     id: 21,
@@ -446,7 +446,7 @@ export const mockRewards = [
     description: '市價NT$2,480',
     marketPrice: 'NT$2,480',
     levelRestriction: 'lv3_plus',
-    details: 'JWAY智能砧板刀具烘乾消毒機，紫外線UV-C與熱風烘乾雙重殺菌技術，殺菌率達99.9%。可同時收納3個砧板與多把刀具，內部以不鏽鋼材質易清潔。智能定時功能，烘乾消毒約60分鐘自動斷電。有效防止細菌滋生與刀具生鏽，為廚房衛生把關。',
+    details: '紫外線UV-C、巴氏殺菌(65度120分鐘)與24小時循環殺菌，三重殺菌率達99.9%。配有三款TPU防霉砧板(生/熟食/蔬果分類)與刀具收納架，砧板可彎折倒菜、凹槽防汁液外流。獨立不銹鋼架設計便於清潔，底部滑水盤防漬檯面。為廚房食安與衛生的最佳把關。',
   },
   {
     id: 22,
@@ -462,7 +462,7 @@ export const mockRewards = [
     description: '市價NT$3,200',
     marketPrice: 'NT$3,200',
     levelRestriction: 'lv3_plus',
-    details: 'Oakywood無線充電盤，天然實木與強化玻璃製成，每件木紋紋理獨一無二。支援Qi無線充電標準，最高輸出15W快速充電。底部配備防滑矽膠墊，充電時穩固不位移。溫潤的木質觸感與簡約設計，將科技產品轉化為桌面上的藝術品，展現自然美學與現代工藝結合。',
+    details: '實木與不銹鋼手工製作，達30W無線快充，相容所有Qi設備。三色選擇——橡木、胡桃木、黑色，每件木紋獨一無二。支援大多數4mm以下手機殼，內附2米USB-C編織線與電源適配器。尺寸20x11x1.5cm，兼具藝術與功能，將科技轉化為桌面美學。',
   },
   {
     id: 23,
@@ -528,7 +528,7 @@ export const mockRewards = [
     description: '市價NT$5,850',
     marketPrice: 'NT$5,850',
     levelRestriction: 'lv4_only',
-    details: 'Porter日本經典品牌真皮公事包，嚴選頂級牛皮製作，隨使用時間呈現獨特皮革光澤。內部多層隔間設計可收納15吋筆電、文件與商務用品。附可拆卸肩背帶，手提肩背兩用。精密車工展現日本職人工藝，YKK拉鍊順暢耐用，是商務人士展現專業形象的最佳選擇。',
+    details: '頂級真皮公事包嚴選上乘牛皮製作，隨使用時間呈現獨特皮革光澤。內部多層隔間設計可收納15吋筆電、文件與商務用品。附可拆卸肩背帶，手提肩背兩用。精密車工展現職人工藝，YKK拉鍊順暢耐用，是商務人士展現專業形象的最佳選擇。',
   },
   {
     id: 27,
@@ -544,7 +544,7 @@ export const mockRewards = [
     description: '市價NT$7,020',
     marketPrice: 'NT$7,020',
     levelRestriction: 'lv4_only',
-    details: 'LAMY 2000鋼筆，德國包浩斯設計經典之作，自1966年問世至今歷久不衰。筆身樹脂纖維與不鏽鋼材質，霧面處理質感細膩。14K金筆尖書寫滑順，墨水以活塞上墨系統，墨水容量大。人體工學設計長時間書寫不疲累，是書寫愛好者與收藏家的夢幻逸品。',
+    details: '德國包浩斯設計經典鋼筆，自1966年問世至今歷久不衰。筆身樹脂纖維與不鏽鋼材質，霧面處理質感細膩。14K金筆尖書寫滑順，墨水以活塞上墨系統，墨水容量大。人體工學設計長時間書寫不疲累，是書寫愛好者與收藏家的夢幻逸品。',
   },
   {
     id: 28,
@@ -662,6 +662,8 @@ export const levelConfig = [
     bgColor: '#d1fae5',
     gradientFrom: 'from-emerald-300',
     gradientTo: 'to-emerald-600',
+    gradientFromHex: '#6ee7b7',
+    gradientToHex: '#059669',
     icon: 'star'
   },
   {
@@ -676,6 +678,8 @@ export const levelConfig = [
     bgColor: '#dbeafe',
     gradientFrom: 'from-cyan-400',
     gradientTo: 'to-blue-500',
+    gradientFromHex: '#67e8f9',
+    gradientToHex: '#1d4ed8',
     icon: 'star'
   },
   {
@@ -690,6 +694,8 @@ export const levelConfig = [
     bgColor: '#fef3c7',
     gradientFrom: 'from-amber-300',
     gradientTo: 'to-amber-600',
+    gradientFromHex: '#fcd34d',
+    gradientToHex: '#d97706',
     icon: 'star'
   },
   {
@@ -704,6 +710,8 @@ export const levelConfig = [
     bgColor: '#ede9fe',
     gradientFrom: 'from-purple-300',
     gradientTo: 'to-purple-600',
+    gradientFromHex: '#c4b5fd',
+    gradientToHex: '#7c3aed',
     icon: 'star'
   },
 ]
