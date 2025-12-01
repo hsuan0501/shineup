@@ -15,8 +15,19 @@
         </svg>
       </button>
 
-      <!-- 內容區 -->
-      <div class="flex flex-col">
+      <!-- 左右排列內容 -->
+      <div class="flex flex-col sm:flex-row gap-6">
+        <!-- 左側：圖片區 -->
+        <div class="flex-shrink-0 relative">
+          <div class="relative w-48 h-48 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
+            <!-- 任務圖示區域 -->
+            <div :class="getTaskIconBgClass(task.category)" class="w-32 h-32 rounded-2xl flex items-center justify-center">
+              <span class="text-5xl">{{ task.icon || '📋' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右側：說明區 -->
         <div class="flex-1 flex flex-col">
           <!-- 標題與標籤 -->
           <div class="mb-3">
@@ -40,10 +51,10 @@
             </p>
           </div>
 
-          <!-- 底部區域：積分 + 按鈕 -->
-          <div class="space-y-2.5">
+          <!-- 底部區域：積分 + 按鈕（同行） -->
+          <div class="flex gap-2.5">
             <!-- 積分顯示 -->
-            <div class="flex items-center justify-between px-4 py-2.5 rounded-lg bg-gradient-to-r from-purple-50 to-cyan-50 dark:from-purple-900/20 dark:to-cyan-900/20">
+            <div class="flex-1 flex items-center justify-between px-4 py-2.5 rounded-lg bg-gradient-to-r from-purple-50 to-cyan-50 dark:from-purple-900/20 dark:to-cyan-900/20">
               <span class="text-sm font-medium text-light-text dark:text-dark-text">獲得積分</span>
               <span :class="getPointsColorClass(task.category)" class="text-lg font-bold">
                 +{{ task.points }}
@@ -52,7 +63,7 @@
 
             <!-- 完成按鈕 -->
             <button
-              class="w-full px-5 py-2.5 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-400 hover:from-purple-600 hover:to-cyan-500 text-white font-medium shadow-md transition-all duration-300 hover:scale-[1.02]">
+              class="flex-1 px-5 py-2.5 rounded-lg text-white font-medium shadow-md transition-all duration-300 hover:opacity-90 hover:scale-[1.02] bg-gradient-to-br from-cyan-400 to-blue-500">
               立即完成
             </button>
           </div>

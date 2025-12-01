@@ -1,9 +1,12 @@
 <template>
     <div class="relative z-10 w-full overflow-hidden py-1">
+        <!-- Gift Detail Modal -->
+        <GiftDetailModal :isOpen="isGiftModalOpen" :gift="selectedGift" @close="closeGiftModal" />
         <!-- First Row - Left to Right (Gifts 1-12) -->
         <div class="flex gap-2 sm:gap-3 animate-scroll-left mb-2 sm:mb-3 overflow-visible">
             <div v-for="gift in [...firstRowGifts, ...firstRowGifts]" :key="gift.id + '-row1'"
-                class="relative flex-shrink-0 w-40 sm:w-48 md:w-52 lg:w-60 p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300">
+                @click="openGiftModal(gift)"
+                class="relative flex-shrink-0 w-40 sm:w-48 md:w-52 lg:w-60 p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300 cursor-pointer">
                 <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
                     <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
                 </div>
@@ -19,7 +22,8 @@
         <!-- Second Row - Right to Left (Gifts 13-24) -->
         <div class="flex gap-2 sm:gap-3 animate-scroll-right overflow-visible">
             <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'"
-                class="relative flex-shrink-0 w-40 sm:w-48 md:w-52 lg:w-60 p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300">
+                @click="openGiftModal(gift)"
+                class="relative flex-shrink-0 w-40 sm:w-48 md:w-52 lg:w-60 p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300 cursor-pointer">
                 <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
                     <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
                 </div>
@@ -35,8 +39,22 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { mockRewards } from '../../mock'
+import GiftDetailModal from '../modals/GiftDetailModal.vue'
+
+// Gift Modal State
+const isGiftModalOpen = ref(false)
+const selectedGift = ref({})
+
+const openGiftModal = (gift) => {
+    selectedGift.value = gift
+    isGiftModalOpen.value = true
+}
+
+const closeGiftModal = () => {
+    isGiftModalOpen.value = false
+}
 
 // 滾動展示的禮品 - 兩排都從最便宜的開始顯示
 // 第一排：永續探索(綠色,1-8) + 質感創造(藍色,9-16) - 向左滾動，最左邊顯示第1個

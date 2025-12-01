@@ -122,6 +122,7 @@ export const mockRewards = [
     description: '市價NT$280',
     marketPrice: 'NT$280',
     levelRestriction: 'lv1_only',
+    details: '環保樹脂製成的種子鉛筆，寫完後可種植於土壤中，發芽成長為真實植物。每組包含5支不同類型的種子鉛筆：番茄、薄荷、向日葵、羅勒和迷迭香。完全可生物分解，是永續生活的最佳選擇。',
   },
   {
     id: 2,
@@ -137,6 +138,7 @@ export const mockRewards = [
     description: '市價NT$300',
     marketPrice: 'NT$300',
     levelRestriction: 'lv1_only',
+    details: '食品級不鏽鋼材質製成，配備便攜布套與專用清潔刷。組合包含直吸管、彎吸管和扁吸管各1支，適應各種飲品容器。耐用性強，可重複使用超過3年，完全避免一次性塑膠吸管污染。是日常外出必備的環保好物。',
   },
   {
     id: 3,
@@ -152,6 +154,7 @@ export const mockRewards = [
     description: '市價NT$390',
     marketPrice: 'NT$390',
     levelRestriction: 'lv1_only',
+    details: '台灣設計品牌印花樂打造的環保布料包袋，100%有機棉布料製作。印花圖案由設計師手繪，每件都是獨一無二。耐用的雙層結構適合日常購物、外出攜帶，可容納A4大小物品。支持本土設計，體現永續消費的理念。',
   },
   {
     id: 4,
@@ -167,6 +170,7 @@ export const mockRewards = [
     description: '市價NT$400',
     marketPrice: 'NT$400',
     levelRestriction: 'lv1_only',
+    details: '100%回收紙漿製造的環保筆記本，封面以植物性染料著色。頁數為200頁，線圈裝訂方便翻閱與拆頁。紙質柔和舒適，適合日常手寫筆記、日記或創意記錄。每本購買都支持全球廢紙回收計畫，實踐循環經濟。',
   },
   {
     id: 5,
@@ -182,6 +186,7 @@ export const mockRewards = [
     description: '市價NT$400',
     marketPrice: 'NT$400',
     levelRestriction: 'lv1_only',
+    details: '台灣品牌沐muhair研發的無塑包裝固態洗髮精，蘊含天然植物萃取成分，溫和不刺激頭皮。每塊重量約80克，相當於400ml液態洗髮精使用量。固態設計方便攜帶，適合旅行或健身使用。泡沫豐富細緻，清潔力佳且易沖洗，完全零塑膠包裝，實踐無塑生活理念。',
   },
   {
     id: 6,
@@ -197,6 +202,7 @@ export const mockRewards = [
     description: '市價NT$450',
     marketPrice: 'NT$450',
     levelRestriction: 'lv1_only',
+    details: '經典百搭設計的托特包，厚磅數帆布材質製作，耐磨耐用且容量充足。內層附有拉鍊口袋與多格收納設計，方便整理隨身物品。提把加厚處理，長時間揹負也不勒手。中性色調適合各種穿搭風格，是日常通勤、購物、休閒外出的最佳選擇。',
   },
   {
     id: 7,
@@ -212,6 +218,7 @@ export const mockRewards = [
     description: '市價NT$450',
     marketPrice: 'NT$450',
     levelRestriction: 'lv1_only',
+    details: 'Re-ing品牌推出的環保便當盒，結合天然竹纖維與玉米澱粉複合材料，可完全生物降解。雙層設計附有密封蓋與分隔餐盤，容量約800ml。耐熱溫度達120度，可微波加熱使用。輕量化設計方便攜帶，是上班族與學生族群的環保餐具首選。',
   },
   {
     id: 8,
@@ -227,6 +234,7 @@ export const mockRewards = [
     description: '市價NT$590',
     marketPrice: 'NT$590',
     levelRestriction: 'lv1_only',
+    details: '來自SUCCULAND精選的多肉植物盆栽，包含陶瓷盆器與優質培養土。每株植物經過專業園藝師悉心照料，健康茁壯。多肉植物易於照顧，適合辦公桌或居家擺設，能淨化空氣並增添綠意。附贈基礎養護說明卡，即使是園藝新手也能輕鬆上手。',
   },
 
   // 🪴 質感創造系列 - Lv2 Creator (禮品 9-16)
@@ -244,6 +252,7 @@ export const mockRewards = [
     description: '市價NT$650',
     marketPrice: 'NT$650',
     levelRestriction: 'lv2_plus',
+    details: 'ekax設計的雲朵造型筆電包，防潑水尼龍布料外層，內裡為柔軟絨布保護層。適用13-14吋筆電，輕量化設計僅重300克。前方拉鍊袋可收納滑鼠、充電線等配件。簡約圓潤的外型搭配多色選擇，兼具實用性與時尚感，是數位工作者的貼心配件。',
   },
   {
     id: 10,
@@ -259,6 +268,7 @@ export const mockRewards = [
     description: '市價NT$700',
     marketPrice: 'NT$700',
     levelRestriction: 'lv2_plus',
+    details: 'smellscape香氛品牌的擴香石禮盒，內含手工製作的石膏擴香座與10ml天然精油。擴香石運用吸水性佳的石膏材質，滴入精油後能持續散發香氛達3-5天。無需插電或點火，安全環保。精油選用薰衣草、柑橘或檀木等天然配方，為居家空間營造放鬆氛圍。',
   },
   {
     id: 11,
@@ -274,6 +284,7 @@ export const mockRewards = [
     description: '市價NT$890',
     marketPrice: 'NT$890',
     levelRestriction: 'lv2_plus',
+    details: 'MOFT創新設計的磁吸式卡包支架，優質PU皮革與強力磁鐵製成。可吸附於手機背面，收納3-5張卡片。內建隱藏式支架功能，可調整多種觀看角度。厚度僅5mm，不影響手機握感。適用於支援MagSafe的iPhone機型，是極簡主義者的理想選擇。',
   },
   {
     id: 12,
@@ -289,6 +300,7 @@ export const mockRewards = [
     description: '市價NT$930',
     marketPrice: 'NT$930',
     levelRestriction: 'lv2_plus',
+    details: '職人手工縫製的真皮名片夾，嚴選義大利植鞣牛皮製作，隨使用時間會呈現獨特光澤與色澤變化。內部雙層設計可收納約30張名片，另有暗袋可放置重要卡片。精緻車縫線展現工藝細節，適合商務場合使用，彰顯專業品味與個人風格。',
   },
   {
     id: 13,
@@ -304,6 +316,7 @@ export const mockRewards = [
     description: '市價NT$930',
     marketPrice: 'NT$930',
     levelRestriction: 'lv2_plus',
+    details: 'Umbra設計的創意臘腸狗造型戒指收納座，樹脂材質製成，表面經拋光處理呈現溫潤質感。狗狗身體各部位設計為戒指收納柱，可同時收納多枚戒指、手鍊等飾品。可愛療癒的造型兼具實用功能，擺放於梳妝台或床頭櫃，為生活空間增添趣味與溫度。',
   },
   {
     id: 14,
@@ -319,6 +332,7 @@ export const mockRewards = [
     description: '市價NT$959',
     marketPrice: 'NT$959',
     levelRestriction: 'lv2_plus',
+    details: 'ROOMMI智能充電式感應垃圾桶，採用紅外線感應技術，手靠近即自動開蓋，3秒後自動關閉。內建USB充電式鋰電池，充電一次可使用約60天。容量10公升，適合臥室、書房或浴室使用。桶身採用ABS材質，防水易清潔，配備垃圾袋固定環設計，實用便利。',
   },
   {
     id: 15,
@@ -334,6 +348,7 @@ export const mockRewards = [
     description: '市價NT$1,148',
     marketPrice: 'NT$1,148',
     levelRestriction: 'lv2_plus',
+    details: '日本KINTO品牌的提式保溫瓶，雙層真空不鏽鋼結構，保溫效果達6小時、保冷效果達12小時。容量500ml，瓶口寬度適中便於清洗與加冰塊。獨特提把設計方便攜帶，啞光霧面塗層質感細膩。簡約俐落的外型適合各種場合使用，是質感生活的日常良伴。',
   },
   {
     id: 16,
@@ -349,6 +364,7 @@ export const mockRewards = [
     description: '市價NT$1,501',
     marketPrice: 'NT$1,501',
     levelRestriction: 'lv2_plus',
+    details: 'MOMOCONCEPT設計的陶瓷保溫杯，優質陶瓷材質搭配食品級不鏽鋼內膽，保溫保冷效果俱佳。容量350ml，單手可握的尺寸設計。附有防漏矽膠密封圈與茶隔設計，適合沖泡茶飲。外觀呈現溫潤的陶瓷質感，多款素雅配色可選，展現獨特美學品味。',
   },
 
   // 🕯️ 美學先鋒系列 - Lv3 Visionary (禮品 17-24)
@@ -366,6 +382,7 @@ export const mockRewards = [
     description: '市價NT$1,580',
     marketPrice: 'NT$1,580',
     levelRestriction: 'lv3_plus',
+    details: 'mordeco設計的創意轉轉零錢筒，透明壓克力材質製成，內部設有螺旋軌道。投入硬幣後會沿著軌道旋轉滑落，過程療癒有趣。上方開口設計方便投幣，底部可旋轉開啟取出零錢。容量可存放約500枚硬幣，不僅是實用的儲蓄工具，更是桌面上的趣味擺飾。',
   },
   {
     id: 18,
@@ -381,6 +398,7 @@ export const mockRewards = [
     description: '市價NT$1,790',
     marketPrice: 'NT$1,790',
     levelRestriction: 'lv3_plus',
+    details: 'Vana香氛蠟燭暖燈，結合蠟燭香氛與暖燈功能的創新設計。鹵素燈泡加熱方式，無明火更安全，可調節亮度營造氛圍。適用於各種香氛蠟燭罐，透過溫熱使香氛均勻擴散。燈罩採用金屬與玻璃材質，外型典雅現代，為居家空間增添溫馨質感與嗅覺享受。',
   },
   {
     id: 19,
@@ -396,6 +414,7 @@ export const mockRewards = [
     description: '市價NT$1,790',
     marketPrice: 'NT$1,790',
     levelRestriction: 'lv3_plus',
+    details: 'MUJI無印良品的超音波芬香噴霧器，超音波震盪技術將水與精油霧化噴出。水箱容量100ml，可持續運作約4小時，具備自動斷電安全設計。兩段式噴霧量調節，可依空間大小調整。簡約圓潤的白色外型，適合各種居家風格，為空間帶來舒適香氛與濕度調節。',
   },
   {
     id: 20,
@@ -411,6 +430,7 @@ export const mockRewards = [
     description: '市價NT$1,980',
     marketPrice: 'NT$1,980',
     levelRestriction: 'lv3_plus',
+    details: 'MOMAX無線充電行動電源，容量10000mAh，支援Qi無線充電與USB-C/USB-A有線充電。可同時為3台裝置充電，無線充電功率達15W。輕薄設計厚度僅15mm，重量約200克。LED電量顯示清楚易讀，內建多重安全保護機制，是外出必備的充電利器。',
   },
   {
     id: 21,
@@ -426,6 +446,7 @@ export const mockRewards = [
     description: '市價NT$2,480',
     marketPrice: 'NT$2,480',
     levelRestriction: 'lv3_plus',
+    details: 'JWAY智能砧板刀具烘乾消毒機，紫外線UV-C與熱風烘乾雙重殺菌技術，殺菌率達99.9%。可同時收納3個砧板與多把刀具，內部以不鏽鋼材質易清潔。智能定時功能，烘乾消毒約60分鐘自動斷電。有效防止細菌滋生與刀具生鏽，為廚房衛生把關。',
   },
   {
     id: 22,
@@ -441,6 +462,7 @@ export const mockRewards = [
     description: '市價NT$3,200',
     marketPrice: 'NT$3,200',
     levelRestriction: 'lv3_plus',
+    details: 'Oakywood無線充電盤，天然實木與強化玻璃製成，每件木紋紋理獨一無二。支援Qi無線充電標準，最高輸出15W快速充電。底部配備防滑矽膠墊，充電時穩固不位移。溫潤的木質觸感與簡約設計，將科技產品轉化為桌面上的藝術品，展現自然美學與現代工藝結合。',
   },
   {
     id: 23,
@@ -456,6 +478,7 @@ export const mockRewards = [
     description: '市價NT$3,385',
     marketPrice: 'NT$3,385',
     levelRestriction: 'lv3_plus',
+    details: 'Bellwood雨傘收納架，實木與金屬結合的工藝設計，底部附有接水盤可拆卸清洗。可同時收納8-10把長短傘，傘架高度約80公分。木質底座穩固耐用，金屬傘柱經防鏽處理。簡約北歐風格設計適合玄關或辦公室使用，兼具實用收納與空間美化功能，提升居家質感。',
   },
   {
     id: 24,
@@ -471,6 +494,7 @@ export const mockRewards = [
     description: '市價NT$3,500',
     marketPrice: 'NT$3,500',
     levelRestriction: 'lv3_plus',
+    details: 'Wanu銜月床頭燈，創新的月型燈設計靈感來自月相變化，可360度旋轉調整照明角度。LED光源，三段式色溫調節(暖光/自然光/白光)，亮度可無段調整。觸控式開關操作直覺便利，底座採用實木與金屬材質，穩固且質感佳，為臥室營造溫馨柔和的閱讀光線。',
   },
 
   // 💼 品味閃耀系列 - Lv4 Luminary (禮品 25-32)
@@ -488,6 +512,7 @@ export const mockRewards = [
     description: '市價NT$4,818',
     marketPrice: 'NT$4,818',
     levelRestriction: 'lv4_only',
+    details: '夏慕尼鐵板燒星級饗宴餐券雙人套餐，享用精選頂級食材現場鐵板料理。套餐包含新鮮海鮮、Prime等級牛排、季節時蔬與主廚特製甜點。專業鐵板燒師傅於面前展現精湛廚藝，提供五感饗宴體驗。餐廳氛圍優雅舒適，適合慶祝紀念日或商務宴請，創造難忘的美食回憶。',
   },
   {
     id: 26,
@@ -503,6 +528,7 @@ export const mockRewards = [
     description: '市價NT$5,850',
     marketPrice: 'NT$5,850',
     levelRestriction: 'lv4_only',
+    details: 'Porter日本經典品牌真皮公事包，嚴選頂級牛皮製作，隨使用時間呈現獨特皮革光澤。內部多層隔間設計可收納15吋筆電、文件與商務用品。附可拆卸肩背帶，手提肩背兩用。精密車工展現日本職人工藝，YKK拉鍊順暢耐用，是商務人士展現專業形象的最佳選擇。',
   },
   {
     id: 27,
@@ -518,6 +544,7 @@ export const mockRewards = [
     description: '市價NT$7,020',
     marketPrice: 'NT$7,020',
     levelRestriction: 'lv4_only',
+    details: 'LAMY 2000鋼筆，德國包浩斯設計經典之作，自1966年問世至今歷久不衰。筆身樹脂纖維與不鏽鋼材質，霧面處理質感細膩。14K金筆尖書寫滑順，墨水以活塞上墨系統，墨水容量大。人體工學設計長時間書寫不疲累，是書寫愛好者與收藏家的夢幻逸品。',
   },
   {
     id: 28,
@@ -533,6 +560,7 @@ export const mockRewards = [
     description: '市價NT$7,490',
     marketPrice: 'NT$7,490',
     levelRestriction: 'lv4_only',
+    details: 'Apple AirPods Pro 3第三代無線藍牙耳機，搭載Apple H2晶片提供卓越音質表現。主動降噪功能再進化，阻隔環境噪音更有效。通透模式可清楚聽見周遭環境音。支援空間音訊與動態頭部追蹤，打造沉浸式聆聽體驗。IPX4防水等級，單次充電續航力達6小時，搭配充電盒總續航力達30小時。',
   },
   {
     id: 29,
@@ -548,6 +576,7 @@ export const mockRewards = [
     description: '市價NT$9,999',
     marketPrice: 'NT$9,999',
     levelRestriction: 'lv4_only',
+    details: 'Dyson Supersonic吹風機，第五代數位馬達技術，風速強勁且運轉安靜。智能溫控系統每秒測溫40次，防止熱傷害保護髮質。附贈多款專業造型風嘴適合各種髮型需求。負離子技術減少靜電與毛躁，吹後秀髮柔順有光澤。人體工學設計平衡好握，是髮型師與質感生活者的首選工具。',
   },
   {
     id: 30,
@@ -563,6 +592,7 @@ export const mockRewards = [
     description: '市價NT$12,900',
     marketPrice: 'NT$12,900',
     levelRestriction: 'lv4_only',
+    details: 'Apple Watch Series 11智慧手錶，搭載最新S11晶片效能更強大。全天候Retina顯示螢幕，陽光下清晰可見。進階健康監測功能包含心率、血氧、睡眠與體溫感測。支援超過100種運動模式記錄，GPS定位精準。防水50米適合游泳使用，電池續航力達18小時，是健康管理與智慧生活的最佳夥伴。',
   },
   {
     id: 31,
@@ -578,6 +608,7 @@ export const mockRewards = [
     description: '市價NT$13,205',
     marketPrice: 'NT$13,205',
     levelRestriction: 'lv4_only',
+    details: 'LOJEL 30吋前開式行李箱，創新前開設計免將行李箱放倒即可取物，車站機場使用超便利。外殼德國拜耳PC材質，堅固耐撞擊且重量輕盈。TSA海關鎖與靜音雙輪設計，推行順暢安靜。內部大容量分層設計附彈性束帶，5年全球保固服務，是商務旅行與度假的最佳旅伴。',
   },
   {
     id: 32,
@@ -593,6 +624,7 @@ export const mockRewards = [
     description: '市價NT$14,888',
     marketPrice: 'NT$14,888',
     levelRestriction: 'lv4_only',
+    details: '雲品溫泉酒店尊榮湖景客房雙人住宿券，坐擁日月潭絕美湖景第一排視野。房內配備獨立景觀溫泉浴池，可邊泡湯邊欣賞湖光山色。含自助式早餐與迎賓下午茶，享用在地食材料理。飯店設施包含健身房、SPA與戶外泳池。專業管家服務細膩貼心，打造奢華放鬆的度假體驗。',
   },
 ]
 

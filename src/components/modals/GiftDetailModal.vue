@@ -24,7 +24,7 @@
           </div>
           <!-- 收藏愛心按鈕 -->
           <button @click="handleToggleWishlist"
-            class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 border border-white/50 dark:border-gray-600/50">
+            class="absolute top-2 left-2 w-8 h-8 flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 border border-white/50 dark:border-gray-600/50">
             <svg v-if="store.isInWishlist(gift.id)" class="w-4 h-4 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd"
                 d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
@@ -64,7 +64,7 @@
           <!-- 商品說明 -->
           <div class="mb-4 flex-1">
             <p class="text-sm text-gray-500 dark:text-gray-500 leading-relaxed">
-              這是商品的詳細說明文字，提供更多關於商品特色、材質、尺寸等資訊。讓使用者能夠充分了解商品內容，做出更好的兌換決策。
+              {{ gift.details || '這是商品的詳細說明文字，提供更多關於商品特色、材質、尺寸等資訊。讓使用者能夠充分了解商品內容，做出更好的兌換決策。' }}
             </p>
           </div>
 
@@ -165,18 +165,16 @@ const getSeriesName = (series) => {
 const formatPrice = (price) => {
   if (!price) return 'NT$280'
 
-  // 如果 price 是字串且包含 NT$，先提取數字
-  let numericPrice = price
+  // 如果 price 已經是完整格式（包含 NT$），直接返回
   if (typeof price === 'string' && price.includes('NT$')) {
-    numericPrice = price.replace('NT$', '').trim()
+    return price
   }
 
-  // 將數字轉換為帶千分號的格式
-  const number = parseInt(numericPrice)
+  // 如果是純數字，添加 NT$ 前綴
+  const number = parseInt(price)
   if (isNaN(number)) return price
 
-  const formatted = number.toLocaleString('en-US')
-  return `NT$${formatted}`
+  return `NT$${number.toLocaleString('zh-TW')}`
 }
 
 // 處理加入購物車
