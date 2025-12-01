@@ -21,11 +21,11 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- ============================================================================
 -- INSERT level_config DATA (4 levels)
 -- ============================================================================
-INSERT INTO level_config (id, levelCode, levelName, levelNumber, minPoints, maxPoints, multiplier, color, bgColor, gradientFrom, gradientTo, gradientFromHex, gradientToHex) VALUES
-(1, 'EXPLORER', '探索者', 1, 0, 249, 1.0, '#10b981', '#d1fae5', 'from-emerald-300', 'to-emerald-600', '#a7f3d0', '#059669'),
-(2, 'CREATOR', '創造者', 2, 250, 749, 1.15, '#06b6d4', '#cffafe', 'from-cyan-300', 'to-cyan-600', '#a5f3fc', '#0891b2'),
-(3, 'VISIONARY', '先行者', 3, 750, 1499, 1.4, '#f59e0b', '#fef3c7', 'from-amber-300', 'to-amber-600', '#fcd34d', '#d97706'),
-(4, 'LUMINARY', '閃耀者', 4, 1500, 999999, 1.7, '#8b5cf6', '#ede9fe', 'from-purple-300', 'to-purple-600', '#ddd6fe', '#7c3aed');
+INSERT INTO level_config (id, levelCode, levelName, levelNumber, minPoints, maxPoints, multiplier) VALUES
+(1, 'EXPLORER', '探索者', 1, 0, 249, 1.0),
+(2, 'CREATOR', '創造者', 2, 250, 749, 1.15),
+(3, 'VISIONARY', '先行者', 3, 750, 1499, 1.4),
+(4, 'LUMINARY', '閃耀者', 4, 1500, 999999, 1.7);
 
 -- ============================================================================
 -- INSERT users DATA

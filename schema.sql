@@ -3,6 +3,12 @@
 -- A gamified financial education platform with user profiles, task tracking, and reward system
 
 -- ============================================================================
+-- CREATE DATABASE AND SELECT SCHEMA
+-- ============================================================================
+CREATE DATABASE IF NOT EXISTS shineup;
+USE shineup;
+
+-- ============================================================================
 -- 1. USERS TABLE - Core user profile and account information
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS users (
@@ -28,12 +34,6 @@ CREATE TABLE IF NOT EXISTS level_config (
     minPoints INT NOT NULL,
     maxPoints INT NOT NULL,
     multiplier DECIMAL(3,2) NOT NULL,
-    color VARCHAR(7) NOT NULL,
-    bgColor VARCHAR(7) NOT NULL,
-    gradientFrom VARCHAR(50) NOT NULL,
-    gradientTo VARCHAR(50) NOT NULL,
-    gradientFromHex VARCHAR(7) NOT NULL,
-    gradientToHex VARCHAR(7) NOT NULL,
     INDEX idx_levelCode (levelCode),
     INDEX idx_levelNumber (levelNumber)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS user_task_progress (
 -- 6. REWARDS TABLE - Master reward/gift catalog
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS rewards (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(150) NOT NULL,
     description VARCHAR(255),
     details LONGTEXT,

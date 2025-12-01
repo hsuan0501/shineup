@@ -151,63 +151,76 @@ Tracks all user redemption transactions for auditing and order management.
 
 ---
 
-## Entity Relationship Diagram (Text Representation)
+## Entity Relationship Diagram (Horizontal Layout)
 
 ```
-┌─────────────────────┐
-│      users          │
-├─────────────────────┤
-│ id (PK)             │
-│ name                │
-│ email (UNIQUE)      │
-│ avatar              │
-│ createdAt           │
-│ kycVerified         │
-│ bankAccountLinked   │
-└──────────┬──────────┘
-           │
-     ┌─────┴─────┬──────────────┬──────────────┐
-     │            │              │              │
-     ▼            ▼              ▼              ▼
-┌──────────────┐ ┌─────────────────┐ ┌────────────────────┐
-│user_levels   │ │user_task_progress│ │reward_redemptions  │
-├──────────────┤ ├─────────────────┤ └────────────────────┘
-│id (PK)       │ │id (PK)          │ (Future table)
-│userId (FK)──┼─│userId (FK)──────┼────┐
-│currentLevel  │ │taskId (FK)      │    │
-│levelPoints   │ │completed        │    │
-│rewardPoints  │ │completedAt      │    │
-│lastUpdated   │ │completionCount  │    │
-└──────────────┘ └─────────────────┘    │
-     │                   │                │
-     │                   ▼                │
-     │            ┌────────────┐         │
-     │            │   tasks    │         │
-     │            ├────────────┤         │
-     │            │ id (PK)    │         │
-     │            │ title      │         │
-     │            │ description│         │
-     │            │ category   │         │
-     │            │ levelPoints│         │
-     │            │ rewardPoints         │
-     │            │ frequency  │         │
-     │            └────────────┘         │
-     │                                   │
-     ▼                                   ▼
-┌─────────────────┐             ┌──────────────┐
-│ level_config    │             │  rewards     │
-├─────────────────┤             ├──────────────┤
-│ id (PK)         │             │ id (PK)      │
-│ levelCode       │             │ title        │
-│ levelName       │             │ description  │
-│ levelNumber     │             │ points       │
-│ minPoints       │             │ category     │
-│ maxPoints       │             │ series       │
-│ multiplier      │             │ level        │
-│ colors/gradients│             │ image        │
-└─────────────────┘             │ stock        │
-                                └──────────────┘
+                                ┌─────────────────────┐
+                                │      users          │
+                                ├─────────────────────┤
+                                │ id (PK)             │
+                                │ name                │
+                                │ email (UNIQUE)      │
+                                │ avatar              │
+                                │ createdAt           │
+                                │ kycVerified         │
+                                │ bankAccountLinked   │
+                                └────────┬────────────┘
+                                         │
+                  ┌──────────────────────┼──────────────────────┐
+                  │                      │                      │
+                  ▼                      ▼                      ▼
+        ┌──────────────────┐   ┌──────────────────┐   ┌────────────────────┐
+        │  user_levels     │   │user_task_progress│   │reward_redemption   │
+        ├──────────────────┤   ├──────────────────┤   ├────────────────────┤
+        │ id (PK)          │   │ id (PK)          │   │ id (PK)            │
+        │ userId (FK)◄─────┼───│ userId (FK)◄─────┼───│ userId (FK)        │
+        │ currentLevel     │   │ taskId (FK)      │   │ rewardId (FK)      │
+        │ levelPoints      │   │ completed        │   │ pointsSpent        │
+        │ rewardPoints     │   │ completedAt      │   │ status             │
+        │ lastUpdated      │   │ completionCount  │   │ redeemedAt         │
+        └────────┬─────────┘   └────────┬─────────┘   │ notes              │
+                 │                      │             └────────────────────┘
+                 │                      │
+                 ▼                      ▼
+        ┌──────────────────┐   ┌────────────────┐
+        │  level_config    │   │     tasks      │
+        ├──────────────────┤   ├────────────────┤
+        │ id (PK)          │   │ id (PK)        │
+        │ levelCode        │   │ title          │
+        │ levelName        │   │ description    │
+        │ levelNumber      │   │ details        │
+        │ minPoints        │   │ category       │
+        │ maxPoints        │   │ levelRequired  │
+        │ multiplier       │   │ levelPoints    │
+        └──────────────────┘   │ rewardPoints   │
+                               │ frequency      │
+                               │ icon/image     │
+                               │ active         │
+                               └─────────┬──────┘
+                                         │
+                                         ▼
+                               ┌────────────────┐
+                               │    rewards     │
+                               ├────────────────┤
+                               │ id (PK)        │
+                               │ title          │
+                               │ description    │
+                               │ details        │
+                               │ points         │
+                               │ category       │
+                               │ series         │
+                               │ level          │
+                               │ image          │
+                               │ stock          │
+                               │ marketPrice    │
+                               │ active         │
+                               └────────────────┘
 ```
+
+### Flow from users (horizontal spread):
+- **Left Branch**: users → user_levels → level_config (level management)
+- **Center Branch**: users → user_task_progress → tasks → rewards (task & reward flow)
+- **Right Branch**: users → reward_redemption (redemption history)
 
 ---
 
