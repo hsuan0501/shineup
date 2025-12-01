@@ -652,7 +652,9 @@ export const mockOrders = [
 export const levelConfig = [
   {
     id: 1,
+    level: 'EXPLORER',
     levelCode: 'EXPLORER',
+    name: '探索者',
     levelName: '探索者',
     levelNumber: 1,
     minPoints: 0,
@@ -667,22 +669,26 @@ export const levelConfig = [
   },
   {
     id: 2,
+    level: 'CREATOR',
     levelCode: 'CREATOR',
+    name: '創造者',
     levelName: '創造者',
     levelNumber: 2,
     minPoints: 250,
     maxPoints: 749,
     multiplier: 1.15,
-    color: '#06b6d4',
-    bgColor: '#cffafe',
-    gradientFrom: 'from-cyan-300',
-    gradientTo: 'to-cyan-600',
-    gradientFromHex: '#a5f3fc',
-    gradientToHex: '#0891b2'
+    color: '#3b82f6',
+    bgColor: '#dbeafe',
+    gradientFrom: 'from-blue-400',
+    gradientTo: 'to-blue-600',
+    gradientFromHex: '#60a5fa',
+    gradientToHex: '#2563eb'
   },
   {
     id: 3,
+    level: 'VISIONARY',
     levelCode: 'VISIONARY',
+    name: '先行者',
     levelName: '先行者',
     levelNumber: 3,
     minPoints: 750,
@@ -697,7 +703,9 @@ export const levelConfig = [
   },
   {
     id: 4,
+    level: 'LUMINARY',
     levelCode: 'LUMINARY',
+    name: '閃耀者',
     levelName: '閃耀者',
     levelNumber: 4,
     minPoints: 1500,

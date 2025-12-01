@@ -27,12 +27,9 @@
           <div class="flex items-start gap-6">
             <!-- 頭像 -->
             <div class="relative hover:scale-105 transition-transform duration-300">
-              <!-- 淺色系漸層邊框 -->
-              <div class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-br from-sky-300 to-blue-400">
-                <img :src="user.avatar" :alt="user.name"
-                  class="w-full h-full rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity bg-white dark:bg-gray-600"
-                  @click="openAvatarUpload" title="點擊更換頭像">
-              </div>
+              <img :src="user.avatar" :alt="user.name"
+                class="w-24 h-24 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity bg-white dark:bg-gray-600"
+                @click="openAvatarUpload" title="點擊更換頭像">
               <!-- 隱藏的檔案輸入 -->
               <input ref="avatarInput" type="file" accept="image/*" @change="handleAvatarChange" class="hidden">
             </div>
@@ -129,7 +126,7 @@
             <div class="text-right">
               <div class="text-lg font-bold" :class="
                 currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-500 dark:text-emerald-400' :
-                currentLevelConfig.level === 'CREATOR' ? 'text-cyan-500 dark:text-cyan-400' :
+                currentLevelConfig.level === 'CREATOR' ? 'text-blue-500 dark:text-blue-400' :
                 currentLevelConfig.level === 'VISIONARY' ? 'text-amber-500 dark:text-amber-400' :
                 'text-purple-500 dark:text-purple-400'
               ">
@@ -157,7 +154,7 @@
             <p class="text-sm text-amber-800 dark:text-amber-300">
               再獲得 <span class="font-bold" :class="
                 currentLevelConfig.level === 'EXPLORER' ? 'text-emerald-500 dark:text-emerald-400' :
-                currentLevelConfig.level === 'CREATOR' ? 'text-cyan-500 dark:text-cyan-400' :
+                currentLevelConfig.level === 'CREATOR' ? 'text-blue-500 dark:text-blue-400' :
                 currentLevelConfig.level === 'VISIONARY' ? 'text-amber-500 dark:text-amber-400' :
                 'text-purple-500 dark:text-purple-400'
               ">{{ nextLevelPoints - user.levelPoints }}</span> 積分即可升級為「{{ nextLevelConfig.name }}」！
@@ -220,7 +217,7 @@
                     <span class="text-sm font-bold"
                       :class="
                         levelInfo.level === 'EXPLORER' ? 'text-emerald-500 dark:text-emerald-400' :
-                        levelInfo.level === 'CREATOR' ? 'text-indigo-500 dark:text-indigo-400' :
+                        levelInfo.level === 'CREATOR' ? 'text-blue-500 dark:text-blue-400' :
                         levelInfo.level === 'VISIONARY' ? 'text-amber-500 dark:text-amber-400' :
                         'text-purple-500 dark:text-purple-400'
                       ">
