@@ -1,4 +1,4 @@
--- ShineUp History - Seed Data
+usersusersusersuser_task_progressuser_levelstasksrewardslevel_config-- ShineUp History - Seed Data
 -- Initial data population for development and testing
 -- Created: 2024-12-01
 
@@ -147,6 +147,14 @@ INSERT INTO rewards (id, title, description, details, points, category, series, 
 (32, '雲品尊榮湖景客房住宿券', '市價NT$14,888', '雲品溫泉酒店尊榮湖景客房雙人住宿券，坐擁日月潭絕美湖景第一排視野。房內配備獨立景觀溫泉浴池，可邊泡湯邊欣賞湖光山色。含自助式早餐與迎賓下午茶，享用在地食材料理。飯店設施包含健身房、SPA與戶外泳池。專業管家服務細膩貼心，打造奢華放鬆的度假體驗。', 5000, 'premium', 'premium', 'LUMINARY', '/images/gifts/gift-32.jpg', 3, 'NT$14,888', TRUE);
 
 -- ============================================================================
+-- 7. INSERT REWARD REDEMPTION HISTORY
+-- ============================================================================
+INSERT INTO reward_redemption (userId, rewardId, pointsSpent, status, redeemedAt, notes) VALUES
+(1, 2, 100, 'completed', '2024-11-20 14:30:00', '使用者兌換了環保吸管組'),
+(1, 10, 230, 'completed', '2024-11-25 10:15:00', '使用者兌換了擴香石香氛禮盒'),
+(1, 15, 400, 'completed', '2024-11-28 16:45:00', '使用者兌換了提式輕巧保溫瓶');
+
+-- ============================================================================
 -- VERIFICATION QUERIES (Uncomment to verify data)
 -- ============================================================================
 -- SELECT COUNT(*) as total_users FROM users;
@@ -154,6 +162,8 @@ INSERT INTO rewards (id, title, description, details, points, category, series, 
 -- SELECT COUNT(*) as total_tasks FROM tasks;
 -- SELECT COUNT(*) as total_rewards FROM rewards;
 -- SELECT COUNT(*) as total_progress_records FROM user_task_progress;
+-- SELECT COUNT(*) as total_redemptions FROM reward_redemption;
 -- SELECT * FROM user_levels WHERE userId = 1;
+-- SELECT * FROM reward_redemption WHERE userId = 1;
 -- SELECT * FROM tasks WHERE category = 'daily';
 -- SELECT * FROM rewards WHERE level = 'EXPLORER';

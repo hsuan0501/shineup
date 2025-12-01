@@ -128,6 +128,27 @@ CREATE TABLE IF NOT EXISTS rewards (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================================
+-- 7. REWARD_REDEMPTION TABLE - Tracks user reward redemption history
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS reward_redemption (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    userId INT NOT NULL,
+    rewardId INT NOT NULL,
+    pointsSpent INT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'completed',
+    redeemedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    notes VARCHAR(255),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (rewardId) REFERENCES rewards(id) ON DELETE RESTRICT,
+    INDEX idx_userId (userId),
+    INDEX idx_rewardId (rewardId),
+    INDEX idx_status (status),
+    INDEX idx_redeemedAt (redeemedAt),
+    CONSTRAINT chk_pointsSpent CHECK (pointsSpent > 0),
+    CONSTRAINT chk_redemption_status CHECK (status IN ('pending', 'completed', 'shipped', 'cancelled'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================================
 -- INDEXES AND CONSTRAINTS SUMMARY
 -- ============================================================================
 -- Foreign Keys:
@@ -135,6 +156,8 @@ CREATE TABLE IF NOT EXISTS rewards (
 --   user_levels.currentLevel → level_config.levelCode
 --   user_task_progress.userId → users.id (CASCADE Delete)
 --   user_task_progress.taskId → tasks.id (CASCADE Delete)
+--   reward_redemption.userId → users.id (CASCADE DELETE)
+--   reward_redemption.rewardId → rewards.id (RESTRICT - prevent deletion if referenced)
 --
 -- Unique Constraints:
 --   users.email (UNIQUE)
@@ -150,5 +173,7 @@ CREATE TABLE IF NOT EXISTS rewards (
 --   tasks.rewardPoints > 0
 --   rewards.points > 0
 --   rewards.stock >= 0
+--   pointsSpent > 0
+--   status IN ('pending', 'completed', 'shipped', 'cancelled')
 --
 -- ============================================================================

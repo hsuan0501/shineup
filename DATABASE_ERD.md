@@ -128,6 +128,29 @@ Stores all available gifts that users can redeem with reward points.
 
 ---
 
+### 7. **reward_redemption** - Reward Redemption History
+Tracks all user redemption transactions for auditing and order management.
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique redemption record identifier |
+| userId | INT | FOREIGN KEY → users.id | Reference to user who redeemed |
+| rewardId | INT | FOREIGN KEY → rewards.id | Reference to reward redeemed |
+| pointsSpent | INT | NOT NULL | Points spent in this transaction |
+| status | VARCHAR(20) | DEFAULT 'completed' | Redemption status (pending/completed/shipped/cancelled) |
+| redeemedAt | DATETIME | DEFAULT CURRENT_TIMESTAMP | Timestamp of redemption |
+| notes | VARCHAR(255) | | Optional notes about redemption |
+
+**Purpose**: Maintain complete audit trail of reward redemptions. Enable order tracking and user redemption history queries.
+
+**Indexes**:
+- idx_userId: Quick lookup of user's redemption history
+- idx_rewardId: Track which rewards have been redeemed most
+- idx_status: Filter redemptions by status for fulfillment
+- idx_redeemedAt: Time-based queries for analytics
+
+---
+
 ## Entity Relationship Diagram (Text Representation)
 
 ```
@@ -261,9 +284,22 @@ Avoids storing level data in user_levels row, allowing flexible level configurat
 - Levels: 4 records
 - Mock Users: 1 record (can extend)
 
+## Current Tables Summary
+
+**Now 7 tables (completed)**:
+1. ✅ users
+2. ✅ level_config
+3. ✅ user_levels
+4. ✅ tasks
+5. ✅ user_task_progress
+6. ✅ rewards
+7. ✅ reward_redemption (NEW)
+
+---
+
 ## Future Enhancements
-1. **reward_redemptions table**: Track redemption history with order status
-2. **task_categories reference table**: Normalize task categories
-3. **user_stats table**: Cache computed statistics (tasksCompleted, consecutiveDays, etc.)
-4. **points_history table**: Audit trail of all point changes
-5. **notifications table**: Toast notifications and achievement notifications
+1. **points_history table**: Audit trail of all point changes (track levelPoints vs rewardPoints flows)
+2. **task_categories reference table**: Normalize task categories (daily/financial/investment/esg/social)
+3. **user_stats table**: Cache computed statistics (tasksCompleted, consecutiveDays, totalPointsEarned, etc.)
+4. **notifications table**: Toast notifications and achievement notifications
+5. **user_achievements table**: Achievement/badge system tracking (when users unlock special milestones)
