@@ -49,3 +49,6 @@ coverage
 *.tmp
 *.temp
 .temp/
+
+# MySQL Workbench 備份
+*.mwb.bak
