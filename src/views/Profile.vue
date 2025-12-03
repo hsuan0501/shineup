@@ -40,7 +40,7 @@
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ user.name }}</h2>
                 <span
                   :class="`px-3 py-1 text-sm font-bold rounded-2xl text-white bg-gradient-to-br ${currentLevelConfig.gradientFrom} ${currentLevelConfig.gradientTo} hover:scale-105 transition-transform duration-300 cursor-default`">
-                  {{ currentLevelConfig.name }} Lv.{{ currentLevelConfig.levelNumber }}
+                  Lv{{ currentLevelConfig.levelNumber }} {{ currentLevelConfig.level }}
                 </span>
               </div>
 
@@ -118,7 +118,7 @@
                 </svg>
               </div>
               <div>
-                <h4 class="font-bold text-gray-900 dark:text-white">{{ currentLevelConfig.name }}</h4>
+                <h4 class="font-bold text-gray-900 dark:text-white">Lv{{ currentLevelConfig.levelNumber }} {{ currentLevelConfig.level }}</h4>
                 <p class="text-sm text-gray-600 dark:text-gray-400">倍率 {{ currentLevelConfig.multiplier }}x</p>
               </div>
             </div>

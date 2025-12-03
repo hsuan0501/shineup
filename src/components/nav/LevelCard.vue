@@ -18,7 +18,7 @@
           :fill="`url(#level-star-${currentLevel.levelNumber})`" />
       </svg>
       <!-- Show text and dropdown arrow only on desktop (md and up) -->
-      <span class="hidden md:inline text-sm font-bold" :style="`color: ${currentLevel.color}`">{{ currentLevel.name }}</span>
+      <span class="hidden md:inline text-sm font-bold" :style="`color: ${currentLevel.color}`">Lv{{ currentLevel.levelNumber }} {{ currentLevel.level }}</span>
       <svg class="hidden md:block w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
@@ -47,11 +47,10 @@
                 </svg>
               </div>
               <div>
-                <h3 class="text-base md:text-lg font-bold text-gray-900 dark:text-white">{{ currentLevel.name }}</h3>
+                <h3 class="text-base md:text-lg font-bold text-gray-900 dark:text-white">Lv{{ currentLevel.levelNumber }} {{ currentLevel.level }}</h3>
                 <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400">{{ currentLevel.multiplier }}x 積分倍率</p>
               </div>
             </div>
-            <span class="text-xs text-gray-500 mt-1">Lv.{{ currentLevel.levelNumber }}</span>
           </div>
 
           <!-- 雙軌積分顯示 -->
