@@ -78,7 +78,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
 import { formatPoints } from '../../utils/formatPoints'
 
 const props = defineProps({

@@ -6,15 +6,29 @@
         <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">會員中心</h1>
         <p class="text-sm text-gray-600 dark:text-gray-400">管理您的積分、等級與獎勵</p>
       </div>
-      <!-- 登出按鈕 -->
-      <button @click="handleLogout"
-        class="px-5 py-2.5 rounded-full bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-        </svg>
-        登出
-      </button>
+      <!-- 設定 & 登出按鈕 -->
+      <div class="flex items-center gap-2">
+        <!-- 設定按鈕 -->
+        <router-link to="/settings"
+          class="px-5 py-2.5 rounded-full bg-gray-50/80 dark:bg-gray-800/50 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 border border-gray-200 dark:border-gray-600 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          設定
+        </router-link>
+
+        <!-- 登出按鈕 -->
+        <button @click="handleLogout"
+          class="px-5 py-2.5 rounded-full bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          登出
+        </button>
+      </div>
     </div>
 
     <!-- 主要內容區域 -->
@@ -118,7 +132,7 @@
                 </svg>
               </div>
               <div>
-                <h4 class="font-bold text-gray-900 dark:text-white">Lv{{ currentLevelConfig.levelNumber }} {{ currentLevelConfig.level }}</h4>
+                <h4 class="text-lg font-bold text-gray-900 dark:text-white">Lv{{ currentLevelConfig.levelNumber }} {{ currentLevelConfig.level }}</h4>
                 <p class="text-sm text-gray-600 dark:text-gray-400">倍率 {{ currentLevelConfig.multiplier }}x</p>
               </div>
             </div>
@@ -167,7 +181,7 @@
           </div>
 
           <!-- 當前等級權益 -->
-          <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 border border-sky-200 dark:border-sky-800 rounded-xl px-5 py-[19px] hover:scale-[1.02] transition-transform duration-300">
+          <div class="bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 border border-sky-200 dark:border-sky-800 rounded-xl px-5 py-4 hover:scale-[1.02] transition-transform duration-300">
             <h5 class="font-bold text-gray-900 dark:text-white mb-2">當前等級權益</h5>
             <div class="space-y-1.5">
               <div class="flex items-center gap-2">
@@ -213,7 +227,7 @@
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between mb-2">
-                    <h4 class="text-lg font-bold text-gray-900 dark:text-white">{{ levelInfo.name }}</h4>
+                    <h4 class="text-base font-medium text-gray-900 dark:text-white">{{ levelInfo.name }}</h4>
                     <span class="text-sm font-bold"
                       :class="
                         levelInfo.level === 'EXPLORER' ? 'text-emerald-500 dark:text-emerald-400' :

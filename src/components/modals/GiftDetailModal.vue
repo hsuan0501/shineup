@@ -96,10 +96,9 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { useStore } from '../../store/app'
 import { mockUsers } from '../../mock'
-import { ref } from 'vue'
 import { formatPoints } from '../../utils/formatPoints'
 
 const store = useStore()

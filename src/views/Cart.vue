@@ -214,7 +214,7 @@
                                 'w-full py-4 rounded-full font-bold transition-all duration-300 flex items-center justify-center',
                                 totalPoints > availablePoints
                                     ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                                    : 'bg-purple-500 text-white hover:opacity-90 hover:scale-[1.02] active:scale-[0.98]'
+                                    : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-[1.02] active:scale-[0.98]'
                             ]">
                                 {{ totalPoints > availablePoints ? '積分不足' : '確認兌換' }}
                             </button>

@@ -33,6 +33,16 @@ const routes = [
     name: 'Search',
     component: () => import('../views/SearchResults.vue'),
   },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: () => import('../views/Settings.vue'),
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../views/Admin.vue'),
+  },
 ]
 
 const router = createRouter({
