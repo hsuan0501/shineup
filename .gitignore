@@ -52,3 +52,9 @@ coverage
 
 # MySQL Workbench 備份
 *.mwb.bak
+
+# Spring Boot 後端
+backend/target/
+backend/.idea/
+backend/*.iml
+backend/.mvn/wrapper/maven-wrapper.jar
