@@ -58,3 +58,6 @@ backend/target/
 backend/.idea/
 backend/*.iml
 backend/.mvn/wrapper/maven-wrapper.jar
+
+# Claude Code
+.claude/
