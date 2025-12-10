@@ -83,6 +83,9 @@ mysql -u root -p shineup < database/seed_data.sql
 
 | 資源 | 端點 | 說明 |
 |------|------|------|
+| 認證 | `POST /api/auth/register` | 註冊 |
+| 認證 | `POST /api/auth/login` | 登入 |
+| 認證 | `GET /api/auth/me` | 取得當前用戶 |
 | 會員 | `GET /api/users` | 取得所有會員 |
 | 任務 | `GET /api/tasks` | 取得所有任務 |
 | 禮品 | `GET /api/gifts` | 取得所有禮品 |
