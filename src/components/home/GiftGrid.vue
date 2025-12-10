@@ -44,7 +44,7 @@
                             <span class="text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap">99+</span>
                         </div>
                         <div class="flex items-center gap-1">
-                            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                            <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
                             <span class="text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap">50-99</span>
                         </div>
                         <div class="flex items-center gap-1">
@@ -52,7 +52,7 @@
                             <span class="text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap">10-49</span>
                         </div>
                         <div class="flex items-center gap-1">
-                            <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                            <div class="w-2 h-2 rounded-full bg-red-600"></div>
                             <span class="text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap">&lt;10</span>
                         </div>
                         <div class="flex items-center gap-1">
@@ -83,7 +83,7 @@
                             <span class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-300 whitespace-nowrap">99+</span>
                         </div>
                         <div class="flex items-center gap-1">
-                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-500"></div>
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-400"></div>
                             <span class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-300 whitespace-nowrap">50-99</span>
                         </div>
                         <div class="flex items-center gap-1">
@@ -91,7 +91,7 @@
                             <span class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-300 whitespace-nowrap">10-49</span>
                         </div>
                         <div class="flex items-center gap-1">
-                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500"></div>
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-600"></div>
                             <span class="text-[9px] sm:text-[10px] text-gray-600 dark:text-gray-300 whitespace-nowrap">&lt;10</span>
                         </div>
                         <div class="flex items-center gap-1">
@@ -394,9 +394,9 @@ const getLevelBadgeClass = (level) => {
 const getStockDotClass = (stockStatus) => {
     const classes = {
         'high': 'bg-green-500',
-        'medium': 'bg-yellow-500',
+        'medium': 'bg-yellow-400',
         'low': 'bg-orange-500',
-        'critical': 'bg-red-500',
+        'critical': 'bg-red-600',
         'sold_out': 'bg-gray-500'
     }
     return classes[stockStatus] || classes['high']

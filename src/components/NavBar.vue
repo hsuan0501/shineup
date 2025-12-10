@@ -165,7 +165,7 @@
             </svg>
             <!-- 購物車数量小圓點 -->
             <span v-if="store.cartItemCount > 0 && isLoggedIn"
-              class="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-pink-400 rounded-full flex items-center justify-center text-[9px] md:text-[10px] text-white font-bold shadow-lg">{{
+              class="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-pink-500 rounded-full flex items-center justify-center text-[9px] md:text-[10px] text-white font-bold shadow-lg">{{
                 store.cartItemCount }}</span>
           </router-link>
 

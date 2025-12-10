@@ -68,7 +68,7 @@
             'relative h-14 w-14 flex items-center justify-center rounded-full border transition-all duration-300 z-50 group shadow-lg backdrop-blur-xl dark:shadow-2xl bg-zinc-100/90 dark:bg-gray-700/80 border-zinc-200/50 dark:border-gray-600/40 hover:bg-zinc-200 dark:hover:bg-gray-600/70 text-zinc-600 dark:text-gray-300 hover:scale-105 active:scale-95'
         ]">
             <span
-                class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full"
+                class="absolute top-0 right-0 w-3 h-3 bg-pink-500 rounded-full"
                 v-if="!isOpen"></span>
             <svg v-if="!isOpen" class="w-7 h-7 group-hover:rotate-12 transition-transform duration-300" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
