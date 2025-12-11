@@ -58,4 +58,10 @@ public class UserController {
             @RequestParam int rewardPoints) {
         return ResponseEntity.ok(userService.addPoints(id, upgradePoints, rewardPoints));
     }
+
+    // 重置用戶資料（展示用）
+    @PostMapping("/{id}/reset")
+    public ResponseEntity<User> resetUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.resetUser(id));
+    }
 }

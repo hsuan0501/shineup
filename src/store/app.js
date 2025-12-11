@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { authAPI, userAPI, taskAPI, giftAPI } from '../api'
 
 export const useStore = defineStore('app', () => {
   const isDark = ref(false)
   const currentUser = ref(null)
   const currentLevel = ref('EXPLORER')
   const isAuthenticated = ref(false)
+  const userPoints = ref({ upgradePoints: 0, rewardPoints: 0 })
 
   // 搜尋狀態
   const searchQuery = ref('')
@@ -207,31 +209,128 @@ export const useStore = defineStore('app', () => {
   }
 
   // 認證相關函數
-  const login = (user) => {
-    isAuthenticated.value = true
-    currentUser.value = user
-    currentLevel.value = user.level || 'EXPLORER'
+  const login = async (credentials) => {
+    try {
+      const response = await authAPI.login(credentials)
+      const { token, user } = response.data
+
+      localStorage.setItem('token', token)
+      localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }))
+
+      isAuthenticated.value = true
+      currentUser.value = user
+      currentLevel.value = user.level || 'EXPLORER'
+      userPoints.value = {
+        upgradePoints: user.upgradePoints || 0,
+        rewardPoints: user.rewardPoints || 0
+      }
+
+      return { success: true, user }
+    } catch (error) {
+      console.error('Login failed:', error)
+      return { success: false, message: error.response?.data?.message || '登入失敗' }
+    }
+  }
+
+  const register = async (userData) => {
+    try {
+      const response = await authAPI.register(userData)
+      const { token, user } = response.data
+
+      localStorage.setItem('token', token)
+      localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }))
+
+      isAuthenticated.value = true
+      currentUser.value = user
+      currentLevel.value = user.level || 'EXPLORER'
+      userPoints.value = {
+        upgradePoints: user.upgradePoints || 0,
+        rewardPoints: user.rewardPoints || 0
+      }
+
+      return { success: true, user }
+    } catch (error) {
+      console.error('Register failed:', error)
+      return { success: false, message: error.response?.data?.message || '註冊失敗' }
+    }
   }
 
   const logout = () => {
     isAuthenticated.value = false
     currentUser.value = null
     currentLevel.value = 'EXPLORER'
+    userPoints.value = { upgradePoints: 0, rewardPoints: 0 }
     localStorage.removeItem('auth')
+    localStorage.removeItem('token')
   }
 
-  const checkAuth = () => {
-    const authData = localStorage.getItem('auth')
-    if (authData) {
+  const checkAuth = async () => {
+    const token = localStorage.getItem('token')
+    if (token) {
       try {
-        const parsed = JSON.parse(authData)
-        if (parsed.isAuthenticated && parsed.user) {
-          login(parsed.user)
+        const response = await authAPI.getMe()
+        const { user } = response.data
+
+        isAuthenticated.value = true
+        currentUser.value = user
+        currentLevel.value = user.level || 'EXPLORER'
+        userPoints.value = {
+          upgradePoints: user.upgradePoints || 0,
+          rewardPoints: user.rewardPoints || 0
         }
-      } catch (e) {
-        console.error('Failed to parse auth data', e)
-        localStorage.removeItem('auth')
+      } catch (error) {
+        console.error('Token invalid:', error)
+        logout()
       }
+    }
+  }
+
+  // 完成任務 API
+  const completeTask = async (taskId) => {
+    if (!currentUser.value) return { success: false, message: '請先登入' }
+
+    try {
+      const response = await taskAPI.complete(taskId, currentUser.value.id)
+      userPoints.value = {
+        upgradePoints: response.data.upgradePoints,
+        rewardPoints: response.data.rewardPoints
+      }
+      return { success: true, message: response.data.message }
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || '完成任務失敗' }
+    }
+  }
+
+  // 兌換禮品 API
+  const redeemGift = async (giftId) => {
+    if (!currentUser.value) return { success: false, message: '請先登入' }
+
+    try {
+      const response = await giftAPI.redeem(giftId, currentUser.value.id)
+      // 重新取得用戶資料更新積分
+      await checkAuth()
+      return { success: true, message: response.data.message }
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || '兌換失敗' }
+    }
+  }
+
+  // 重置用戶資料（展示用）
+  const resetUser = async () => {
+    if (!currentUser.value) return { success: false, message: '請先登入' }
+
+    try {
+      const response = await userAPI.reset(currentUser.value.id)
+      const user = response.data
+      currentUser.value = user
+      currentLevel.value = user.level || 'EXPLORER'
+      userPoints.value = {
+        upgradePoints: user.upgradePoints || 0,
+        rewardPoints: user.rewardPoints || 0
+      }
+      return { success: true, message: '資料已重置' }
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || '重置失敗' }
     }
   }
 
@@ -270,6 +369,7 @@ export const useStore = defineStore('app', () => {
     currentUser,
     currentLevel,
     isAuthenticated,
+    userPoints,
     cartItems,
     cartItemCount,
     addToCart,
@@ -284,8 +384,12 @@ export const useStore = defineStore('app', () => {
     toggleDarkMode,
     initDarkMode,
     login,
+    register,
     logout,
     checkAuth,
+    completeTask,
+    redeemGift,
+    resetUser,
     searchQuery,
     setSearchQuery,
     clearSearch,

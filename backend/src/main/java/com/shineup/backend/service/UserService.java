@@ -58,4 +58,14 @@ public class UserService {
             user.setLevel(User.MemberLevel.EXPLORER);
         }
     }
+
+    // 重置用戶資料（展示用）
+    public User resetUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setUpgradePoints(1200);
+        user.setRewardPoints(3500);
+        user.setLevel(User.MemberLevel.CREATOR);
+        return userRepository.save(user);
+    }
 }

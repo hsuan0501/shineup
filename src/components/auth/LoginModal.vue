@@ -152,7 +152,6 @@
 <script setup>
 import { ref } from 'vue'
 import { useStore } from '../../store/app'
-import { mockUsers } from '../../mock'
 
 const props = defineProps({
     modelValue: Boolean
@@ -162,6 +161,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const store = useStore()
 const activeTab = ref('login')
+const isLoading = ref(false)
 
 // Login Form
 const loginForm = ref({
@@ -189,43 +189,30 @@ const closeModal = () => {
     }, 300)
 }
 
-// Handle Login (假登入，使用 localStorage)
-const handleLogin = () => {
-    // 驗證帳號密碼（目前使用 mock 資料）
-    const user = mockUsers[1]
+// Handle Login - 串接後端 API
+const handleLogin = async () => {
+    isLoading.value = true
+    try {
+        const result = await store.login({
+            email: loginForm.value.email,
+            password: loginForm.value.password
+        })
 
-    if (loginForm.value.email === user.email && loginForm.value.password === '20001108') {
-        // 登入成功
-        const authData = {
-            isAuthenticated: true,
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                avatar: user.avatar,
-                level: user.level,
-                levelPoints: user.levelPoints,
-                rewardPoints: user.rewardPoints
-            },
-            // 模擬 JWT Token（實際應由後端產生）
-            token: 'fake-jwt-token-' + Date.now()
+        if (result.success) {
+            store.showToast('登入成功！', 'success')
+            closeModal()
+        } else {
+            store.showToast(result.message || '登入失敗', 'error')
         }
-
-        // 儲存到 localStorage
-        localStorage.setItem('auth', JSON.stringify(authData))
-
-        // 更新 store
-        store.login(authData.user)
-
-        store.showToast('登入成功！', 'success')
-        closeModal()
-    } else {
-        store.showToast('帳號或密碼錯誤', 'error')
+    } catch (error) {
+        store.showToast('登入失敗，請稍後再試', 'error')
+    } finally {
+        isLoading.value = false
     }
 }
 
-// Handle Register (假註冊，儲存到 localStorage)
-const handleRegister = () => {
+// Handle Register - 串接後端 API
+const handleRegister = async () => {
     // 驗證密碼
     if (registerForm.value.password !== registerForm.value.confirmPassword) {
         store.showToast('密碼不一致，請重新輸入', 'error')
@@ -237,32 +224,25 @@ const handleRegister = () => {
         return
     }
 
-    // 建立新用戶資料
-    const newUser = {
-        id: Date.now(), // 臨時 ID
-        name: registerForm.value.name,
-        email: registerForm.value.email,
-        avatar: 'https://api.dicebear.com/9.x/thumbs/svg?seed=' + registerForm.value.name,
-        level: 'EXPLORER',
-        levelPoints: 0,
-        rewardPoints: 100, // 新用戶贈送 100 積分
-        createdAt: new Date().toISOString()
+    isLoading.value = true
+    try {
+        const result = await store.register({
+            name: registerForm.value.name,
+            email: registerForm.value.email,
+            password: registerForm.value.password
+        })
+
+        if (result.success) {
+            store.showToast('註冊成功！', 'success')
+            closeModal()
+        } else {
+            store.showToast(result.message || '註冊失敗', 'error')
+        }
+    } catch (error) {
+        store.showToast('註冊失敗，請稍後再試', 'error')
+    } finally {
+        isLoading.value = false
     }
-
-    const authData = {
-        isAuthenticated: true,
-        user: newUser,
-        token: 'fake-jwt-token-' + Date.now()
-    }
-
-    // 儲存到 localStorage
-    localStorage.setItem('auth', JSON.stringify(authData))
-
-    // 更新 store
-    store.login(authData.user)
-
-    store.showToast('註冊成功！贈送您 100 積分', 'success')
-    closeModal()
 }
 </script>
 

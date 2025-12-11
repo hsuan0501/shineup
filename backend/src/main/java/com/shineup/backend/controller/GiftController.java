@@ -1,11 +1,13 @@
 package com.shineup.backend.controller;
 
 import com.shineup.backend.entity.Gift;
+import com.shineup.backend.entity.RedemptionOrder;
 import com.shineup.backend.service.GiftService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/gifts")
@@ -64,5 +66,24 @@ public class GiftController {
     @PostMapping("/{id}/adjust-stock")
     public ResponseEntity<Gift> adjustStock(@PathVariable Long id, @RequestParam int adjustment) {
         return ResponseEntity.ok(giftService.adjustStock(id, adjustment));
+    }
+
+    // 兌換禮品
+    @PostMapping("/{id}/redeem")
+    public ResponseEntity<?> redeemGift(@PathVariable Long id, @RequestBody Map<String, Long> request) {
+        try {
+            Long userId = request.get("userId");
+            if (userId == null) {
+                return ResponseEntity.badRequest().body(Map.of("message", "請提供 userId"));
+            }
+            RedemptionOrder order = giftService.redeemGift(id, userId);
+            return ResponseEntity.ok(Map.of(
+                "message", "兌換成功！",
+                "orderId", order.getId(),
+                "pointsSpent", order.getTotalPoints()
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 }
