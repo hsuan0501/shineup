@@ -29,7 +29,9 @@ export const authAPI = {
 export const userAPI = {
   getAll: () => api.get('/users'),
   getById: (id) => api.get(`/users/${id}`),
-  reset: (id) => api.post(`/users/${id}/reset`)
+  reset: (id) => api.post(`/users/${id}/reset`),
+  getStats: (id) => api.get(`/users/${id}/stats`),
+  recordLogin: (id) => api.post(`/users/${id}/record-login`)
 }
 
 // 任務 API

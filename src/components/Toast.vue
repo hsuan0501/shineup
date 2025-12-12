@@ -57,7 +57,7 @@ const store = useStore()
 const getToastClass = (type) => {
   const classes = {
     'success': 'bg-emerald-50/95 dark:bg-emerald-900/95 border-emerald-200/50 dark:border-emerald-700/50 text-emerald-800 dark:text-emerald-100',
-    'error': 'bg-red-50/95 dark:bg-red-900/95 border-red-200/50 dark:border-red-700/50 text-red-800 dark:text-red-100',
+    'error': 'bg-pink-50/95 dark:bg-pink-900/95 border-pink-200/50 dark:border-pink-700/50 text-pink-800 dark:text-pink-100',
     'info': 'bg-blue-50/95 dark:bg-blue-900/95 border-blue-200/50 dark:border-blue-700/50 text-blue-800 dark:text-blue-100',
     'wishlist-add': 'bg-amber-50/95 dark:bg-amber-900/95 border-amber-200/50 dark:border-amber-700/50 text-amber-800 dark:text-amber-100',
     'wishlist-remove': 'bg-purple-50/95 dark:bg-purple-900/95 border-purple-200/50 dark:border-purple-700/50 text-purple-800 dark:text-purple-100'

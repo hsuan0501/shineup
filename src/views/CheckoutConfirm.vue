@@ -216,7 +216,16 @@ const confirmCheckout = async () => {
       }
     }
 
-    // 兌換成功後清空購物車和 checkoutItems
+    // 兌換成功後，記錄到活動紀錄
+    for (const item of items) {
+      store.addActivityRecord({
+        type: 'reward',
+        title: `兌換 ${item.title}`,
+        points: item.points * item.quantity
+      })
+    }
+
+    // 清空購物車和 checkoutItems
     store.clearCart()
     store.clearCheckoutItems()
 

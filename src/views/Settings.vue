@@ -20,10 +20,16 @@
         <div class="space-y-4">
           <!-- 姓名 -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">姓名</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              姓名 <span class="text-pink-500">*</span>
+            </label>
             <input type="text" v-model="form.name"
-              class="w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all"
+              :class="[
+                'w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all',
+                errors.name ? 'border-pink-500' : 'border-gray-200 dark:border-gray-600'
+              ]"
               placeholder="請輸入姓名">
+            <p v-if="errors.name" class="text-xs text-pink-800 dark:text-pink-300 mt-1">{{ errors.name }}</p>
           </div>
 
           <!-- Email -->
@@ -44,7 +50,7 @@
                 'w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all',
                 errors.birthday ? 'border-pink-500' : 'border-gray-200 dark:border-gray-600'
               ]">
-            <p v-if="errors.birthday" class="text-xs text-pink-500 mt-1">{{ errors.birthday }}</p>
+            <p v-if="errors.birthday" class="text-xs text-pink-800 dark:text-pink-300 mt-1">{{ errors.birthday }}</p>
             <p v-else class="text-xs text-gray-500 dark:text-gray-400 mt-1">生日資料僅限修改一次</p>
           </div>
 
@@ -59,7 +65,7 @@
                 errors.phone ? 'border-pink-500' : 'border-gray-200 dark:border-gray-600'
               ]"
               placeholder="請輸入手機號碼">
-            <p v-if="errors.phone" class="text-xs text-pink-500 mt-1">{{ errors.phone }}</p>
+            <p v-if="errors.phone" class="text-xs text-pink-800 dark:text-pink-300 mt-1">{{ errors.phone }}</p>
           </div>
         </div>
       </div>
@@ -71,14 +77,16 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
-          收件地址 <span class="text-pink-500 text-sm">*</span>
+          收件地址
         </h3>
 
         <div class="space-y-4">
           <div class="grid grid-cols-2 gap-4">
             <!-- 縣市 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">縣市</label>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                縣市 <span class="text-pink-500">*</span>
+              </label>
               <select v-model="form.city"
                 :class="[
                   'w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all',
@@ -90,7 +98,9 @@
             </div>
             <!-- 區域 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">區域</label>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                區域 <span class="text-pink-500">*</span>
+              </label>
               <input type="text" v-model="form.district"
                 :class="[
                   'w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all',
@@ -102,14 +112,16 @@
 
           <!-- 詳細地址 -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">詳細地址</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              詳細地址 <span class="text-pink-500">*</span>
+            </label>
             <input type="text" v-model="form.address"
               :class="[
                 'w-full px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500 transition-all',
                 errors.address ? 'border-pink-500' : 'border-gray-200 dark:border-gray-600'
               ]"
               placeholder="請輸入詳細地址">
-            <p v-if="errors.address" class="text-xs text-pink-500 mt-1">{{ errors.address }}</p>
+            <p v-if="errors.address" class="text-xs text-pink-800 dark:text-pink-300 mt-1">{{ errors.address }}</p>
           </div>
         </div>
       </div>
@@ -126,25 +138,6 @@
         <div class="space-y-4">
           <div class="flex items-center justify-between py-2">
             <div>
-              <p class="text-sm font-medium text-gray-900 dark:text-white">積分變動</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">當積分增加或使用時通知</p>
-            </div>
-            <button @click="toggleNotification('points', '積分變動')"
-              :class="[
-                'relative w-14 h-8 rounded-full shadow-inner border hover:scale-[1.02] active:scale-95 transition-all duration-300',
-                notifications.points
-                  ? 'bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-300/50'
-                  : 'bg-gray-200 dark:bg-gray-700 border-gray-300/30 dark:border-gray-600/30'
-              ]">
-              <div :class="[
-                'absolute top-1 w-6 h-6 rounded-full bg-white shadow-md transition-all duration-300',
-                notifications.points ? 'left-[calc(100%-1.75rem)]' : 'left-1'
-              ]"></div>
-            </button>
-          </div>
-
-          <div class="flex items-center justify-between py-2">
-            <div>
               <p class="text-sm font-medium text-gray-900 dark:text-white">等級提升</p>
               <p class="text-xs text-gray-500 dark:text-gray-400">當等級提升時通知</p>
             </div>
@@ -158,6 +151,25 @@
               <div :class="[
                 'absolute top-1 w-6 h-6 rounded-full bg-white shadow-md transition-all duration-300',
                 notifications.levelUp ? 'left-[calc(100%-1.75rem)]' : 'left-1'
+              ]"></div>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between py-2">
+            <div>
+              <p class="text-sm font-medium text-gray-900 dark:text-white">積分變動</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">當積分增加或使用時通知</p>
+            </div>
+            <button @click="toggleNotification('points', '積分變動')"
+              :class="[
+                'relative w-14 h-8 rounded-full shadow-inner border hover:scale-[1.02] active:scale-95 transition-all duration-300',
+                notifications.points
+                  ? 'bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-300/50'
+                  : 'bg-gray-200 dark:bg-gray-700 border-gray-300/30 dark:border-gray-600/30'
+              ]">
+              <div :class="[
+                'absolute top-1 w-6 h-6 rounded-full bg-white shadow-md transition-all duration-300',
+                notifications.points ? 'left-[calc(100%-1.75rem)]' : 'left-1'
               ]"></div>
             </button>
           </div>
@@ -206,6 +218,7 @@ const store = useStore()
 
 // 錯誤訊息
 const errors = reactive({
+  name: '',
   birthday: '',
   phone: '',
   address: ''
@@ -240,7 +253,7 @@ onMounted(() => {
 const notifications = reactive({
   points: true,
   levelUp: true,
-  shipping: true
+  shipping: false
 })
 
 // 台灣縣市
@@ -256,9 +269,16 @@ const validateForm = () => {
   let isValid = true
 
   // 清除錯誤
+  errors.name = ''
   errors.birthday = ''
   errors.phone = ''
   errors.address = ''
+
+  // 驗證姓名
+  if (!form.name || !form.name.trim()) {
+    errors.name = '請輸入姓名'
+    isValid = false
+  }
 
   // 驗證生日
   if (!form.birthday) {
@@ -275,10 +295,9 @@ const validateForm = () => {
     isValid = false
   }
 
-  // 驗證地址（縣市 + 區域 + 詳細地址至少要有完整地址）
-  const fullAddress = `${form.city}${form.district}${form.address}`.trim()
-  if (!form.city || !form.address) {
-    errors.address = '請填寫完整收件地址（縣市及詳細地址）'
+  // 驗證地址（縣市 + 區域 + 詳細地址）
+  if (!form.city || !form.district || !form.address) {
+    errors.address = '請填寫完整收件地址（縣市、區域及詳細地址）'
     isValid = false
   }
 

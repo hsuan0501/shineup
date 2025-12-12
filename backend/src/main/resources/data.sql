@@ -16,22 +16,22 @@ ON DUPLICATE KEY UPDATE level_name = VALUES(level_name);
 -- ============================================
 -- 密碼都是 123456 (BCrypt 加密後)
 INSERT INTO users (email, password, name, phone, level, upgrade_points, reward_points, created_at, updated_at) VALUES
-('matcha@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Matcha', '0912345678', 'CREATOR', 480, 600, NOW(), NOW()),
+('matcha@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Matcha', '0912345678', 'CREATOR', 700, 600, NOW(), NOW()),
 ('alice@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Alice', '0923456789', 'EXPLORER', 120, 80, NOW(), NOW()),
 ('bob@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Bob', '0934567890', 'VISIONARY', 980, 1800, NOW(), NOW()),
 ('carol@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Carol', '0945678901', 'LUMINARY', 1800, 4200, NOW(), NOW())
-ON DUPLICATE KEY UPDATE name = VALUES(name);
+ON DUPLICATE KEY UPDATE name = VALUES(name), upgrade_points = VALUES(upgrade_points), reward_points = VALUES(reward_points);
 
 -- ============================================
 -- 3. 任務資料 (tasks)
 -- ============================================
 INSERT INTO tasks (id, title, description, category, required_level, upgrade_points, reward_points, image, active) VALUES
 -- 📱 日常互動任務
-(1, '每日登入', '每日登入一次即可完成', 'daily', 'EXPLORER', 5, 10, '/images/tasks/task-1.jpg', true),
-(2, '完善身份驗證資料', '完整填寫身份基本資訊', 'daily', 'EXPLORER', 40, 60, '/images/tasks/task-2.jpg', true),
+(1, '每日登入', '每日登入一次即可完成', 'daily', 'EXPLORER', 5, 5, '/images/tasks/task-1.jpg', true),
+(2, '連續登入七天', '連續七天每日登入', 'daily', 'EXPLORER', 10, 10, '/images/tasks/task-2.jpg', true),
 (3, '綁定銀行帳戶', '關聯銀行帳戶資訊', 'daily', 'EXPLORER', 50, 75, '/images/tasks/task-3.jpg', true),
 (4, '設定理財目標', '建立個人理財目標', 'daily', 'EXPLORER', 30, 45, '/images/tasks/task-4.jpg', true),
-(5, '邀請好友開戶', '透過邀請碼邀請朋友註冊', 'daily', 'EXPLORER', 60, 90, '/images/tasks/task-5.jpg', true),
+(5, '邀請好友註冊', '透過邀請碼邀請朋友註冊', 'daily', 'EXPLORER', 20, 30, '/images/tasks/task-5.jpg', true),
 (6, '完成個人檔案設置', '設定個人檔案完整性', 'daily', 'EXPLORER', 25, 38, '/images/tasks/task-6.jpg', true),
 
 -- 💰 理財學習任務
@@ -65,7 +65,7 @@ INSERT INTO tasks (id, title, description, category, required_level, upgrade_poi
 (28, '達成 Luminary 等級升級', '累積升級點數至5000點', 'social', 'EXPLORER', 300, 450, '/images/tasks/task-28.jpg', true),
 (29, '累積月度交易額到100萬', '單月虛擬投資成交額突破', 'social', 'VISIONARY', 250, 375, '/images/tasks/task-29.jpg', true),
 (30, '累積社群貢獻成為大使', '累積社群互動和推薦成就', 'social', 'VISIONARY', 350, 525, '/images/tasks/task-30.jpg', true)
-ON DUPLICATE KEY UPDATE title = VALUES(title);
+ON DUPLICATE KEY UPDATE title = VALUES(title), description = VALUES(description), upgrade_points = VALUES(upgrade_points), reward_points = VALUES(reward_points);
 
 -- ============================================
 -- 4. 禮品資料 (gifts)
@@ -121,3 +121,13 @@ INSERT INTO redemption_orders (user_id, gift_id, quantity, total_points, status,
 (2, 1, 1, 100, 'PENDING', DATE_SUB(NOW(), INTERVAL 1 DAY)),
 (3, 18, 1, 600, 'COMPLETED', DATE_SUB(NOW(), INTERVAL 7 DAY))
 ON DUPLICATE KEY UPDATE status = VALUES(status);
+
+-- ============================================
+-- 6. 用戶統計資料 (user_stats)
+-- ============================================
+INSERT INTO user_stats (user_id, tasks_completed, consecutive_days, total_logins, rewards_redeemed, friends_invited, last_login_date, created_at, updated_at) VALUES
+(1, 9, 7, 7, 1, 1, CURDATE(), NOW(), NOW()),
+(2, 3, 2, 5, 0, 0, CURDATE(), NOW(), NOW()),
+(3, 12, 5, 20, 1, 2, CURDATE(), NOW(), NOW()),
+(4, 25, 14, 45, 5, 8, CURDATE(), NOW(), NOW())
+ON DUPLICATE KEY UPDATE tasks_completed = VALUES(tasks_completed), consecutive_days = VALUES(consecutive_days), total_logins = VALUES(total_logins), rewards_redeemed = VALUES(rewards_redeemed);

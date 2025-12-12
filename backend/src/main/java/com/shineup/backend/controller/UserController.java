@@ -1,5 +1,6 @@
 package com.shineup.backend.controller;
 
+import com.shineup.backend.dto.UserStatsDTO;
 import com.shineup.backend.entity.User;
 import com.shineup.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +64,24 @@ public class UserController {
     @PostMapping("/{id}/reset")
     public ResponseEntity<User> resetUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.resetUser(id));
+    }
+
+    // 取得用戶統計資料
+    @GetMapping("/{id}/stats")
+    public ResponseEntity<UserStatsDTO> getUserStats(@PathVariable Long id) {
+        if (userService.findById(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userService.getUserStats(id));
+    }
+
+    // 記錄登入（用於更新連續登入天數）
+    @PostMapping("/{id}/record-login")
+    public ResponseEntity<UserStatsDTO> recordLogin(@PathVariable Long id) {
+        if (userService.findById(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        userService.recordLogin(id);
+        return ResponseEntity.ok(userService.getUserStats(id));
     }
 }

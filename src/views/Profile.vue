@@ -304,34 +304,146 @@
       <div>
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white">最近活動記錄</h3>
-          <button
-            class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+          <button @click="showAllRecords = true"
+            class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors hover:underline">
             查看完整記錄 →
           </button>
         </div>
         <div class="space-y-2">
-          <div v-for="record in recentRecords.slice(0, 8)" :key="record.id"
+          <div v-for="record in recentRecords.slice(0, 5)" :key="record.id"
             class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-600/30 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors rounded px-2">
             <div class="flex items-center gap-3 flex-1 min-w-0">
-              <span class="text-sm text-gray-600 dark:text-gray-400 truncate">{{ record.title }}</span>
+              <!-- 圖標 - 根據類型顯示不同顏色 -->
+              <div :class="[
+                'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0',
+                record.type === 'task' ? 'bg-indigo-100 dark:bg-indigo-900/30' :
+                record.type === 'login' ? 'bg-pink-100 dark:bg-pink-900/30' :
+                record.type === 'streak' ? 'bg-purple-100 dark:bg-purple-900/30' :
+                record.type === 'reward' ? 'bg-green-100 dark:bg-green-900/30' :
+                record.type === 'invite' ? 'bg-amber-100 dark:bg-amber-900/30' :
+                'bg-gray-100 dark:bg-gray-900/30'
+              ]">
+                <!-- 任務類 - 藍色 -->
+                <svg v-if="record.type === 'task'" class="w-4 h-4 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <!-- 登入類 - 粉紅色 -->
+                <svg v-else-if="record.type === 'login'" class="w-4 h-4 text-pink-500 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <!-- 連續登入七天 - 紫色 -->
+                <svg v-else-if="record.type === 'streak'" class="w-4 h-4 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                <!-- 兌換禮品 - 綠色 -->
+                <svg v-else-if="record.type === 'reward'" class="w-4 h-4 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+                </svg>
+                <!-- 邀請好友 - 黃色 -->
+                <svg v-else-if="record.type === 'invite'" class="w-4 h-4 text-amber-500 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+              </div>
+              <span class="text-sm text-gray-700 dark:text-gray-300 truncate">{{ record.title }}</span>
             </div>
             <div class="flex items-center gap-4 flex-shrink-0">
               <span class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">{{ formatDate(record.date) }}</span>
-              <span class="text-sm font-medium w-12 text-right" :class="record.type === 'task' ? 'text-green-600 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'">
-                {{ record.type === 'task' ? '+' + record.points : '-' + record.points }}
+              <span class="text-sm font-medium w-16 text-right" :class="record.type === 'reward' ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'">
+                {{ record.type === 'reward' ? '-' + record.points : '+' + record.points }}
               </span>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- 完整紀錄彈窗 -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="showAllRecords" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <!-- 背景遮罩 -->
+          <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="showAllRecords = false"></div>
+
+          <!-- 彈窗內容 -->
+          <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden">
+            <!-- 標題列 -->
+            <div class="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">完整活動記錄</h3>
+              <button @click="showAllRecords = false"
+                class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- 紀錄列表 -->
+            <div class="overflow-y-auto max-h-[60vh] p-5">
+              <div class="space-y-2">
+                <div v-for="record in recentRecords" :key="record.id"
+                  class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors rounded px-3">
+                  <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <!-- 圖標 - 根據類型顯示不同顏色 -->
+                    <div :class="[
+                      'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0',
+                      record.type === 'task' ? 'bg-indigo-100 dark:bg-indigo-900/30' :
+                      record.type === 'login' ? 'bg-pink-100 dark:bg-pink-900/30' :
+                      record.type === 'streak' ? 'bg-purple-100 dark:bg-purple-900/30' :
+                      record.type === 'reward' ? 'bg-green-100 dark:bg-green-900/30' :
+                      record.type === 'invite' ? 'bg-amber-100 dark:bg-amber-900/30' :
+                      'bg-gray-100 dark:bg-gray-900/30'
+                    ]">
+                      <!-- 任務類 - 藍色 -->
+                      <svg v-if="record.type === 'task'" class="w-4 h-4 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <!-- 登入類 - 粉紅色 -->
+                      <svg v-else-if="record.type === 'login'" class="w-4 h-4 text-pink-500 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <!-- 連續登入七天 - 紫色 -->
+                      <svg v-else-if="record.type === 'streak'" class="w-4 h-4 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                      </svg>
+                      <!-- 兌換禮品 - 綠色 -->
+                      <svg v-else-if="record.type === 'reward'" class="w-4 h-4 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+                      </svg>
+                      <!-- 邀請好友 - 黃色 -->
+                      <svg v-else-if="record.type === 'invite'" class="w-4 h-4 text-amber-500 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                      </svg>
+                    </div>
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ record.title }}</span>
+                  </div>
+                  <div class="flex items-center gap-4 flex-shrink-0">
+                    <span class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">{{ formatDate(record.date) }}</span>
+                    <span class="text-sm font-medium w-16 text-right" :class="record.type === 'reward' ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'">
+                      {{ record.type === 'reward' ? '-' + record.points : '+' + record.points }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 空狀態 -->
+              <div v-if="recentRecords.length === 0" class="text-center py-10 text-gray-500 dark:text-gray-400">
+                <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <p>目前沒有活動記錄</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { mockUsers, levelConfig } from '../mock.js'
+import { levelConfig } from '../mock.js'
 import { useStore } from '../store/app.js'
 
 const store = useStore()
@@ -340,17 +452,30 @@ const router = useRouter()
 // 頭像上傳相關
 const avatarInput = ref(null)
 
+// 完整紀錄彈窗
+const showAllRecords = ref(false)
+
+// 載入統計資料
+onMounted(() => {
+  store.fetchUserStats()
+})
 
 // 用戶資料 - 使用 store 即時數據
 const user = computed(() => ({
   ...store.currentUser,
   levelPoints: store.userPoints.upgradePoints,
-  rewardPoints: store.userPoints.rewardPoints
+  rewardPoints: store.userPoints.rewardPoints,
+  stats: store.userStats
 }))
 
-// 當前等級配置
+// 當前等級配置 - 使用 userPoints 計算以避免閃現問題
 const currentLevelConfig = computed(() => {
-  return levelConfig.find(level => level.level === user.value.level) || levelConfig[0]
+  // 優先使用 userPoints 計算等級，比 currentLevel 更即時
+  const upgradePoints = store.userPoints.upgradePoints || 0
+  const levelByPoints = levelConfig.find(level =>
+    upgradePoints >= level.minPoints && upgradePoints <= level.maxPoints
+  )
+  return levelByPoints || levelConfig.find(level => level.level === user.value.level) || levelConfig[0]
 })
 
 // 下一等級配置
@@ -372,83 +497,57 @@ const levelProgress = computed(() => {
   return Math.min((current / total) * 100, 100)
 })
 
-// 模擬最近紀錄
-const recentRecords = computed(() => [
-  { id: 1, type: 'task', title: '完成每日登入', points: 5, date: '2024-11-24T09:30:00' },
-  { id: 2, type: 'reward', title: '兌換環保便攜吸管組', points: 100, date: '2024-11-23T14:25:00' },
-  { id: 3, type: 'task', title: '閱讀理財文章', points: 10, date: '2024-11-23T10:15:00' },
-  { id: 4, type: 'task', title: '分享到社群', points: 15, date: '2024-11-22T16:45:00' },
-  { id: 5, type: 'reward', title: '兌換種子鉛筆組', points: 100, date: '2024-11-21T11:20:00' }
-])
+// 活動紀錄 - 結合 store 中的即時兌換紀錄
+const recentRecords = computed(() => {
+  // 基礎任務紀錄（按時間倒序排列，積分對應任務實際 levelPoints）
+  // 情境：使用者連續登入 7 天，完成多項任務後升級到 CREATOR (Lv2)
+  // 積分計算（升級積分 700）：
+  // 每日登入 7次 × 5 = 35
+  // 連續登入七天 = 10
+  // 完成個人檔案設置 = 25
+  // 設定理財目標 = 30
+  // 完成金融知識測驗 = 35
+  // 觀看線上課程視頻 = 45
+  // 綁定銀行帳戶 = 50
+  // 邀請好友註冊 = 60
+  // 完成風險承受能力評估 = 60
+  // 參與線上學習論壇 = 70
+  // 撰寫永續投資文章 = 80
+  // 建立借貸需求檔案 = 80
+  // 達成 Creator 等級升級 = 100
+  // 額外登入獎勵 = 20（連續登入獎勵）
+  // 總計：35+10+25+30+35+45+50+60+60+70+80+80+100+20 = 700
+  const baseRecords = [
+    // 最近 5 筆（從新到舊）
+    { id: 1, type: 'streak', title: '連續登入七天', points: 10, date: '2024-12-12T09:16:00' },
+    { id: 2, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-12T09:15:00' },
+    { id: 3, type: 'reward', title: '兌換 UiU 環保便攜吸管組', points: 100, date: '2024-12-11T16:30:00' },
+    { id: 4, type: 'invite', title: '邀請好友註冊成功', points: 20, date: '2024-12-11T14:00:00' },
+    { id: 5, type: 'task', title: '達成 Creator 等級升級', points: 100, date: '2024-12-11T10:00:00' },
+    // 歷史紀錄（任務按積分由低到高的順序完成）
+    { id: 6, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-11T08:30:00' },
+    { id: 7, type: 'task', title: '建立借貸需求檔案', points: 80, date: '2024-12-10T15:45:00' },
+    { id: 8, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-10T09:00:00' },
+    { id: 9, type: 'task', title: '撰寫永續投資文章', points: 80, date: '2024-12-09T16:30:00' },
+    { id: 10, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-09T08:45:00' },
+    { id: 11, type: 'task', title: '參與線上學習論壇', points: 70, date: '2024-12-08T17:00:00' },
+    { id: 12, type: 'task', title: '完成風險承受能力評估', points: 60, date: '2024-12-08T14:30:00' },
+    { id: 13, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-08T09:20:00' },
+    { id: 14, type: 'task', title: '綁定銀行帳戶', points: 50, date: '2024-12-07T16:00:00' },
+    { id: 15, type: 'task', title: '觀看線上課程視頻', points: 45, date: '2024-12-07T11:00:00' },
+    { id: 16, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-07T09:00:00' },
+    { id: 17, type: 'task', title: '完成金融知識測驗', points: 35, date: '2024-12-06T14:00:00' },
+    { id: 18, type: 'task', title: '設定理財目標', points: 30, date: '2024-12-06T11:30:00' },
+    { id: 19, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-06T09:15:00' },
+    { id: 20, type: 'task', title: '完成個人檔案設置', points: 25, date: '2024-12-05T14:00:00' }
+  ]
 
-// 獲取紀錄樣式
-const getRecordStyle = (record) => {
-  if (record.type === 'task') {
-    // 根據任務類型返回不同顏色
-    if (record.title.includes('登入')) {
-      return {
-        bg: 'bg-pink-100 dark:bg-pink-900/30',
-        text: 'text-pink-600 dark:text-pink-400',
-        icon: 'login'
-      }
-    } else if (record.title.includes('理財') || record.title.includes('文章')) {
-      return {
-        bg: 'bg-amber-100 dark:bg-amber-900/30',
-        text: 'text-amber-600 dark:text-amber-400',
-        icon: 'article'
-      }
-    } else if (record.title.includes('分享')) {
-      return {
-        bg: 'bg-blue-100 dark:bg-blue-900/30',
-        text: 'text-blue-600 dark:text-blue-400',
-        icon: 'share'
-      }
-    } else {
-      return {
-        bg: 'bg-green-100 dark:bg-green-900/30',
-        text: 'text-green-600 dark:text-green-400',
-        icon: 'task'
-      }
-    }
-  } else {
-    // 根據禮品類型返回不同顏色
-    if (record.title.includes('環保') || record.title.includes('種子')) {
-      return {
-        bg: 'bg-green-100 dark:bg-green-900/30',
-        text: 'text-green-600 dark:text-green-400',
-        icon: 'gift'
-      }
-    } else {
-      return {
-        bg: 'bg-purple-100 dark:bg-purple-900/30',
-        text: 'text-purple-600 dark:text-purple-400',
-        icon: 'gift'
-      }
-    }
-  }
-}
+  // 合併 store 中的即時活動紀錄（購物車兌換等）
+  const storeRecords = store.activityRecords || []
+  const allRecords = [...storeRecords, ...baseRecords]
 
-// 獲取紀錄圖標
-const getRecordIcon = (iconType) => {
-  const icons = {
-    login: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>`,
-    article: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-              </svg>`,
-    share: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-            </svg>`,
-    task: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-           </svg>`,
-    gift: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
-           </svg>`
-  }
-  return icons[iconType] || icons.task
-}
+  return allRecords.sort((a, b) => new Date(b.date) - new Date(a.date))
+})
 
 // 格式化日期
 const formatDate = (dateString) => {
@@ -491,9 +590,9 @@ const handleAvatarChange = (event) => {
     // 這裡可以更新用戶頭像
     // 如果有後端 API，可以在這裡上傳到伺服器
 
-    // 暫時更新本地顯示 (實際使用時需要更新 mockUsers 或呼叫 API)
-    if (mockUsers[1]) {
-      mockUsers[1].avatar = e.target?.result
+    // 暫時更新本地顯示
+    if (store.currentUser) {
+      store.currentUser.avatar = e.target?.result
     }
 
     store.showToast('頭像更新成功！', 'success')
@@ -515,3 +614,20 @@ const handleLogout = () => {
   }
 }
 </script>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-from .relative,
+.modal-leave-to .relative {
+  transform: scale(0.95) translateY(10px);
+}
+</style>

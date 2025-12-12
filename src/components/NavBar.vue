@@ -82,14 +82,11 @@
               <transition name="fade-slide">
                 <div v-if="showNotifications && isLoggedIn && notifications.length > 0"
                   class="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-600/40 overflow-hidden z-50">
-                  <div class="p-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white">
-                    <h4 class="font-bold text-sm">通知提醒</h4>
-                  </div>
-                  <div class="max-h-64 overflow-y-auto">
+                  <div class="max-h-64 overflow-y-auto p-2">
                     <router-link v-for="(notif, index) in notifications" :key="index"
                       :to="notif.link"
                       @click="showNotifications = false"
-                      class="flex items-start gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+                      class="flex items-start gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:scale-[1.02] transition-all duration-200 rounded-xl">
                       <div :class="['w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0', notif.iconBg]">
                         <svg class="w-5 h-5" :class="notif.iconColor" fill="none" stroke="currentColor" viewBox="0 0 24 24" v-html="notif.icon"></svg>
                       </div>
@@ -308,7 +305,7 @@ const notifications = computed(() => {
     if (pointsNeeded > 0) {
       list.push({
         title: '升級提醒',
-        description: `再累積 ${pointsNeeded} 升級積分即可升級至 ${threshold.next}`,
+        description: `再累積 ${pointsNeeded} 積分即可升級至 ${threshold.next}`,
         link: '/profile',
         icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />',
         iconBg: 'bg-purple-100 dark:bg-purple-900/30',

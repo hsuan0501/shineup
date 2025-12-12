@@ -19,6 +19,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     // 註冊
     public AuthResponse register(RegisterRequest request) {
@@ -59,6 +60,9 @@ public class AuthService {
 
         // 產生 Token
         String token = jwtUtil.generateToken(user.getId(), user.getEmail());
+
+        // 記錄登入統計
+        userService.recordLogin(user.getId());
 
         return AuthResponse.success(token, user);
     }

@@ -5,12 +5,53 @@ import { mockUsers } from '../mock.js'
 // 設定是否使用後端 API（true = 連後端，false = 純前端 mock）
 const USE_BACKEND_API = true
 
+// 同步讀取 localStorage 快取的認證資料，避免頁面閃現
+const getInitialAuthState = () => {
+  try {
+    const saved = localStorage.getItem('auth')
+    if (saved) {
+      const { isAuthenticated: auth, user } = JSON.parse(saved)
+      if (auth && user) {
+        return {
+          user,
+          level: user.level || 'EXPLORER',
+          authenticated: true,
+          points: {
+            upgradePoints: user.levelPoints || user.upgradePoints || 0,
+            rewardPoints: user.rewardPoints || 0
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.error('Failed to read initial auth state', e)
+  }
+  return {
+    user: null,
+    level: 'EXPLORER',
+    authenticated: false,
+    points: { upgradePoints: 0, rewardPoints: 0 }
+  }
+}
+
+const initialAuth = getInitialAuthState()
+
 export const useStore = defineStore('app', () => {
   const isDark = ref(false)
-  const currentUser = ref(null)
-  const currentLevel = ref('EXPLORER')
-  const isAuthenticated = ref(false)
-  const userPoints = ref({ upgradePoints: 0, rewardPoints: 0 })
+  const currentUser = ref(initialAuth.user)
+  const currentLevel = ref(initialAuth.level)
+  const isAuthenticated = ref(initialAuth.authenticated)
+  const authLoading = ref(true) // 認證載入狀態
+  const userPoints = ref(initialAuth.points)
+
+  // 用戶統計資料
+  const userStats = ref({
+    tasksCompleted: 0,
+    consecutiveDays: 0,
+    totalLogins: 0,
+    rewardsRedeemed: 0,
+    friendsInvited: 0
+  })
 
   // 搜尋狀態
   const searchQuery = ref('')
@@ -65,6 +106,9 @@ export const useStore = defineStore('app', () => {
 
   // 結帳暫存
   const checkoutItems = ref([])
+
+  // 活動紀錄（兌換記錄會即時加入）
+  const activityRecords = ref([])
 
   // 心願清單狀態管理 - 預設收藏項目
   const wishlistItems = ref([
@@ -158,6 +202,20 @@ export const useStore = defineStore('app', () => {
 
   const clearCheckoutItems = () => {
     checkoutItems.value = []
+  }
+
+  // 新增活動紀錄
+  const addActivityRecord = (record) => {
+    const newRecord = {
+      id: Date.now(),
+      ...record,
+      date: new Date().toISOString()
+    }
+    activityRecords.value.unshift(newRecord)
+    // 只保留最近 50 筆紀錄
+    if (activityRecords.value.length > 50) {
+      activityRecords.value = activityRecords.value.slice(0, 50)
+    }
   }
 
   // 心願清單操作函數
@@ -327,6 +385,8 @@ export const useStore = defineStore('app', () => {
   }
 
   const checkAuth = async () => {
+    authLoading.value = true
+
     // Mock 模式：從 localStorage 讀取
     if (!USE_BACKEND_API) {
       const saved = localStorage.getItem('auth')
@@ -346,6 +406,7 @@ export const useStore = defineStore('app', () => {
           console.error('Failed to parse auth', e)
         }
       }
+      authLoading.value = false
       return
     }
 
@@ -364,11 +425,14 @@ export const useStore = defineStore('app', () => {
           upgradePoints: user.upgradePoints || 0,
           rewardPoints: user.rewardPoints || 0
         }
+        // 同步更新 localStorage 快取
+        localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }))
       } catch (error) {
         console.error('Token invalid:', error)
         logout()
       }
     }
+    authLoading.value = false
   }
 
   // 完成任務 API
@@ -447,6 +511,32 @@ export const useStore = defineStore('app', () => {
     }
   }
 
+  // 取得用戶統計資料
+  const fetchUserStats = async () => {
+    if (!currentUser.value) return
+
+    // Mock 模式：使用 mockUsers 的統計
+    if (!USE_BACKEND_API) {
+      userStats.value = mockUsers[1]?.stats || {
+        tasksCompleted: 0,
+        consecutiveDays: 0,
+        totalLogins: 0,
+        rewardsRedeemed: 0,
+        friendsInvited: 0
+      }
+      return
+    }
+
+    // 後端 API 模式
+    try {
+      const { userAPI } = await import('../api')
+      const response = await userAPI.getStats(currentUser.value.id)
+      userStats.value = response.data
+    } catch (error) {
+      console.error('Failed to fetch user stats:', error)
+    }
+  }
+
   // 搜尋功能
   const setSearchQuery = (query) => {
     searchQuery.value = query
@@ -482,7 +572,10 @@ export const useStore = defineStore('app', () => {
     currentUser,
     currentLevel,
     isAuthenticated,
+    authLoading,
     userPoints,
+    userStats,
+    fetchUserStats,
     cartItems,
     cartItemCount,
     addToCart,
@@ -513,5 +606,7 @@ export const useStore = defineStore('app', () => {
     toasts,
     showToast,
     removeToast,
+    activityRecords,
+    addActivityRecord,
   }
 })
