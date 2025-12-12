@@ -24,11 +24,6 @@ const routes = [
     component: () => import('../views/History.vue'),
   },
   {
-    path: '/roadmap',
-    name: 'Roadmap',
-    component: () => import('../views/Roadmap.vue'),
-  },
-  {
     path: '/search',
     name: 'Search',
     component: () => import('../views/SearchResults.vue'),
@@ -42,6 +37,16 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: () => import('../views/Admin.vue'),
+  },
+  {
+    path: '/checkout-confirm',
+    name: 'CheckoutConfirm',
+    component: () => import('../views/CheckoutConfirm.vue'),
+  },
+  {
+    path: '/redemption-complete',
+    name: 'RedemptionComplete',
+    component: () => import('../views/RedemptionComplete.vue'),
   },
 ]
 

@@ -48,23 +48,25 @@ public class UserService {
 
     private void checkLevelUp(User user) {
         int points = user.getUpgradePoints();
-        if (points >= 5000) {
+        // 等級門檻：0-249 EXPLORER, 250-749 CREATOR, 750-1499 VISIONARY, 1500+ LUMINARY
+        if (points >= 1500) {
             user.setLevel(User.MemberLevel.LUMINARY);
-        } else if (points >= 2000) {
+        } else if (points >= 750) {
             user.setLevel(User.MemberLevel.VISIONARY);
-        } else if (points >= 500) {
+        } else if (points >= 250) {
             user.setLevel(User.MemberLevel.CREATOR);
         } else {
             user.setLevel(User.MemberLevel.EXPLORER);
         }
     }
 
-    // 重置用戶資料（展示用）
+    // 重置用戶資料（展示用）- 重置為 matcha 初始狀態
     public User resetUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setUpgradePoints(1200);
-        user.setRewardPoints(3500);
+        // matcha 初始值：Lv2 CREATOR, 升級積分 480, 兌換積分 600
+        user.setUpgradePoints(480);
+        user.setRewardPoints(600);
         user.setLevel(User.MemberLevel.CREATOR);
         return userRepository.save(user);
     }

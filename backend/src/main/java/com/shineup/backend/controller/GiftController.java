@@ -1,5 +1,6 @@
 package com.shineup.backend.controller;
 
+import com.shineup.backend.dto.GiftDTO;
 import com.shineup.backend.entity.Gift;
 import com.shineup.backend.entity.RedemptionOrder;
 import com.shineup.backend.service.GiftService;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/gifts")
@@ -18,25 +20,32 @@ public class GiftController {
     private final GiftService giftService;
 
     @GetMapping
-    public List<Gift> getAllGifts() {
-        return giftService.findAll();
+    public List<GiftDTO> getAllGifts() {
+        return giftService.findAll().stream()
+                .map(GiftDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/in-stock")
-    public List<Gift> getGiftsInStock() {
-        return giftService.findInStock();
+    public List<GiftDTO> getGiftsInStock() {
+        return giftService.findInStock().stream()
+                .map(GiftDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Gift> getGiftById(@PathVariable Long id) {
+    public ResponseEntity<GiftDTO> getGiftById(@PathVariable Long id) {
         return giftService.findById(id)
+                .map(GiftDTO::fromEntity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/series/{series}")
-    public List<Gift> getGiftsBySeries(@PathVariable String series) {
-        return giftService.findBySeries(series);
+    public List<GiftDTO> getGiftsBySeries(@PathVariable String series) {
+        return giftService.findBySeries(series).stream()
+                .map(GiftDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @PostMapping

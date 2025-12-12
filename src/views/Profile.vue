@@ -341,8 +341,12 @@ const router = useRouter()
 const avatarInput = ref(null)
 
 
-// 用戶資料
-const user = computed(() => mockUsers[1])
+// 用戶資料 - 使用 store 即時數據
+const user = computed(() => ({
+  ...store.currentUser,
+  levelPoints: store.userPoints.upgradePoints,
+  rewardPoints: store.userPoints.rewardPoints
+}))
 
 // 當前等級配置
 const currentLevelConfig = computed(() => {

@@ -1,13 +1,14 @@
 <template>
   <div ref="levelCardContainer" class="relative">
     <!-- Level Card Trigger -->
+    <!-- 手機/平板為小圓形星星icon，桌面(lg+)顯示完整等級資訊 -->
     <div @click="toggleLevelCard"
       :class="[
         'flex items-center justify-center cursor-pointer hover:scale-[1.02] transition-all active:scale-95 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:opacity-100 opacity-90',
-        'md:gap-2 md:px-3 md:py-1.5 md:rounded-full',
-        'w-9 h-9 rounded-full md:w-auto md:h-auto'
+        'lg:gap-2 lg:px-3 lg:py-1.5 lg:rounded-full',
+        'w-8 h-8 lg:w-auto lg:h-auto rounded-full'
       ]">
-      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24">
+      <svg class="w-4 h-4 lg:w-[18px] lg:h-[18px]" fill="none" viewBox="0 0 24 24">
         <defs>
           <linearGradient :id="`level-star-${currentLevel.levelNumber}`" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" :stop-color="currentLevel.gradientFromHex || '#c4b5fd'" />
@@ -17,9 +18,9 @@
         <path d="M12 1 L14.5 10.5 L24 12 L14.5 13.5 L12 23 L9.5 13.5 L0 12 L9.5 10.5 Z"
           :fill="`url(#level-star-${currentLevel.levelNumber})`" />
       </svg>
-      <!-- Show text and dropdown arrow only on desktop (md and up) -->
-      <span class="hidden md:inline text-sm font-bold" :style="`color: ${currentLevel.color}`">Lv{{ currentLevel.levelNumber }} {{ currentLevel.level }}</span>
-      <svg class="hidden md:block w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <!-- Show Lv and level name on desktop (lg and up) -->
+      <span class="hidden lg:inline text-sm font-bold" :style="`color: ${currentLevel.color}`">Lv{{ currentLevel.levelNumber }} {{ currentLevel.level }}</span>
+      <svg class="hidden lg:block w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </div>
@@ -146,7 +147,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { levelConfig, mockUsers } from '../../mock.js'
+import { levelConfig } from '../../mock.js'
 import { useStore } from '../../store/app.js'
 import { formatPoints } from '../../utils/formatPoints.js'
 
@@ -157,15 +158,15 @@ const store = useStore()
 // 檢查是否登入
 const isLoggedIn = computed(() => store.isAuthenticated)
 
-// 雙軌積分系統 - 根據登入狀態決定
+// 雙軌積分系統 - 使用 store.userPoints 即時數據
 const userLevelPoints = computed(() => {
   if (!isLoggedIn.value) return 0
-  return store.currentUser?.levelPoints || mockUsers[1]?.levelPoints || 0
+  return store.userPoints.upgradePoints || 0
 })
 
 const userRewardPoints = computed(() => {
   if (!isLoggedIn.value) return 0
-  return store.currentUser?.rewardPoints || mockUsers[1]?.rewardPoints || 0
+  return store.userPoints.rewardPoints || 0
 })
 
 // 未登入時的預設等級配置

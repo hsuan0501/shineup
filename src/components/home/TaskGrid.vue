@@ -36,26 +36,26 @@
             </div>
 
             <!-- Tasks Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-8">
                 <div v-for="task in paginatedTasks" :key="task.id"
                     @click="openTaskModal(task)"
-                    class="p-3.5 rounded-2xl bg-light-card dark:bg-gray-700/60 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 group dark:shadow-2xl border cursor-pointer flex flex-col sm:flex-row gap-3"
+                    class="p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-light-card dark:bg-gray-700/60 dark:backdrop-blur-xl hover:scale-105 transition-all duration-300 group dark:shadow-2xl border cursor-pointer flex flex-row gap-2 sm:gap-3"
                     :class="getTaskBorderClass(task.category)">
 
                     <!-- 左側：圖片 -->
                     <div v-if="task.image" class="flex-shrink-0">
-                        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
+                        <div class="w-16 h-16 sm:w-28 sm:h-28 rounded-lg sm:rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
                             <img :src="task.image" :alt="task.title" class="w-full h-full object-cover">
                         </div>
                     </div>
 
                     <!-- 右側：內容 -->
-                    <div class="flex-1 flex flex-col">
+                    <div class="flex-1 flex flex-col min-w-0">
                         <!-- 頂部：標題 -->
-                        <h3 class="text-base font-bold text-light-text dark:text-dark-text mb-2">{{ task.title }}</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-light-text dark:text-dark-text mb-1 sm:mb-2 truncate">{{ task.title }}</h3>
 
-                        <!-- 標籤 -->
-                        <div class="flex gap-2 mb-2">
+                        <!-- 標籤 - 手機版隱藏 -->
+                        <div class="hidden sm:flex gap-2 mb-2">
                             <!-- 分類標籤 (深色) -->
                             <span :class="getCategoryBadgeClass(task.category)" class="px-2.5 py-1 rounded-full text-xs font-semibold">
                                 {{ getCategoryLabelForTask(task.category) }}
@@ -66,21 +66,21 @@
                             </span>
                         </div>
 
-                        <!-- 簡潔描述（一兩句） -->
-                        <p class="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-2 flex-1">{{
+                        <!-- 簡潔描述（一兩句）- 手機版只顯示1行 -->
+                        <p class="text-[11px] sm:text-xs text-gray-600 dark:text-gray-400 mb-1.5 sm:mb-3 line-clamp-1 sm:line-clamp-2 flex-1">{{
                             task.description }}</p>
 
                         <!-- 底部區域：積分 + 按鈕（同行） -->
-                        <div class="flex gap-2.5 items-center">
+                        <div class="flex gap-1.5 sm:gap-2.5 items-center">
                             <!-- 積分顯示 -->
-                            <div class="flex items-baseline gap-1 flex-1">
-                                <span class="text-lg font-bold" :class="getPointsColorClass(task.category)">+{{ formatPoints(task.points) }}</span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400">積分</span>
+                            <div class="flex items-baseline gap-0.5 sm:gap-1 flex-1">
+                                <span class="text-sm sm:text-lg font-bold" :class="getPointsColorClass(task.category)">+{{ formatPoints(task.points) }}</span>
+                                <span class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">積分</span>
                             </div>
 
                             <!-- 完成按鈕 -->
                             <button :disabled="task.completed" :class="[
-                                'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 pointer-events-auto',
+                                'px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold transition-all duration-300 pointer-events-auto',
                                 task.completed
                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                     : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'

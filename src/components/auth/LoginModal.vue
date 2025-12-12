@@ -66,9 +66,23 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 密碼
                             </label>
-                            <input v-model="loginForm.password" type="password" required
-                                class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
-                                placeholder="請輸入密碼">
+                            <div class="relative">
+                                <input v-model="loginForm.password" :type="showLoginPassword ? 'text' : 'password'" required
+                                    class="w-full px-4 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                                    placeholder="請輸入密碼">
+                                <button type="button" @click="showLoginPassword = !showLoginPassword"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                    <!-- Eye Open -->
+                                    <svg v-if="!showLoginPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <!-- Eye Closed -->
+                                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="flex items-center justify-between text-sm">
@@ -89,7 +103,7 @@
                         <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                             <p class="text-xs text-blue-600 dark:text-blue-400">
                                 <strong>測試帳號：</strong>matcha@example.com<br>
-                                <strong>測試密碼：</strong>20001108
+                                <strong>測試密碼：</strong>123456
                             </p>
                         </div>
                     </form>
@@ -120,18 +134,42 @@
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 密碼
                             </label>
-                            <input v-model="registerForm.password" type="password" required
-                                class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
-                                placeholder="至少 6 個字元">
+                            <div class="relative">
+                                <input v-model="registerForm.password" :type="showRegisterPassword ? 'text' : 'password'" required
+                                    class="w-full px-4 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                                    placeholder="至少 6 個字元">
+                                <button type="button" @click="showRegisterPassword = !showRegisterPassword"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                    <svg v-if="!showRegisterPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 確認密碼
                             </label>
-                            <input v-model="registerForm.confirmPassword" type="password" required
-                                class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
-                                placeholder="再次輸入密碼">
+                            <div class="relative">
+                                <input v-model="registerForm.confirmPassword" :type="showConfirmPassword ? 'text' : 'password'" required
+                                    class="w-full px-4 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                                    placeholder="再次輸入密碼">
+                                <button type="button" @click="showConfirmPassword = !showConfirmPassword"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                    <svg v-if="!showConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <button type="submit"
@@ -163,6 +201,11 @@ const store = useStore()
 const activeTab = ref('login')
 const isLoading = ref(false)
 
+// 密碼顯示狀態
+const showLoginPassword = ref(false)
+const showRegisterPassword = ref(false)
+const showConfirmPassword = ref(false)
+
 // Login Form
 const loginForm = ref({
     email: '',
@@ -186,6 +229,9 @@ const closeModal = () => {
         activeTab.value = 'login'
         loginForm.value = { email: '', password: '', rememberMe: false }
         registerForm.value = { name: '', email: '', password: '', confirmPassword: '' }
+        showLoginPassword.value = false
+        showRegisterPassword.value = false
+        showConfirmPassword.value = false
     }, 300)
 }
 

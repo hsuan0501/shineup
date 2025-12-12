@@ -158,7 +158,7 @@ const toggleChat = async () => {
 
     // 如果未登入，提示先登入
     if (!isLoggedIn.value) {
-        store.showToast('請先登入以開啟您的旅程，體驗智能客服功能！', 'info')
+        store.showToast('請先登入以體驗智能客服功能！', 'info')
         return
     }
 
@@ -174,8 +174,8 @@ const toggleChat = async () => {
 // 點擊外部區域關閉對話框
 const handleClickOutside = (event) => {
     if (isToggling.value) return
-    if (chatBoxContainer.value && !chatBoxContainer.value.contains(event.target) && isOpen.value) {
-        isOpen.value = false
+    if (chatBoxContainer.value && !chatBoxContainer.value.contains(event.target)) {
+        if (isOpen.value) isOpen.value = false
     }
 }
 

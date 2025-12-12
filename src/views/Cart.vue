@@ -210,13 +210,17 @@
                             </div>
 
                             <!-- 兌換按鈕 -->
-                            <button @click="checkout" :disabled="totalPoints > availablePoints" :class="[
-                                'w-full py-4 rounded-full font-bold transition-all duration-300 flex items-center justify-center',
-                                totalPoints > availablePoints
+                            <button @click="checkout" :disabled="totalPoints > availablePoints || isCheckingOut" :class="[
+                                'w-full py-4 rounded-full font-bold transition-all duration-300 flex items-center justify-center gap-2',
+                                totalPoints > availablePoints || isCheckingOut
                                     ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                                     : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-[1.02] active:scale-[0.98]'
                             ]">
-                                {{ totalPoints > availablePoints ? '積分不足' : '確認兌換' }}
+                                <svg v-if="isCheckingOut" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                {{ isCheckingOut ? '兌換中...' : (totalPoints > availablePoints ? '積分不足' : '確認兌換') }}
                             </button>
                         </div>
                     </div>
@@ -285,11 +289,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { mockUsers } from '../mock.js'
+import { useRouter } from 'vue-router'
 import { useStore } from '../store/app.js'
 
 // 使用全局 store
 const store = useStore()
+const router = useRouter()
 
 // 頁籤切換
 const activeTab = ref('cart')
@@ -306,8 +311,8 @@ if (typeof document !== 'undefined') {
   observer.observe(document.body, { childList: true, subtree: true })
 }
 
-// 用戶積分
-const availablePoints = computed(() => mockUsers[1]?.rewardPoints || 0)
+// 用戶積分 - 使用 store 的即時數據
+const availablePoints = computed(() => store.userPoints.rewardPoints || 0)
 
 // 使用全局購物車狀態
 const cartItems = computed(() => store.cartItems)
@@ -332,15 +337,25 @@ const removeItem = (itemId) => {
     store.removeFromCart(itemId)
 }
 
-// 結帳
+// 結帳 - 跳轉到確認頁面
+const isCheckingOut = ref(false)
+
 const checkout = () => {
     if (totalPoints.value > availablePoints.value) {
         store.showToast('積分不足，無法完成兌換', 'error')
         return
     }
 
-    store.showToast(`兌換成功！共使用 ${totalPoints.value} 積分`, 'success')
-    // 實際應用中這裡會調用API
+    if (!store.isAuthenticated) {
+        store.showToast('請先登入', 'error')
+        return
+    }
+
+    // 把購物車內容複製到 checkoutItems
+    store.setCheckoutItems(cartItems.value)
+
+    // 跳轉到確認頁面
+    router.push('/checkout-confirm')
 }
 
 // 獲取系列樣式

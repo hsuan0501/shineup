@@ -5,10 +5,10 @@
 -- 1. 等級配置 (level_config)
 -- ============================================
 INSERT INTO level_config (level_code, level_name, level_number, min_points, max_points, multiplier) VALUES
-('EXPLORER', '探索者', 1, 0, 499, 1.0),
-('CREATOR', '創造者', 2, 500, 1999, 1.15),
-('VISIONARY', '先行者', 3, 2000, 4999, 1.4),
-('LUMINARY', '閃耀者', 4, 5000, 999999, 1.7)
+('EXPLORER', '探索者', 1, 0, 249, 1.0),
+('CREATOR', '創造者', 2, 250, 749, 1.15),
+('VISIONARY', '先行者', 3, 750, 1499, 1.3),
+('LUMINARY', '閃耀者', 4, 1500, 999999, 1.5)
 ON DUPLICATE KEY UPDATE level_name = VALUES(level_name);
 
 -- ============================================
@@ -16,10 +16,10 @@ ON DUPLICATE KEY UPDATE level_name = VALUES(level_name);
 -- ============================================
 -- 密碼都是 123456 (BCrypt 加密後)
 INSERT INTO users (email, password, name, phone, level, upgrade_points, reward_points, created_at, updated_at) VALUES
-('matcha@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZRGdjGj/n3.Y8j7r5F6O7e/Z6e.YO', 'Matcha', '0912345678', 'CREATOR', 1200, 3500, NOW(), NOW()),
-('alice@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZRGdjGj/n3.Y8j7r5F6O7e/Z6e.YO', 'Alice', '0923456789', 'EXPLORER', 120, 80, NOW(), NOW()),
-('bob@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZRGdjGj/n3.Y8j7r5F6O7e/Z6e.YO', 'Bob', '0934567890', 'VISIONARY', 2500, 1800, NOW(), NOW()),
-('carol@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZRGdjGj/n3.Y8j7r5F6O7e/Z6e.YO', 'Carol', '0945678901', 'LUMINARY', 5500, 4200, NOW(), NOW())
+('matcha@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Matcha', '0912345678', 'CREATOR', 480, 600, NOW(), NOW()),
+('alice@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Alice', '0923456789', 'EXPLORER', 120, 80, NOW(), NOW()),
+('bob@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Bob', '0934567890', 'VISIONARY', 980, 1800, NOW(), NOW()),
+('carol@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Carol', '0945678901', 'LUMINARY', 1800, 4200, NOW(), NOW())
 ON DUPLICATE KEY UPDATE name = VALUES(name);
 
 -- ============================================

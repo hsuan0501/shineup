@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { authAPI, userAPI, taskAPI, giftAPI } from '../api'
+import { mockUsers } from '../mock.js'
+
+// 設定是否使用後端 API（true = 連後端，false = 純前端 mock）
+const USE_BACKEND_API = true
 
 export const useStore = defineStore('app', () => {
   const isDark = ref(false)
@@ -59,6 +62,9 @@ export const useStore = defineStore('app', () => {
       quantity: 1
     }
   ])
+
+  // 結帳暫存
+  const checkoutItems = ref([])
 
   // 心願清單狀態管理 - 預設收藏項目
   const wishlistItems = ref([
@@ -141,6 +147,19 @@ export const useStore = defineStore('app', () => {
     }
   }
 
+  const clearCart = () => {
+    cartItems.value = []
+  }
+
+  // 設定結帳暫存（從購物車複製）
+  const setCheckoutItems = (items) => {
+    checkoutItems.value = [...items]
+  }
+
+  const clearCheckoutItems = () => {
+    checkoutItems.value = []
+  }
+
   // 心願清單操作函數
   const addToWishlist = (gift) => {
     const exists = wishlistItems.value.find(item => item.id === gift.id)
@@ -210,7 +229,26 @@ export const useStore = defineStore('app', () => {
 
   // 認證相關函數
   const login = async (credentials) => {
+    // Mock 模式：直接用假資料驗證
+    if (!USE_BACKEND_API) {
+      const user = mockUsers[1]
+      if (credentials.email === user.email) {
+        localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }))
+        isAuthenticated.value = true
+        currentUser.value = user
+        currentLevel.value = user.level
+        userPoints.value = {
+          upgradePoints: user.levelPoints,
+          rewardPoints: user.rewardPoints
+        }
+        return { success: true, user }
+      }
+      return { success: false, message: '帳號或密碼錯誤' }
+    }
+
+    // 後端 API 模式
     try {
+      const { authAPI } = await import('../api')
       const response = await authAPI.login(credentials)
       const { token, user } = response.data
 
@@ -233,7 +271,31 @@ export const useStore = defineStore('app', () => {
   }
 
   const register = async (userData) => {
+    // Mock 模式：直接建立用戶
+    if (!USE_BACKEND_API) {
+      const newUser = {
+        id: Date.now(),
+        name: userData.name,
+        email: userData.email,
+        level: 'EXPLORER',
+        levelPoints: 0,
+        rewardPoints: 0,
+        avatar: `https://api.dicebear.com/9.x/thumbs/svg?seed=${userData.name}`
+      }
+      localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user: newUser }))
+      isAuthenticated.value = true
+      currentUser.value = newUser
+      currentLevel.value = newUser.level
+      userPoints.value = {
+        upgradePoints: newUser.levelPoints,
+        rewardPoints: newUser.rewardPoints
+      }
+      return { success: true, user: newUser }
+    }
+
+    // 後端 API 模式
     try {
+      const { authAPI } = await import('../api')
       const response = await authAPI.register(userData)
       const { token, user } = response.data
 
@@ -265,9 +327,33 @@ export const useStore = defineStore('app', () => {
   }
 
   const checkAuth = async () => {
+    // Mock 模式：從 localStorage 讀取
+    if (!USE_BACKEND_API) {
+      const saved = localStorage.getItem('auth')
+      if (saved) {
+        try {
+          const { isAuthenticated: auth, user } = JSON.parse(saved)
+          if (auth && user) {
+            isAuthenticated.value = true
+            currentUser.value = user
+            currentLevel.value = user.level || 'EXPLORER'
+            userPoints.value = {
+              upgradePoints: user.levelPoints || user.upgradePoints || 0,
+              rewardPoints: user.rewardPoints || 0
+            }
+          }
+        } catch (e) {
+          console.error('Failed to parse auth', e)
+        }
+      }
+      return
+    }
+
+    // 後端 API 模式
     const token = localStorage.getItem('token')
     if (token) {
       try {
+        const { authAPI } = await import('../api')
         const response = await authAPI.getMe()
         const { user } = response.data
 
@@ -289,7 +375,15 @@ export const useStore = defineStore('app', () => {
   const completeTask = async (taskId) => {
     if (!currentUser.value) return { success: false, message: '請先登入' }
 
+    // Mock 模式：直接加積分
+    if (!USE_BACKEND_API) {
+      userPoints.value.upgradePoints += 50
+      userPoints.value.rewardPoints += 50
+      return { success: true, message: '任務完成！' }
+    }
+
     try {
+      const { taskAPI } = await import('../api')
       const response = await taskAPI.complete(taskId, currentUser.value.id)
       userPoints.value = {
         upgradePoints: response.data.upgradePoints,
@@ -305,9 +399,14 @@ export const useStore = defineStore('app', () => {
   const redeemGift = async (giftId) => {
     if (!currentUser.value) return { success: false, message: '請先登入' }
 
+    // Mock 模式：直接扣積分
+    if (!USE_BACKEND_API) {
+      return { success: true, message: '兌換成功！' }
+    }
+
     try {
+      const { giftAPI } = await import('../api')
       const response = await giftAPI.redeem(giftId, currentUser.value.id)
-      // 重新取得用戶資料更新積分
       await checkAuth()
       return { success: true, message: response.data.message }
     } catch (error) {
@@ -319,7 +418,21 @@ export const useStore = defineStore('app', () => {
   const resetUser = async () => {
     if (!currentUser.value) return { success: false, message: '請先登入' }
 
+    // Mock 模式：重置為預設值
+    if (!USE_BACKEND_API) {
+      const user = mockUsers[1]
+      currentUser.value = user
+      currentLevel.value = user.level
+      userPoints.value = {
+        upgradePoints: user.levelPoints,
+        rewardPoints: user.rewardPoints
+      }
+      localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }))
+      return { success: true, message: '資料已重置' }
+    }
+
     try {
+      const { userAPI } = await import('../api')
       const response = await userAPI.reset(currentUser.value.id)
       const user = response.data
       currentUser.value = user
@@ -375,6 +488,10 @@ export const useStore = defineStore('app', () => {
     addToCart,
     removeFromCart,
     updateCartItemQuantity,
+    clearCart,
+    checkoutItems,
+    setCheckoutItems,
+    clearCheckoutItems,
     wishlistItems,
     addToWishlist,
     removeFromWishlist,
