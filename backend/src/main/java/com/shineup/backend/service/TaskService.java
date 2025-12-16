@@ -21,6 +21,7 @@ public class TaskService {
     private final UserRepository userRepository;
     private final UserTaskProgressRepository userTaskProgressRepository;
     private final UserService userService;
+    private final ActivityRecordService activityRecordService;
 
     public List<Task> findAll() {
         return taskRepository.findAll();
@@ -92,6 +93,9 @@ public class TaskService {
 
         // 更新統計：任務完成數 +1
         userService.incrementTasksCompleted(userId);
+
+        // 新增活動紀錄
+        activityRecordService.addRecord(userId, "task", task.getTitle(), task.getUpgradePoints());
 
         return userRepository.save(user);
     }

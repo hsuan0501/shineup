@@ -7,9 +7,13 @@ import com.shineup.backend.entity.User;
 import com.shineup.backend.repository.UserRepository;
 import com.shineup.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -20,6 +24,10 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final ActivityRecordService activityRecordService;
+
+    @Value("${recaptcha.secret}")
+    private String recaptchaSecret;
 
     // 註冊
     public AuthResponse register(RegisterRequest request) {
@@ -45,6 +53,11 @@ public class AuthService {
 
     // 登入
     public AuthResponse login(LoginRequest request) {
+        // 驗證 reCAPTCHA
+        if (!verifyRecaptcha(request.getCaptchaToken())) {
+            return AuthResponse.error("人機驗證失敗，請重試");
+        }
+
         // 查找用戶
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
         if (userOpt.isEmpty()) {
@@ -64,7 +77,30 @@ public class AuthService {
         // 記錄登入統計
         userService.recordLogin(user.getId());
 
+        // 新增活動紀錄：每日登入
+        activityRecordService.addRecord(user.getId(), "login", "完成每日登入", 5);
+
         return AuthResponse.success(token, user);
+    }
+
+    // 驗證 reCAPTCHA token
+    private boolean verifyRecaptcha(String token) {
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+
+        try {
+            String url = "https://www.google.com/recaptcha/api/siteverify?secret="
+                + recaptchaSecret + "&response=" + token;
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<Map> response = restTemplate.postForEntity(url, null, Map.class);
+
+            Map body = response.getBody();
+            return body != null && Boolean.TRUE.equals(body.get("success"));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     // 透過 Token 取得用戶資料

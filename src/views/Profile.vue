@@ -455,9 +455,14 @@ const avatarInput = ref(null)
 // 完整紀錄彈窗
 const showAllRecords = ref(false)
 
-// 載入統計資料
-onMounted(() => {
+// 後端活動紀錄
+const backendRecords = ref([])
+
+// 載入資料
+onMounted(async () => {
   store.fetchUserStats()
+  // 從後端取得活動紀錄
+  backendRecords.value = await store.fetchActivityRecords()
 })
 
 // 用戶資料 - 使用 store 即時數據
@@ -497,56 +502,26 @@ const levelProgress = computed(() => {
   return Math.min((current / total) * 100, 100)
 })
 
-// 活動紀錄 - 結合 store 中的即時兌換紀錄
+// 假資料（當後端沒資料時 Demo 用）
+const mockRecords = [
+  { id: 1, type: 'streak', title: '連續登入七天', points: 10, date: '2024-12-12T09:16:00' },
+  { id: 2, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-12T09:15:00' },
+  { id: 3, type: 'reward', title: '兌換 UiU 環保便攜吸管組', points: 100, date: '2024-12-11T16:30:00' },
+  { id: 4, type: 'invite', title: '邀請好友註冊成功', points: 20, date: '2024-12-11T14:00:00' },
+  { id: 5, type: 'task', title: '達成 Creator 等級升級', points: 100, date: '2024-12-11T10:00:00' },
+  { id: 6, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-11T08:30:00' },
+  { id: 7, type: 'task', title: '建立借貸需求檔案', points: 80, date: '2024-12-10T15:45:00' },
+  { id: 8, type: 'task', title: '完成個人檔案設置', points: 25, date: '2024-12-05T14:00:00' }
+]
+
+// 活動紀錄 - 優先使用後端資料，沒有則用假資料
 const recentRecords = computed(() => {
-  // 基礎任務紀錄（按時間倒序排列，積分對應任務實際 levelPoints）
-  // 情境：使用者連續登入 7 天，完成多項任務後升級到 CREATOR (Lv2)
-  // 積分計算（升級積分 700）：
-  // 每日登入 7次 × 5 = 35
-  // 連續登入七天 = 10
-  // 完成個人檔案設置 = 25
-  // 設定理財目標 = 30
-  // 完成金融知識測驗 = 35
-  // 觀看線上課程視頻 = 45
-  // 綁定銀行帳戶 = 50
-  // 邀請好友註冊 = 60
-  // 完成風險承受能力評估 = 60
-  // 參與線上學習論壇 = 70
-  // 撰寫永續投資文章 = 80
-  // 建立借貸需求檔案 = 80
-  // 達成 Creator 等級升級 = 100
-  // 額外登入獎勵 = 20（連續登入獎勵）
-  // 總計：35+10+25+30+35+45+50+60+60+70+80+80+100+20 = 700
-  const baseRecords = [
-    // 最近 5 筆（從新到舊）
-    { id: 1, type: 'streak', title: '連續登入七天', points: 10, date: '2024-12-12T09:16:00' },
-    { id: 2, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-12T09:15:00' },
-    { id: 3, type: 'reward', title: '兌換 UiU 環保便攜吸管組', points: 100, date: '2024-12-11T16:30:00' },
-    { id: 4, type: 'invite', title: '邀請好友註冊成功', points: 20, date: '2024-12-11T14:00:00' },
-    { id: 5, type: 'task', title: '達成 Creator 等級升級', points: 100, date: '2024-12-11T10:00:00' },
-    // 歷史紀錄（任務按積分由低到高的順序完成）
-    { id: 6, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-11T08:30:00' },
-    { id: 7, type: 'task', title: '建立借貸需求檔案', points: 80, date: '2024-12-10T15:45:00' },
-    { id: 8, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-10T09:00:00' },
-    { id: 9, type: 'task', title: '撰寫永續投資文章', points: 80, date: '2024-12-09T16:30:00' },
-    { id: 10, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-09T08:45:00' },
-    { id: 11, type: 'task', title: '參與線上學習論壇', points: 70, date: '2024-12-08T17:00:00' },
-    { id: 12, type: 'task', title: '完成風險承受能力評估', points: 60, date: '2024-12-08T14:30:00' },
-    { id: 13, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-08T09:20:00' },
-    { id: 14, type: 'task', title: '綁定銀行帳戶', points: 50, date: '2024-12-07T16:00:00' },
-    { id: 15, type: 'task', title: '觀看線上課程視頻', points: 45, date: '2024-12-07T11:00:00' },
-    { id: 16, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-07T09:00:00' },
-    { id: 17, type: 'task', title: '完成金融知識測驗', points: 35, date: '2024-12-06T14:00:00' },
-    { id: 18, type: 'task', title: '設定理財目標', points: 30, date: '2024-12-06T11:30:00' },
-    { id: 19, type: 'login', title: '完成每日登入', points: 5, date: '2024-12-06T09:15:00' },
-    { id: 20, type: 'task', title: '完成個人檔案設置', points: 25, date: '2024-12-05T14:00:00' }
-  ]
-
-  // 合併 store 中的即時活動紀錄（購物車兌換等）
-  const storeRecords = store.activityRecords || []
-  const allRecords = [...storeRecords, ...baseRecords]
-
-  return allRecords.sort((a, b) => new Date(b.date) - new Date(a.date))
+  // 如果有後端資料，使用後端資料
+  if (backendRecords.value.length > 0) {
+    return backendRecords.value.sort((a, b) => new Date(b.date) - new Date(a.date))
+  }
+  // 否則使用假資料（Demo 用）
+  return mockRecords
 })
 
 // 格式化日期

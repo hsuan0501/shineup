@@ -126,8 +126,35 @@ ON DUPLICATE KEY UPDATE status = VALUES(status);
 -- 6. 用戶統計資料 (user_stats)
 -- ============================================
 INSERT INTO user_stats (user_id, tasks_completed, consecutive_days, total_logins, rewards_redeemed, friends_invited, last_login_date, created_at, updated_at) VALUES
-(1, 9, 7, 7, 1, 1, CURDATE(), NOW(), NOW()),
+(1, 9, 7, 7, 1, 1, DATE_SUB(CURDATE(), INTERVAL 1 DAY), NOW(), NOW()),
 (2, 3, 2, 5, 0, 0, CURDATE(), NOW(), NOW()),
 (3, 12, 5, 20, 1, 2, CURDATE(), NOW(), NOW()),
 (4, 25, 14, 45, 5, 8, CURDATE(), NOW(), NOW())
 ON DUPLICATE KEY UPDATE tasks_completed = VALUES(tasks_completed), consecutive_days = VALUES(consecutive_days), total_logins = VALUES(total_logins), rewards_redeemed = VALUES(rewards_redeemed);
+
+-- ============================================
+-- 7. 活動紀錄 (activity_records)
+-- ============================================
+-- 用戶1 (matcha) 的歷史活動紀錄
+INSERT INTO activity_records (user_id, type, title, points, created_at) VALUES
+-- 最近紀錄
+(1, 'streak', '連續登入七天', 10, DATE_SUB(NOW(), INTERVAL 1 HOUR)),
+(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 1 HOUR)),
+(1, 'reward', '兌換 UiU 環保便攜吸管組', -100, DATE_SUB(NOW(), INTERVAL 1 DAY)),
+(1, 'invite', '邀請好友註冊成功', 20, DATE_SUB(NOW(), INTERVAL 1 DAY)),
+(1, 'task', '達成 Creator 等級升級', 100, DATE_SUB(NOW(), INTERVAL 1 DAY)),
+-- 歷史紀錄（任務按積分由低到高完成）
+(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 2 DAY)),
+(1, 'task', '建立借貸需求檔案', 80, DATE_SUB(NOW(), INTERVAL 2 DAY)),
+(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 3 DAY)),
+(1, 'task', '撰寫永續投資文章', 80, DATE_SUB(NOW(), INTERVAL 3 DAY)),
+(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 4 DAY)),
+(1, 'task', '完成風險承受能力評估', 60, DATE_SUB(NOW(), INTERVAL 4 DAY)),
+(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 5 DAY)),
+(1, 'task', '綁定銀行帳戶', 50, DATE_SUB(NOW(), INTERVAL 5 DAY)),
+(1, 'task', '觀看線上課程視頻', 45, DATE_SUB(NOW(), INTERVAL 5 DAY)),
+(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 6 DAY)),
+(1, 'task', '完成金融知識測驗', 35, DATE_SUB(NOW(), INTERVAL 6 DAY)),
+(1, 'task', '設定理財目標', 30, DATE_SUB(NOW(), INTERVAL 6 DAY)),
+(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 7 DAY)),
+(1, 'task', '完成個人檔案設置', 25, DATE_SUB(NOW(), INTERVAL 7 DAY));

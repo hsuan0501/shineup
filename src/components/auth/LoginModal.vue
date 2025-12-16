@@ -91,21 +91,20 @@
                                     class="w-4 h-4 rounded border-gray-300 text-cyan-500 focus:ring-cyan-500">
                                 <span class="ml-2 text-gray-600 dark:text-gray-400">記住我</span>
                             </label>
-                            <a href="#" class="text-cyan-500 hover:text-cyan-600 font-medium">忘記密碼？</a>
+                            <button type="button" @click="openForgotPassword" class="text-cyan-500 hover:text-cyan-600 font-medium">忘記密碼？</button>
                         </div>
 
-                        <button type="submit"
+                        <!-- Google reCAPTCHA -->
+                        <div class="flex justify-center">
+                            <div ref="recaptchaRef" class="g-recaptcha" data-sitekey="6Le1Jy0sAAAAAAwbNt-_UnUgQTokardUIOFKjYny"></div>
+                        </div>
+                        <p v-if="recaptchaError" class="text-red-500 text-xs text-center">請先完成驗證</p>
+
+                        <button type="submit" :disabled="isLoading"
                             class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                             登入
                         </button>
 
-                        <!-- Demo Hint -->
-                        <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                            <p class="text-xs text-blue-600 dark:text-blue-400">
-                                <strong>測試帳號：</strong>matcha@example.com<br>
-                                <strong>測試密碼：</strong>123456
-                            </p>
-                        </div>
                     </form>
 
 
@@ -185,11 +184,15 @@
             </div>
         </div>
     </Transition>
+
+    <!-- 忘記密碼 Modal -->
+    <ForgotPasswordModal v-model="showForgotPassword" />
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useStore } from '../../store/app'
+import ForgotPasswordModal from './ForgotPasswordModal.vue'
 
 const props = defineProps({
     modelValue: Boolean
@@ -201,10 +204,63 @@ const store = useStore()
 const activeTab = ref('login')
 const isLoading = ref(false)
 
+// reCAPTCHA
+const recaptchaRef = ref(null)
+const recaptchaToken = ref('')
+const recaptchaError = ref(false)
+
+// 當 modal 打開時，渲染 reCAPTCHA
+watch(() => props.modelValue, (newVal) => {
+    if (newVal) {
+        // Modal 開啟時，等 DOM 更新後渲染 reCAPTCHA
+        setTimeout(() => {
+            renderRecaptcha()
+        }, 100)
+    }
+})
+
+// 當切換回登入 tab 時，重新渲染 reCAPTCHA
+watch(() => activeTab.value, (newVal) => {
+    if (newVal === 'login') {
+        setTimeout(() => {
+            renderRecaptcha()
+        }, 100)
+    }
+})
+
+// 渲染 reCAPTCHA
+const renderRecaptcha = () => {
+    if (window.grecaptcha && recaptchaRef.value) {
+        // 先清空舊的
+        recaptchaRef.value.innerHTML = ''
+        // 渲染新的
+        window.grecaptcha.render(recaptchaRef.value, {
+            sitekey: '6Le1Jy0sAAAAAAwbNt-_UnUgQTokardUIOFKjYny',
+            callback: onRecaptchaSuccess,
+            size: 'normal'  // 標準大小
+        })
+    }
+}
+
+// reCAPTCHA 成功時的回調
+const onRecaptchaSuccess = (token) => {
+    recaptchaToken.value = token
+    recaptchaError.value = false
+}
+
 // 密碼顯示狀態
 const showLoginPassword = ref(false)
 const showRegisterPassword = ref(false)
 const showConfirmPassword = ref(false)
+
+// 忘記密碼 Modal
+const showForgotPassword = ref(false)
+const openForgotPassword = () => {
+    emit('update:modelValue', false)  // 先關閉登入 Modal
+    setTimeout(() => {
+        showForgotPassword.value = true  // 再打開忘記密碼 Modal
+    }, 200)
+}
 
 // Login Form
 const loginForm = ref({
@@ -232,16 +288,26 @@ const closeModal = () => {
         showLoginPassword.value = false
         showRegisterPassword.value = false
         showConfirmPassword.value = false
+        recaptchaToken.value = ''
+        recaptchaError.value = false
     }, 300)
 }
 
 // Handle Login - 串接後端 API
 const handleLogin = async () => {
+    // 檢查 reCAPTCHA 是否完成
+    if (!recaptchaToken.value) {
+        recaptchaError.value = true
+        store.showToast('請先完成人機驗證', 'error')
+        return
+    }
+
     isLoading.value = true
     try {
         const result = await store.login({
             email: loginForm.value.email,
-            password: loginForm.value.password
+            password: loginForm.value.password,
+            captchaToken: recaptchaToken.value
         })
 
         if (result.success) {

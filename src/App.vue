@@ -32,21 +32,42 @@
 
       <!-- Global Toast Notifications -->
       <Toast />
+
+      <!-- Reset Password Modal -->
+      <ResetPasswordModal v-model="showResetPasswordModal" :token="resetToken" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { useStore } from './store/app'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import NavBar from './components/NavBar.vue'
 import Footer from './components/Footer.vue'
 import ChatBox from './components/ChatBox.vue'
 import Toast from './components/Toast.vue'
+import ResetPasswordModal from './components/auth/ResetPasswordModal.vue'
 import { RouterView } from 'vue-router'
 
 const store = useStore()
+const route = useRoute()
+const router = useRouter()
 const isDark = computed(() => store.isDark)
+
+// Reset Password Modal
+const showResetPasswordModal = ref(false)
+const resetToken = ref('')
+
+// 監聽路由，當進入 /reset-password 時顯示 Modal
+watch(() => route.path, (newPath) => {
+  if (newPath === '/reset-password') {
+    resetToken.value = route.query.token || ''
+    showResetPasswordModal.value = true
+    // 導回首頁但保持 Modal 開啟
+    router.replace('/')
+  }
+}, { immediate: true })
 
 // 檢測登入modal是否開啟
 const isLoginModalOpen = ref(false)

@@ -13,4 +13,7 @@ public class LoginRequest {
 
     @NotBlank(message = "密碼不能為空")
     private String password;
+
+    // reCAPTCHA token（前端驗證後傳來）
+    private String captchaToken;
 }

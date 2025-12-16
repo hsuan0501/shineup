@@ -36,6 +36,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/tasks/**").permitAll()
                 .requestMatchers("/api/gifts/**").permitAll()
                 .requestMatchers("/api/users/**").permitAll()
+                .requestMatchers("/api/orders/**").permitAll()
+                .requestMatchers("/api/activities/**").permitAll()
                 // 其他請求需要認證
                 .anyRequest().authenticated()
             );

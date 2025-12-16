@@ -55,4 +55,9 @@ export const orderAPI = {
   getByUserId: (userId) => api.get(`/orders/user/${userId}`)
 }
 
+// 活動紀錄 API
+export const activityAPI = {
+  getByUserId: (userId) => api.get(`/activities/user/${userId}`)
+}
+
 export default api

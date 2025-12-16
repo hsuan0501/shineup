@@ -21,6 +21,7 @@ public class GiftService {
     private final UserRepository userRepository;
     private final RedemptionOrderRepository redemptionOrderRepository;
     private final UserStatsRepository userStatsRepository;
+    private final ActivityRecordService activityRecordService;
 
     public List<Gift> findAll() {
         return giftRepository.findAll();
@@ -98,6 +99,9 @@ public class GiftService {
             stats.setRewardsRedeemed(stats.getRewardsRedeemed() + 1);
             userStatsRepository.save(stats);
         });
+
+        // 新增活動紀錄（負數表示消耗積分）
+        activityRecordService.addRecord(userId, "reward", "兌換 " + gift.getTitle(), -gift.getRequiredPoints());
 
         return redemptionOrderRepository.save(order);
     }

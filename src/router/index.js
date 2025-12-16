@@ -48,6 +48,11 @@ const routes = [
     name: 'RedemptionComplete',
     component: () => import('../views/RedemptionComplete.vue'),
   },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: () => import('../views/ResetPassword.vue'),
+  },
 ]
 
 const router = createRouter({

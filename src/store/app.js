@@ -537,6 +537,33 @@ export const useStore = defineStore('app', () => {
     }
   }
 
+  // 取得用戶活動紀錄
+  const fetchActivityRecords = async () => {
+    if (!currentUser.value) return []
+
+    // Mock 模式：回傳空陣列（Profile.vue 會使用假資料）
+    if (!USE_BACKEND_API) {
+      return []
+    }
+
+    // 後端 API 模式
+    try {
+      const { activityAPI } = await import('../api')
+      const response = await activityAPI.getByUserId(currentUser.value.id)
+      // 轉換後端格式
+      return response.data.map(record => ({
+        id: record.id,
+        type: record.type,
+        title: record.title,
+        points: Math.abs(record.points),
+        date: record.createdAt
+      }))
+    } catch (error) {
+      console.error('Failed to fetch activity records:', error)
+      return []
+    }
+  }
+
   // 搜尋功能
   const setSearchQuery = (query) => {
     searchQuery.value = query
@@ -608,5 +635,6 @@ export const useStore = defineStore('app', () => {
     removeToast,
     activityRecords,
     addActivityRecord,
+    fetchActivityRecords,
   }
 })
