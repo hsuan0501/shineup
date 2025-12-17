@@ -20,7 +20,7 @@ public class EmailService {
     private String fromEmail;
 
     // 寄送重設密碼信件
-    public void sendPasswordResetEmail(String toEmail, String resetUrl) throws MessagingException, UnsupportedEncodingException {
+    public void sendPasswordResetEmail(String toEmail, String userName, String resetUrl) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
@@ -29,39 +29,38 @@ public class EmailService {
         helper.setSubject("【ShineUp】重設密碼");
 
         String htmlContent = """
-            <div style="font-family: 'Microsoft JhengHei', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                <div style="background: linear-gradient(135deg, #06b6d4, #3b82f6); padding: 30px; border-radius: 16px 16px 0 0; text-align: center;">
-                    <h1 style="color: white; margin: 0; font-size: 28px;">ShineUp</h1>
-                    <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">重設您的密碼</p>
-                </div>
+            <div style="font-family: 'Microsoft JhengHei', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background: #ffffff;">
+                <p style="margin: 0 0 30px 0; font-size: 32px; font-weight: bold; text-align: center; color: #38bdf8;">
+                    ShineUp
+                </p>
 
-                <div style="background: #ffffff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 16px 16px;">
-                    <p style="color: #374151; font-size: 16px; line-height: 1.6;">您好，</p>
-                    <p style="color: #374151; font-size: 16px; line-height: 1.6;">
-                        我們收到了您重設密碼的請求。請點擊下方按鈕來設定新密碼：
-                    </p>
+                <p style="color: #374151; font-size: 15px; line-height: 1.8; text-align: center;">
+                    %s 您好，<br>
+                    我們收到了您重設密碼的請求。請點擊下方按鈕來設定新密碼。
+                </p>
 
-                    <div style="text-align: center; margin: 30px 0;">
-                        <a href="%s" style="display: inline-block; background: linear-gradient(135deg, #06b6d4, #3b82f6); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
-                            重設密碼
-                        </a>
-                    </div>
+                <table cellpadding="0" cellspacing="0" border="0" style="margin: 30px auto;">
+                    <tr>
+                        <td bgcolor="#38bdf8" style="border-radius: 50px;">
+                            <a href="%s" style="display: inline-block; color: #ffffff; padding: 12px 40px; text-decoration: none; font-weight: bold; font-size: 15px;">
+                                重設密碼
+                            </a>
+                        </td>
+                    </tr>
+                </table>
 
-                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
-                        此連結將在 <strong>30 分鐘</strong>後失效。
-                    </p>
-                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
-                        如果您沒有請求重設密碼，請忽略此信件，您的帳號將保持安全。
-                    </p>
+                <p style="color: #9ca3af; font-size: 13px; line-height: 1.6; text-align: center;">
+                    此連結將在 30 分鐘後失效。<br>
+                    如果您沒有請求重設密碼，請忽略此信件。
+                </p>
 
-                    <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
+                <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
 
-                    <p style="color: #9ca3af; font-size: 12px; text-align: center;">
-                        此為系統自動發送的信件，請勿直接回覆。
-                    </p>
-                </div>
+                <p style="color: #9ca3af; font-size: 12px; text-align: center;">
+                    此為系統自動發送的信件，請勿直接回覆。
+                </p>
             </div>
-            """.formatted(resetUrl);
+            """.formatted(userName, resetUrl);
 
         helper.setText(htmlContent, true);
         mailSender.send(message);

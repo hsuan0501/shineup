@@ -101,8 +101,8 @@ public class UserService {
                 .orElse(UserStatsDTO.empty());
     }
 
-    // 取得或建立用戶統計
-    private UserStats getOrCreateStats(Long userId) {
+    // 取得或建立用戶統計（公開方法供 AuthService 使用）
+    public UserStats getOrCreateStats(Long userId) {
         return userStatsRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     User user = userRepository.findById(userId)
@@ -114,30 +114,38 @@ public class UserService {
     }
 
     // 記錄登入（更新連續登入天數和總登入次數）
+    // 只有當天第一次登入才會更新統計
     @Transactional
     public UserStats recordLogin(Long userId) {
         UserStats stats = getOrCreateStats(userId);
         LocalDate today = LocalDate.now();
         LocalDate lastLogin = stats.getLastLoginDate();
 
-        // 更新總登入次數
-        stats.setTotalLogins(stats.getTotalLogins() + 1);
+        // 判斷是否為今天第一次登入
+        boolean isFirstLoginToday = lastLogin == null || !lastLogin.equals(today);
 
-        // 計算連續登入
-        if (lastLogin == null) {
-            // 首次登入
-            stats.setConsecutiveDays(1);
-        } else if (lastLogin.equals(today.minusDays(1))) {
-            // 連續登入（昨天有登入）
-            stats.setConsecutiveDays(stats.getConsecutiveDays() + 1);
-        } else if (!lastLogin.equals(today)) {
-            // 不連續，重置為 1
-            stats.setConsecutiveDays(1);
+        if (isFirstLoginToday) {
+            // 更新總登入次數（只有第一次登入才計算）
+            stats.setTotalLogins(stats.getTotalLogins() + 1);
+
+            // 計算連續登入
+            if (lastLogin == null) {
+                // 首次登入
+                stats.setConsecutiveDays(1);
+            } else if (lastLogin.equals(today.minusDays(1))) {
+                // 連續登入（昨天有登入）
+                stats.setConsecutiveDays(stats.getConsecutiveDays() + 1);
+            } else {
+                // 不連續，重置為 1
+                stats.setConsecutiveDays(1);
+            }
+
+            stats.setLastLoginDate(today);
+            return userStatsRepository.save(stats);
         }
-        // 如果是同一天重複登入，不改變連續天數
 
-        stats.setLastLoginDate(today);
-        return userStatsRepository.save(stats);
+        // 同一天重複登入，直接回傳不做任何更新
+        return stats;
     }
 
     // 增加任務完成數

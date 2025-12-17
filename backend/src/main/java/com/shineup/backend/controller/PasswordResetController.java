@@ -30,15 +30,15 @@ public class PasswordResetController {
             ));
         }
 
-        String token = passwordResetService.requestPasswordReset(email);
+        var result = passwordResetService.requestPasswordReset(email);
 
         // 不管 Email 存不存在，都回傳成功（安全考量）
-        if (token != null) {
-            String resetUrl = "http://localhost:5173/reset-password?token=" + token;
+        if (result != null) {
+            String resetUrl = "http://localhost:5173/reset-password?token=" + result.token();
 
             try {
-                // 寄送重設密碼信件
-                emailService.sendPasswordResetEmail(email, resetUrl);
+                // 寄送重設密碼信件（帶入用戶名稱）
+                emailService.sendPasswordResetEmail(email, result.userName(), resetUrl);
                 log.info("Password reset email sent to: {}", email);
             } catch (Exception e) {
                 log.error("Failed to send password reset email to: {}", email, e);

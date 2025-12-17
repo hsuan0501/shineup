@@ -33,6 +33,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // 公開的 API
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/captcha/**").permitAll()
                 .requestMatchers("/api/tasks/**").permitAll()
                 .requestMatchers("/api/gifts/**").permitAll()
                 .requestMatchers("/api/users/**").permitAll()

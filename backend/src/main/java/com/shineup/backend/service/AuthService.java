@@ -4,16 +4,14 @@ import com.shineup.backend.dto.AuthResponse;
 import com.shineup.backend.dto.LoginRequest;
 import com.shineup.backend.dto.RegisterRequest;
 import com.shineup.backend.entity.User;
+import com.shineup.backend.entity.UserStats;
 import com.shineup.backend.repository.UserRepository;
 import com.shineup.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.ResponseEntity;
 
-import java.util.Map;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -25,9 +23,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final ActivityRecordService activityRecordService;
-
-    @Value("${recaptcha.secret}")
-    private String recaptchaSecret;
 
     // 註冊
     public AuthResponse register(RegisterRequest request) {
@@ -53,11 +48,6 @@ public class AuthService {
 
     // 登入
     public AuthResponse login(LoginRequest request) {
-        // 驗證 reCAPTCHA
-        if (!verifyRecaptcha(request.getCaptchaToken())) {
-            return AuthResponse.error("人機驗證失敗，請重試");
-        }
-
         // 查找用戶
         Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
         if (userOpt.isEmpty()) {
@@ -74,33 +64,26 @@ public class AuthService {
         // 產生 Token
         String token = jwtUtil.generateToken(user.getId(), user.getEmail());
 
-        // 記錄登入統計
-        userService.recordLogin(user.getId());
+        // 檢查是否為當天第一次登入
+        LocalDate today = LocalDate.now();
+        LocalDate lastLoginBefore = userService.getOrCreateStats(user.getId()).getLastLoginDate();
+        boolean isFirstLoginToday = lastLoginBefore == null || !lastLoginBefore.equals(today);
 
-        // 新增活動紀錄：每日登入
-        activityRecordService.addRecord(user.getId(), "login", "完成每日登入", 5);
+        // 記錄登入統計（只有第一次登入才會更新）
+        UserStats stats = userService.recordLogin(user.getId());
+
+        // 只有當天第一次登入才加積分
+        if (isFirstLoginToday) {
+            // 每日登入 +5 積分
+            activityRecordService.addRecord(user.getId(), "login", "完成每日登入", 5);
+
+            // 連續登入七天 +10 積分（每 7 天觸發一次：7, 14, 21...）
+            if (stats.getConsecutiveDays() > 0 && stats.getConsecutiveDays() % 7 == 0) {
+                activityRecordService.addRecord(user.getId(), "streak", "連續登入七天", 10);
+            }
+        }
 
         return AuthResponse.success(token, user);
-    }
-
-    // 驗證 reCAPTCHA token
-    private boolean verifyRecaptcha(String token) {
-        if (token == null || token.isEmpty()) {
-            return false;
-        }
-
-        try {
-            String url = "https://www.google.com/recaptcha/api/siteverify?secret="
-                + recaptchaSecret + "&response=" + token;
-
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<Map> response = restTemplate.postForEntity(url, null, Map.class);
-
-            Map body = response.getBody();
-            return body != null && Boolean.TRUE.equals(body.get("success"));
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     // 透過 Token 取得用戶資料

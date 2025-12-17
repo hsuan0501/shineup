@@ -94,11 +94,22 @@
                             <button type="button" @click="openForgotPassword" class="text-cyan-500 hover:text-cyan-600 font-medium">忘記密碼？</button>
                         </div>
 
-                        <!-- Google reCAPTCHA -->
-                        <div class="flex justify-center">
-                            <div ref="recaptchaRef" class="g-recaptcha" data-sitekey="6Le1Jy0sAAAAAAwbNt-_UnUgQTokardUIOFKjYny"></div>
+                        <!-- 圖形驗證碼 -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                驗證碼
+                            </label>
+                            <div class="flex gap-2 items-center">
+                                <input v-model="captchaCode" type="text" required maxlength="5"
+                                    class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all uppercase"
+                                    placeholder="請輸入驗證碼">
+                                <img v-if="captchaImage" :src="captchaImage" @click="refreshCaptcha"
+                                    class="h-10 rounded cursor-pointer border border-gray-300 dark:border-gray-600 hover:opacity-80 transition-opacity"
+                                    title="點擊更換驗證碼" alt="驗證碼">
+                                <div v-else class="h-10 w-[120px] bg-gray-200 dark:bg-gray-600 rounded animate-pulse"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">點擊圖片可更換驗證碼</p>
                         </div>
-                        <p v-if="recaptchaError" class="text-red-500 text-xs text-center">請先完成驗證</p>
 
                         <button type="submit" :disabled="isLoading"
                             class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
@@ -193,6 +204,7 @@
 import { ref, watch } from 'vue'
 import { useStore } from '../../store/app'
 import ForgotPasswordModal from './ForgotPasswordModal.vue'
+import axios from 'axios'
 
 const props = defineProps({
     modelValue: Boolean
@@ -204,49 +216,29 @@ const store = useStore()
 const activeTab = ref('login')
 const isLoading = ref(false)
 
-// reCAPTCHA
-const recaptchaRef = ref(null)
-const recaptchaToken = ref('')
-const recaptchaError = ref(false)
+// 圖形驗證碼
+const captchaId = ref('')
+const captchaImage = ref('')
+const captchaCode = ref('')
 
-// 當 modal 打開時，渲染 reCAPTCHA
+// 取得驗證碼
+const refreshCaptcha = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/captcha/generate')
+        captchaId.value = response.data.captchaId
+        captchaImage.value = response.data.image
+        captchaCode.value = ''
+    } catch (error) {
+        console.error('Failed to get captcha:', error)
+    }
+}
+
+// 當 modal 打開時，取得驗證碼
 watch(() => props.modelValue, (newVal) => {
     if (newVal) {
-        // Modal 開啟時，等 DOM 更新後渲染 reCAPTCHA
-        setTimeout(() => {
-            renderRecaptcha()
-        }, 100)
+        refreshCaptcha()
     }
 })
-
-// 當切換回登入 tab 時，重新渲染 reCAPTCHA
-watch(() => activeTab.value, (newVal) => {
-    if (newVal === 'login') {
-        setTimeout(() => {
-            renderRecaptcha()
-        }, 100)
-    }
-})
-
-// 渲染 reCAPTCHA
-const renderRecaptcha = () => {
-    if (window.grecaptcha && recaptchaRef.value) {
-        // 先清空舊的
-        recaptchaRef.value.innerHTML = ''
-        // 渲染新的
-        window.grecaptcha.render(recaptchaRef.value, {
-            sitekey: '6Le1Jy0sAAAAAAwbNt-_UnUgQTokardUIOFKjYny',
-            callback: onRecaptchaSuccess,
-            size: 'normal'  // 標準大小
-        })
-    }
-}
-
-// reCAPTCHA 成功時的回調
-const onRecaptchaSuccess = (token) => {
-    recaptchaToken.value = token
-    recaptchaError.value = false
-}
 
 // 密碼顯示狀態
 const showLoginPassword = ref(false)
@@ -288,26 +280,35 @@ const closeModal = () => {
         showLoginPassword.value = false
         showRegisterPassword.value = false
         showConfirmPassword.value = false
-        recaptchaToken.value = ''
-        recaptchaError.value = false
+        captchaCode.value = ''
     }, 300)
 }
 
 // Handle Login - 串接後端 API
 const handleLogin = async () => {
-    // 檢查 reCAPTCHA 是否完成
-    if (!recaptchaToken.value) {
-        recaptchaError.value = true
-        store.showToast('請先完成人機驗證', 'error')
+    // 檢查驗證碼
+    if (!captchaCode.value) {
+        store.showToast('請輸入驗證碼', 'error')
         return
     }
 
     isLoading.value = true
     try {
+        // 先驗證圖形驗證碼
+        const captchaResponse = await axios.post('http://localhost:8080/api/captcha/verify', {
+            captchaId: captchaId.value,
+            captchaCode: captchaCode.value
+        })
+
+        if (!captchaResponse.data.valid) {
+            store.showToast('驗證碼錯誤', 'error')
+            refreshCaptcha()
+            return
+        }
+
         const result = await store.login({
             email: loginForm.value.email,
-            password: loginForm.value.password,
-            captchaToken: recaptchaToken.value
+            password: loginForm.value.password
         })
 
         if (result.success) {
@@ -315,9 +316,12 @@ const handleLogin = async () => {
             closeModal()
         } else {
             store.showToast(result.message || '登入失敗', 'error')
+            refreshCaptcha()
         }
     } catch (error) {
+        console.error('Login error:', error)
         store.showToast('登入失敗，請稍後再試', 'error')
+        refreshCaptcha()
     } finally {
         isLoading.value = false
     }

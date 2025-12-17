@@ -24,9 +24,9 @@ public class PasswordResetService {
     // Token 有效期限（30 分鐘）
     private static final int TOKEN_EXPIRY_MINUTES = 30;
 
-    // 申請重設密碼 - 產生 Token
+    // 申請重設密碼 - 產生 Token，回傳 Token 和用戶名稱
     @Transactional
-    public String requestPasswordReset(String email) {
+    public PasswordResetResult requestPasswordReset(String email) {
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
             // 為了安全，不透露 Email 是否存在
@@ -48,8 +48,11 @@ public class PasswordResetService {
 
         tokenRepository.save(resetToken);
 
-        return token;
+        return new PasswordResetResult(token, user.getName());
     }
+
+    // 內部類別用於回傳結果
+    public record PasswordResetResult(String token, String userName) {}
 
     // 驗證 Token 是否有效
     public boolean validateToken(String token) {

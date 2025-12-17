@@ -12,14 +12,13 @@ INSERT INTO level_config (level_code, level_name, level_number, min_points, max_
 ON DUPLICATE KEY UPDATE level_name = VALUES(level_name);
 
 -- ============================================
--- 2. 測試用戶 (users)
+-- 2. 用戶資料 (users)
 -- ============================================
--- 密碼都是 123456 (BCrypt 加密後)
-INSERT INTO users (email, password, name, phone, level, upgrade_points, reward_points, created_at, updated_at) VALUES
-('matcha@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Matcha', '0912345678', 'CREATOR', 700, 600, NOW(), NOW()),
-('alice@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Alice', '0923456789', 'EXPLORER', 120, 80, NOW(), NOW()),
-('bob@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Bob', '0934567890', 'VISIONARY', 980, 1800, NOW(), NOW()),
-('carol@example.com', '$2a$10$ByiUywbYqk0OI9E3LZa0rOIasbjQbc7fB9ZB8IA6obcaOaYhMHRle', 'Carol', '0945678901', 'LUMINARY', 1800, 4200, NOW(), NOW())
+-- 密碼都是 Qwe1234 (BCrypt 加密後)
+INSERT INTO users (id, email, password, name, phone, level, upgrade_points, reward_points, created_at, updated_at) VALUES
+(1, 'hsuan0501@outlook.com', '$2b$10$m8lm348q0VWqPuxXOdEfSOqvnvbAh2rEkLYi8/JP8q5nqNnEfC2Oq', 'Hsuan', '0912345678', 'CREATOR', 700, 600, NOW(), NOW()),
+(2, 'matcha1108@example.com', '$2b$10$m8lm348q0VWqPuxXOdEfSOqvnvbAh2rEkLYi8/JP8q5nqNnEfC2Oq', 'Matcha', '0923456789', 'EXPLORER', 120, 80, NOW(), NOW()),
+(3, 'may0529@example.com', '$2b$10$m8lm348q0VWqPuxXOdEfSOqvnvbAh2rEkLYi8/JP8q5nqNnEfC2Oq', 'May', '0934567890', 'EXPLORER', 100, 50, NOW(), NOW())
 ON DUPLICATE KEY UPDATE name = VALUES(name), upgrade_points = VALUES(upgrade_points), reward_points = VALUES(reward_points);
 
 -- ============================================
@@ -125,36 +124,45 @@ ON DUPLICATE KEY UPDATE status = VALUES(status);
 -- ============================================
 -- 6. 用戶統計資料 (user_stats)
 -- ============================================
+-- last_login_date 設為今天，避免登入時重複新增紀錄
+-- consecutive_days 設為 8，表示已經過了第 7 天獎勵
 INSERT INTO user_stats (user_id, tasks_completed, consecutive_days, total_logins, rewards_redeemed, friends_invited, last_login_date, created_at, updated_at) VALUES
-(1, 9, 7, 7, 1, 1, DATE_SUB(CURDATE(), INTERVAL 1 DAY), NOW(), NOW()),
+(1, 9, 8, 8, 1, 1, CURDATE(), NOW(), NOW()),
 (2, 3, 2, 5, 0, 0, CURDATE(), NOW(), NOW()),
-(3, 12, 5, 20, 1, 2, CURDATE(), NOW(), NOW()),
-(4, 25, 14, 45, 5, 8, CURDATE(), NOW(), NOW())
-ON DUPLICATE KEY UPDATE tasks_completed = VALUES(tasks_completed), consecutive_days = VALUES(consecutive_days), total_logins = VALUES(total_logins), rewards_redeemed = VALUES(rewards_redeemed);
+(3, 2, 1, 3, 0, 0, CURDATE(), NOW(), NOW())
+ON DUPLICATE KEY UPDATE
+    tasks_completed = VALUES(tasks_completed),
+    consecutive_days = VALUES(consecutive_days),
+    total_logins = VALUES(total_logins),
+    rewards_redeemed = VALUES(rewards_redeemed),
+    last_login_date = VALUES(last_login_date);
 
 -- ============================================
 -- 7. 活動紀錄 (activity_records)
 -- ============================================
--- 用戶1 (matcha) 的歷史活動紀錄
+-- 注意：活動紀錄不使用 ON DUPLICATE KEY，所以只在資料庫為空時插入
+-- 使用 INSERT IGNORE 或檢查是否已有資料來避免重複
+
+-- 先清空再插入，確保不會累積重複資料
+DELETE FROM activity_records WHERE user_id IN (1, 2, 3);
+
+-- 用戶1 (hsuan0501@outlook.com) 的歷史活動紀錄
+-- 順序：先登入，再其他任務/獎勵
 INSERT INTO activity_records (user_id, type, title, points, created_at) VALUES
--- 最近紀錄
-(1, 'streak', '連續登入七天', 10, DATE_SUB(NOW(), INTERVAL 1 HOUR)),
-(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 1 HOUR)),
-(1, 'reward', '兌換 UiU 環保便攜吸管組', -100, DATE_SUB(NOW(), INTERVAL 1 DAY)),
-(1, 'invite', '邀請好友註冊成功', 20, DATE_SUB(NOW(), INTERVAL 1 DAY)),
-(1, 'task', '達成 Creator 等級升級', 100, DATE_SUB(NOW(), INTERVAL 1 DAY)),
--- 歷史紀錄（任務按積分由低到高完成）
-(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 2 DAY)),
-(1, 'task', '建立借貸需求檔案', 80, DATE_SUB(NOW(), INTERVAL 2 DAY)),
-(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 3 DAY)),
-(1, 'task', '撰寫永續投資文章', 80, DATE_SUB(NOW(), INTERVAL 3 DAY)),
-(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 4 DAY)),
-(1, 'task', '完成風險承受能力評估', 60, DATE_SUB(NOW(), INTERVAL 4 DAY)),
-(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 5 DAY)),
-(1, 'task', '綁定銀行帳戶', 50, DATE_SUB(NOW(), INTERVAL 5 DAY)),
-(1, 'task', '觀看線上課程視頻', 45, DATE_SUB(NOW(), INTERVAL 5 DAY)),
-(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 6 DAY)),
-(1, 'task', '完成金融知識測驗', 35, DATE_SUB(NOW(), INTERVAL 6 DAY)),
-(1, 'task', '設定理財目標', 30, DATE_SUB(NOW(), INTERVAL 6 DAY)),
-(1, 'login', '完成每日登入', 5, DATE_SUB(NOW(), INTERVAL 7 DAY)),
-(1, 'task', '完成個人檔案設置', 25, DATE_SUB(NOW(), INTERVAL 7 DAY));
+-- 今天的紀錄（已登入，已領過連續七天獎勵是昨天的事）
+(1, 'login', '完成每日登入', 5, CONCAT(CURDATE(), ' 09:15:00')),
+-- 昨天的紀錄（第7天，獲得連續登入獎勵）
+(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 09:00:00')),
+(1, 'streak', '連續登入七天', 10, CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 09:00:01')),
+(1, 'reward', '兌換 UiU 環保便攜吸管組', -100, CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 16:30:00')),
+-- 前幾天的紀錄
+(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 2 DAY), ' 09:00:00')),
+(1, 'task', '建立借貸需求檔案', 80, CONCAT(DATE_SUB(CURDATE(), INTERVAL 2 DAY), ' 15:45:00')),
+(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 3 DAY), ' 09:00:00')),
+(1, 'task', '完成風險承受能力評估', 60, CONCAT(DATE_SUB(CURDATE(), INTERVAL 3 DAY), ' 14:00:00')),
+(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY), ' 09:00:00')),
+(1, 'task', '綁定銀行帳戶', 50, CONCAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY), ' 14:00:00')),
+(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 5 DAY), ' 09:00:00')),
+(1, 'task', '完成金融知識測驗', 35, CONCAT(DATE_SUB(CURDATE(), INTERVAL 5 DAY), ' 14:00:00')),
+(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 6 DAY), ' 09:00:00')),
+(1, 'task', '完成個人檔案設置', 25, CONCAT(DATE_SUB(CURDATE(), INTERVAL 6 DAY), ' 14:00:00'));
