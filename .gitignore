@@ -59,6 +59,7 @@ backend/.idea/
 backend/*.iml
 backend/.mvn/wrapper/maven-wrapper.jar
 backend/.env
+backend/start-backend.ps1
 
 # Claude Code
 .claude/

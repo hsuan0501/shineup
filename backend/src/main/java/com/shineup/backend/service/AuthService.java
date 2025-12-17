@@ -74,12 +74,12 @@ public class AuthService {
 
         // 只有當天第一次登入才加積分
         if (isFirstLoginToday) {
-            // 每日登入 +5 積分
-            activityRecordService.addRecord(user.getId(), "login", "完成每日登入", 5);
+            // 每日登入 +1 積分
+            activityRecordService.addRecord(user.getId(), "login", "完成每日登入", 1);
 
-            // 連續登入七天 +10 積分（每 7 天觸發一次：7, 14, 21...）
+            // 連續登入七天 +5 積分（每 7 天觸發一次：7, 14, 21...）
             if (stats.getConsecutiveDays() > 0 && stats.getConsecutiveDays() % 7 == 0) {
-                activityRecordService.addRecord(user.getId(), "streak", "連續登入七天", 10);
+                activityRecordService.addRecord(user.getId(), "streak", "連續登入七天", 5);
             }
         }
 

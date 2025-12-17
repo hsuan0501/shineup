@@ -26,12 +26,12 @@ ON DUPLICATE KEY UPDATE name = VALUES(name), upgrade_points = VALUES(upgrade_poi
 -- ============================================
 INSERT INTO tasks (id, title, description, category, required_level, upgrade_points, reward_points, image, active) VALUES
 -- 📱 日常互動任務
-(1, '每日登入', '每日登入一次即可完成', 'daily', 'EXPLORER', 5, 5, '/images/tasks/task-1.jpg', true),
-(2, '連續登入七天', '連續七天每日登入', 'daily', 'EXPLORER', 10, 10, '/images/tasks/task-2.jpg', true),
-(3, '綁定銀行帳戶', '關聯銀行帳戶資訊', 'daily', 'EXPLORER', 50, 75, '/images/tasks/task-3.jpg', true),
-(4, '設定理財目標', '建立個人理財目標', 'daily', 'EXPLORER', 30, 45, '/images/tasks/task-4.jpg', true),
-(5, '邀請好友註冊', '透過邀請碼邀請朋友註冊', 'daily', 'EXPLORER', 20, 30, '/images/tasks/task-5.jpg', true),
-(6, '完成個人檔案設置', '設定個人檔案完整性', 'daily', 'EXPLORER', 25, 38, '/images/tasks/task-6.jpg', true),
+(1, '每日登入', '每日登入一次即可完成', 'daily', 'EXPLORER', 1, 1, '/images/tasks/task-1.jpg', true),
+(2, '連續登入七天', '連續七天每日登入', 'daily', 'EXPLORER', 5, 5, '/images/tasks/task-2.jpg', true),
+(3, '完成個人檔案設置', '設定個人檔案完整性', 'daily', 'EXPLORER', 5, 5, '/images/tasks/task-3.jpg', true),
+(4, '邀請好友註冊', '透過邀請碼邀請朋友註冊', 'daily', 'EXPLORER', 10, 10, '/images/tasks/task-4.jpg', true),
+(5, '設定理財目標', '建立個人理財目標', 'daily', 'EXPLORER', 10, 10, '/images/tasks/task-5.jpg', true),
+(6, '綁定銀行帳戶', '關聯銀行帳戶資訊', 'daily', 'EXPLORER', 20, 20, '/images/tasks/task-6.jpg', true),
 
 -- 💰 理財學習任務
 (7, '完成金融知識測驗', '通過基礎理財知識測試', 'financial', 'EXPLORER', 35, 52, '/images/tasks/task-7.jpg', true),
@@ -64,7 +64,7 @@ INSERT INTO tasks (id, title, description, category, required_level, upgrade_poi
 (28, '達成 Luminary 等級升級', '累積升級點數至5000點', 'social', 'EXPLORER', 300, 450, '/images/tasks/task-28.jpg', true),
 (29, '累積月度交易額到100萬', '單月虛擬投資成交額突破', 'social', 'VISIONARY', 250, 375, '/images/tasks/task-29.jpg', true),
 (30, '累積社群貢獻成為大使', '累積社群互動和推薦成就', 'social', 'VISIONARY', 350, 525, '/images/tasks/task-30.jpg', true)
-ON DUPLICATE KEY UPDATE title = VALUES(title), description = VALUES(description), upgrade_points = VALUES(upgrade_points), reward_points = VALUES(reward_points);
+ON DUPLICATE KEY UPDATE title = VALUES(title), description = VALUES(description), upgrade_points = VALUES(upgrade_points), reward_points = VALUES(reward_points), image = VALUES(image);
 
 -- ============================================
 -- 4. 禮品資料 (gifts)
@@ -150,19 +150,19 @@ DELETE FROM activity_records WHERE user_id IN (1, 2, 3);
 -- 順序：先登入，再其他任務/獎勵
 INSERT INTO activity_records (user_id, type, title, points, created_at) VALUES
 -- 今天的紀錄（已登入，已領過連續七天獎勵是昨天的事）
-(1, 'login', '完成每日登入', 5, CONCAT(CURDATE(), ' 09:15:00')),
+(1, 'login', '完成每日登入', 1, CONCAT(CURDATE(), ' 09:15:00')),
 -- 昨天的紀錄（第7天，獲得連續登入獎勵）
-(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 09:00:00')),
-(1, 'streak', '連續登入七天', 10, CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 09:00:01')),
+(1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 09:00:00')),
+(1, 'streak', '連續登入七天', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 09:00:01')),
 (1, 'reward', '兌換 UiU 環保便攜吸管組', -100, CONCAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY), ' 16:30:00')),
 -- 前幾天的紀錄
-(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 2 DAY), ' 09:00:00')),
+(1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 2 DAY), ' 09:00:00')),
 (1, 'task', '建立借貸需求檔案', 80, CONCAT(DATE_SUB(CURDATE(), INTERVAL 2 DAY), ' 15:45:00')),
-(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 3 DAY), ' 09:00:00')),
+(1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 3 DAY), ' 09:00:00')),
 (1, 'task', '完成風險承受能力評估', 60, CONCAT(DATE_SUB(CURDATE(), INTERVAL 3 DAY), ' 14:00:00')),
-(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY), ' 09:00:00')),
-(1, 'task', '綁定銀行帳戶', 50, CONCAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY), ' 14:00:00')),
-(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 5 DAY), ' 09:00:00')),
+(1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY), ' 09:00:00')),
+(1, 'task', '綁定銀行帳戶', 20, CONCAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY), ' 14:00:00')),
+(1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 5 DAY), ' 09:00:00')),
 (1, 'task', '完成金融知識測驗', 35, CONCAT(DATE_SUB(CURDATE(), INTERVAL 5 DAY), ' 14:00:00')),
-(1, 'login', '完成每日登入', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 6 DAY), ' 09:00:00')),
-(1, 'task', '完成個人檔案設置', 25, CONCAT(DATE_SUB(CURDATE(), INTERVAL 6 DAY), ' 14:00:00'));
+(1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 6 DAY), ' 09:00:00')),
+(1, 'task', '完成個人檔案設置', 5, CONCAT(DATE_SUB(CURDATE(), INTERVAL 6 DAY), ' 14:00:00'));

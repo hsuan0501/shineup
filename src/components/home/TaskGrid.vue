@@ -79,13 +79,15 @@
                             </div>
 
                             <!-- 完成按鈕 -->
-                            <button :disabled="task.completed" :class="[
+                            <button :disabled="task.completed || isAutoCompleteTask(task.title)" :class="[
                                 'px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold transition-all duration-300 pointer-events-auto',
                                 task.completed
                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'
+                                    : isAutoCompleteTask(task.title)
+                                        ? 'bg-gray-200 text-gray-500 cursor-default'
+                                        : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-105 active:scale-95'
                             ]">
-                                {{ task.completed ? '已完成' : '立即完成' }}
+                                {{ task.completed ? '已完成' : isAutoCompleteTask(task.title) ? '自動完成' : '立即完成' }}
                             </button>
                         </div>
                     </div>
@@ -107,8 +109,16 @@
                 </button>
             </div>
 
+            <!-- Loading State -->
+            <div v-if="isLoading" class="text-center py-12">
+                <div class="inline-block w-6 h-6 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mb-2"></div>
+                <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm">
+                    載入任務中...
+                </p>
+            </div>
+
             <!-- Empty State -->
-            <div v-if="filteredTasks.length === 0" class="text-center py-12">
+            <div v-else-if="filteredTasks.length === 0" class="text-center py-12">
                 <p class="text-light-text-secondary dark:text-dark-text-secondary text-sm">
                     此分類暫無任務
                 </p>
@@ -121,13 +131,53 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { mockTasks } from '../../mock'
+import { taskAPI } from '../../api'
 import { useStore } from '../../store/app'
 import { formatPoints } from '../../utils/formatPoints'
 import TaskDetailModal from '../modals/TaskDetailModal.vue'
 
 const store = useStore()
+
+// 任務資料 - 先用 mock 顯示，背景載入後端資料
+const tasks = ref(mockTasks)
+const isLoading = ref(false)
+
+// 從後端取得任務（背景更新）
+const fetchTasks = async () => {
+    try {
+        const response = await taskAPI.getAll()
+        // 後端回傳的欄位轉換為前端格式
+        tasks.value = response.data.map(task => ({
+            ...task,
+            levelPoints: task.upgradePoints,
+            rewardPoints: task.rewardPoints,
+            points: task.upgradePoints, // 顯示用
+            level: task.requiredLevel === 'EXPLORER' ? '全等級' :
+                   task.requiredLevel === 'CREATOR' ? 'Lv2+' :
+                   task.requiredLevel === 'VISIONARY' ? 'Lv3+' : 'Lv4+',
+            completed: false,
+            frequency: getFrequencyByTitle(task.title)
+        }))
+    } catch (error) {
+        console.error('Failed to fetch tasks from API, keeping mock data:', error)
+        // 失敗時保持 mock 資料，不需要再設定
+    }
+}
+
+// 根據任務標題判斷頻率
+const getFrequencyByTitle = (title) => {
+    if (title.includes('每日')) return '每日'
+    if (title.includes('連續') && title.includes('七天')) return '每週'
+    if (title.includes('邀請')) return '無限'
+    if (title.includes('設定') && title.includes('目標')) return '可重複'
+    return '一次性'
+}
+
+onMounted(() => {
+    fetchTasks()
+})
 
 // Task Modal State
 const isTaskModalOpen = ref(false)
@@ -210,9 +260,9 @@ const currentTaskCategoryInfo = computed(() => {
 
 const filteredTasks = computed(() => {
     if (selectedTaskCategory.value === 'all' || selectedTaskCategory.value === '') {
-        return mockTasks
+        return tasks.value
     }
-    return mockTasks.filter(t => t.category === selectedTaskCategory.value)
+    return tasks.value.filter(t => t.category === selectedTaskCategory.value)
 })
 
 const paginatedTasks = computed(() => {
@@ -316,5 +366,10 @@ const getFrequencyBadgeClassNew = (category) => {
         'social': 'bg-violet-100/90 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200'
     }
     return classes[category] || 'bg-gray-100/90 dark:bg-gray-900/40 text-gray-700 dark:text-gray-200'
+}
+
+// 判斷是否為自動完成的登入類任務
+const isAutoCompleteTask = (title) => {
+    return title === '每日登入' || title === '連續登入七天'
 }
 </script>
