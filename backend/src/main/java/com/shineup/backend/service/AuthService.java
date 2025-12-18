@@ -8,12 +8,14 @@ import com.shineup.backend.entity.UserStats;
 import com.shineup.backend.repository.UserRepository;
 import com.shineup.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -23,6 +25,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final ActivityRecordService activityRecordService;
+    private final EmailVerificationService emailVerificationService;
+    private final EmailService emailService;
 
     // 註冊
     public AuthResponse register(RegisterRequest request) {
@@ -31,19 +35,36 @@ public class AuthService {
             return AuthResponse.error("此 Email 已被註冊");
         }
 
-        // 建立新用戶
+        // 建立新用戶（預設未驗證）
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhone(request.getPhone());
+        user.setEmailVerified(false);
 
         User savedUser = userRepository.save(user);
 
-        // 產生 Token
-        String token = jwtUtil.generateToken(savedUser.getId(), savedUser.getEmail());
+        // 產生並發送驗證碼
+        String verificationCode = emailVerificationService.createVerificationToken(savedUser);
+        try {
+            emailService.sendVerificationEmail(savedUser.getEmail(), savedUser.getName(), verificationCode);
+            log.info("Verification email sent to: {}", savedUser.getEmail());
+        } catch (Exception e) {
+            log.error("Failed to send verification email to: {}", savedUser.getEmail(), e);
+        }
 
-        return AuthResponse.success(token, savedUser);
+        // 回傳用戶 ID（不給 token，因為還沒驗證）
+        return AuthResponse.builder()
+                .success(true)
+                .message("註冊成功，請查收驗證碼信件")
+                .user(AuthResponse.UserInfo.builder()
+                        .id(savedUser.getId())
+                        .name(savedUser.getName())
+                        .email(savedUser.getEmail())
+                        .emailVerified(false)
+                        .build())
+                .build();
     }
 
     // 登入

@@ -310,6 +310,13 @@
           </button>
         </div>
         <div class="space-y-2">
+          <!-- 無活動紀錄時顯示 -->
+          <div v-if="recentRecords.length === 0" class="text-center py-8 text-gray-400 dark:text-gray-500">
+            <svg class="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            <p class="text-sm">暫無活動紀錄</p>
+          </div>
           <div v-for="record in recentRecords.slice(0, 5)" :key="record.id"
             class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-600/30 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors rounded px-2">
             <div class="flex items-center gap-3 flex-1 min-w-0">
@@ -485,7 +492,7 @@ const currentLevelConfig = computed(() => {
 
 // 下一等級配置
 const nextLevelConfig = computed(() => {
-  const currentIndex = levelConfig.findIndex(level => level.level === user.value.level)
+  const currentIndex = levelConfig.findIndex(level => level.level === currentLevelConfig.value.level)
   return currentIndex < levelConfig.length - 1 ? levelConfig[currentIndex + 1] : null
 })
 
@@ -514,14 +521,9 @@ const mockRecords = [
   { id: 8, type: 'task', title: '完成個人檔案設置', points: 25, date: '2024-12-05T14:00:00' }
 ]
 
-// 活動紀錄 - 優先使用後端資料，沒有則用假資料
+// 活動紀錄 - 使用後端資料（新用戶沒有活動紀錄是正常的）
 const recentRecords = computed(() => {
-  // 如果有後端資料，使用後端資料
-  if (backendRecords.value.length > 0) {
-    return backendRecords.value.sort((a, b) => new Date(b.date) - new Date(a.date))
-  }
-  // 否則使用假資料（Demo 用）
-  return mockRecords
+  return backendRecords.value.sort((a, b) => new Date(b.date) - new Date(a.date))
 })
 
 // 格式化日期

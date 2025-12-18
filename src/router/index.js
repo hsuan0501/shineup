@@ -53,6 +53,11 @@ const routes = [
     name: 'ResetPassword',
     component: () => import('../views/ResetPassword.vue'),
   },
+  {
+    path: '/auth/line/callback',
+    name: 'LineCallback',
+    component: () => import('../views/LineCallback.vue'),
+  },
 ]
 
 const router = createRouter({

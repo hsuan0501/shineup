@@ -1,7 +1,7 @@
 <template>
     <!-- Modal Overlay -->
     <Transition name="modal">
-        <div v-if="modelValue" @click.self="closeModal"
+        <div v-if="modelValue" @click.self="handleOverlayClick"
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xl backdrop-saturate-150 px-4">
             <!-- Modal Card -->
             <div
@@ -51,8 +51,48 @@
 
                 <!-- Form Content -->
                 <div class="p-6">
+                    <!-- Email Verification Form (註冊後顯示) -->
+                    <div v-if="showVerification" class="space-y-4">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-900/30 dark:to-blue-900/30 rounded-full flex items-center justify-center">
+                                <svg class="w-8 h-8 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-white">驗證您的信箱</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                驗證碼已發送至 <span class="font-medium text-cyan-500">{{ pendingUser?.email }}</span>
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                6 位數驗證碼
+                            </label>
+                            <input v-model="verificationCode" type="text" required maxlength="6"
+                                class="w-full px-4 py-3 text-center text-2xl font-bold tracking-[0.5em] border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all"
+                                placeholder="000000">
+                        </div>
+
+                        <button @click="handleVerifyEmail" :disabled="isLoading || verificationCode.length !== 6"
+                            class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                            {{ isLoading ? '驗證中...' : '驗證信箱' }}
+                        </button>
+
+                        <div class="flex items-center justify-between text-sm">
+                            <button type="button" @click="handleResendCode" :disabled="resendCooldown > 0"
+                                class="text-cyan-500 hover:text-cyan-600 font-medium disabled:text-gray-400 disabled:cursor-not-allowed">
+                                {{ resendCooldown > 0 ? `${resendCooldown} 秒後可重新發送` : '重新發送驗證碼' }}
+                            </button>
+                            <button type="button" @click="cancelVerification"
+                                class="text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300">
+                                返回
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Login Form -->
-                    <form v-if="activeTab === 'login'" @submit.prevent="handleLogin" class="space-y-4">
+                    <form v-else-if="activeTab === 'login'" @submit.prevent="handleLogin" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 電子信箱
@@ -111,17 +151,27 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">點擊圖片可更換驗證碼</p>
                         </div>
 
-                        <button type="submit" :disabled="isLoading"
-                            class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
-                            登入
-                        </button>
+                        <!-- 登入按鈕：LINE 在左，一般登入在右 -->
+                        <div class="flex gap-3">
+                            <button type="button" @click="handleLineLogin" :disabled="isLoading"
+                                class="flex-1 py-3 bg-[#06C755] text-white font-semibold rounded-lg hover:bg-[#05b34c] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                                </svg>
+                                LINE
+                            </button>
+                            <button type="submit" :disabled="isLoading"
+                                class="flex-1 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                                登入
+                            </button>
+                        </div>
 
                     </form>
 
 
 
                     <!-- Register Form -->
-                    <form v-if="activeTab === 'register'" @submit.prevent="handleRegister" class="space-y-4">
+                    <form v-else-if="activeTab === 'register' && !showVerification" @submit.prevent="handleRegister" class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                 姓名
@@ -201,7 +251,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import { useStore } from '../../store/app'
 import ForgotPasswordModal from './ForgotPasswordModal.vue'
 import axios from 'axios'
@@ -215,6 +265,13 @@ const emit = defineEmits(['update:modelValue'])
 const store = useStore()
 const activeTab = ref('login')
 const isLoading = ref(false)
+
+// 信箱驗證相關
+const showVerification = ref(false)
+const verificationCode = ref('')
+const pendingUser = ref(null)
+const resendCooldown = ref(0)
+let cooldownTimer = null
 
 // 圖形驗證碼
 const captchaId = ref('')
@@ -244,6 +301,24 @@ watch(() => props.modelValue, (newVal) => {
 const showLoginPassword = ref(false)
 const showRegisterPassword = ref(false)
 const showConfirmPassword = ref(false)
+
+// 點擊外面時的處理 - 註冊或驗證中不關閉
+const handleOverlayClick = () => {
+    // 如果正在驗證信箱，不允許點外面關閉
+    if (showVerification.value) return
+
+    // 如果是註冊頁且有填寫資料，不允許點外面關閉
+    if (activeTab.value === 'register') {
+        const hasData = registerForm.value.name ||
+                        registerForm.value.email ||
+                        registerForm.value.password ||
+                        registerForm.value.confirmPassword
+        if (hasData) return
+    }
+
+    // 其他情況可以關閉
+    closeModal()
+}
 
 // 忘記密碼 Modal
 const showForgotPassword = ref(false)
@@ -281,7 +356,126 @@ const closeModal = () => {
         showRegisterPassword.value = false
         showConfirmPassword.value = false
         captchaCode.value = ''
+        // 重置驗證相關狀態
+        showVerification.value = false
+        verificationCode.value = ''
+        pendingUser.value = null
+        resendCooldown.value = 0
+        if (cooldownTimer) {
+            clearInterval(cooldownTimer)
+            cooldownTimer = null
+        }
     }, 300)
+}
+
+// 取消驗證，返回註冊頁
+const cancelVerification = () => {
+    showVerification.value = false
+    verificationCode.value = ''
+    pendingUser.value = null
+    resendCooldown.value = 0
+    if (cooldownTimer) {
+        clearInterval(cooldownTimer)
+        cooldownTimer = null
+    }
+}
+
+// 開始重發冷卻倒數
+const startResendCooldown = () => {
+    resendCooldown.value = 60
+    cooldownTimer = setInterval(() => {
+        resendCooldown.value--
+        if (resendCooldown.value <= 0) {
+            clearInterval(cooldownTimer)
+            cooldownTimer = null
+        }
+    }, 1000)
+}
+
+// 驗證信箱
+const handleVerifyEmail = async () => {
+    if (!verificationCode.value || verificationCode.value.length !== 6) {
+        store.showToast('請輸入 6 位數驗證碼', 'error')
+        return
+    }
+
+    isLoading.value = true
+    try {
+        const response = await axios.post('http://localhost:8080/api/auth/verify-email', {
+            userId: pendingUser.value.id.toString(),
+            code: verificationCode.value
+        })
+
+        if (response.data.success) {
+            // 驗證成功，儲存 token 並登入
+            store.showToast('驗證成功！歡迎加入 ShineUp', 'success')
+
+            // 更新 store 狀態（使用正確的屬性名稱）
+            const user = response.data.user
+            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('auth', JSON.stringify({ isAuthenticated: true, user }))
+            store.currentUser = user
+            store.isAuthenticated = true
+            store.currentLevel = user.level || 'EXPLORER'
+            store.userPoints = {
+                upgradePoints: user.upgradePoints || 0,
+                rewardPoints: user.rewardPoints || 0
+            }
+
+            closeModal()
+        } else {
+            store.showToast(response.data.message || '驗證失敗', 'error')
+        }
+    } catch (error) {
+        console.error('Verification error:', error)
+        store.showToast(error.response?.data?.message || '驗證失敗，請稍後再試', 'error')
+    } finally {
+        isLoading.value = false
+    }
+}
+
+// 重新發送驗證碼
+const handleResendCode = async () => {
+    if (resendCooldown.value > 0) return
+
+    isLoading.value = true
+    try {
+        const response = await axios.post('http://localhost:8080/api/auth/resend-verification', {
+            userId: pendingUser.value.id.toString()
+        })
+
+        if (response.data.success) {
+            store.showToast('驗證碼已重新發送', 'success')
+            startResendCooldown()
+        } else {
+            store.showToast(response.data.message || '發送失敗', 'error')
+        }
+    } catch (error) {
+        console.error('Resend error:', error)
+        store.showToast('發送失敗，請稍後再試', 'error')
+    } finally {
+        isLoading.value = false
+    }
+}
+
+// 清理計時器
+onUnmounted(() => {
+    if (cooldownTimer) {
+        clearInterval(cooldownTimer)
+    }
+})
+
+// Handle LINE Login - 導向 LINE 授權頁面
+const handleLineLogin = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/auth/line/auth-url')
+        if (response.data.url) {
+            window.location.href = response.data.url
+        }
+    } catch (error) {
+        console.error('LINE login error:', error)
+        store.showToast('LINE 登入失敗，請稍後再試', 'error')
+    }
 }
 
 // Handle Login - 串接後端 API
@@ -342,20 +536,25 @@ const handleRegister = async () => {
 
     isLoading.value = true
     try {
-        const result = await store.register({
+        // 直接呼叫 API，不經過 store
+        const response = await axios.post('http://localhost:8080/api/auth/register', {
             name: registerForm.value.name,
             email: registerForm.value.email,
             password: registerForm.value.password
         })
 
-        if (result.success) {
-            store.showToast('註冊成功！', 'success')
-            closeModal()
+        if (response.data.success) {
+            // 註冊成功，顯示驗證碼輸入畫面
+            store.showToast('驗證碼已發送至您的信箱', 'success')
+            pendingUser.value = response.data.user
+            showVerification.value = true
+            startResendCooldown()
         } else {
-            store.showToast(result.message || '註冊失敗', 'error')
+            store.showToast(response.data.message || '註冊失敗', 'error')
         }
     } catch (error) {
-        store.showToast('註冊失敗，請稍後再試', 'error')
+        console.error('Register error:', error)
+        store.showToast(error.response?.data?.message || '註冊失敗，請稍後再試', 'error')
     } finally {
         isLoading.value = false
     }

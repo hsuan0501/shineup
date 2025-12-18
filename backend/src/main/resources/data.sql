@@ -14,12 +14,17 @@ ON DUPLICATE KEY UPDATE level_name = VALUES(level_name);
 -- ============================================
 -- 2. 用戶資料 (users)
 -- ============================================
+-- 先刪除非初始用戶（ID > 3）和相關的驗證碼，方便重複測試註冊流程
+DELETE FROM email_verification_tokens WHERE user_id > 3;
+DELETE FROM users WHERE id > 3;
+
 -- 密碼都是 Qwe1234 (BCrypt 加密後)
-INSERT INTO users (id, email, password, name, phone, level, upgrade_points, reward_points, created_at, updated_at) VALUES
-(1, 'hsuan0501@outlook.com', '$2b$10$m8lm348q0VWqPuxXOdEfSOqvnvbAh2rEkLYi8/JP8q5nqNnEfC2Oq', 'Hsuan', '0912345678', 'CREATOR', 700, 600, NOW(), NOW()),
-(2, 'matcha1108@example.com', '$2b$10$m8lm348q0VWqPuxXOdEfSOqvnvbAh2rEkLYi8/JP8q5nqNnEfC2Oq', 'Matcha', '0923456789', 'EXPLORER', 120, 80, NOW(), NOW()),
-(3, 'may0529@example.com', '$2b$10$m8lm348q0VWqPuxXOdEfSOqvnvbAh2rEkLYi8/JP8q5nqNnEfC2Oq', 'May', '0934567890', 'EXPLORER', 100, 50, NOW(), NOW())
-ON DUPLICATE KEY UPDATE name = VALUES(name), upgrade_points = VALUES(upgrade_points), reward_points = VALUES(reward_points);
+-- email_verified = true 讓這些測試帳號可以直接登入
+INSERT INTO users (id, email, password, name, phone, level, upgrade_points, reward_points, email_verified, created_at, updated_at) VALUES
+(1, 'hsuan0501@outlook.com', '$2b$10$m8lm348q0VWqPuxXOdEfSOqvnvbAh2rEkLYi8/JP8q5nqNnEfC2Oq', 'Hsuan', '0912345678', 'CREATOR', 700, 600, true, NOW(), NOW()),
+(2, 'matcha1108@example.com', '$2b$10$m8lm348q0VWqPuxXOdEfSOqvnvbAh2rEkLYi8/JP8q5nqNnEfC2Oq', 'Matcha', '0923456789', 'EXPLORER', 120, 80, true, NOW(), NOW()),
+(3, 'may0529@example.com', '$2b$10$m8lm348q0VWqPuxXOdEfSOqvnvbAh2rEkLYi8/JP8q5nqNnEfC2Oq', 'May', '0934567890', 'EXPLORER', 100, 50, true, NOW(), NOW())
+ON DUPLICATE KEY UPDATE name = VALUES(name), upgrade_points = VALUES(upgrade_points), reward_points = VALUES(reward_points), email_verified = VALUES(email_verified);
 
 -- ============================================
 -- 3. 任務資料 (tasks)

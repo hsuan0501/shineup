@@ -21,7 +21,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         AuthResponse response = authService.register(request);
-        if (response.getToken() == null) {
+        // 用 success 欄位判斷，因為註冊成功時不會有 token（要等信箱驗證）
+        if (!response.isSuccess()) {
             return ResponseEntity.badRequest().body(response);
         }
         return ResponseEntity.ok(response);

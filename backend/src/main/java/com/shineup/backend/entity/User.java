@@ -13,10 +13,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
@@ -33,6 +32,12 @@ public class User {
 
     @Column(name = "reward_points")
     private Integer rewardPoints = 0;
+
+    @Column(name = "email_verified")
+    private boolean emailVerified = false;
+
+    @Column(name = "line_id", unique = true)
+    private String lineId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();

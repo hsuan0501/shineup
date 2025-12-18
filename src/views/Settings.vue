@@ -126,6 +126,43 @@
         </div>
       </div>
 
+      <!-- 帳號連結 -->
+      <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          帳號連結
+        </h3>
+
+        <div class="space-y-4">
+          <!-- LINE 綁定 -->
+          <div class="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-gray-800/50">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#06C755] flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-900 dark:text-white">LINE</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ isLineBound ? '已綁定' : '綁定後可使用 LINE 快速登入' }}
+                </p>
+              </div>
+            </div>
+            <button v-if="!isLineBound" @click="handleBindLine"
+              class="px-4 py-2 rounded-full bg-[#06C755] text-white text-sm font-medium hover:bg-[#05b34c] transition-all hover:scale-105 active:scale-95">
+              綁定
+            </button>
+            <button v-else @click="handleUnbindLine"
+              class="px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-500 transition-all">
+              解除綁定
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- 通知設定 -->
       <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -213,8 +250,12 @@
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useStore } from '../store/app.js'
+import axios from 'axios'
 
 const store = useStore()
+
+// LINE 綁定狀態
+const isLineBound = computed(() => !!store.currentUser?.lineId)
 
 // 錯誤訊息
 const errors = reactive({
@@ -331,5 +372,43 @@ const saveSettings = () => {
   }
 
   store.showToast('設定已儲存', 'success')
+}
+
+// LINE 綁定
+const handleBindLine = async () => {
+  try {
+    // 導向 LINE 授權頁面，帶上 bind 參數表示是綁定操作
+    const response = await axios.get('http://localhost:8080/api/auth/line/auth-url')
+    if (response.data.url) {
+      // 在 URL 加上 state 參數標記這是綁定操作
+      const bindUrl = response.data.url.replace('state=shineup', 'state=bind')
+      window.location.href = bindUrl
+    }
+  } catch (error) {
+    console.error('LINE bind error:', error)
+    store.showToast('LINE 綁定失敗，請稍後再試', 'error')
+  }
+}
+
+// LINE 解除綁定
+const handleUnbindLine = async () => {
+  if (!confirm('確定要解除 LINE 綁定嗎？')) return
+
+  try {
+    const token = localStorage.getItem('token')
+    const response = await axios.post('http://localhost:8080/api/auth/line/unbind', {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    if (response.data.success) {
+      store.currentUser.lineId = null
+      store.showToast('已解除 LINE 綁定', 'success')
+    } else {
+      store.showToast(response.data.message || '解除綁定失敗', 'error')
+    }
+  } catch (error) {
+    console.error('LINE unbind error:', error)
+    store.showToast('解除綁定失敗，請稍後再試', 'error')
+  }
 }
 </script>
