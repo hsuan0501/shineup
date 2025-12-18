@@ -67,8 +67,16 @@
 
             <!-- 完成按鈕 -->
             <button
-              class="flex-1 px-5 py-2.5 rounded-lg text-white font-medium shadow-md transition-all duration-300 hover:opacity-90 hover:scale-[1.02] bg-gradient-to-br from-cyan-400 to-blue-500">
-              立即完成
+              :disabled="task.completed || isAutoCompleteTask(task.title)"
+              :class="[
+                'flex-1 px-5 py-2.5 rounded-lg font-medium shadow-md transition-all duration-300',
+                task.completed
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : isAutoCompleteTask(task.title)
+                    ? 'bg-gray-200 text-gray-500 cursor-default'
+                    : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-[1.02]'
+              ]">
+              {{ task.completed ? '已完成' : isAutoCompleteTask(task.title) ? '自動完成' : '立即完成' }}
             </button>
           </div>
         </div>
@@ -164,5 +172,14 @@ const getPointsBgClass = (category) => {
     'social': 'bg-violet-50 dark:bg-violet-900/20'
   }
   return classes[category] || 'bg-gray-50 dark:bg-gray-900/20'
+}
+
+// 判斷是否為自動完成的任務（登入類、等級升級類）
+const isAutoCompleteTask = (title) => {
+  return title === '每日登入' ||
+         title === '連續登入七天' ||
+         title === '達成 Lv2 Creator 等級升級' ||
+         title === '達成 Lv3 Visionary 等級升級' ||
+         title === '達成 Lv4 Luminary 等級升級'
 }
 </script>

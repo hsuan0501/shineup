@@ -368,8 +368,12 @@ const getFrequencyBadgeClassNew = (category) => {
     return classes[category] || 'bg-gray-100/90 dark:bg-gray-900/40 text-gray-700 dark:text-gray-200'
 }
 
-// 判斷是否為自動完成的登入類任務
+// 判斷是否為自動完成的任務（登入類、等級升級類）
 const isAutoCompleteTask = (title) => {
-    return title === '每日登入' || title === '連續登入七天'
+    return title === '每日登入' ||
+           title === '連續登入七天' ||
+           title === '達成 Lv2 Creator 等級升級' ||
+           title === '達成 Lv3 Visionary 等級升級' ||
+           title === '達成 Lv4 Luminary 等級升級'
 }
 </script>

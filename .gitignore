@@ -60,6 +60,7 @@ backend/*.iml
 backend/.mvn/wrapper/maven-wrapper.jar
 backend/.env
 backend/start-backend.ps1
+backend/src/main/resources/application-local.properties
 
 # Claude Code
 .claude/

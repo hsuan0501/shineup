@@ -36,7 +36,7 @@ INSERT INTO tasks (id, title, description, category, required_level, upgrade_poi
 (3, '完成個人檔案設置', '設定個人檔案完整性', 'daily', 'EXPLORER', 5, 5, '/images/tasks/task-3.jpg', true),
 (4, '邀請好友註冊', '透過邀請碼邀請朋友註冊', 'daily', 'EXPLORER', 10, 10, '/images/tasks/task-4.jpg', true),
 (5, '設定理財目標', '建立個人理財目標', 'daily', 'EXPLORER', 10, 10, '/images/tasks/task-5.jpg', true),
-(6, '綁定銀行帳戶', '關聯銀行帳戶資訊', 'daily', 'EXPLORER', 20, 20, '/images/tasks/task-6.jpg', true),
+(6, '綁定銀行帳戶', '關聯銀行帳戶資訊', 'daily', 'EXPLORER', 15, 15, '/images/tasks/task-6.jpg', true),
 
 -- 💰 理財學習任務
 (7, '完成金融知識測驗', '通過基礎理財知識測試', 'financial', 'EXPLORER', 35, 52, '/images/tasks/task-7.jpg', true),
@@ -63,10 +63,10 @@ INSERT INTO tasks (id, title, description, category, required_level, upgrade_poi
 (24, '參與永續投資討論', '在論壇參與ESG投資討論', 'esg', 'VISIONARY', 150, 225, '/images/tasks/task-24.jpg', true),
 
 -- 🎁 社群成就任務
-(25, '邀請3位朋友完成認證', '成功推薦朋友註冊帳戶', 'social', 'EXPLORER', 100, 150, '/images/tasks/task-25.jpg', true),
-(26, '達成 Creator 等級升級', '累積升級點數至500點', 'social', 'EXPLORER', 100, 150, '/images/tasks/task-26.jpg', true),
-(27, '達成 Visionary 等級升級', '累積升級點數至2000點', 'social', 'EXPLORER', 200, 300, '/images/tasks/task-27.jpg', true),
-(28, '達成 Luminary 等級升級', '累積升級點數至5000點', 'social', 'EXPLORER', 300, 450, '/images/tasks/task-28.jpg', true),
+(25, '達成 Lv2 Creator 等級升級', '累積升級點數至250點', 'social', 'EXPLORER', 100, 150, '/images/tasks/task-25.jpg', true),
+(26, '達成 Lv3 Visionary 等級升級', '累積升級點數至750點', 'social', 'EXPLORER', 200, 300, '/images/tasks/task-26.jpg', true),
+(27, '達成 Lv4 Luminary 等級升級', '累積升級點數至1500點', 'social', 'EXPLORER', 300, 450, '/images/tasks/task-27.jpg', true),
+(28, '邀請3位朋友完成認證', '成功推薦朋友註冊帳戶', 'social', 'EXPLORER', 100, 150, '/images/tasks/task-28.jpg', true),
 (29, '累積月度交易額到100萬', '單月虛擬投資成交額突破', 'social', 'VISIONARY', 250, 375, '/images/tasks/task-29.jpg', true),
 (30, '累積社群貢獻成為大使', '累積社群互動和推薦成就', 'social', 'VISIONARY', 350, 525, '/images/tasks/task-30.jpg', true)
 ON DUPLICATE KEY UPDATE title = VALUES(title), description = VALUES(description), upgrade_points = VALUES(upgrade_points), reward_points = VALUES(reward_points), image = VALUES(image);
@@ -166,7 +166,7 @@ INSERT INTO activity_records (user_id, type, title, points, created_at) VALUES
 (1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 3 DAY), ' 09:00:00')),
 (1, 'task', '完成風險承受能力評估', 60, CONCAT(DATE_SUB(CURDATE(), INTERVAL 3 DAY), ' 14:00:00')),
 (1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY), ' 09:00:00')),
-(1, 'task', '綁定銀行帳戶', 20, CONCAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY), ' 14:00:00')),
+(1, 'task', '綁定銀行帳戶', 15, CONCAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY), ' 14:00:00')),
 (1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 5 DAY), ' 09:00:00')),
 (1, 'task', '完成金融知識測驗', 35, CONCAT(DATE_SUB(CURDATE(), INTERVAL 5 DAY), ' 14:00:00')),
 (1, 'login', '完成每日登入', 1, CONCAT(DATE_SUB(CURDATE(), INTERVAL 6 DAY), ' 09:00:00')),
