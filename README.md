@@ -1,13 +1,13 @@
 # ShineUp
 
-專為企業客戶設計的積分獎勵與分級制度平台。透過任務累積積分、兌換禮品的機制，引導客戶完成風險屬性評估、投資組合建立、虛擬交易模擬等關鍵行為，提升轉換率並降低獲客成本。
+專為企業客戶設計的積分獎勵與分級制度平台。以任務累積積分、兌換禮品的機制，引導客戶完成風險屬性評估、投資組合建立、虛擬交易模擬等關鍵行為，提升轉換率並降低獲客成本。
 
 **技術：** Vue 3 / Spring Boot / MySQL / Tailwind CSS
 
 ## 功能特色
 
 **會員系統**
-- 四階等級制度 (Explorer → Creator → Visionary → Luminary)
+- 四階等級制度 (Lv1 Explorer → Lv2 Creator → Lv3 Visionary → Lv4 Luminary)
 - LINE OAuth 登入與帳號綁定
 - 密碼重設與信箱驗證
 
