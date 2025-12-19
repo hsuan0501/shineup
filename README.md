@@ -1,99 +1,92 @@
 # ShineUp
 
-專為企業客戶設計的積分獎勵與分級制度平台。以任務累積積分、兌換禮品的機制，引導客戶完成風險屬性評估、投資組合建立、虛擬交易模擬等關鍵行為，提升轉換率並降低獲客成本。
+專為企業客戶設計的積分獎勵與分級制度平台。透過任務累積積分、兌換禮品的機制，引導客戶完成風險屬性評估、投資組合建立、虛擬交易模擬等關鍵行為，提升轉換率並降低獲客成本。
 
-## 專案架構
-
-```
-shineup/
-├── src/                    # 前端 (Vue 3)
-│   ├── api/                # API 服務層
-│   ├── components/         # 共用元件
-│   ├── views/              # 頁面
-│   ├── router/             # 路由設定
-│   ├── store/              # Pinia 狀態管理
-│   └── mock.js             # 假資料
-├── backend/                # 後端 (Spring Boot)
-│   └── src/main/java/com/shineup/backend/
-│       ├── controller/     # REST API
-│       ├── service/        # 業務邏輯
-│       ├── repository/     # 資料存取
-│       ├── entity/         # 資料模型
-│       ├── dto/            # 資料傳輸物件
-│       ├── config/         # 安全設定
-│       └── util/           # JWT 工具
-│   └── src/main/resources/
-│       ├── application.properties  # 設定檔
-│       └── data.sql                # 初始資料
-└── public/                 # 靜態資源
-```
-
-## 技術棧
-
-### 前端
-- Vue 3 (Composition API)
-- Vite
-- Tailwind CSS
-- Pinia
-- Vue Router
-
-### 後端
-- Java 17
-- Spring Boot 3.5
-- Spring Data JPA
-- MySQL 8.0
+**技術：** Vue 3 / Spring Boot / MySQL / Tailwind CSS
 
 ## 功能特色
 
-- 會員等級制度 (Explorer → Creator → Visionary → Luminary)
-- 任務系統 (日常互動、理財學習、投資實踐、永續行動、社群成就)
-- 積分兌換禮品
-- 深色模式支援
-- RWD 響應式設計
+**會員系統**
+- 四階等級制度 (Explorer → Creator → Visionary → Luminary)
+- LINE OAuth 登入與帳號綁定
+- 密碼重設與信箱驗證
+
+**任務系統**
+- 五大類別：日常互動、理財學習、投資實踐、永續行動、社群成就
+- 任務完成自動發放積分與等級升級檢測
+
+**兌換系統**
+- 禮品瀏覽與購物車
+- 訂單管理與兌換紀錄
+
+**其他**
+- 圖形驗證碼 / 庫存狀態標示
+- 深色模式 / RWD 響應式設計
+- 後台管理頁面
 
 ## 快速開始
 
-### 前端
+### 環境變數
+
+```properties
+MYSQL_USER=your_username
+MYSQL_PASSWORD=your_password
+
+# LINE Login (選填)
+LINE_CHANNEL_ID=your_channel_id
+LINE_CHANNEL_SECRET=your_channel_secret
+```
+
+### 啟動專案
 
 ```bash
-# 安裝依賴
-npm install
+# 前端
+npm install && npm run dev
 
-# 啟動開發伺服器
-npm run dev
+# 後端
+cd backend && ./mvnw spring-boot:run
 ```
 
-### 後端
+### 測試帳號
 
-1. 確保 MySQL 服務已啟動
-2. 建立資料庫：
-```sql
-CREATE DATABASE shineup;
 ```
-3. 設定 `backend/src/main/resources/application.properties` 中的資料庫連線
-4. 使用 IDE 執行 `BackendApplication.java`
+帳號：hsuan0501@outlook.com
+密碼：Qwe1234
+```
 
-### 資料庫
+<details>
+<summary><strong>API 端點</strong></summary>
 
-Spring Boot 啟動時會自動建立資料表並匯入初始資料 (`data.sql`)。
+- **認證** `/api/auth` - 註冊、登入、取得用戶資訊
+- **LINE** `/api/line` - OAuth 回調、帳號綁定
+- **會員** `/api/users` - 會員列表、資料重置
+- **任務** `/api/tasks` - 任務列表、完成任務
+- **禮品** `/api/gifts` - 禮品列表、兌換禮品
+- **訂單** `/api/orders` - 兌換紀錄
 
-首次啟動後，可將 `application.properties` 中的 `spring.sql.init.mode` 改為 `never` 避免重複匯入。
+</details>
 
-## API 端點
+<details>
+<summary><strong>專案架構</strong></summary>
 
-| 資源 | 端點 | 說明 |
-|------|------|------|
-| 認證 | `POST /api/auth/register` | 註冊 |
-| 認證 | `POST /api/auth/login` | 登入 |
-| 認證 | `GET /api/auth/me` | 取得當前用戶 |
-| 會員 | `GET /api/users` | 取得所有會員 |
-| 會員 | `POST /api/users/{id}/reset` | 重置用戶資料 (展示用) |
-| 任務 | `GET /api/tasks` | 取得所有任務 |
-| 任務 | `POST /api/tasks/{id}/complete` | 完成任務 |
-| 禮品 | `GET /api/gifts` | 取得所有禮品 |
-| 禮品 | `POST /api/gifts/{id}/redeem` | 兌換禮品 |
-| 訂單 | `GET /api/orders` | 取得兌換訂單 |
+```
+shineup/
+├── src/                    # 前端 (Vue 3 + Pinia)
+│   ├── api/                # API 服務層
+│   ├── components/         # 共用元件
+│   ├── views/              # 頁面
+│   └── store/              # 狀態管理
+├── backend/                # 後端 (Spring Boot)
+│   └── src/main/java/.../
+│       ├── controller/     # REST API
+│       ├── service/        # 業務邏輯
+│       ├── repository/     # 資料存取
+│       └── entity/         # 資料模型
+└── public/                 # 靜態資源
+```
+
+</details>
 
 ## License
 
-MIT
+Copyright © 2025 May Yang. All rights reserved.
