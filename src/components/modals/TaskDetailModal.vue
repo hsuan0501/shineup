@@ -174,12 +174,12 @@ const getPointsBgClass = (category) => {
   return classes[category] || 'bg-gray-50 dark:bg-gray-900/20'
 }
 
-// 判斷是否為自動完成的任務（登入類、等級升級類）
+// 判斷是否為自動完成的任務（登入類、等級升級類、累積積分類）
 const isAutoCompleteTask = (title) => {
   return title === '每日登入' ||
          title === '連續登入七天' ||
-         title === '達成 Lv2 Creator 等級升級' ||
          title === '達成 Lv3 Visionary 等級升級' ||
-         title === '達成 Lv4 Luminary 等級升級'
+         title === '達成 Lv4 Luminary 等級升級' ||
+         title === '累積達到5,000積分'
 }
 </script>
