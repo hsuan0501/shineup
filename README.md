@@ -2,7 +2,7 @@
 
 專為企業客戶設計的積分獎勵與分級制度平台。以任務累積積分、兌換禮品的機制，引導客戶完成風險屬性評估、投資組合建立、虛擬交易模擬等關鍵行為，提升轉換率並降低獲客成本。
 
-**技術：** Vue 3 / Spring Boot / MySQL / Tailwind CSS
+**技術：** Vue 3 / Tailwind CSS / Spring Boot / MySQL
 
 ## 功能特色
 

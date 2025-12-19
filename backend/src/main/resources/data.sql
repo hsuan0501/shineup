@@ -34,7 +34,7 @@ INSERT INTO tasks (id, title, description, category, required_level, upgrade_poi
 (1, '每日登入', '每日登入一次即可完成', 'daily', 'EXPLORER', 1, 1, '/images/tasks/task-1.jpg', true),
 (2, '連續登入七天', '連續七天每日登入', 'daily', 'EXPLORER', 5, 5, '/images/tasks/task-2.jpg', true),
 (3, '完成個人檔案設置', '設定個人檔案完整性', 'daily', 'EXPLORER', 5, 5, '/images/tasks/task-3.jpg', true),
-(4, '邀請好友註冊', '透過邀請碼邀請朋友註冊', 'daily', 'EXPLORER', 10, 10, '/images/tasks/task-4.jpg', true),
+(4, '訂閱電子報', '訂閱平台理財週報', 'daily', 'EXPLORER', 10, 10, '/images/tasks/task-4.jpg', true),
 (5, '設定理財目標', '建立個人理財目標', 'daily', 'EXPLORER', 10, 10, '/images/tasks/task-5.jpg', true),
 (6, '綁定銀行帳戶', '關聯銀行帳戶資訊', 'daily', 'EXPLORER', 15, 15, '/images/tasks/task-6.jpg', true),
 
@@ -47,20 +47,20 @@ INSERT INTO tasks (id, title, description, category, required_level, upgrade_poi
 (12, '建立借貸需求檔案', '填寫貸款需求基本資訊', 'financial', 'CREATOR', 50, 75, '/images/tasks/task-12.jpg', true),
 
 -- 📊 投資實踐任務
-(13, '完成風險承受能力評估', '填寫投資風險問卷', 'investment', 'EXPLORER', 60, 90, '/images/tasks/task-13.jpg', true),
-(14, '建立定期定額投資計畫', '設定月定投計畫參數', 'investment', 'CREATOR', 100, 150, '/images/tasks/task-14.jpg', true),
-(15, '建立投資帳戶記錄', '在系統中註冊投資帳戶', 'investment', 'CREATOR', 120, 180, '/images/tasks/task-15.jpg', true),
-(16, '記錄虛擬投資交易', '記錄一筆虛擬投資交易', 'investment', 'CREATOR', 200, 300, '/images/tasks/task-16.jpg', true),
-(17, '設定投資限制和額度', '配置個人投資風險限制', 'investment', 'VISIONARY', 180, 270, '/images/tasks/task-17.jpg', true),
-(18, '建立個人投資日誌', '記錄投資心得和分析', 'investment', 'VISIONARY', 200, 300, '/images/tasks/task-18.jpg', true),
+(13, '完成風險承受能力評估', '填寫投資風險問卷', 'investment', 'EXPLORER', 10, 15, '/images/tasks/task-13.jpg', true),
+(14, '建立個人投資日誌', '記錄投資心得和分析', 'investment', 'CREATOR', 20, 30, '/images/tasks/task-14.jpg', true),
+(15, '建立投資帳戶記錄', '在系統中註冊投資帳戶', 'investment', 'CREATOR', 30, 45, '/images/tasks/task-15.jpg', true),
+(16, '記錄虛擬投資交易', '記錄一筆虛擬投資交易', 'investment', 'CREATOR', 40, 60, '/images/tasks/task-16.jpg', true),
+(17, '設定投資限制和額度', '配置個人投資風險限制', 'investment', 'VISIONARY', 50, 75, '/images/tasks/task-17.jpg', true),
+(18, '建立定期定額投資計畫', '設定月定投計畫參數', 'investment', 'VISIONARY', 60, 90, '/images/tasks/task-18.jpg', true),
 
 -- 🌱 永續行動任務
-(19, '完成ESG價值觀評估', '填寫永續投資偏好問卷', 'esg', 'EXPLORER', 45, 68, '/images/tasks/task-19.jpg', true),
-(20, '記錄永續投資組合', '建立永續主題投資組合記錄', 'esg', 'CREATOR', 140, 210, '/images/tasks/task-20.jpg', true),
-(21, '設定永續投資目標', '建立個人永續投資目標', 'esg', 'CREATOR', 120, 180, '/images/tasks/task-21.jpg', true),
-(22, '建立慈善捐款記錄', '記錄個人慈善捐款計畫', 'esg', 'CREATOR', 130, 195, '/images/tasks/task-22.jpg', true),
-(23, '撰寫永續投資文章', '發表ESG投資心得文章', 'esg', 'CREATOR', 80, 120, '/images/tasks/task-23.jpg', true),
-(24, '參與永續投資討論', '在論壇參與ESG投資討論', 'esg', 'VISIONARY', 150, 225, '/images/tasks/task-24.jpg', true),
+(19, '完成ESG價值觀評估', '填寫永續投資偏好問卷', 'esg', 'EXPLORER', 10, 15, '/images/tasks/task-19.jpg', true),
+(20, '記錄永續投資組合', '建立永續主題投資組合記錄', 'esg', 'CREATOR', 20, 30, '/images/tasks/task-20.jpg', true),
+(21, '設定永續投資目標', '建立個人永續投資目標', 'esg', 'CREATOR', 30, 45, '/images/tasks/task-21.jpg', true),
+(22, '建立慈善捐款記錄', '記錄個人慈善捐款計畫', 'esg', 'CREATOR', 40, 60, '/images/tasks/task-22.jpg', true),
+(23, '參與永續投資討論', '在論壇參與ESG投資討論', 'esg', 'CREATOR', 50, 75, '/images/tasks/task-23.jpg', true),
+(24, '撰寫永續投資文章', '發表ESG投資心得文章', 'esg', 'VISIONARY', 60, 90, '/images/tasks/task-24.jpg', true),
 
 -- 🎁 社群成就任務
 (25, '邀請朋友完成註冊', '成功推薦朋友註冊帳戶', 'social', 'EXPLORER', 50, 75, '/images/tasks/task-25.jpg', true),
