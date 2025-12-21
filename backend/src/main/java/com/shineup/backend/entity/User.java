@@ -36,6 +36,9 @@ public class User {
     @Column(name = "email_verified")
     private boolean emailVerified = false;
 
+    @Column(name = "is_admin")
+    private boolean admin = false;
+
     @Column(name = "line_id", unique = true)
     private String lineId;
 

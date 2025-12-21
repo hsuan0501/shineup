@@ -29,6 +29,7 @@ export const useStore = () => {
     get isAuthenticated() { return auth.isAuthenticated },
     set isAuthenticated(v) { auth.isAuthenticated = v },
     get authLoading() { return auth.authLoading },
+    get isAdmin() { return auth.isAdmin },
     get userPoints() { return auth.userPoints },
     set userPoints(v) { auth.userPoints = v },
 

@@ -80,19 +80,15 @@ public class GiftController {
     // 兌換禮品
     @PostMapping("/{id}/redeem")
     public ResponseEntity<?> redeemGift(@PathVariable Long id, @RequestBody Map<String, Long> request) {
-        try {
-            Long userId = request.get("userId");
-            if (userId == null) {
-                return ResponseEntity.badRequest().body(Map.of("message", "請提供 userId"));
-            }
-            RedemptionOrder order = giftService.redeemGift(id, userId);
-            return ResponseEntity.ok(Map.of(
-                "message", "兌換成功！",
-                "orderId", order.getId(),
-                "pointsSpent", order.getTotalPoints()
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        Long userId = request.get("userId");
+        if (userId == null) {
+            throw new IllegalArgumentException("請提供 userId");
         }
+        RedemptionOrder order = giftService.redeemGift(id, userId);
+        return ResponseEntity.ok(Map.of(
+            "message", "兌換成功！",
+            "orderId", order.getId(),
+            "pointsSpent", order.getTotalPoints()
+        ));
     }
 }

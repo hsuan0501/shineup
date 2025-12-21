@@ -71,19 +71,15 @@ public class TaskController {
     // 完成任務
     @PostMapping("/{id}/complete")
     public ResponseEntity<?> completeTask(@PathVariable Long id, @RequestBody Map<String, Long> request) {
-        try {
-            Long userId = request.get("userId");
-            if (userId == null) {
-                return ResponseEntity.badRequest().body(Map.of("message", "請提供 userId"));
-            }
-            User user = taskService.completeTask(id, userId);
-            return ResponseEntity.ok(Map.of(
-                "message", "任務完成！",
-                "upgradePoints", user.getUpgradePoints(),
-                "rewardPoints", user.getRewardPoints()
-            ));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        Long userId = request.get("userId");
+        if (userId == null) {
+            throw new IllegalArgumentException("請提供 userId");
         }
+        User user = taskService.completeTask(id, userId);
+        return ResponseEntity.ok(Map.of(
+            "message", "任務完成！",
+            "upgradePoints", user.getUpgradePoints(),
+            "rewardPoints", user.getRewardPoints()
+        ));
     }
 }

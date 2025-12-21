@@ -561,10 +561,9 @@ const deleteType = ref('')
 
 // 使用者資料
 const users = ref([
-  { id: 1, name: 'Matcha', email: 'matcha@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Matcha', level: 'CREATOR', levelPoints: 700, rewardPoints: 600, createdAt: '2024-10-15' },
-  { id: 2, name: 'Alice', email: 'alice@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alice', level: 'EXPLORER', levelPoints: 120, rewardPoints: 80, createdAt: '2024-11-01' },
-  { id: 3, name: 'Bob', email: 'bob@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob', level: 'VISIONARY', levelPoints: 980, rewardPoints: 450, createdAt: '2024-09-20' },
-  { id: 4, name: 'Carol', email: 'carol@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Carol', level: 'LUMINARY', levelPoints: 1850, rewardPoints: 1200, createdAt: '2024-08-05' }
+  { id: 1, name: 'Hsuan', email: 'hsuan0501@outlook.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Hsuan', level: 'CREATOR', levelPoints: 700, rewardPoints: 600, createdAt: '2025-12-15' },
+  { id: 2, name: 'Matcha', email: 'matcha1108@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Matcha', level: 'EXPLORER', levelPoints: 120, rewardPoints: 80, createdAt: '2025-12-18' },
+  { id: 3, name: 'May', email: 'may0529@example.com', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=May', level: 'EXPLORER', levelPoints: 100, rewardPoints: 50, createdAt: '2025-12-20' }
 ])
 
 const filteredUsers = computed(() => {
@@ -584,10 +583,10 @@ const giftList = ref([...mockRewards.slice(0, 10)])
 
 // 兌換記錄
 const redemptions = ref([
-  { id: 1001, userName: 'Matcha', giftName: '環保便攜吸管組', points: 100, status: 'completed', date: '2024-11-24' },
-  { id: 1002, userName: 'Alice', giftName: '雲朵筆電包', points: 350, status: 'shipped', date: '2024-11-23' },
-  { id: 1003, userName: 'Bob', giftName: '香氛蠟燭暖燈', points: 800, status: 'pending', date: '2024-11-22' },
-  { id: 1004, userName: 'Carol', giftName: '星級饗宴餐券', points: 2500, status: 'completed', date: '2024-11-21' }
+  { id: 1001, userName: 'Hsuan', giftName: '環保便攜吸管組', points: 100, status: 'completed', date: '2025-12-16' },
+  { id: 1002, userName: 'Hsuan', giftName: '雲朵筆電包', points: 220, status: 'shipped', date: '2025-12-18' },
+  { id: 1003, userName: 'Matcha', giftName: '種子鉛筆組', points: 100, status: 'pending', date: '2025-12-20' },
+  { id: 1004, userName: 'May', giftName: '香氛蠟燭暖燈', points: 600, status: 'completed', date: '2025-12-14' }
 ])
 
 // 任務 Modal

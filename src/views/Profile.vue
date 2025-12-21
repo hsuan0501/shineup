@@ -176,7 +176,7 @@
           </div>
           <div v-else-if="!nextLevelPoints || nextLevelPoints === '∞'" class="mb-4 px-4 py-3 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800/30 rounded-xl hover:scale-[1.02] transition-transform duration-300">
             <p class="text-sm text-purple-800 dark:text-purple-300 font-medium">
-              🎉 恭喜！您已達到最高等級
+              恭喜！您已達到最高等級
             </p>
           </div>
 

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Profile from '../views/Profile.vue'
+import { useAuthStore } from '../store/useAuthStore'
 
 const routes = [
   {
@@ -37,6 +38,7 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: () => import('../views/Admin.vue'),
+    meta: { requiresAdmin: true }
   },
   {
     path: '/checkout-confirm',
@@ -78,6 +80,19 @@ const router = createRouter({
     // 默認滾動到頂部（包括重新整理的情況）
     return { top: 0, behavior: 'instant' }
   },
+})
+
+// 路由守衛：檢查管理員權限
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAdmin) {
+    const authStore = useAuthStore()
+    if (!authStore.isAuthenticated || !authStore.isAdmin) {
+      // 非管理員，導向首頁
+      next({ name: 'Home' })
+      return
+    }
+  }
+  next()
 })
 
 export default router

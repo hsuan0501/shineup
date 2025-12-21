@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { mockUsers } from '../mock.js'
 
 // 設定是否使用後端 API（true = 連後端，false = 純前端 mock）
@@ -42,6 +42,9 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = ref(initialAuth.authenticated)
   const authLoading = ref(true)
   const userPoints = ref(initialAuth.points)
+
+  // 是否為管理員
+  const isAdmin = computed(() => currentUser.value?.admin === true)
 
   const login = async (credentials) => {
     if (!USE_BACKEND_API) {
@@ -189,6 +192,7 @@ export const useAuthStore = defineStore('auth', () => {
     currentUser,
     currentLevel,
     isAuthenticated,
+    isAdmin,
     authLoading,
     userPoints,
     login,

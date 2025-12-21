@@ -108,7 +108,7 @@
         </div>
         <div v-else class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800">
           <div class="text-center">
-            <span :class="`text-xs md:text-sm font-medium`" :style="`color: ${currentLevel.color}`">🎉 已達最高等級！</span>
+            <span :class="`text-xs md:text-sm font-medium`" :style="`color: ${currentLevel.color}`">已達最高等級！</span>
             <p class="text-[10px] md:text-xs text-gray-500 mt-1">享受所有專屬權益</p>
           </div>
         </div>

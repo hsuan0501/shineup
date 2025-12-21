@@ -82,8 +82,8 @@ public class AuthService {
             return AuthResponse.error("Email 或密碼錯誤");
         }
 
-        // 產生 Token
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail());
+        // 產生 Token（包含管理員資訊）
+        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.isAdmin());
 
         // 檢查是否為當天第一次登入
         LocalDate today = LocalDate.now();

@@ -25,9 +25,15 @@ public class JwtUtil {
 
     // 產生 JWT Token
     public String generateToken(Long userId, String email) {
+        return generateToken(userId, email, false);
+    }
+
+    // 產生 JWT Token（含管理員資訊）
+    public String generateToken(Long userId, String email, boolean isAdmin) {
         return Jwts.builder()
                 .subject(email)
                 .claim("userId", userId)
+                .claim("isAdmin", isAdmin)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey())
@@ -42,6 +48,12 @@ public class JwtUtil {
     // 從 Token 取得 UserId
     public Long getUserIdFromToken(String token) {
         return getClaims(token).get("userId", Long.class);
+    }
+
+    // 從 Token 取得是否為管理員
+    public boolean isAdminFromToken(String token) {
+        Boolean isAdmin = getClaims(token).get("isAdmin", Boolean.class);
+        return isAdmin != null && isAdmin;
     }
 
     // 驗證 Token 是否有效

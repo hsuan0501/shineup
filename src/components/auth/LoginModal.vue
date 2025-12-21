@@ -252,6 +252,7 @@
 
 <script setup>
 import { ref, watch, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useStore } from '@/store'
 import ForgotPasswordModal from './ForgotPasswordModal.vue'
 import axios from 'axios'
@@ -262,6 +263,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
+const router = useRouter()
 const store = useStore()
 const activeTab = ref('login')
 const isLoading = ref(false)
@@ -302,10 +304,16 @@ const showLoginPassword = ref(false)
 const showRegisterPassword = ref(false)
 const showConfirmPassword = ref(false)
 
-// 點擊外面時的處理 - 註冊或驗證中不關閉
+// 點擊外面時的處理 - 有填寫資料時不關閉
 const handleOverlayClick = () => {
     // 如果正在驗證信箱，不允許點外面關閉
     if (showVerification.value) return
+
+    // 如果是登入頁且有填寫資料，不允許點外面關閉
+    if (activeTab.value === 'login') {
+        const hasData = loginForm.value.email || loginForm.value.password
+        if (hasData) return
+    }
 
     // 如果是註冊頁且有填寫資料，不允許點外面關閉
     if (activeTab.value === 'register') {
@@ -508,6 +516,10 @@ const handleLogin = async () => {
         if (result.success) {
             store.showToast('登入成功！', 'success')
             closeModal()
+            // 管理員自動跳轉到管理頁面
+            if (result.user?.admin) {
+                router.push('/admin')
+            }
         } else {
             store.showToast(result.message || '登入失敗', 'error')
             refreshCaptcha()

@@ -30,6 +30,7 @@ public class AuthResponse {
         private Integer upgradePoints;
         private Integer rewardPoints;
         private boolean emailVerified;
+        private boolean admin;
     }
 
     public static AuthResponse success(String token, User user) {
@@ -46,6 +47,7 @@ public class AuthResponse {
                         .upgradePoints(user.getUpgradePoints())
                         .rewardPoints(user.getRewardPoints())
                         .emailVerified(user.isEmailVerified())
+                        .admin(user.isAdmin())
                         .build())
                 .build();
     }

@@ -37,11 +37,7 @@ public class RedemptionController {
             @RequestParam Long userId,
             @RequestParam Long giftId,
             @RequestParam(defaultValue = "1") int quantity) {
-        try {
-            return ResponseEntity.ok(redemptionService.createOrder(userId, giftId, quantity));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(redemptionService.createOrder(userId, giftId, quantity));
     }
 
     @PutMapping("/{id}/status")
