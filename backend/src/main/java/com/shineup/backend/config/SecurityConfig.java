@@ -2,6 +2,7 @@ package com.shineup.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,14 +32,18 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // 公開的 API
+                // 公開的 API（不需登入）
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/captcha/**").permitAll()
-                .requestMatchers("/api/tasks/**").permitAll()
-                .requestMatchers("/api/gifts/**").permitAll()
-                .requestMatchers("/api/users/**").permitAll()
-                .requestMatchers("/api/orders/**").permitAll()
-                .requestMatchers("/api/activities/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/tasks/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/gifts/**").permitAll()
+                // 需要登入的 API
+                .requestMatchers("/api/users/**").authenticated()
+                .requestMatchers("/api/orders/**").authenticated()
+                .requestMatchers("/api/activities/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/tasks/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/tasks/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/tasks/**").authenticated()
                 // 其他請求需要認證
                 .anyRequest().authenticated()
             );

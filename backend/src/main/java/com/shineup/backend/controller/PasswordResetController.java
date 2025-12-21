@@ -30,6 +30,14 @@ public class PasswordResetController {
             ));
         }
 
+        // 驗證 Email 格式
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "success", false,
+                "message", "電子信箱格式不正確"
+            ));
+        }
+
         var result = passwordResetService.requestPasswordReset(email);
 
         // 不管 Email 存不存在，都回傳成功（安全考量）

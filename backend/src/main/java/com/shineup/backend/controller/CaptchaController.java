@@ -2,7 +2,6 @@ package com.shineup.backend.controller;
 
 import com.shineup.backend.service.CaptchaService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
