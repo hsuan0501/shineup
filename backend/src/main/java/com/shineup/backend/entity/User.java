@@ -1,5 +1,6 @@
 package com.shineup.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -16,12 +17,15 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)
     private String name;
 
     private String phone;
+
+    private String address;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -1,8 +1,11 @@
 package com.shineup.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -17,9 +20,15 @@ public class RedemptionOrder {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    // 保留原本的單一禮品欄位（向後兼容舊訂單）
     @ManyToOne
-    @JoinColumn(name = "gift_id", nullable = false)
+    @JoinColumn(name = "gift_id")
     private Gift gift;
+
+    // 新增：訂單明細（多個禮品）
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<OrderItem> items = new ArrayList<>();
 
     private Integer quantity = 1;
 
@@ -33,6 +42,12 @@ public class RedemptionOrder {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public enum OrderStatus {
-        PENDING, COMPLETED, SHIPPED, CANCELLED
+        PENDING, SHIPPED, DELIVERED, COMPLETED, CANCELLED
+    }
+
+    // 便利方法：新增訂單明細
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
     }
 }

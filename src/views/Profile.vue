@@ -304,10 +304,10 @@
       <div>
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white">最近活動記錄</h3>
-          <button @click="showAllRecords = true"
+          <router-link to="/history"
             class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors hover:underline">
             查看完整記錄 →
-          </button>
+          </router-link>
         </div>
         <div class="space-y-2">
           <!-- 無活動紀錄時顯示 -->
@@ -364,86 +364,6 @@
       </div>
     </div>
 
-    <!-- 完整紀錄彈窗 -->
-    <Teleport to="body">
-      <Transition name="modal">
-        <div v-if="showAllRecords" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <!-- 背景遮罩 -->
-          <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="showAllRecords = false"></div>
-
-          <!-- 彈窗內容 -->
-          <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden">
-            <!-- 標題列 -->
-            <div class="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">完整活動記錄</h3>
-              <button @click="showAllRecords = false"
-                class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <!-- 紀錄列表 -->
-            <div class="overflow-y-auto max-h-[60vh] p-5">
-              <div class="space-y-2">
-                <div v-for="record in recentRecords" :key="record.id"
-                  class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors rounded px-3">
-                  <div class="flex items-center gap-3 flex-1 min-w-0">
-                    <!-- 圖標 - 根據類型顯示不同顏色 -->
-                    <div :class="[
-                      'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0',
-                      record.type === 'task' ? 'bg-indigo-100 dark:bg-indigo-900/30' :
-                      record.type === 'login' ? 'bg-pink-100 dark:bg-pink-900/30' :
-                      record.type === 'streak' ? 'bg-purple-100 dark:bg-purple-900/30' :
-                      record.type === 'reward' ? 'bg-green-100 dark:bg-green-900/30' :
-                      record.type === 'invite' ? 'bg-amber-100 dark:bg-amber-900/30' :
-                      'bg-gray-100 dark:bg-gray-900/30'
-                    ]">
-                      <!-- 任務類 - 藍色 -->
-                      <svg v-if="record.type === 'task'" class="w-4 h-4 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                      </svg>
-                      <!-- 登入類 - 粉紅色 -->
-                      <svg v-else-if="record.type === 'login'" class="w-4 h-4 text-pink-500 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                      </svg>
-                      <!-- 連續登入七天 - 紫色 -->
-                      <svg v-else-if="record.type === 'streak'" class="w-4 h-4 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                      </svg>
-                      <!-- 兌換禮品 - 綠色 -->
-                      <svg v-else-if="record.type === 'reward'" class="w-4 h-4 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
-                      </svg>
-                      <!-- 邀請好友 - 黃色 -->
-                      <svg v-else-if="record.type === 'invite'" class="w-4 h-4 text-amber-500 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                      </svg>
-                    </div>
-                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ record.title }}</span>
-                  </div>
-                  <div class="flex items-center gap-4 flex-shrink-0">
-                    <span class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">{{ formatDate(record.date) }}</span>
-                    <span class="text-sm font-medium w-16 text-right" :class="record.type === 'reward' ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'">
-                      {{ record.type === 'reward' ? '-' + record.points : '+' + record.points }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 空狀態 -->
-              <div v-if="recentRecords.length === 0" class="text-center py-10 text-gray-500 dark:text-gray-400">
-                <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                <p>目前沒有活動記錄</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
   </div>
 </template>
 
@@ -458,9 +378,6 @@ const router = useRouter()
 
 // 頭像上傳相關
 const avatarInput = ref(null)
-
-// 完整紀錄彈窗
-const showAllRecords = ref(false)
 
 // 後端活動紀錄
 const backendRecords = ref([])

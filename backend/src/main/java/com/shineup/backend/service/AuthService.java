@@ -107,7 +107,7 @@ public class AuthService {
         return AuthResponse.success(token, user);
     }
 
-    // 透過 Token 取得用戶資料
+    // 透過 Token 取得用戶資料（同時記錄每日登入）
     public AuthResponse getUserByToken(String token) {
         try {
             if (!jwtUtil.validateToken(token)) {
@@ -121,7 +121,31 @@ public class AuthService {
                 return AuthResponse.error("用戶不存在");
             }
 
-            return AuthResponse.success(token, userOpt.get());
+            User user = userOpt.get();
+
+            // 檢查是否為當天第一次登入（刷新頁面也算）
+            LocalDate today = LocalDate.now();
+            LocalDate lastLoginBefore = userService.getOrCreateStats(userId).getLastLoginDate();
+            boolean isFirstLoginToday = lastLoginBefore == null || !lastLoginBefore.equals(today);
+
+            // 記錄登入統計
+            UserStats stats = userService.recordLogin(userId);
+
+            // 只有當天第一次登入才加積分
+            if (isFirstLoginToday) {
+                // 每日登入 +1 積分
+                activityRecordService.addRecord(userId, "login", "完成每日登入", 1);
+
+                // 連續登入七天 +5 積分
+                if (stats.getConsecutiveDays() > 0 && stats.getConsecutiveDays() % 7 == 0) {
+                    activityRecordService.addRecord(userId, "streak", "連續登入七天", 5);
+                }
+
+                // 重新載入用戶資料以取得更新後的積分
+                user = userRepository.findById(userId).orElse(user);
+            }
+
+            return AuthResponse.success(token, user);
         } catch (Exception e) {
             return AuthResponse.error("Token 驗證失敗");
         }

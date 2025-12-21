@@ -160,11 +160,17 @@ const store = useStore()
 // 寄送方式
 const deliveryMethod = ref('home')
 
+// 默認值
+const defaults = {
+  phone: '0912345678',
+  address: '台北市中山區民生東路三段67號'
+}
+
 // 表單資料
 const form = reactive({
   name: store.currentUser?.name || '',
-  phone: store.currentUser?.phone || '',
-  address: store.currentUser?.address || '',
+  phone: store.currentUser?.phone || defaults.phone,
+  address: store.currentUser?.address || defaults.address,
   storeBrand: '',
   storeName: ''
 })
@@ -199,41 +205,32 @@ const confirmCheckout = async () => {
   isProcessing.value = true
 
   try {
-    // 逐一兌換購物車中的禮品
-    const items = [...store.checkoutItems]
-    let successCount = 0
+    const { orderAPI } = await import('@/api')
 
-    for (const item of items) {
-      for (let i = 0; i < item.quantity; i++) {
-        const result = await store.redeemGift(item.id)
-        if (result.success) {
-          successCount++
-        } else {
-          store.showToast(result.message || '兌換失敗', 'error')
-          isProcessing.value = false
-          return
-        }
-      }
+    // 準備批次兌換的資料
+    const items = store.checkoutItems.map(item => ({
+      giftId: item.id,
+      quantity: item.quantity
+    }))
+
+    // 呼叫批次兌換 API（合併成一筆訂單）
+    const response = await orderAPI.createBatch(store.currentUser.id, items)
+
+    if (response.data) {
+      // 更新用戶積分
+      await store.checkAuth()
+
+      // 清空購物車和 checkoutItems
+      store.clearCart()
+      store.clearCheckoutItems()
+
+      // 跳轉到完成頁面
+      router.push('/redemption-complete')
     }
-
-    // 兌換成功後，記錄到活動紀錄
-    for (const item of items) {
-      store.addActivityRecord({
-        type: 'reward',
-        title: `兌換 ${item.title}`,
-        points: item.points * item.quantity
-      })
-    }
-
-    // 清空購物車和 checkoutItems
-    store.clearCart()
-    store.clearCheckoutItems()
-
-    // 跳轉到完成頁面
-    router.push('/redemption-complete')
 
   } catch (error) {
-    store.showToast('兌換過程發生錯誤', 'error')
+    const message = error.response?.data?.message || '兌換過程發生錯誤'
+    store.showToast(message, 'error')
   } finally {
     isProcessing.value = false
   }

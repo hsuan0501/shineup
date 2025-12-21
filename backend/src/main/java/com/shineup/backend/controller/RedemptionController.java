@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -38,6 +39,24 @@ public class RedemptionController {
             @RequestParam Long giftId,
             @RequestParam(defaultValue = "1") int quantity) {
         return ResponseEntity.ok(redemptionService.createOrder(userId, giftId, quantity));
+    }
+
+    /**
+     * 批次兌換多個禮品（合併成一筆訂單）
+     * Request body: { "userId": 1, "items": [{ "giftId": 1, "quantity": 2 }, ...] }
+     */
+    @PostMapping("/batch")
+    public ResponseEntity<?> createBatchOrder(@RequestBody Map<String, Object> request) {
+        try {
+            Long userId = ((Number) request.get("userId")).longValue();
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> items = (List<Map<String, Object>>) request.get("items");
+
+            RedemptionOrder order = redemptionService.createBatchOrder(userId, items);
+            return ResponseEntity.ok(order);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}/status")

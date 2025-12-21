@@ -265,6 +265,15 @@ const errors = reactive({
   address: ''
 })
 
+// 默認值
+const defaults = {
+  birthday: '2025-09-01',
+  phone: '0912345678',
+  city: '台北市',
+  district: '中山區',
+  address: '民生東路三段67號'
+}
+
 // 表單資料 - 從 store.currentUser 載入
 const form = reactive({
   name: '',
@@ -281,11 +290,32 @@ onMounted(() => {
   if (store.currentUser) {
     form.name = store.currentUser.name || ''
     form.email = store.currentUser.email || ''
-    form.birthday = store.currentUser.birthday || ''
-    form.phone = store.currentUser.phone || ''
-    // 地址可能需要拆分
+    form.birthday = store.currentUser.birthday || defaults.birthday
+    form.phone = store.currentUser.phone || defaults.phone
+    // 地址解析或使用默認值
     if (store.currentUser.address) {
-      form.address = store.currentUser.address
+      // 嘗試解析地址（縣市+區域+詳細地址）
+      const addr = store.currentUser.address
+      const cityMatch = cities.find(c => addr.startsWith(c))
+      if (cityMatch) {
+        form.city = cityMatch
+        const rest = addr.substring(cityMatch.length)
+        // 嘗試解析區域（找到第一個「區」、「市」、「鄉」、「鎮」）
+        const districtMatch = rest.match(/^(.+?[區市鄉鎮])/)
+        if (districtMatch) {
+          form.district = districtMatch[1]
+          form.address = rest.substring(districtMatch[1].length)
+        } else {
+          form.address = rest
+        }
+      } else {
+        form.address = addr
+      }
+    } else {
+      // 使用默認值
+      form.city = defaults.city
+      form.district = defaults.district
+      form.address = defaults.address
     }
   }
 })

@@ -257,8 +257,9 @@
 
     <!-- 兌換記錄 -->
     <div v-if="activeTab === 'redemptions'" class="bg-white dark:bg-gray-700/70 rounded-2xl border dark:border-gray-600/30 overflow-hidden">
-      <div class="p-4 border-b border-gray-200 dark:border-gray-600">
+      <div class="p-4 border-b border-gray-200 dark:border-gray-600 flex items-center justify-between">
         <h3 class="font-bold text-gray-900 dark:text-white">兌換記錄</h3>
+        <button @click="fetchOrders" class="text-sm text-sky-600 dark:text-sky-400 hover:underline">重新整理</button>
       </div>
 
       <div class="overflow-x-auto">
@@ -269,7 +270,7 @@
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
-              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">進度</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">日期</th>
               <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
             </tr>
@@ -277,22 +278,30 @@
           <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
             <tr v-for="order in redemptions" :key="order.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
               <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ order.id }}</td>
-              <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ order.userName }}</td>
-              <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ order.giftName }}</td>
-              <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ order.points }}</td>
+              <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ order.user?.name || '-' }}</td>
+              <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                <div v-if="order.items && order.items.length > 0">
+                  <span v-for="(item, idx) in order.items" :key="item.id">
+                    {{ item.gift?.title }}<span v-if="item.quantity > 1"> x{{ item.quantity }}</span><span v-if="idx < order.items.length - 1">、</span>
+                  </span>
+                </div>
+                <span v-else>{{ order.gift?.title || '-' }}</span>
+              </td>
+              <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ order.totalPoints }}</td>
               <td class="px-4 py-3">
                 <span :class="getStatusBadgeClass(order.status)" class="px-2 py-1 text-xs font-medium rounded-full">
                   {{ getStatusText(order.status) }}
                 </span>
               </td>
-              <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ order.date }}</td>
+              <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ formatDate(order.createdAt) }}</td>
               <td class="px-4 py-3">
-                <select v-model="order.status" @change="updateOrderStatus(order)"
+                <select :value="order.status" @change="updateOrderStatus(order, $event.target.value)"
                   class="text-sm bg-transparent border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-500/50 dark:text-white">
-                  <option value="pending">待處理</option>
-                  <option value="completed">已完成</option>
-                  <option value="shipped">已出貨</option>
-                  <option value="cancelled">已取消</option>
+                  <option value="PENDING">訂單確認中</option>
+                  <option value="SHIPPED">已出貨</option>
+                  <option value="DELIVERED">已送達</option>
+                  <option value="COMPLETED">取貨完成</option>
+                  <option value="CANCELLED">已取消</option>
                 </select>
               </td>
             </tr>
@@ -505,9 +514,10 @@
 </template>
 
 <script setup>
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, onMounted } from 'vue'
 import { mockTasks, mockRewards } from '../mock.js'
 import { useStore } from '@/store'
+import { orderAPI } from '@/api'
 
 const store = useStore()
 
@@ -582,12 +592,36 @@ const taskList = ref([...mockTasks.slice(0, 10)])
 const giftList = ref([...mockRewards.slice(0, 10)])
 
 // 兌換記錄
-const redemptions = ref([
-  { id: 1001, userName: 'Hsuan', giftName: '環保便攜吸管組', points: 100, status: 'completed', date: '2025-12-16' },
-  { id: 1002, userName: 'Hsuan', giftName: '雲朵筆電包', points: 220, status: 'shipped', date: '2025-12-18' },
-  { id: 1003, userName: 'Matcha', giftName: '種子鉛筆組', points: 100, status: 'pending', date: '2025-12-20' },
-  { id: 1004, userName: 'May', giftName: '香氛蠟燭暖燈', points: 600, status: 'completed', date: '2025-12-14' }
-])
+const redemptions = ref([])
+
+// 載入訂單資料
+const fetchOrders = async () => {
+  try {
+    const response = await orderAPI.getAll()
+    redemptions.value = (response.data || []).sort((a, b) =>
+      new Date(b.createdAt) - new Date(a.createdAt)
+    )
+  } catch (error) {
+    console.error('Failed to fetch orders:', error)
+  }
+}
+
+// 格式化日期
+const formatDate = (dateString) => {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  return date.toLocaleString('zh-TW', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+onMounted(() => {
+  fetchOrders()
+})
 
 // 任務 Modal
 const openTaskModal = (task = null) => {
@@ -734,8 +768,15 @@ const executeDelete = () => {
 }
 
 // 訂單狀態更新
-const updateOrderStatus = (order) => {
-  store.showToast(`訂單 #${order.id} 狀態已更新為「${getStatusText(order.status)}」`, 'success')
+const updateOrderStatus = async (order, newStatus) => {
+  try {
+    await orderAPI.updateStatus(order.id, newStatus)
+    order.status = newStatus
+    store.showToast(`訂單 #${order.id} 狀態已更新為「${getStatusText(newStatus)}」`, 'success')
+  } catch (error) {
+    console.error('Failed to update order status:', error)
+    store.showToast('更新失敗，請稍後再試', 'error')
+  }
 }
 
 // 樣式輔助函數
@@ -783,20 +824,22 @@ const getSeriesBadgeClass = (series) => {
 
 const getStatusBadgeClass = (status) => {
   const classes = {
-    pending: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
-    completed: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
-    shipped: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
-    cancelled: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+    PENDING: 'bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-400',
+    SHIPPED: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
+    DELIVERED: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
+    COMPLETED: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+    CANCELLED: 'bg-gray-100 dark:bg-gray-900/30 text-gray-700 dark:text-gray-400'
   }
-  return classes[status] || classes.pending
+  return classes[status] || classes.PENDING
 }
 
 const getStatusText = (status) => {
   const texts = {
-    pending: '待處理',
-    completed: '已完成',
-    shipped: '已出貨',
-    cancelled: '已取消'
+    PENDING: '訂單確認中',
+    SHIPPED: '已出貨',
+    DELIVERED: '已送達',
+    COMPLETED: '取貨完成',
+    CANCELLED: '已取消'
   }
   return texts[status] || status
 }

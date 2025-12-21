@@ -52,7 +52,9 @@ export const giftAPI = {
 // 訂單 API
 export const orderAPI = {
   getAll: () => api.get('/orders'),
-  getByUserId: (userId) => api.get(`/orders/user/${userId}`)
+  getByUserId: (userId) => api.get(`/orders/user/${userId}`),
+  createBatch: (userId, items) => api.post('/orders/batch', { userId, items }),
+  updateStatus: (orderId, status) => api.put(`/orders/${orderId}/status?status=${status}`)
 }
 
 // 活動紀錄 API

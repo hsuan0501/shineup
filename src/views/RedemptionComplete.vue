@@ -46,9 +46,9 @@
           class="px-8 py-3 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 text-white font-bold hover:opacity-90 hover:scale-105 active:scale-95 transition-all shadow-lg">
           返回首頁
         </router-link>
-        <router-link to="/profile"
+        <router-link to="/history?tab=orders"
           class="px-8 py-3 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-all">
-          查看會員中心
+          查看訂單
         </router-link>
       </div>
     </div>

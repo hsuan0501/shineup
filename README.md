@@ -50,8 +50,8 @@ cd backend && ./mvnw spring-boot:run
 ### 測試帳號
 
 ```
-帳號：hsuan0501@outlook.com
-密碼：Qwe1234
+一般會員：hsuan0501@outlook.com / Qwe1234
+管理員：admin@shineup.com / Admin123
 ```
 
 <details>
