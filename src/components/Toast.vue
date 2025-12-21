@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { useStore } from '../store/app'
+import { useStore } from '@/store'
 
 const store = useStore()
 

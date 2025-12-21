@@ -85,7 +85,7 @@
 
 <script setup>
 import { ref, nextTick, watch, onMounted, onUnmounted, computed } from 'vue'
-import { useStore } from '../store/app'
+import { useStore } from '@/store'
 
 const store = useStore()
 const isOpen = ref(false)

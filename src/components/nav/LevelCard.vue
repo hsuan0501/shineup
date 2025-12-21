@@ -148,7 +148,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { levelConfig } from '../../mock.js'
-import { useStore } from '../../store/app.js'
+import { useStore } from '@/store'
 import { formatPoints } from '../../utils/formatPoints.js'
 
 const showLevelCard = ref(false)

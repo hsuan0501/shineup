@@ -1,5 +1,7 @@
 package com.shineup.backend.config;
 
+import com.shineup.backend.filter.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -18,7 +21,10 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/captcha/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/tasks/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/gifts/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/gifts/**").authenticated()
                 // 需要登入的 API
                 .requestMatchers("/api/users/**").authenticated()
                 .requestMatchers("/api/orders/**").authenticated()
@@ -46,7 +53,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/api/tasks/**").authenticated()
                 // 其他請求需要認證
                 .anyRequest().authenticated()
-            );
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -120,7 +120,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStore } from '../store/app'
+import { useStore } from '@/store'
 import api from '../api'
 
 const route = useRoute()

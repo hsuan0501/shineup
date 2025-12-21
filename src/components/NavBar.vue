@@ -265,7 +265,7 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useStore } from '../store/app.js'
+import { useStore } from '@/store'
 import LevelCard from './nav/LevelCard.vue'
 import LoginModal from './auth/LoginModal.vue'
 import { mockTasks, mockRewards } from '../mock'

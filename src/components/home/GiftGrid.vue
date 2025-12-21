@@ -209,7 +209,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { mockRewards, mockUsers } from '../../mock'
-import { useStore } from '../../store/app'
+import { useStore } from '@/store'
 import { formatPoints } from '../../utils/formatPoints'
 import GiftDetailModal from '../modals/GiftDetailModal.vue'
 

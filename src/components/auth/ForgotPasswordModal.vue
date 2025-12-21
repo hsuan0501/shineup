@@ -85,7 +85,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useStore } from '../../store/app'
+import { useStore } from '@/store'
 import api from '../../api'
 
 const props = defineProps({

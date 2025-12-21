@@ -152,7 +152,7 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from '../store/app.js'
+import { useStore } from '@/store'
 
 const router = useRouter()
 const store = useStore()

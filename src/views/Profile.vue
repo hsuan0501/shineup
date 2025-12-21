@@ -451,7 +451,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { levelConfig } from '../mock.js'
-import { useStore } from '../store/app.js'
+import { useStore } from '@/store'
 
 const store = useStore()
 const router = useRouter()

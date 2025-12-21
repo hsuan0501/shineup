@@ -290,7 +290,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useStore } from '../store/app.js'
+import { useStore } from '@/store'
 
 // 使用全局 store
 const store = useStore()

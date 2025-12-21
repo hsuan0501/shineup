@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { useStore } from './store/app'
+import { useStore } from '@/store'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import NavBar from './components/NavBar.vue'

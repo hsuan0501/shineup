@@ -134,7 +134,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { mockTasks } from '../../mock'
 import { taskAPI } from '../../api'
-import { useStore } from '../../store/app'
+import { useStore } from '@/store'
 import { formatPoints } from '../../utils/formatPoints'
 import TaskDetailModal from '../modals/TaskDetailModal.vue'
 

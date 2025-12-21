@@ -119,7 +119,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useStore } from '../store/app'
+import { useStore } from '@/store'
 import { mockTasks, mockRewards, mockUsers } from '../mock'
 
 const store = useStore()

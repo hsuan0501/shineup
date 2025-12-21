@@ -252,7 +252,7 @@
 
 <script setup>
 import { ref, watch, onUnmounted } from 'vue'
-import { useStore } from '../../store/app'
+import { useStore } from '@/store'
 import ForgotPasswordModal from './ForgotPasswordModal.vue'
 import axios from 'axios'
 

@@ -507,7 +507,7 @@
 <script setup>
 import { ref, computed, reactive } from 'vue'
 import { mockTasks, mockRewards } from '../mock.js'
-import { useStore } from '../store/app.js'
+import { useStore } from '@/store'
 
 const store = useStore()
 

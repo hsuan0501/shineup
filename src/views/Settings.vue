@@ -249,7 +249,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import { useStore } from '../store/app.js'
+import { useStore } from '@/store'
 import axios from 'axios'
 
 const store = useStore()
