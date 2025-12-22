@@ -204,6 +204,9 @@ const confirmCheckout = async () => {
 
   isProcessing.value = true
 
+  // 記錄兌換的商品名稱（用於通知）
+  const itemNames = store.checkoutItems.map(item => item.title).join('、')
+
   try {
     const { orderAPI } = await import('@/api')
 
@@ -219,6 +222,17 @@ const confirmCheckout = async () => {
     if (response.data) {
       // 更新用戶積分
       await store.checkAuth()
+
+      // 發送出貨通知
+      const settings = store.notificationSettings || {}
+      if (settings.shipping !== false) {
+        store.addNotification({
+          type: 'shipping',
+          title: '兌換成功',
+          description: `「${itemNames}」已兌換，將於 3-5 個工作天出貨`,
+          link: '/history?tab=orders'
+        })
+      }
 
       // 清空購物車和 checkoutItems
       store.clearCart()

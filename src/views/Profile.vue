@@ -6,28 +6,28 @@
         <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">會員中心</h1>
         <p class="text-sm text-gray-600 dark:text-gray-400">管理您的積分、等級與獎勵</p>
       </div>
-      <!-- 設定 & 登出按鈕 -->
+      <!-- 登出 & 設定按鈕 -->
       <div class="flex items-center gap-2">
-        <!-- 設定按鈕 -->
-        <router-link to="/settings"
-          class="px-5 py-2.5 rounded-full bg-gray-50/80 dark:bg-gray-800/50 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 border border-gray-200 dark:border-gray-600 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          設定
-        </router-link>
-
-        <!-- 登出按鈕 -->
+        <!-- 登出按鈕 (灰色) -->
         <button @click="handleLogout"
-          class="px-5 py-2.5 rounded-full bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
+          class="px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>
           登出
         </button>
+
+        <!-- 設定按鈕 (綠色) -->
+        <router-link to="/settings"
+          class="px-4 py-2 rounded-full bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          帳號設定
+        </router-link>
       </div>
     </div>
 
@@ -41,7 +41,7 @@
           <div class="flex items-start gap-6">
             <!-- 頭像 -->
             <div class="relative hover:scale-105 transition-transform duration-300">
-              <img :src="user.avatar" :alt="user.name"
+              <img :src="userAvatar" :alt="user.name"
                 class="w-24 h-24 rounded-full object-cover cursor-pointer hover:opacity-90 transition-opacity bg-white dark:bg-gray-600"
                 @click="openAvatarUpload" title="點擊更換頭像">
               <!-- 隱藏的檔案輸入 -->
@@ -397,6 +397,10 @@ const user = computed(() => ({
   stats: store.userStats
 }))
 
+const userAvatar = computed(() => {
+  return user.value?.avatar || `https://api.dicebear.com/9.x/thumbs/svg?seed=Sarah&radius=50&backgroundColor=69d2e7&translateX=-10`
+})
+
 // 當前等級配置 - 使用 userPoints 計算以避免閃現問題
 const currentLevelConfig = computed(() => {
   // 優先使用 userPoints 計算等級，比 currentLevel 更即時
@@ -481,12 +485,23 @@ const handleAvatarChange = (event) => {
   // 讀取檔案為 Data URL
   const reader = new FileReader()
   reader.onload = (e) => {
-    // 這裡可以更新用戶頭像
-    // 如果有後端 API，可以在這裡上傳到伺服器
+    const avatarData = e.target?.result
 
-    // 暫時更新本地顯示
+    // 更新 store 中的用戶頭像
     if (store.currentUser) {
-      store.currentUser.avatar = e.target?.result
+      store.currentUser.avatar = avatarData
+
+      // 同步更新 localStorage 讓頭像持久化
+      const saved = localStorage.getItem('auth')
+      if (saved) {
+        try {
+          const authData = JSON.parse(saved)
+          authData.user.avatar = avatarData
+          localStorage.setItem('auth', JSON.stringify(authData))
+        } catch (err) {
+          console.error('Failed to save avatar to localStorage', err)
+        }
+      }
     }
 
     store.showToast('頭像更新成功！', 'success')

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { mockUsers } from '../mock.js'
+import { useUIStore } from './useUIStore'
 
 // 設定是否使用後端 API（true = 連後端，false = 純前端 mock）
 export const USE_BACKEND_API = true
@@ -47,6 +48,8 @@ export const useAuthStore = defineStore('auth', () => {
   const isAdmin = computed(() => currentUser.value?.admin === true)
 
   const login = async (credentials) => {
+    const uiStore = useUIStore()
+
     if (!USE_BACKEND_API) {
       const user = mockUsers[1]
       if (credentials.email === user.email) {
@@ -58,13 +61,22 @@ export const useAuthStore = defineStore('auth', () => {
           upgradePoints: user.levelPoints,
           rewardPoints: user.rewardPoints
         }
+        // Mock 模式下模擬每日登入獎勵通知
+        if (uiStore.notificationSettings.points) {
+          uiStore.addNotification({
+            type: 'points',
+            title: '每日登入獎勵',
+            description: '完成「每日登入」獲得 +10 積分',
+            link: '/profile'
+          })
+        }
         return { success: true, user }
       }
       return { success: false, message: '帳號或密碼錯誤' }
     }
 
     try {
-      const { authAPI } = await import('../api')
+      const { authAPI, userAPI } = await import('../api')
       const response = await authAPI.login(credentials)
       const { token, user } = response.data
 
@@ -77,6 +89,45 @@ export const useAuthStore = defineStore('auth', () => {
       userPoints.value = {
         upgradePoints: user.upgradePoints || 0,
         rewardPoints: user.rewardPoints || 0
+      }
+
+      // 記錄登入並獲取積分
+      const loginTime = new Date().toISOString()
+      try {
+        const loginResult = await userAPI.recordLogin(user.id)
+        if (loginResult.data) {
+          const earnedPoints = loginResult.data.earnedPoints || 0
+          // 更新積分
+          userPoints.value = {
+            upgradePoints: loginResult.data.upgradePoints || userPoints.value.upgradePoints,
+            rewardPoints: loginResult.data.rewardPoints || userPoints.value.rewardPoints
+          }
+          // 記錄登入時間到 currentUser
+          currentUser.value = { ...currentUser.value, lastLoginAt: loginTime }
+          // 更新 localStorage
+          const saved = localStorage.getItem('auth')
+          if (saved) {
+            try {
+              const authData = JSON.parse(saved)
+              authData.user.lastLoginAt = loginTime
+              localStorage.setItem('auth', JSON.stringify(authData))
+            } catch (e) {
+              console.error('Failed to update lastLoginAt in localStorage', e)
+            }
+          }
+          // 只有獲得積分時才顯示通知
+          const settings = uiStore.notificationSettings || {}
+          if (earnedPoints > 0 && settings.points !== false) {
+            uiStore.addNotification({
+              type: 'points',
+              title: '每日登入獎勵',
+              description: `完成「每日登入」獲得 +${earnedPoints} 積分`,
+              link: '/profile'
+            })
+          }
+        }
+      } catch (loginError) {
+        console.error('Record login failed:', loginError)
       }
 
       return { success: true, user }

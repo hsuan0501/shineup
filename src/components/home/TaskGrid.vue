@@ -304,14 +304,14 @@ const getCategoryLabelForTask = (category) => {
 }
 
 
-const getTaskBorderClass = (taskCategory) => {
+const getTaskBorderClass = () => {
     // 根據當前選擇的任務分類來決定邊框顏色（與說明欄一致）
     const borderClasses = {
         'all': 'border-cyan-200 dark:border-cyan-800',           // 全部任務 - 淺青色
-        'daily': 'border-pink-200 dark:border-pink-800',         // 日常互動 - 淺粉紅
-        'financial': 'border-indigo-200 dark:border-indigo-800', // 理財學習 - 淺靛藍
-        'investment': 'border-orange-200 dark:border-orange-800', // 投資實踐 - 淺橘色
-        'esg': 'border-emerald-100 dark:border-emerald-800',     // 永續行動 - 淺翡翠
+        'daily': 'border-pink-200 dark:border-pink-800',         // 日常互動 - 粉紅
+        'financial': 'border-indigo-200 dark:border-indigo-800', // 理財學習 - 靛藍
+        'investment': 'border-orange-200 dark:border-orange-800', // 投資實踐 - 橘色
+        'esg': 'border-emerald-100 dark:border-emerald-800',     // 永續行動 - 翡翠綠
         'social': 'border-violet-200 dark:border-violet-800'     // 社交分享 - 淺紫色
     }
     return borderClasses[selectedTaskCategory.value] || 'border-cyan-200 dark:border-cyan-800'

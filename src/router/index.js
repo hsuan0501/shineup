@@ -13,16 +13,19 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/cart',
     name: 'Cart',
     component: () => import('../views/Cart.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/history',
     name: 'History',
     component: () => import('../views/History.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/search',
@@ -33,6 +36,7 @@ const routes = [
     path: '/settings',
     name: 'Settings',
     component: () => import('../views/Settings.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/admin',
@@ -44,11 +48,13 @@ const routes = [
     path: '/checkout-confirm',
     name: 'CheckoutConfirm',
     component: () => import('../views/CheckoutConfirm.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/redemption-complete',
     name: 'RedemptionComplete',
     component: () => import('../views/RedemptionComplete.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/reset-password',
@@ -82,10 +88,19 @@ const router = createRouter({
   },
 })
 
-// 路由守衛：檢查管理員權限
+// 路由守衛：檢查登入與管理員權限
 router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+
+  // 檢查是否需要登入
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    // 未登入，導向首頁
+    next({ name: 'Home' })
+    return
+  }
+
+  // 檢查是否需要管理員權限
   if (to.meta.requiresAdmin) {
-    const authStore = useAuthStore()
     if (!authStore.isAuthenticated || !authStore.isAdmin) {
       // 非管理員，導向首頁
       next({ name: 'Home' })

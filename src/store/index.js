@@ -50,6 +50,10 @@ export const useStore = () => {
     get searchQuery() { return ui.searchQuery },
     set searchQuery(v) { ui.searchQuery = v },
     get toasts() { return ui.toasts },
+    get notificationSettings() { return ui.notificationSettings.value },
+    get notificationList() { return ui.notificationList.value },
+    get showNotificationPanel() { return ui.showNotificationPanel },
+    set showNotificationPanel(v) { ui.showNotificationPanel = v },
 
     // Auth methods
     login: auth.login,
@@ -86,6 +90,10 @@ export const useStore = () => {
     setSearchQuery: ui.setSearchQuery,
     clearSearch: ui.clearSearch,
     showToast: ui.showToast,
-    removeToast: ui.removeToast
+    removeToast: ui.removeToast,
+    toggleNotificationSetting: ui.toggleNotificationSetting,
+    addNotification: ui.addNotification,
+    markNotificationRead: ui.markNotificationRead,
+    clearNotifications: ui.clearNotifications
   })
 }

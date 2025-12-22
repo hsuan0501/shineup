@@ -1,34 +1,42 @@
 <template>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- 購物車/心願清單 標題與切換 -->
+        <!-- 標題與分頁切換 -->
         <div class="mb-8 flex items-end justify-between">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    {{ activeTab === 'cart' ? '購物車' : '心願清單' }}
+                    {{ activeTab === 'cart' ? '購物車' : activeTab === 'wishlist' ? '心願清單' : '兌換紀錄' }}
                 </h1>
                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ activeTab === 'cart' ? '使用兌換積分選購心儀的禮品' : '收藏您喜愛的禮品' }}
+                    {{ activeTab === 'cart' ? '使用兌換積分選購心儀的禮品' : activeTab === 'wishlist' ? '收藏您喜愛的禮品' : '查看您的兌換訂單記錄' }}
                 </p>
             </div>
-            <!-- 心願清單/購物車切換按鈕 -->
-            <button @click="activeTab = activeTab === 'cart' ? 'wishlist' : 'cart'" :class="[
-                'px-5 py-2.5 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl',
-                activeTab === 'cart'
-                    ? 'bg-pink-50/80 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/30 border border-pink-200 dark:border-pink-800'
-                    : 'bg-sky-50/80 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800'
-            ]">
-                <!-- 購物車圖案（當在心願清單時顯示） -->
-                <svg v-if="activeTab === 'wishlist'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <!-- 愛心圖案（當在購物車時顯示） -->
-                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-                {{ activeTab === 'cart' ? '心願清單' : '購物車' }}
-            </button>
+            <!-- 右上角分頁切換按鈕（只顯示非當前分頁） -->
+            <div class="flex gap-2">
+                <router-link v-if="activeTab !== 'wishlist'" to="/history?tab=orders"
+                    class="px-4 py-2 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl bg-purple-50/80 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/30 border border-purple-200 dark:border-purple-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                    <span class="hidden sm:inline">兌換紀錄</span>
+                </router-link>
+                <button v-if="activeTab !== 'wishlist'" @click="activeTab = 'wishlist'"
+                    class="px-4 py-2 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl bg-pink-50/80 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 hover:bg-pink-100 dark:hover:bg-pink-900/30 border border-pink-200 dark:border-pink-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    <span class="hidden sm:inline">心願清單</span>
+                </button>
+                <button v-if="activeTab !== 'cart'" @click="activeTab = 'cart'"
+                    class="px-4 py-2 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl bg-sky-50/80 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span class="hidden sm:inline">購物車</span>
+                </button>
+            </div>
         </div>
 
         <!-- 購物車列表 -->
@@ -358,28 +366,6 @@ const checkout = () => {
     router.push('/checkout-confirm')
 }
 
-// 獲取系列樣式
-const getSeriesStyle = (series) => {
-    const styles = {
-        sustainable: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300',
-        quality: 'bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300',
-        aesthetic: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300',
-        premium: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
-    }
-    return styles[series] || styles.sustainable
-}
-
-// 獲取系列名稱
-const getSeriesName = (series) => {
-    const names = {
-        sustainable: '永續探索',
-        quality: '質感創造',
-        aesthetic: '美學先鋒',
-        premium: '品味閃耀'
-    }
-    return names[series] || '永續探索'
-}
-
 // 獲取等級樣式
 const getLevelStyle = (level) => {
     const styles = {
@@ -393,7 +379,6 @@ const getLevelStyle = (level) => {
 
 // 從心願清單加入購物車
 const handleAddFromWishlist = (item) => {
-    // 檢查是否已登入
     if (!store.isAuthenticated) {
         store.showToast('請先登入以使用購物車功能', 'error')
         return

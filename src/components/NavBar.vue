@@ -59,11 +59,11 @@
 
             <!-- 通知鈴鐺按鈕（左側）- 用震動動畫提示有通知 -->
             <div class="relative" ref="notificationContainer">
-              <button @click.stop="isLoggedIn && notifications.length > 0 ? toggleNotifications() : null"
-                :disabled="!isLoggedIn || notifications.length === 0"
+              <button @click.stop="isLoggedIn ? toggleNotifications() : null"
+                :disabled="!isLoggedIn"
                 :class="[
                   'notification-bell relative h-8 w-8 lg:h-9 lg:w-9 flex items-center justify-center rounded-full border transition-all duration-300 group',
-                  isLoggedIn && notifications.length > 0
+                  isLoggedIn
                     ? 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 hover:scale-[1.02] active:scale-95 cursor-pointer'
                     : 'bg-gray-100 dark:bg-gray-800/30 border-gray-200/50 dark:border-gray-700/50 opacity-50 cursor-not-allowed'
                 ]"
@@ -80,21 +80,39 @@
               </button>
               <!-- Notification Dropdown -->
               <transition name="fade-slide">
-                <div v-if="showNotifications && isLoggedIn && notifications.length > 0"
+                <div v-if="showNotifications && isLoggedIn"
                   class="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-600/40 overflow-hidden z-50">
                   <div class="max-h-64 overflow-y-auto p-2">
-                    <router-link v-for="(notif, index) in notifications" :key="index"
-                      :to="notif.link"
-                      @click="showNotifications = false"
-                      class="flex items-start gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:scale-[1.02] transition-all duration-200 rounded-xl">
-                      <div :class="['w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0', notif.iconBg]">
-                        <svg class="w-5 h-5" :class="notif.iconColor" fill="none" stroke="currentColor" viewBox="0 0 24 24" v-html="notif.icon"></svg>
-                      </div>
-                      <div class="flex-1 min-w-0">
-                        <p class="font-medium text-gray-900 dark:text-white text-sm">{{ notif.title }}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ notif.description }}</p>
-                      </div>
-                    </router-link>
+                    <!-- 有通知時顯示列表 -->
+                    <template v-if="notifications.length > 0">
+                      <router-link v-for="(notif, index) in notifications" :key="index"
+                        :to="notif.link"
+                        @click="showNotifications = false"
+                        class="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:scale-[1.02] transition-all duration-200 rounded-xl">
+                        <div :class="['w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0', notif.iconBg]">
+                          <svg class="w-5 h-5" :class="notif.iconColor" fill="none" stroke="currentColor" viewBox="0 0 24 24" v-html="notif.icon"></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <p class="font-medium text-gray-900 dark:text-white text-sm leading-5">{{ notif.title }}</p>
+                          <p class="text-xs text-gray-500 dark:text-gray-400 leading-4">{{ notif.description }}</p>
+                        </div>
+                        <span v-if="notif.timestamp" class="text-[10px] text-gray-400 dark:text-gray-500 flex-shrink-0">{{ formatTime(notif.timestamp) }}</span>
+                      </router-link>
+                    </template>
+                    <!-- 沒有通知時顯示空狀態 -->
+                    <div v-else class="p-4 text-center">
+                      <svg class="w-10 h-10 mx-auto text-gray-300 dark:text-gray-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                      </svg>
+                      <p class="text-sm text-gray-500 dark:text-gray-400">目前沒有通知</p>
+                    </div>
+                  </div>
+                  <!-- 清除全部按鈕 -->
+                  <div v-if="store.notificationList && store.notificationList.length > 0" class="border-t border-gray-200 dark:border-gray-700 p-2">
+                    <button @click="clearAllNotifications"
+                      class="w-full px-3 py-2 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all">
+                      清除全部通知
+                    </button>
                   </div>
                 </div>
               </transition>
@@ -264,23 +282,51 @@
 
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useStore } from '@/store'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
+import { useStore, useUIStore } from '@/store'
+import { storeToRefs } from 'pinia'
 import LevelCard from './nav/LevelCard.vue'
 import LoginModal from './auth/LoginModal.vue'
 import { mockTasks, mockRewards } from '../mock'
+import { orderAPI, activityAPI } from '@/api'
 
 const router = useRouter()
 const store = useStore()
+const uiStore = useUIStore()
+const { showNotificationPanel, notificationSettings } = storeToRefs(uiStore)
 const isDarkMode = ref(false)
 const showLoginModal = ref(false)
 const showSearchSuggestions = ref(false)
 const showSearchSuggestionsMobile = ref(false)
-const showNotifications = ref(false)
+const showNotifications = computed({
+  get: () => showNotificationPanel.value,
+  set: (val) => showNotificationPanel.value = val
+})
 const notificationContainer = ref(null)
+const programmaticOpenTime = ref(0) // 記錄程式化開啟的時間戳
+const pendingOrder = ref(null) // 進行中的訂單
+const lastActivityTime = ref(null) // 最後一筆積分紀錄的時間
+
+// 監聽 store 變化，當從外部開啟時記錄時間戳
+watch(showNotificationPanel, (newVal) => {
+  if (newVal) {
+    programmaticOpenTime.value = Date.now()
+  }
+})
 
 // 使用 store 的認證狀態
 const isLoggedIn = computed(() => store.isAuthenticated)
+
+// 格式化時間為 "MM/DD HH:mm" 格式
+const formatTime = (timestamp) => {
+  if (!timestamp) return ''
+  const date = new Date(timestamp)
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  return `${month}/${day} ${hours}:${minutes}`
+}
 
 // 等級門檻
 const levelThresholds = {
@@ -290,44 +336,81 @@ const levelThresholds = {
   LUMINARY: { min: 1500, max: Infinity, next: null, nextMin: null }
 }
 
-// 通知列表
+// 通知列表 - 包含靜態升級提醒和動態通知
 const notifications = computed(() => {
   if (!store.currentUser) return []
-  const user = store.currentUser
+  const settings = notificationSettings.value || { levelUp: true, points: true, shipping: true }
   const list = []
 
-  // 升級提醒（固定在最上面，只有非最高等級才顯示）
-  const currentLevel = store.currentLevel || 'EXPLORER'
-  const threshold = levelThresholds[currentLevel]
-  if (threshold && threshold.next) {
-    const upgradePoints = store.userPoints?.upgradePoints || 0
-    const pointsNeeded = threshold.nextMin - upgradePoints
-    if (pointsNeeded > 0) {
-      list.push({
-        title: '升級提醒',
-        description: `再累積 ${pointsNeeded} 積分即可升級至 ${threshold.next}`,
-        link: '/profile',
-        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />',
-        iconBg: 'bg-purple-100 dark:bg-purple-900/30',
-        iconColor: 'text-purple-500'
-      })
+  // 1. 靜態升級提醒（永遠顯示，除非已滿級）
+  if (settings.levelUp) {
+    const currentLevel = store.currentLevel || 'EXPLORER'
+    const threshold = levelThresholds[currentLevel]
+    if (threshold && threshold.next) {
+      const upgradePoints = store.userPoints?.upgradePoints || 0
+      const pointsNeeded = threshold.nextMin - upgradePoints
+      if (pointsNeeded > 0) {
+        list.push({
+          id: 'level-up-hint',
+          title: '升級提醒',
+          description: `再獲得 ${pointsNeeded} 積分即可升級至 ${threshold.next}`,
+          timestamp: null,
+          link: '/profile',
+          icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />',
+          iconBg: 'bg-purple-100 dark:bg-purple-900/30',
+          iconColor: 'text-purple-500'
+        })
+      }
     }
   }
 
-  // 個人資料未完成通知（合併為一個）
-  if (!user.birthday || !user.phone || !user.address) {
-    const missing = []
-    if (!user.birthday) missing.push('生日')
-    if (!user.phone) missing.push('手機')
-    if (!user.address) missing.push('地址')
+  // 2. 活動紀錄通知（顯示最後一筆積分紀錄的時間）
+  if (settings.points) {
     list.push({
-      title: '完善個人資料',
-      description: `請填寫${missing.join('、')}以享受完整服務`,
-      link: '/settings',
-      icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />',
-      iconBg: 'bg-sky-100 dark:bg-sky-900/30',
-      iconColor: 'text-sky-500'
+      id: 'activity-login',
+      title: '活動紀錄',
+      description: `每日登入 +10 積分`,
+      timestamp: lastActivityTime.value,
+      link: '/history?tab=points',
+      icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />',
+      iconBg: 'bg-blue-100 dark:bg-blue-900/30',
+      iconColor: 'text-blue-500'
     })
+  }
+
+  // 3. 出貨進度（根據真實訂單狀態顯示）
+  if (settings.shipping) {
+    const order = pendingOrder.value
+    if (order) {
+      // 有進行中訂單，顯示狀態
+      const statusLabels = {
+        PENDING: '訂單確認中',
+        SHIPPED: '已出貨',
+        DELIVERED: '已送達'
+      }
+      list.push({
+        id: 'shipping-status',
+        title: '出貨進度',
+        description: statusLabels[order.status] || order.status,
+        timestamp: order.createdAt,
+        link: '/history?tab=orders',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />',
+        iconBg: 'bg-green-100 dark:bg-green-900/30',
+        iconColor: 'text-green-500'
+      })
+    } else {
+      // 沒有進行中訂單，顯示暫無
+      list.push({
+        id: 'shipping-empty',
+        title: '出貨進度',
+        description: '暫無出貨進度',
+        timestamp: null,
+        link: '/history?tab=orders',
+        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />',
+        iconBg: 'bg-gray-100 dark:bg-gray-700/30',
+        iconColor: 'text-gray-400'
+      })
+    }
   }
 
   return list
@@ -340,6 +423,10 @@ const toggleNotifications = () => {
 
 // 點擊外部關閉通知
 const handleNotificationClickOutside = (event) => {
+  // 如果是 3500ms 內程式化開啟的，不要關閉（讓 Settings 的自動關閉計時器處理）
+  if (Date.now() - programmaticOpenTime.value < 3500) {
+    return
+  }
   if (notificationContainer.value && !notificationContainer.value.contains(event.target)) {
     showNotifications.value = false
   }
@@ -350,10 +437,63 @@ const openLoginModal = () => {
   showLoginModal.value = true
 }
 
+// 查詢進行中的訂單
+const fetchPendingOrder = async () => {
+  if (!store.currentUser?.id) {
+    pendingOrder.value = null
+    return
+  }
+  try {
+    const response = await orderAPI.getByUserId(store.currentUser.id)
+    const orders = response.data || []
+    // 找最新的進行中訂單（PENDING, SHIPPED, DELIVERED）
+    const pending = orders.find(o => ['PENDING', 'SHIPPED', 'DELIVERED'].includes(o.status))
+    pendingOrder.value = pending || null
+  } catch (error) {
+    console.error('Failed to fetch pending order:', error)
+    pendingOrder.value = null
+  }
+}
+
+// 查詢最後一筆獲得積分的時間（正積分）
+const fetchLastActivityTime = async () => {
+  if (!store.currentUser?.id) {
+    lastActivityTime.value = null
+    return
+  }
+  try {
+    const response = await activityAPI.getByUserId(store.currentUser.id)
+    const records = response.data || []
+    // 找最新一筆正積分的紀錄（獲得積分，不是兌換扣除）
+    const lastEarned = records.find(r => r.points > 0)
+    if (lastEarned) {
+      lastActivityTime.value = lastEarned.createdAt
+    } else {
+      lastActivityTime.value = null
+    }
+  } catch (error) {
+    console.error('Failed to fetch last activity time:', error)
+    lastActivityTime.value = null
+  }
+}
+
+// 監聽登入狀態變化，重新查詢訂單和活動紀錄
+watch(() => store.isAuthenticated, (newVal) => {
+  if (newVal) {
+    fetchPendingOrder()
+    fetchLastActivityTime()
+  } else {
+    pendingOrder.value = null
+    lastActivityTime.value = null
+  }
+})
+
 // 初始化暗色模式狀態和檢查登入狀態
-onMounted(() => {
+onMounted(async () => {
   isDarkMode.value = document.documentElement.classList.contains('dark')
-  store.checkAuth() // 檢查是否已登入
+  await store.checkAuth() // 檢查是否已登入
+  fetchPendingOrder() // 查詢進行中訂單
+  fetchLastActivityTime() // 查詢最後活動時間
   document.addEventListener('click', handleNotificationClickOutside)
 })
 
@@ -494,6 +634,11 @@ const clearSearch = () => {
   store.searchQuery = ''
   showSearchSuggestions.value = false
   showSearchSuggestionsMobile.value = false
+}
+
+const clearAllNotifications = () => {
+  store.clearNotifications()
+  showNotifications.value = false
 }
 </script>
 

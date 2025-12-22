@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { mockUsers } from '../mock.js'
 import { useAuthStore, USE_BACKEND_API } from './useAuthStore'
+import { useUIStore } from './useUIStore'
 
 export const useActivityStore = defineStore('activity', () => {
   const activityRecords = ref([])
@@ -74,22 +75,78 @@ export const useActivityStore = defineStore('activity', () => {
     }
   }
 
-  const completeTask = async (taskId) => {
+  const completeTask = async (taskId, taskTitle = '任務', points = 0) => {
     const authStore = useAuthStore()
+    const uiStore = useUIStore()
     if (!authStore.currentUser) return { success: false, message: '請先登入' }
 
     if (!USE_BACKEND_API) {
       authStore.userPoints.upgradePoints += 50
       authStore.userPoints.rewardPoints += 50
+      if (uiStore.notificationSettings.points) {
+        uiStore.addNotification({
+          type: 'points',
+          title: '積分獲得',
+          description: `完成「${taskTitle}」獲得 +50 積分`,
+          link: '/profile'
+        })
+      }
       return { success: true, message: '任務完成！' }
     }
 
     try {
       const { taskAPI } = await import('../api')
       const response = await taskAPI.complete(taskId, authStore.currentUser.id)
+      const oldPoints = authStore.userPoints.upgradePoints
+      const oldLevel = authStore.currentLevel
+
+      // 更新積分
       authStore.userPoints = {
         upgradePoints: response.data.upgradePoints,
         rewardPoints: response.data.rewardPoints
+      }
+
+      // 檢查是否有升級
+      const newLevel = response.data.level || response.data.newLevel
+      if (newLevel && newLevel !== oldLevel) {
+        authStore.currentLevel = newLevel
+        // 更新 localStorage
+        const saved = localStorage.getItem('auth')
+        if (saved) {
+          try {
+            const authData = JSON.parse(saved)
+            authData.user.level = newLevel
+            localStorage.setItem('auth', JSON.stringify(authData))
+          } catch (e) {
+            console.error('Failed to update auth localStorage', e)
+          }
+        }
+        // 添加升級通知
+        if (uiStore.notificationSettings.levelUp) {
+          const levelNames = {
+            EXPLORER: 'Lv1 Explorer 探索者',
+            CREATOR: 'Lv2 Creator 創造者',
+            VISIONARY: 'Lv3 Visionary 先驅者',
+            LUMINARY: 'Lv4 Luminary 閃耀者'
+          }
+          uiStore.addNotification({
+            type: 'levelUp',
+            title: '等級提升！',
+            description: `恭喜您升級至 ${levelNames[newLevel] || newLevel}`,
+            link: '/profile'
+          })
+        }
+      }
+
+      // 積分通知
+      const earnedPoints = response.data.upgradePoints - oldPoints
+      if (uiStore.notificationSettings.points && earnedPoints > 0) {
+        uiStore.addNotification({
+          type: 'points',
+          title: '積分獲得',
+          description: `完成「${taskTitle}」獲得 +${earnedPoints} 積分`,
+          link: '/profile'
+        })
       }
       return { success: true, message: response.data.message }
     } catch (error) {
@@ -97,11 +154,20 @@ export const useActivityStore = defineStore('activity', () => {
     }
   }
 
-  const redeemGift = async (giftId) => {
+  const redeemGift = async (giftId, giftName = '禮品') => {
     const authStore = useAuthStore()
+    const uiStore = useUIStore()
     if (!authStore.currentUser) return { success: false, message: '請先登入' }
 
     if (!USE_BACKEND_API) {
+      if (uiStore.notificationSettings.shipping) {
+        uiStore.addNotification({
+          type: 'shipping',
+          title: '出貨進度',
+          description: `「${giftName}」訂單確認中`,
+          link: '/history?tab=orders'
+        })
+      }
       return { success: true, message: '兌換成功！' }
     }
 
@@ -109,6 +175,14 @@ export const useActivityStore = defineStore('activity', () => {
       const { giftAPI } = await import('../api')
       const response = await giftAPI.redeem(giftId, authStore.currentUser.id)
       await authStore.checkAuth()
+      if (uiStore.notificationSettings.shipping) {
+        uiStore.addNotification({
+          type: 'shipping',
+          title: '出貨進度',
+          description: `「${giftName}」訂單確認中`,
+          link: '/history?tab=orders'
+        })
+      }
       return { success: true, message: response.data.message }
     } catch (error) {
       return { success: false, message: error.response?.data?.message || '兌換失敗' }

@@ -1,9 +1,29 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- 標題 -->
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">帳號設定</h1>
-      <p class="text-sm text-gray-600 dark:text-gray-400">管理您的個人資料與偏好設定</p>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- 標題 + 按鈕 -->
+    <div class="mb-8 flex items-end justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">帳號設定</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400">管理您的個人資料與偏好設定</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <!-- 登出按鈕 (灰色) -->
+        <button @click="handleLogout"
+          class="px-4 py-2 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          登出
+        </button>
+        <!-- 會員中心按鈕 (藍色) -->
+        <router-link to="/profile"
+          class="px-4 py-2 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl bg-sky-50/80 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          會員中心
+        </router-link>
+      </div>
     </div>
 
     <!-- 設定區塊 -->
@@ -175,57 +195,57 @@
         <div class="space-y-4">
           <div class="flex items-center justify-between py-2">
             <div>
-              <p class="text-sm font-medium text-gray-900 dark:text-white">等級提升</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">當等級提升時通知</p>
+              <p class="text-sm font-medium text-gray-900 dark:text-white">升級提醒通知</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">距離下一等級的積分進度</p>
             </div>
-            <button @click="toggleNotification('levelUp', '等級提升')"
+            <button @click.stop="toggleNotification('levelUp', '升級提醒通知')"
               :class="[
                 'relative w-14 h-8 rounded-full shadow-inner border hover:scale-[1.02] active:scale-95 transition-all duration-300',
-                notifications.levelUp
+                notificationSettings.levelUp
                   ? 'bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-300/50'
                   : 'bg-gray-200 dark:bg-gray-700 border-gray-300/30 dark:border-gray-600/30'
               ]">
               <div :class="[
                 'absolute top-1 w-6 h-6 rounded-full bg-white shadow-md transition-all duration-300',
-                notifications.levelUp ? 'left-[calc(100%-1.75rem)]' : 'left-1'
+                notificationSettings.levelUp ? 'left-[calc(100%-1.75rem)]' : 'left-1'
               ]"></div>
             </button>
           </div>
 
           <div class="flex items-center justify-between py-2">
             <div>
-              <p class="text-sm font-medium text-gray-900 dark:text-white">積分變動</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">當積分增加或使用時通知</p>
+              <p class="text-sm font-medium text-gray-900 dark:text-white">活動紀錄通知</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">顯示最新的活動紀錄</p>
             </div>
-            <button @click="toggleNotification('points', '積分變動')"
+            <button @click.stop="toggleNotification('points', '活動紀錄通知')"
               :class="[
                 'relative w-14 h-8 rounded-full shadow-inner border hover:scale-[1.02] active:scale-95 transition-all duration-300',
-                notifications.points
+                notificationSettings.points
                   ? 'bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-300/50'
                   : 'bg-gray-200 dark:bg-gray-700 border-gray-300/30 dark:border-gray-600/30'
               ]">
               <div :class="[
                 'absolute top-1 w-6 h-6 rounded-full bg-white shadow-md transition-all duration-300',
-                notifications.points ? 'left-[calc(100%-1.75rem)]' : 'left-1'
+                notificationSettings.points ? 'left-[calc(100%-1.75rem)]' : 'left-1'
               ]"></div>
             </button>
           </div>
 
           <div class="flex items-center justify-between py-2">
             <div>
-              <p class="text-sm font-medium text-gray-900 dark:text-white">出貨通知</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400">當兌換禮品出貨時通知</p>
+              <p class="text-sm font-medium text-gray-900 dark:text-white">出貨進度通知</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">兌換禮品的出貨狀態</p>
             </div>
-            <button @click="toggleNotification('shipping', '出貨通知')"
+            <button @click.stop="toggleNotification('shipping', '出貨進度通知')"
               :class="[
                 'relative w-14 h-8 rounded-full shadow-inner border hover:scale-[1.02] active:scale-95 transition-all duration-300',
-                notifications.shipping
+                notificationSettings.shipping
                   ? 'bg-gradient-to-r from-cyan-400 to-blue-500 border-cyan-300/50'
                   : 'bg-gray-200 dark:bg-gray-700 border-gray-300/30 dark:border-gray-600/30'
               ]">
               <div :class="[
                 'absolute top-1 w-6 h-6 rounded-full bg-white shadow-md transition-all duration-300',
-                notifications.shipping ? 'left-[calc(100%-1.75rem)]' : 'left-1'
+                notificationSettings.shipping ? 'left-[calc(100%-1.75rem)]' : 'left-1'
               ]"></div>
             </button>
           </div>
@@ -249,10 +269,22 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import { useStore } from '@/store'
+import { useRouter } from 'vue-router'
+import { useStore, useUIStore } from '@/store'
+import { storeToRefs } from 'pinia'
 import axios from 'axios'
 
+const router = useRouter()
 const store = useStore()
+const uiStore = useUIStore()
+const { notificationSettings } = storeToRefs(uiStore)
+
+// 登出
+const handleLogout = () => {
+  store.logout()
+  store.showToast('已成功登出', 'success')
+  router.push('/')
+}
 
 // LINE 綁定狀態
 const isLineBound = computed(() => !!store.currentUser?.lineId)
@@ -320,13 +352,6 @@ onMounted(() => {
   }
 })
 
-// 通知設定
-const notifications = reactive({
-  points: true,
-  levelUp: true,
-  shipping: false
-})
-
 // 台灣縣市
 const cities = [
   '台北市', '新北市', '桃園市', '台中市', '台南市', '高雄市',
@@ -375,12 +400,30 @@ const validateForm = () => {
   return isValid
 }
 
-// 切換通知設定
-const toggleNotification = (key, label) => {
-  notifications[key] = !notifications[key]
-  const status = notifications[key] ? '開啟' : '關閉'
-  const type = notifications[key] ? 'success' : 'error'
+// 通知面板自動收起的計時器
+let notificationTimer = null
+
+// 切換通知設定 - 使用 store 方法
+const toggleNotification = async (key, label) => {
+  // 先清除之前的計時器（避免舊計時器干擾）
+  if (notificationTimer) {
+    clearTimeout(notificationTimer)
+    notificationTimer = null
+  }
+
+  const newValue = store.toggleNotificationSetting(key)
+  const status = newValue ? '開啟' : '關閉'
+  const type = newValue ? 'success' : 'error'
   store.showToast(`${label}通知已${status}`, type)
+
+  // 自動展開鈴鐺通知面板，讓用戶看到變化
+  uiStore.showNotificationPanel = true
+
+  // 3秒後自動收起
+  notificationTimer = setTimeout(() => {
+    uiStore.showNotificationPanel = false
+    notificationTimer = null
+  }, 3000)
 }
 
 // 儲存設定

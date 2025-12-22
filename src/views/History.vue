@@ -1,13 +1,9 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
-    <div class="flex items-center gap-4 mb-8">
-      <router-link to="/profile" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-        <svg class="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-      </router-link>
-      <h1 class="text-3xl font-bold text-light-text dark:text-dark-text">查詢紀錄</h1>
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">查詢紀錄</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400">查看您的積分與兌換記錄</p>
     </div>
 
     <!-- Tabs -->
@@ -75,11 +71,11 @@
             </svg>
           </div>
           <div>
-            <h3 class="font-bold text-light-text dark:text-dark-text">{{ record.title }}</h3>
+            <h3 class="font-medium text-sm text-light-text dark:text-dark-text">{{ record.title }}</h3>
             <p class="text-xs text-gray-500 dark:text-gray-400">{{ formatDate(record.createdAt) }}</p>
           </div>
         </div>
-        <span :class="['font-bold text-lg', record.points > 0 ? 'text-green-500' : 'text-pink-500']">
+        <span :class="['font-medium text-sm', record.points > 0 ? 'text-green-600 dark:text-green-400' : 'text-pink-500']">
           {{ record.points > 0 ? '+' : '' }}{{ record.points }}
         </span>
       </div>
@@ -158,7 +154,7 @@
           </div>
         </div>
 
-        <!-- 水平時間軸：左到右 -->
+        <!-- 水平時間軸：左到右（統一綠色，當前進度實心，已完成空心） -->
         <div v-if="order.status !== 'CANCELLED'" class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
           <div class="flex items-center justify-between">
             <template v-for="(step, index) in orderSteps" :key="step.status">
@@ -166,10 +162,12 @@
               <div class="flex flex-col items-center">
                 <!-- 圓點 + 圖示 -->
                 <div :class="[
-                  'w-8 h-8 rounded-full border-2 flex items-center justify-center',
-                  getStepIndex(order.status) >= index
-                    ? 'bg-green-500 border-green-500 text-white'
-                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-400'
+                  'w-8 h-8 rounded-full border-[1.5px] flex items-center justify-center',
+                  getStepIndex(order.status) === index
+                    ? 'bg-emerald-500 border-emerald-500 text-white'
+                    : getStepIndex(order.status) > index
+                      ? 'bg-white dark:bg-gray-800 border-emerald-500 text-emerald-500'
+                      : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-500 text-gray-400'
                 ]">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path v-if="index === 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -182,7 +180,7 @@
                 <span :class="[
                   'mt-1 text-xs',
                   getStepIndex(order.status) >= index
-                    ? 'text-green-600 dark:text-green-400 font-medium'
+                    ? 'text-emerald-600 dark:text-emerald-400 font-medium'
                     : 'text-gray-400 dark:text-gray-500'
                 ]">{{ step.label }}</span>
                 <!-- 時間（已完成的步驟顯示虛擬時間） -->
@@ -192,8 +190,8 @@
               </div>
               <!-- 連接線 -->
               <div v-if="index < orderSteps.length - 1" :class="[
-                'flex-1 h-0.5 mx-2',
-                getStepIndex(order.status) > index ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
+                'flex-1 h-[1.5px] mx-2',
+                getStepIndex(order.status) > index ? 'bg-emerald-500' : 'bg-gray-300 dark:bg-gray-600'
               ]" style="margin-top: -1rem;"></div>
             </template>
           </div>
@@ -226,6 +224,11 @@ import { orderAPI, activityAPI } from '@/api'
 const route = useRoute()
 const store = useStore()
 const activeTab = ref(route.query.tab === 'orders' ? 'orders' : 'points')
+
+// 監聽 URL query 變化，切換 tab
+watch(() => route.query.tab, (newTab) => {
+  activeTab.value = newTab === 'orders' ? 'orders' : 'points'
+})
 const loading = ref(true)
 const orders = ref([])
 const activityRecords = ref([])
@@ -277,7 +280,7 @@ const formatShortDate = (dateString) => {
   })
 }
 
-// 訂單時間線步驟
+// 訂單時間線步驟（統一綠色）
 const orderSteps = [
   { status: 'PENDING', label: '訂單確認中' },
   { status: 'SHIPPED', label: '已出貨' },
