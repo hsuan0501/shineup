@@ -31,7 +31,10 @@ export const userAPI = {
   getById: (id) => api.get(`/users/${id}`),
   reset: (id) => api.post(`/users/${id}/reset`),
   getStats: (id) => api.get(`/users/${id}/stats`),
-  recordLogin: (id) => api.post(`/users/${id}/record-login`)
+  recordLogin: (id) => api.post(`/users/${id}/record-login`),
+  toggleStatus: (id) => api.put(`/users/${id}/toggle-status`),
+  getLoginHistory: (id) => api.get(`/users/${id}/login-history`),
+  getAllLoginHistory: () => api.get('/users/login-history')
 }
 
 // 任務 API
@@ -53,13 +56,23 @@ export const giftAPI = {
 export const orderAPI = {
   getAll: () => api.get('/orders'),
   getByUserId: (userId) => api.get(`/orders/user/${userId}`),
-  createBatch: (userId, items) => api.post('/orders/batch', { userId, items }),
+  createBatch: (userId, items, deliveryInfo) => api.post('/orders/batch', { userId, items, ...deliveryInfo }),
   updateStatus: (orderId, status) => api.put(`/orders/${orderId}/status?status=${status}`)
 }
 
 // 活動紀錄 API
 export const activityAPI = {
   getByUserId: (userId) => api.get(`/activities/user/${userId}`)
+}
+
+// AI 客服 API
+export const chatAPI = {
+  send: (message) => api.post('/chat', { message }),
+  // 管理員用
+  getReplies: () => api.get('/chat/replies'),
+  saveReply: (reply) => api.post('/chat/replies', reply),
+  saveAllReplies: (replies) => api.put('/chat/replies', replies),
+  deleteReply: (id) => api.delete(`/chat/replies/${id}`)
 }
 
 export default api

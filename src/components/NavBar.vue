@@ -1,9 +1,38 @@
 <template>
   <nav
-    class="fixed top-0 left-0 right-0 z-40 backdrop-blur-md backdrop-saturate-150 bg-white/40 dark:bg-gray-900/40 transition-all duration-300">
+    :class="[
+      'fixed top-0 left-0 right-0 z-40 backdrop-blur-md backdrop-saturate-150 transition-all duration-300',
+      isAdmin
+        ? 'bg-[#266fe8]/70 dark:bg-[#4787f0]/70'
+        : 'bg-white/40 dark:bg-gray-900/40'
+    ]">
     <div class="w-full px-4 sm:px-6 lg:px-8">
-      <!-- 第一列：主導航 -->
-      <div class="relative flex items-center justify-between h-16 md:h-20">
+      <!-- 管理員專用簡化導航 -->
+      <div v-if="isAdmin" class="flex items-center justify-between h-16 md:h-20">
+        <!-- 左側空白佔位 -->
+        <div class="w-20"></div>
+        <!-- Logo + Admin 置中 -->
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-0.5 text-xl md:text-2xl font-bold text-white">
+            <span>Shine</span>
+            <svg class="w-3.5 h-3.5 md:w-4 md:h-4" viewBox="0 0 24 24">
+              <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="white" />
+            </svg>
+            <span>Up</span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+            <svg class="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="white" />
+            </svg>
+          </div>
+          <span class="text-xl md:text-2xl font-light text-white">Admin Panel</span>
+        </div>
+        <!-- 右側空白佔位 -->
+        <div class="w-20"></div>
+      </div>
+
+      <!-- 一般會員導航 -->
+      <div v-else class="relative flex items-center justify-between h-16 md:h-20">
         <!-- Logo + Nav Links (左邊群組) -->
         <div class="flex items-center space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-6 z-10">
           <!-- Logo -->
@@ -236,8 +265,8 @@
         </div>
       </div>
 
-      <!-- 第二列：搜尋欄 (Mobile only) -->
-      <div class="md:hidden pb-3">
+      <!-- 第二列：搜尋欄 (Mobile only)（管理員不顯示） -->
+      <div v-if="!isAdmin" class="md:hidden pb-3">
         <div class="relative w-full">
           <input type="text" placeholder="搜尋任務或禮品..." :value="store.searchQuery"
             @input="handleSearch"
@@ -281,7 +310,7 @@
 </template>
 
 <script setup>
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useStore, useUIStore } from '@/store'
 import { storeToRefs } from 'pinia'
@@ -291,7 +320,9 @@ import { mockTasks, mockRewards } from '../mock'
 import { orderAPI, activityAPI } from '@/api'
 
 const router = useRouter()
+const route = useRoute()
 const store = useStore()
+
 const uiStore = useUIStore()
 const { showNotificationPanel, notificationSettings } = storeToRefs(uiStore)
 const isDarkMode = ref(false)
@@ -316,6 +347,9 @@ watch(showNotificationPanel, (newVal) => {
 
 // 使用 store 的認證狀態
 const isLoggedIn = computed(() => store.isAuthenticated)
+
+// 檢查是否為管理員
+const isAdmin = computed(() => store.currentUser?.admin === true)
 
 // 格式化時間為 "MM/DD HH:mm" 格式
 const formatTime = (timestamp) => {
@@ -486,6 +520,11 @@ watch(() => store.isAuthenticated, (newVal) => {
     pendingOrder.value = null
     lastActivityTime.value = null
   }
+})
+
+// 監聽訂單版本變化，觸發重新查詢（兌換後更新出貨進度）
+watch(() => store.orderVersion, () => {
+  fetchPendingOrder()
 })
 
 // 初始化暗色模式狀態和檢查登入狀態

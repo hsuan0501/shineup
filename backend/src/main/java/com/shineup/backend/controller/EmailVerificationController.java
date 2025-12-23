@@ -18,7 +18,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class EmailVerificationController {
 
     private final EmailVerificationService emailVerificationService;

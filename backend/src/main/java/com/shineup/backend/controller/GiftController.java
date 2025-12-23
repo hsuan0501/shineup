@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/gifts")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class GiftController {
 
     private final GiftService giftService;

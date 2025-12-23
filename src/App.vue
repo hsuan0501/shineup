@@ -1,7 +1,12 @@
 <template>
   <div :class="isDark ? 'dark' : ''" class="w-full min-h-screen overflow-x-hidden" style="margin: 0; padding: 0;">
-    <!-- Whitesmoke background for blob effect -->
-    <div class="fixed inset-0 -z-50 bg-[whitesmoke] dark:bg-gray-900"></div>
+    <!-- Background (admin頁面用淺藍漸層) -->
+    <div :class="[
+      'fixed inset-0 -z-50',
+      isAdminPage
+        ? 'bg-[#ecf2fe] dark:bg-gray-900'
+        : 'bg-[whitesmoke] dark:bg-gray-900'
+    ]"></div>
 
     <div class="flex flex-col min-h-screen w-full bg-transparent dark:bg-transparent bg-cover bg-fixed bg-no-repeat">
       <!-- NavBar -->
@@ -27,8 +32,8 @@
         </svg>
       </button>
 
-      <!-- Global ChatBox -->
-      <ChatBox />
+      <!-- Global ChatBox (管理員不顯示) -->
+      <ChatBox v-if="!isAdmin" />
 
       <!-- Global Toast Notifications -->
       <Toast />
@@ -54,6 +59,12 @@ const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const isDark = computed(() => store.isDark)
+
+// 檢查是否為管理員
+const isAdmin = computed(() => store.currentUser?.admin === true)
+
+// 檢查是否在管理後台頁面
+const isAdminPage = computed(() => route.path === '/admin')
 
 // Reset Password Modal
 const showResetPasswordModal = ref(false)

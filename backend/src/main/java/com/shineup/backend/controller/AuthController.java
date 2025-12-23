@@ -4,6 +4,7 @@ import com.shineup.backend.dto.AuthResponse;
 import com.shineup.backend.dto.LoginRequest;
 import com.shineup.backend.dto.RegisterRequest;
 import com.shineup.backend.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final AuthService authService;
@@ -30,11 +30,18 @@ public class AuthController {
 
     // 登入
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest) {
         AuthResponse response = authService.login(request);
         if (response.getToken() == null) {
             return ResponseEntity.badRequest().body(response);
         }
+        // 記錄登入歷史
+        String ipAddress = httpRequest.getHeader("X-Forwarded-For");
+        if (ipAddress == null) {
+            ipAddress = httpRequest.getRemoteAddr();
+        }
+        String userAgent = httpRequest.getHeader("User-Agent");
+        authService.recordLoginHistory(response.getUser().getId(), ipAddress, userAgent, "EMAIL");
         return ResponseEntity.ok(response);
     }
 

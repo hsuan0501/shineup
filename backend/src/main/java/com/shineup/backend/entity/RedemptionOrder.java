@@ -41,6 +41,32 @@ public class RedemptionOrder {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    // 收件資訊
+    @Column(name = "recipient_name")
+    private String recipientName;
+
+    @Column(name = "recipient_phone")
+    private String recipientPhone;
+
+    @Column(name = "delivery_method")
+    private String deliveryMethod;
+
+    @Column(name = "delivery_address")
+    private String deliveryAddress;
+
+    @Column(name = "store_brand")
+    private String storeBrand;
+
+    @Column(name = "store_name")
+    private String storeName;
+
+    // 物流時間
+    @Column(name = "shipped_at")
+    private LocalDateTime shippedAt;
+
+    @Column(name = "completed_at")
+    private LocalDateTime completedAt;
+
     public enum OrderStatus {
         PENDING, SHIPPED, DELIVERED, COMPLETED, CANCELLED
     }

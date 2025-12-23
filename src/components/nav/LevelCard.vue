@@ -1,8 +1,17 @@
 <template>
   <div ref="levelCardContainer" class="relative">
-    <!-- Level Card Trigger -->
+    <!-- 管理員專用簡化標籤 -->
+    <div v-if="isAdmin"
+      class="flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-500 border border-amber-300 dark:border-amber-600 lg:gap-2 lg:px-3 lg:py-1.5 lg:rounded-full w-8 h-8 lg:w-auto lg:h-auto rounded-full">
+      <svg class="w-4 h-4 lg:w-[18px] lg:h-[18px] text-white" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+      </svg>
+      <span class="hidden lg:inline text-sm font-bold text-white">管理員</span>
+    </div>
+
+    <!-- 一般會員 Level Card Trigger -->
     <!-- 手機/平板為小圓形星星icon，桌面(lg+)顯示完整等級資訊 -->
-    <div @click="toggleLevelCard"
+    <div v-else @click="toggleLevelCard"
       :class="[
         'flex items-center justify-center cursor-pointer hover:scale-[1.02] transition-all active:scale-95 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:opacity-100 opacity-90',
         'lg:gap-2 lg:px-3 lg:py-1.5 lg:rounded-full',
@@ -157,6 +166,9 @@ const store = useStore()
 
 // 檢查是否登入
 const isLoggedIn = computed(() => store.isAuthenticated)
+
+// 檢查是否為管理員
+const isAdmin = computed(() => store.currentUser?.admin === true)
 
 // 雙軌積分系統 - 使用 store.userPoints 即時數據
 const userLevelPoints = computed(() => {

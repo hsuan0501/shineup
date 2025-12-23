@@ -1,6 +1,7 @@
 package com.shineup.backend.config;
 
 import com.shineup.backend.filter.JwtAuthenticationFilter;
+import com.shineup.backend.filter.RateLimitFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final RateLimitFilter rateLimitFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -48,12 +50,14 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/**").authenticated()
                 .requestMatchers("/api/orders/**").authenticated()
                 .requestMatchers("/api/activities/**").authenticated()
+                .requestMatchers("/api/chat/**").authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/tasks/**").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/tasks/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/tasks/**").authenticated()
                 // 其他請求需要認證
                 .anyRequest().authenticated()
             )
+            .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -62,7 +66,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174", "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

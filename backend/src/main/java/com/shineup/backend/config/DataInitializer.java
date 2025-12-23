@@ -1,11 +1,13 @@
 package com.shineup.backend.config;
 
 import com.shineup.backend.entity.ActivityRecord;
+import com.shineup.backend.entity.ChatbotReply;
 import com.shineup.backend.entity.Gift;
 import com.shineup.backend.entity.RedemptionOrder;
 import com.shineup.backend.entity.User;
 import com.shineup.backend.entity.UserStats;
 import com.shineup.backend.repository.ActivityRecordRepository;
+import com.shineup.backend.repository.ChatbotReplyRepository;
 import com.shineup.backend.repository.GiftRepository;
 import com.shineup.backend.repository.RedemptionOrderRepository;
 import com.shineup.backend.repository.UserRepository;
@@ -34,6 +36,7 @@ public class DataInitializer implements CommandLineRunner {
     private final UserStatsRepository userStatsRepository;
     private final RedemptionOrderRepository redemptionOrderRepository;
     private final GiftRepository giftRepository;
+    private final ChatbotReplyRepository chatbotReplyRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${admin.email:admin@shineup.com}")
@@ -53,6 +56,7 @@ public class DataInitializer implements CommandLineRunner {
         createDefaultAdmin();
         createDefaultUsers();
         createMockActivityRecords();
+        createDefaultChatbotReplies();
     }
 
     private void createDefaultAdmin() {
@@ -76,42 +80,50 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createDefaultUsers() {
-        // Hsuan - CREATOR 等級
+        // Hsuan - CREATOR 等級（宅配）- 11/23 註冊
         createUserIfNotExists(
             "hsuan0501@outlook.com",
             "Hsuan",
             "0912345678",
-            "臺北市中山區民生東路三段67號",
+            "台北市中山區民生東路三段67號",
             User.MemberLevel.CREATOR,
             700,
-            600
+            600,
+            LocalDateTime.of(2024, 11, 23, 10, 30)
         );
 
-        // Matcha - EXPLORER 等級
+        // Matcha - EXPLORER 等級（超商取貨：全家 江寧店）- 11/27 註冊
+        // 兌換過 250 積分（120+130），目前剩餘 80，表示曾賺過 330 兌換積分
+        // 升級積分維持 280（接近 CREATOR 門檻 300）
         createUserIfNotExists(
             "matcha1108@example.com",
             "Matcha",
-            "0923456789",
-            "新北市板橋區文化路一段100號",
+            "0912345678",
+            null,
             User.MemberLevel.EXPLORER,
-            120,
-            80
+            280,
+            80,
+            LocalDateTime.of(2024, 11, 27, 14, 15)
         );
 
-        // May - EXPLORER 等級
+        // May - EXPLORER 等級（超商取貨：7-11 復錦門市）- 12/6 註冊
+        // 兌換過 200 積分，目前剩餘 50，表示曾賺過 250 兌換積分
+        // 升級積分維持 180（新手狀態）
         createUserIfNotExists(
             "may0529@example.com",
             "May",
-            "0934567890",
-            "台中市西屯區台灣大道三段99號",
+            "0912345678",
+            null,
             User.MemberLevel.EXPLORER,
-            100,
-            50
+            180,
+            50,
+            LocalDateTime.of(2024, 12, 6, 9, 45)
         );
     }
 
     private void createUserIfNotExists(String email, String name, String phone, String address,
-                                        User.MemberLevel level, int upgradePoints, int rewardPoints) {
+                                        User.MemberLevel level, int upgradePoints, int rewardPoints,
+                                        LocalDateTime createdAt) {
         var existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
             // 重設所有資料（方便測試）
@@ -122,6 +134,7 @@ public class DataInitializer implements CommandLineRunner {
             user.setLevel(level);
             user.setUpgradePoints(upgradePoints);
             user.setRewardPoints(rewardPoints);
+            user.setCreatedAt(createdAt);
             user.setAdmin(false);
             userRepository.save(user);
             log.info("會員帳號已重設: {}", email);
@@ -137,6 +150,7 @@ public class DataInitializer implements CommandLineRunner {
         user.setLevel(level);
         user.setUpgradePoints(upgradePoints);
         user.setRewardPoints(rewardPoints);
+        user.setCreatedAt(createdAt);
         user.setEmailVerified(true);
         user.setAdmin(false);
 
@@ -246,11 +260,73 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createMockRedemptionOrder(User user, String giftTitle, int points, LocalDateTime createdAt) {
-        // 先清除該用戶的舊訂單
-        var oldOrders = redemptionOrderRepository.findByUserId(user.getId());
-        redemptionOrderRepository.deleteAll(oldOrders);
+        // 先清除所有用戶的舊訂單
+        redemptionOrderRepository.deleteAll();
 
-        // 找到對應的禮品
+        // 取得其他測試用戶
+        var matchaUser = userRepository.findByEmail("matcha1108@example.com");
+        var mayUser = userRepository.findByEmail("may0529@example.com");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // === Hsuan 的訂單（#1）- 已完成，宅配 ===
+        createOrderWithDelivery(
+            user, "UiU 環保便攜吸管組", 100,
+            RedemptionOrder.OrderStatus.COMPLETED,
+            now.minusDays(5).withHour(10).withMinute(30),
+            now.minusDays(4).withHour(14).withMinute(0),
+            now.minusDays(2).withHour(16).withMinute(30),
+            "Hsuan", "0912345678", "home",
+            "台北市中山區民生東路三段67號", null, null
+        );
+
+        // === Matcha 的訂單（#2）- 已完成，超商取貨 ===
+        if (matchaUser.isPresent()) {
+            createOrderWithDelivery(
+                matchaUser.get(), "印花樂 實用環保包袋", 120,
+                RedemptionOrder.OrderStatus.COMPLETED,
+                now.minusDays(4).withHour(15).withMinute(20),
+                now.minusDays(3).withHour(10).withMinute(0),
+                now.minusDays(1).withHour(18).withMinute(45),
+                "Matcha", "0912345678", "store",
+                null, "family", "江寧店"
+            );
+        }
+
+        // === Matcha 的訂單（#3）- 已出貨，超商取貨 ===
+        if (matchaUser.isPresent()) {
+            createOrderWithDelivery(
+                matchaUser.get(), "HappyEarth 回收紙筆記本", 130,
+                RedemptionOrder.OrderStatus.SHIPPED,
+                now.minusDays(2).withHour(11).withMinute(15),
+                now.minusDays(1).withHour(9).withMinute(30),
+                null,
+                "Matcha", "0912345678", "store",
+                null, "family", "江寧店"
+            );
+        }
+
+        // === May 的訂單（#4）- 待處理，超商取貨 ===
+        if (mayUser.isPresent()) {
+            createOrderWithDelivery(
+                mayUser.get(), "SUCCULAND 多肉植物", 200,
+                RedemptionOrder.OrderStatus.PENDING,
+                now.minusHours(6),
+                null,
+                null,
+                "May", "0912345678", "store",
+                null, "7-11", "復錦門市"
+            );
+        }
+
+        log.info("已建立模擬兌換訂單（Hsuan #1完成, Matcha #2完成 #3出貨, May #4待處理）");
+    }
+
+    private void createOrderWithDelivery(User user, String giftTitle, int points,
+            RedemptionOrder.OrderStatus status, LocalDateTime createdAt,
+            LocalDateTime shippedAt, LocalDateTime completedAt,
+            String recipientName, String recipientPhone, String deliveryMethod,
+            String deliveryAddress, String storeBrand, String storeName) {
         var giftOpt = giftRepository.findByTitle(giftTitle);
         if (giftOpt.isEmpty()) {
             log.warn("找不到禮品: {}", giftTitle);
@@ -263,10 +339,73 @@ public class DataInitializer implements CommandLineRunner {
         order.setGift(gift);
         order.setQuantity(1);
         order.setTotalPoints(points);
-        order.setStatus(RedemptionOrder.OrderStatus.COMPLETED);
+        order.setStatus(status);
         order.setCreatedAt(createdAt);
+        order.setShippedAt(shippedAt);
+        order.setCompletedAt(completedAt);
+
+        // 收件資訊
+        order.setRecipientName(recipientName);
+        order.setRecipientPhone(recipientPhone);
+        order.setDeliveryMethod(deliveryMethod);
+        order.setDeliveryAddress(deliveryAddress);
+        order.setStoreBrand(storeBrand);
+        order.setStoreName(storeName);
 
         redemptionOrderRepository.save(order);
-        log.info("已建立模擬兌換訂單: {} - {}", user.getName(), giftTitle);
+    }
+
+    /**
+     * 建立預設的客服快速回覆設定
+     */
+    private void createDefaultChatbotReplies() {
+        if (chatbotReplyRepository.count() > 0) {
+            log.info("客服快速回覆設定已存在，跳過初始化");
+            return;
+        }
+
+        // 出貨/物流
+        ChatbotReply shipping = new ChatbotReply();
+        shipping.setId("shipping");
+        shipping.setKeyword("出貨|寄送|物流|配送|多久會到|進度");
+        shipping.setReply("您好！禮品兌換後，我們會在 3-5 個工作天內處理出貨。實際到貨時間依配送地區而定，通常為出貨後 1-3 天。\n\n您可以在個人頁面的「兌換紀錄」查看目前的處理狀態喔！");
+        chatbotReplyRepository.save(shipping);
+
+        // 積分
+        ChatbotReply points = new ChatbotReply();
+        points.setId("points");
+        points.setKeyword("積分.*怎麼|積分.*如何|積分.*獲得|積分.*賺|怎麼.*積分|如何.*積分");
+        points.setReply("獲得積分的方式有：\n\n📅 每日登入、連續登入\n✅ 完成任務獲得對應積分\n\n💡 前往「任務清單」領取任務，完成後即可獲得積分獎勵！\n\n升級積分用於提升等級，獎勵積分用於兌換禮品喔！");
+        chatbotReplyRepository.save(points);
+
+        // 等級
+        ChatbotReply level = new ChatbotReply();
+        level.setId("level");
+        level.setKeyword("等級|level");
+        level.setReply("ShineUp 共有 4 個等級：\n\n⭐ Lv1 EXPLORER 探索者（0-299 升級積分）\n⭐ Lv2 CREATOR 創造者（300-599 升級積分）\n⭐ Lv3 VISIONARY 遠見者（600-999 升級積分）\n⭐ Lv4 LUMINARY 領航者（1000+ 升級積分）\n\n等級越高，可以兌換的禮品種類越多！");
+        chatbotReplyRepository.save(level);
+
+        // 兌換
+        ChatbotReply redeem = new ChatbotReply();
+        redeem.setId("redeem");
+        redeem.setKeyword("兌換.*怎麼|兌換.*如何|怎麼.*兌換|如何.*兌換");
+        redeem.setReply("兌換禮品的步驟：\n\n1️⃣ 前往「禮品總覽」頁面瀏覽禮品\n2️⃣ 選擇想要的禮品並加入購物車\n3️⃣ 確認兌換資訊後送出訂單\n4️⃣ 等待處理出貨\n\n📦 您可以在個人頁面的「兌換紀錄」查看訂單狀態喔！\n\n⚠️ 請注意：部分禮品有等級限制，需達到指定等級才能兌換。");
+        chatbotReplyRepository.save(redeem);
+
+        // 人工客服
+        ChatbotReply support = new ChatbotReply();
+        support.setId("support");
+        support.setKeyword("真人|人工|客服|聯絡|聯繫|專員");
+        support.setReply("如需人工客服協助，請透過以下方式聯繫我們：\n\nEmail：support@shineup.com\n服務專線：(02) 1234-5678\n服務時間：週一至週五 9:00-18:00\n\n我們會盡快回覆您的問題！");
+        chatbotReplyRepository.save(support);
+
+        // 訂單查詢
+        ChatbotReply order = new ChatbotReply();
+        order.setId("order");
+        order.setKeyword("訂單.*查|訂單.*哪裡|訂單.*看");
+        order.setReply("您可以在個人頁面的「訂單紀錄」區塊查看所有兌換訂單，包含處理中、已出貨、已完成等狀態。");
+        chatbotReplyRepository.save(order);
+
+        log.info("已建立預設客服快速回覆設定");
     }
 }

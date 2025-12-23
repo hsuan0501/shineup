@@ -1,14 +1,24 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- 標題 -->
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">確認兌換</h1>
-      <p class="text-sm text-gray-600 dark:text-gray-400">請確認收件資訊後完成兌換</p>
+    <div class="mb-8 flex items-end justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">確認兌換</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400">請確認收件資訊後完成兌換</p>
+      </div>
+      <!-- 右上角返回購物車按鈕 -->
+      <router-link to="/cart"
+        class="px-4 py-2 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        返回購物車
+      </router-link>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
       <!-- 左側：收件資訊 -->
-      <div class="space-y-6">
+      <div class="lg:col-span-3 flex flex-col gap-6">
         <!-- 寄送方式選擇 -->
         <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">寄送方式</h3>
@@ -95,12 +105,12 @@
       </div>
 
       <!-- 右側：訂單摘要 -->
-      <div>
-        <div class="sticky top-24 bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
+      <div class="lg:col-span-2 flex flex-col">
+        <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30 flex flex-col flex-1">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">訂單摘要</h3>
 
           <!-- 商品列表 -->
-          <div class="space-y-3 mb-4 max-h-60 overflow-y-auto">
+          <div class="space-y-3 mb-4 flex-1 overflow-y-auto">
             <div v-for="item in store.checkoutItems" :key="item.id" class="flex gap-3 p-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
               <img :src="item.image" :alt="item.title" class="w-16 h-16 object-cover rounded-lg">
               <div class="flex-1 min-w-0">
@@ -112,7 +122,7 @@
           </div>
 
           <!-- 總計 -->
-          <div class="border-t border-gray-200 dark:border-gray-600 pt-4 mb-6">
+          <div class="border-t border-gray-200 dark:border-gray-600 pt-4 mb-4">
             <div class="flex justify-between items-center">
               <span class="text-gray-600 dark:text-gray-400">商品總數</span>
               <span class="font-medium text-gray-900 dark:text-white">{{ totalItems }} 件</span>
@@ -124,25 +134,19 @@
           </div>
 
           <!-- 按鈕 -->
-          <div class="space-y-3">
-            <button @click="confirmCheckout" :disabled="!isFormValid || isProcessing"
-              :class="[
-                'w-full py-3 rounded-full font-bold transition-all duration-300 flex items-center justify-center gap-2',
-                isFormValid && !isProcessing
-                  ? 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-[1.02] active:scale-[0.98]'
-                  : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-              ]">
-              <svg v-if="isProcessing" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              {{ isProcessing ? '處理中...' : '確認兌換' }}
-            </button>
-            <router-link to="/cart"
-              class="block w-full py-3 text-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all font-medium">
-              返回購物車
-            </router-link>
-          </div>
+          <button @click="confirmCheckout" :disabled="!isFormValid || isProcessing"
+            :class="[
+              'w-full py-4 rounded-full font-bold transition-all duration-300 flex items-center justify-center gap-2',
+              isFormValid && !isProcessing
+                ? 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-[1.02] active:scale-[0.98]'
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+            ]">
+            <svg v-if="isProcessing" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            {{ isProcessing ? '處理中...' : '確認兌換' }}
+          </button>
         </div>
       </div>
     </div>
@@ -216,12 +220,25 @@ const confirmCheckout = async () => {
       quantity: item.quantity
     }))
 
+    // 準備收件資訊
+    const deliveryInfo = {
+      recipientName: form.name,
+      recipientPhone: form.phone,
+      deliveryMethod: deliveryMethod.value,
+      deliveryAddress: deliveryMethod.value === 'home' ? form.address : null,
+      storeBrand: deliveryMethod.value === 'store' ? form.storeBrand : null,
+      storeName: deliveryMethod.value === 'store' ? form.storeName : null
+    }
+
     // 呼叫批次兌換 API（合併成一筆訂單）
-    const response = await orderAPI.createBatch(store.currentUser.id, items)
+    const response = await orderAPI.createBatch(store.currentUser.id, items, deliveryInfo)
 
     if (response.data) {
       // 更新用戶積分
       await store.checkAuth()
+
+      // 觸發訂單刷新，讓 NavBar 更新出貨進度
+      store.triggerOrderRefresh()
 
       // 發送出貨通知
       const settings = store.notificationSettings || {}

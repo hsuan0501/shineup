@@ -79,13 +79,29 @@ public class RedemptionService {
     }
 
     /**
-     * 批次兌換多個禮品（合併成一筆訂單）
-     * @param userId 用戶 ID
-     * @param items 禮品清單，格式為 [{giftId, quantity}, ...]
-     * @return 建立的訂單
+     * 批次兌換多個禮品（合併成一筆訂單）- 無收件資訊版本（向後兼容）
      */
     @Transactional
     public RedemptionOrder createBatchOrder(Long userId, List<Map<String, Object>> items) {
+        return createBatchOrder(userId, items, null, null, null, null, null, null);
+    }
+
+    /**
+     * 批次兌換多個禮品（合併成一筆訂單）
+     * @param userId 用戶 ID
+     * @param items 禮品清單，格式為 [{giftId, quantity}, ...]
+     * @param recipientName 收件人姓名
+     * @param recipientPhone 收件人電話
+     * @param deliveryMethod 寄送方式 (home/store)
+     * @param deliveryAddress 收件地址
+     * @param storeBrand 超商品牌
+     * @param storeName 門市名稱
+     * @return 建立的訂單
+     */
+    @Transactional
+    public RedemptionOrder createBatchOrder(Long userId, List<Map<String, Object>> items,
+            String recipientName, String recipientPhone, String deliveryMethod,
+            String deliveryAddress, String storeBrand, String storeName) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -114,6 +130,14 @@ public class RedemptionService {
         RedemptionOrder order = new RedemptionOrder();
         order.setUser(user);
         order.setTotalPoints(totalPoints);
+
+        // 設定收件資訊
+        order.setRecipientName(recipientName);
+        order.setRecipientPhone(recipientPhone);
+        order.setDeliveryMethod(deliveryMethod);
+        order.setDeliveryAddress(deliveryAddress);
+        order.setStoreBrand(storeBrand);
+        order.setStoreName(storeName);
 
         // 計算總數量
         int totalQuantity = 0;

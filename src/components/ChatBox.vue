@@ -4,10 +4,10 @@
         <!-- Chat Window -->
         <transition name="fade-slide">
             <div v-if="isOpen"
-                class="mb-4 w-72 sm:w-80 h-[420px] bg-zinc-50 dark:bg-gray-700/80 rounded-2xl shadow-2xl border border-zinc-200 dark:border-gray-600/40 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150 dark:backdrop-blur-2xl">
+                class="mb-4 w-[300px] sm:w-[340px] h-[450px] bg-zinc-50 dark:bg-gray-700/80 rounded-2xl shadow-2xl border border-zinc-200 dark:border-gray-600/40 flex flex-col overflow-hidden backdrop-blur-xl backdrop-saturate-150 dark:backdrop-blur-2xl">
                 <!-- Header -->
                 <div
-                    class="p-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex justify-between items-center">
+                    class="p-4 bg-gradient-to-br from-cyan-400 to-blue-500 text-white flex justify-between items-center">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                             <svg class="w-5 h-5" viewBox="0 0 24 24">
@@ -16,7 +16,6 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-sm">ShineUp 智能客服</h3>
-                            <p class="text-xs text-white/80">通常在幾分鐘內回覆</p>
                         </div>
                     </div>
                     <button @click="isOpen = false" class="text-white/80 hover:text-white transition-colors">
@@ -28,7 +27,7 @@
                 </div>
 
                 <!-- Messages Area -->
-                <div class="flex-1 p-4 overflow-y-auto space-y-4 bg-zinc-50 dark:bg-gray-900/50"
+                <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-zinc-50 dark:bg-gray-900/50"
                     ref="messagesContainer">
                     <div v-for="(msg, index) in messages" :key="index" :class="[
                         'flex w-full',
@@ -40,8 +39,32 @@
                                 ? 'bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-700/50 dark:to-blue-700/50 text-gray-900 dark:text-white rounded-tr-none border border-cyan-200 dark:border-cyan-600/50 shadow-sm'
                                 : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-tl-none shadow-sm'
                         ]">
-                            {{ msg.text }}
+                            <span class="whitespace-pre-wrap">{{ msg.text }}</span>
                         </div>
+                    </div>
+                    <!-- 載入中動畫 -->
+                    <div v-if="isLoading" class="flex w-full justify-start">
+                        <div class="bg-white dark:bg-gray-700 p-3 rounded-2xl rounded-tl-none shadow-sm">
+                            <div class="flex gap-1">
+                                <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+                                <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+                                <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快速問題按鈕 (固定在底部) -->
+                <div class="px-3 py-2 bg-zinc-50 dark:bg-gray-800/50 border-t border-zinc-100 dark:border-gray-700/50">
+                    <div class="flex flex-wrap gap-1.5 justify-center">
+                        <button
+                            v-for="q in quickQuestions"
+                            :key="q"
+                            @click.stop="askQuickQuestion(q)"
+                            class="px-2.5 py-1 text-[11px] bg-white dark:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-full border border-gray-200 dark:border-gray-500 hover:bg-cyan-50 dark:hover:bg-cyan-700/30 hover:border-cyan-300 dark:hover:border-cyan-500 transition-all"
+                        >
+                            {{ q }}
+                        </button>
                     </div>
                 </div>
 
@@ -86,8 +109,10 @@
 <script setup>
 import { ref, nextTick, watch, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from '@/store'
+import { chatAPI } from '@/api'
 
 const store = useStore()
+const isLoading = ref(false)
 const isOpen = ref(false)
 const newMessage = ref('')
 const messagesContainer = ref(null)
@@ -109,8 +134,23 @@ if (typeof document !== 'undefined') {
 }
 
 const messages = ref([
-    { text: '您好！歡迎來到 ShineUp。請問有什麼可以幫忙的嗎？', isUser: false }
+    { text: '您好！歡迎來到 ShineUp，請問有什麼可以幫忙的嗎？', isUser: false }
 ])
+
+// 快速問題選項
+const quickQuestions = [
+    '如何獲得積分？',
+    '如何兌換禮品？',
+    '等級制度說明',
+    '出貨進度',
+    '人工客服'
+]
+
+// 點擊快速問題
+const askQuickQuestion = (question) => {
+    newMessage.value = question
+    sendMessage()
+}
 
 const scrollToBottom = async () => {
     await nextTick()
@@ -119,36 +159,43 @@ const scrollToBottom = async () => {
     }
 }
 
-const sendMessage = () => {
-    if (!newMessage.value.trim()) return
+const sendMessage = async () => {
+    if (!newMessage.value.trim() || isLoading.value) return
 
     // Add user message
+    const userMsg = newMessage.value
     messages.value.push({
-        text: newMessage.value,
+        text: userMsg,
         isUser: true
     })
-
-    const userMsg = newMessage.value
     newMessage.value = ''
     scrollToBottom()
 
-    // Simulate bot response
-    setTimeout(() => {
-        let reply = '收到您的訊息！我們的客服人員會盡快回覆您。'
-        if (userMsg.includes('積分') || userMsg.includes('點數')) {
-            reply = '積分可以透過完成每日任務和參與活動獲得，並可用於兌換各種精美禮品。'
-        } else if (userMsg.includes('禮品') || userMsg.includes('兌換')) {
-            reply = '您可以到首頁下方的「全部禮品」區塊查看所有可兌換的獎勵。'
-        } else if (userMsg.includes('等級') || userMsg.includes('升級')) {
-            reply = '累積足夠積分後，您的等級會自動提升，解鎖更多專屬權益！'
+    // 呼叫 AI API
+    isLoading.value = true
+    try {
+        const response = await chatAPI.send(userMsg)
+        if (response.data.success) {
+            messages.value.push({
+                text: response.data.reply,
+                isUser: false
+            })
+        } else {
+            messages.value.push({
+                text: '抱歉，發生錯誤，請稍後再試。',
+                isUser: false
+            })
         }
-
+    } catch (error) {
+        console.error('Chat error:', error)
         messages.value.push({
-            text: reply,
+            text: '抱歉，無法連接客服，請稍後再試。',
             isUser: false
         })
+    } finally {
+        isLoading.value = false
         scrollToBottom()
-    }, 1000)
+    }
 }
 
 // 切換聊天窗口

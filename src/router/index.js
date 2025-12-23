@@ -92,6 +92,15 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
 
+  // 如果是管理員，只能訪問 /admin 頁面
+  if (authStore.isAuthenticated && authStore.isAdmin) {
+    if (to.name !== 'Admin') {
+      // 管理員嘗試訪問非管理頁面，導向管理後台
+      next({ name: 'Admin' })
+      return
+    }
+  }
+
   // 檢查是否需要登入
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     // 未登入，導向首頁

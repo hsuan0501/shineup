@@ -43,6 +43,9 @@ public class User {
     @Column(name = "is_admin")
     private boolean admin = false;
 
+    @Column(name = "enabled")
+    private boolean enabled = true;
+
     @Column(name = "line_id", unique = true)
     private String lineId;
 

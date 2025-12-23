@@ -6,6 +6,7 @@ export const useUIStore = defineStore('ui', () => {
   const searchQuery = ref('')
   const toasts = ref([])
   const showNotificationPanel = ref(false)
+  const orderVersion = ref(0) // 用於觸發訂單刷新
   let toastId = 0
 
   // 通知設定永遠保持全開（每次重新載入都重置為全開）
@@ -99,11 +100,17 @@ export const useUIStore = defineStore('ui', () => {
     return notificationSettings.value[key]
   }
 
+  // 觸發訂單刷新（讓 NavBar 重新查詢訂單狀態）
+  const triggerOrderRefresh = () => {
+    orderVersion.value++
+  }
+
   return {
     isDark,
     searchQuery,
     toasts,
     showNotificationPanel,
+    orderVersion,
     notificationSettings,
     notificationList,
     toggleDarkMode,
@@ -115,6 +122,7 @@ export const useUIStore = defineStore('ui', () => {
     toggleNotificationSetting,
     addNotification,
     markNotificationRead,
-    clearNotifications
+    clearNotifications,
+    triggerOrderRefresh
   }
 })

@@ -54,6 +54,7 @@ export const useStore = () => {
     get notificationList() { return ui.notificationList.value },
     get showNotificationPanel() { return ui.showNotificationPanel },
     set showNotificationPanel(v) { ui.showNotificationPanel = v },
+    get orderVersion() { return ui.orderVersion },
 
     // Auth methods
     login: auth.login,
@@ -94,6 +95,7 @@ export const useStore = () => {
     toggleNotificationSetting: ui.toggleNotificationSetting,
     addNotification: ui.addNotification,
     markNotificationRead: ui.markNotificationRead,
-    clearNotifications: ui.clearNotifications
+    clearNotifications: ui.clearNotifications,
+    triggerOrderRefresh: ui.triggerOrderRefresh
   })
 }

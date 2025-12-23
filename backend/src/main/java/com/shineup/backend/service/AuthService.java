@@ -3,8 +3,10 @@ package com.shineup.backend.service;
 import com.shineup.backend.dto.AuthResponse;
 import com.shineup.backend.dto.LoginRequest;
 import com.shineup.backend.dto.RegisterRequest;
+import com.shineup.backend.entity.LoginHistory;
 import com.shineup.backend.entity.User;
 import com.shineup.backend.entity.UserStats;
+import com.shineup.backend.repository.LoginHistoryRepository;
 import com.shineup.backend.repository.UserRepository;
 import com.shineup.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final LoginHistoryRepository loginHistoryRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
@@ -77,6 +80,11 @@ public class AuthService {
 
         User user = userOpt.get();
 
+        // 檢查帳號是否被停用
+        if (!user.isEnabled()) {
+            return AuthResponse.error("此帳號已被停用，請聯繫管理員");
+        }
+
         // 驗證密碼
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return AuthResponse.error("Email 或密碼錯誤");
@@ -107,7 +115,17 @@ public class AuthService {
         return AuthResponse.success(token, user);
     }
 
-    // 透過 Token 取得用戶資料（同時記錄每日登入）
+    // 記錄登入歷史
+    public void recordLoginHistory(Long userId, String ipAddress, String userAgent, String loginType) {
+        LoginHistory history = new LoginHistory();
+        history.setUserId(userId);
+        history.setIpAddress(ipAddress);
+        history.setUserAgent(userAgent);
+        history.setLoginType(loginType != null ? loginType : "EMAIL");
+        loginHistoryRepository.save(history);
+    }
+
+    // 透過 Token 取得用戶資料（僅驗證 token，不處理登入獎勵）
     public AuthResponse getUserByToken(String token) {
         try {
             if (!jwtUtil.validateToken(token)) {
@@ -123,28 +141,8 @@ public class AuthService {
 
             User user = userOpt.get();
 
-            // 檢查是否為當天第一次登入（刷新頁面也算）
-            LocalDate today = LocalDate.now();
-            LocalDate lastLoginBefore = userService.getOrCreateStats(userId).getLastLoginDate();
-            boolean isFirstLoginToday = lastLoginBefore == null || !lastLoginBefore.equals(today);
-
-            // 記錄登入統計
-            UserStats stats = userService.recordLogin(userId);
-
-            // 只有當天第一次登入才加積分
-            if (isFirstLoginToday) {
-                // 每日登入 +1 積分
-                activityRecordService.addRecord(userId, "login", "完成每日登入", 1);
-
-                // 連續登入七天 +5 積分
-                if (stats.getConsecutiveDays() > 0 && stats.getConsecutiveDays() % 7 == 0) {
-                    activityRecordService.addRecord(userId, "streak", "連續登入七天", 5);
-                }
-
-                // 重新載入用戶資料以取得更新後的積分
-                user = userRepository.findById(userId).orElse(user);
-            }
-
+            // 只回傳用戶資料，不處理每日登入邏輯
+            // 每日登入獎勵已在 login() 方法中處理，避免重複發放
             return AuthResponse.success(token, user);
         } catch (Exception e) {
             return AuthResponse.error("Token 驗證失敗");
