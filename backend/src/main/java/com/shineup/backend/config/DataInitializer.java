@@ -92,15 +92,15 @@ public class DataInitializer implements CommandLineRunner {
             LocalDateTime.of(2024, 11, 23, 10, 30)
         );
 
-        // Matcha - EXPLORER 等級（超商取貨：全家 江寧店）- 11/27 註冊
+        // Matcha - CREATOR 等級（超商取貨：全家 江寧店）- 11/27 註冊
         // 兌換過 250 積分（120+130），目前剩餘 80，表示曾賺過 330 兌換積分
-        // 升級積分維持 280（接近 CREATOR 門檻 300）
+        // 升級積分 280（已達 CREATOR 門檻 250）
         createUserIfNotExists(
             "matcha1108@example.com",
             "Matcha",
             "0912345678",
             null,
-            User.MemberLevel.EXPLORER,
+            User.MemberLevel.CREATOR,
             280,
             80,
             LocalDateTime.of(2024, 11, 27, 14, 15)

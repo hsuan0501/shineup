@@ -6,13 +6,21 @@
         <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">管理後台</h1>
         <p class="text-sm text-gray-600 dark:text-gray-400">管理會員、任務、禮品與系統設定</p>
       </div>
-      <button @click="handleLogout"
-        class="px-4 py-2 rounded-full bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-        </svg>
-        登出
-      </button>
+      <div class="flex items-center gap-3">
+        <button @click="refreshAllData"
+          class="p-2 text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 hover:scale-110 active:scale-95 transition-all duration-300">
+          <svg class="w-4 h-4" :class="{ 'animate-spin': isRefreshing }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+        <button @click="handleLogout"
+          class="px-4 py-2 rounded-full bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          登出
+        </button>
+      </div>
     </div>
 
     <!-- 統計卡片（精簡版） -->
@@ -142,18 +150,18 @@
           <thead class="bg-gray-50 dark:bg-gray-800/50">
             <tr>
               <th class="w-[6%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-              <th class="w-[22%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
+              <th class="w-[24%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
               <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">等級</th>
               <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">升級積分</th>
               <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">兌換積分</th>
-              <th class="w-[8%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
-              <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">註冊日期</th>
-              <th class="w-[20%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+              <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
+              <th class="w-[12%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">註冊日期</th>
+              <th class="w-[18%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-            <tr v-for="user in paginatedUsers" :key="user.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
-              <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ user.id }}</td>
+            <tr v-for="(user, index) in paginatedUsers" :key="user.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
+              <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (userCurrentPage - 1) * 10 + index + 1 }}</td>
               <td class="px-4 py-3">
                 <div class="flex items-center gap-3">
                   <img :src="user.avatar" class="w-8 h-8 rounded-full object-cover bg-gray-200">
@@ -283,17 +291,16 @@
             <thead class="bg-gray-50 dark:bg-gray-800/50">
               <tr>
                 <th class="w-[6%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-                <th class="w-[26%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">任務名稱</th>
-                <th class="w-[12%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">分類</th>
-                <th class="w-[12%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
-                <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">等級限制</th>
+                <th class="w-[24%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">任務名稱</th>
+                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">分類</th>
+                <th class="w-[20%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
                 <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
-                <th class="w-[20%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+                <th class="w-[22%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-              <tr v-for="task in paginatedTasks" :key="task.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
-                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ task.id }}</td>
+              <tr v-for="(task, index) in paginatedTasks" :key="task.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
+                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (taskCurrentPage - 1) * 10 + index + 1 }}</td>
                 <td class="px-4 py-3">
                   <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ task.title }}</p>
                 </td>
@@ -303,7 +310,6 @@
                   </span>
                 </td>
                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">+{{ task.levelPoints }} / +{{ task.rewardPoints }}</td>
-                <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ task.levelRequired }}</td>
                 <td class="px-4 py-3">
                   <span :class="task.active !== false ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'" class="px-2 py-1 text-xs font-medium rounded-full">
                     {{ task.active !== false ? '啟用' : '停用' }}
@@ -416,8 +422,8 @@
           <thead class="bg-gray-50 dark:bg-gray-800/50">
             <tr>
               <th class="w-[6%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-              <th class="w-[26%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
-              <th class="w-[12%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">系列</th>
+              <th class="w-[24%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
+              <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">系列</th>
               <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
               <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">庫存</th>
               <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
@@ -425,8 +431,8 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-            <tr v-for="gift in paginatedGifts" :key="gift.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
-              <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ gift.id }}</td>
+            <tr v-for="(gift, index) in paginatedGifts" :key="gift.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
+              <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (giftCurrentPage - 1) * 10 + index + 1 }}</td>
               <td class="px-4 py-3">
                 <div class="flex items-center gap-3">
                   <img :src="gift.image" class="w-10 h-10 rounded-lg object-cover bg-gray-200 flex-shrink-0">
@@ -549,16 +555,16 @@
               <tr>
                 <th class="w-[4%] px-2 py-3"></th>
                 <th class="w-[6%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-                <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
-                <th class="w-[18%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
+                <th class="w-[12%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
+                <th class="w-[22%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
                 <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
-                <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">進度</th>
-                <th class="w-[22%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">日期</th>
-                <th class="w-[20%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">進度</th>
+                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">日期</th>
+                <th class="w-[18%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-              <template v-for="order in paginatedRedemptions" :key="order.id">
+              <template v-for="(order, index) in paginatedRedemptions" :key="order.id">
                 <!-- 主要列 -->
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12 cursor-pointer" @click="toggleOrderExpand(order.id)">
                   <td class="px-2 py-3 text-center">
@@ -568,7 +574,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                   </td>
-                  <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ order.id }}</td>
+                  <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (currentPage - 1) * 10 + index + 1 }}</td>
                   <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ order.user?.name || '-' }}</td>
                   <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div v-if="order.items && order.items.length > 0" class="truncate">
@@ -586,7 +592,7 @@
                   </td>
                   <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ formatDate(order.createdAt) }}</td>
                   <td class="px-4 py-3" @click.stop>
-                    <div class="flex items-center justify-center">
+                    <div class="flex items-center gap-4">
                       <select :value="order.status" @change="updateOrderStatus(order, $event.target.value)"
                         class="text-sm bg-transparent border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-500/50 dark:text-white">
                         <option value="PENDING">訂單確認中</option>
@@ -1113,6 +1119,25 @@ const handleLogout = () => {
     store.logout()
     router.push('/')
     store.showToast('已成功登出', 'info')
+  }
+}
+
+// 重新整理功能
+const isRefreshing = ref(false)
+
+const refreshAllData = async () => {
+  if (isRefreshing.value) return
+  isRefreshing.value = true
+  try {
+    await Promise.all([
+      fetchOrders(),
+      fetchChatbotReplies(),
+      fetchUsers()
+    ])
+  } catch (error) {
+    console.error('Refresh failed:', error)
+  } finally {
+    isRefreshing.value = false
   }
 }
 

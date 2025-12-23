@@ -22,6 +22,7 @@ public class TaskService {
     private final UserTaskProgressRepository userTaskProgressRepository;
     private final UserService userService;
     private final ActivityRecordService activityRecordService;
+    private final AchievementService achievementService;
 
     public List<Task> findAll() {
         return taskRepository.findAll();
@@ -91,13 +92,37 @@ public class TaskService {
         user.setUpgradePoints(user.getUpgradePoints() + task.getUpgradePoints());
         user.setRewardPoints(user.getRewardPoints() + task.getRewardPoints());
 
+        // 檢查等級升級
+        checkLevelUp(user);
+
         // 更新統計：任務完成數 +1
         userService.incrementTasksCompleted(userId);
 
         // 新增活動紀錄
         activityRecordService.addRecord(userId, "task", task.getTitle(), task.getUpgradePoints());
 
-        return userRepository.save(user);
+        // 儲存用戶
+        User savedUser = userRepository.save(user);
+
+        // 檢查並完成等級/積分相關成就任務
+        achievementService.checkAndCompleteAchievements(savedUser);
+
+        return savedUser;
+    }
+
+    // 檢查等級升級
+    private void checkLevelUp(User user) {
+        int points = user.getUpgradePoints();
+        // 等級門檻：0-249 EXPLORER, 250-749 CREATOR, 750-1499 VISIONARY, 1500+ LUMINARY
+        if (points >= 1500) {
+            user.setLevel(User.MemberLevel.LUMINARY);
+        } else if (points >= 750) {
+            user.setLevel(User.MemberLevel.VISIONARY);
+        } else if (points >= 250) {
+            user.setLevel(User.MemberLevel.CREATOR);
+        } else {
+            user.setLevel(User.MemberLevel.EXPLORER);
+        }
     }
 
     // 取得用戶已完成的任務
