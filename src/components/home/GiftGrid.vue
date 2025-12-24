@@ -244,7 +244,7 @@ const giftSeries = [
         activeClass: 'bg-gradient-to-br from-cyan-500 to-cyan-300 text-white',
         inactiveClass: 'bg-gradient-to-br from-cyan-200 to-cyan-50 dark:from-cyan-900/40 dark:to-cyan-700/40 text-cyan-700 dark:text-cyan-300',
         bgClass: 'bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/30 dark:to-blue-950/30 border border-cyan-200 dark:border-cyan-800',
-        pointRange: '0-5000+分',
+        pointRange: '100-6,300',
         restriction: '包含所有等級禮物'
     },
     {
@@ -255,7 +255,7 @@ const giftSeries = [
         activeClass: 'bg-gradient-to-br from-emerald-500 to-teal-300 text-white',
         inactiveClass: 'bg-gradient-to-br from-emerald-100 to-teal-50 dark:from-emerald-900/40 dark:to-teal-700/40 text-emerald-600 dark:text-emerald-300',
         bgClass: 'bg-gradient-to-br from-emerald-50/80 to-teal-50/80 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-100 dark:border-emerald-800',
-        pointRange: '0-299分',
+        pointRange: '100-200',
         restriction: 'Lv1+ 可兌換'
     },
     {
@@ -266,7 +266,7 @@ const giftSeries = [
         activeClass: 'bg-gradient-to-br from-indigo-600 to-blue-400 text-white',
         inactiveClass: 'bg-gradient-to-br from-indigo-200 to-blue-100 dark:from-indigo-900/40 dark:to-blue-800/40 text-indigo-700 dark:text-indigo-300',
         bgClass: 'bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/30 border border-indigo-200 dark:border-indigo-800',
-        pointRange: '300-799分',
+        pointRange: '220-500',
         restriction: 'Lv2+ 可兌換'
     },
     {
@@ -277,7 +277,7 @@ const giftSeries = [
         activeClass: 'bg-gradient-to-br from-orange-500 to-yellow-300 text-white',
         inactiveClass: 'bg-gradient-to-br from-orange-200 to-amber-100 dark:from-orange-900/40 dark:to-amber-800/40 text-amber-600 dark:text-amber-400',
         bgClass: 'bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-orange-950/30 dark:via-amber-950/30 dark:to-yellow-950/30 border border-orange-200 dark:border-orange-800',
-        pointRange: '800-1499分',
+        pointRange: '530-1,200',
         restriction: 'Lv3+ 可兌換'
     },
     {
@@ -288,7 +288,7 @@ const giftSeries = [
         activeClass: 'bg-gradient-to-br from-violet-600 to-fuchsia-400 text-white',
         inactiveClass: 'bg-gradient-to-br from-violet-200 to-fuchsia-100 dark:from-violet-900/40 dark:to-fuchsia-800/40 text-violet-700 dark:text-violet-300',
         bgClass: 'bg-gradient-to-br from-violet-50 via-fuchsia-50 to-purple-100 dark:from-violet-950/30 dark:via-fuchsia-950/30 dark:to-purple-900/30 border border-violet-200 dark:border-violet-800',
-        pointRange: '1500+分',
+        pointRange: '1,600-6,300',
         restriction: 'Lv4 專屬頂級禮物'
     }
 ]

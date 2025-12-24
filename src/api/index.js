@@ -33,8 +33,7 @@ export const userAPI = {
   getStats: (id) => api.get(`/users/${id}/stats`),
   recordLogin: (id) => api.post(`/users/${id}/record-login`),
   toggleStatus: (id) => api.put(`/users/${id}/toggle-status`),
-  getLoginHistory: (id) => api.get(`/users/${id}/login-history`),
-  getAllLoginHistory: () => api.get('/users/login-history')
+  delete: (id) => api.delete(`/users/${id}`)
 }
 
 // 任務 API

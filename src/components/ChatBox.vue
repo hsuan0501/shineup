@@ -141,8 +141,8 @@ const messages = ref([
 const quickQuestions = [
     '如何獲得積分？',
     '如何兌換禮品？',
-    '等級制度說明',
     '出貨進度',
+    '等級制度說明',
     '人工客服'
 ]
 

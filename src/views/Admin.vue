@@ -1,12 +1,60 @@
 <template>
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- 標題 + 登出按鈕 -->
-    <div class="mb-8 flex items-end justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-light-text dark:text-dark-text mb-2">管理後台</h1>
-        <p class="text-sm text-gray-600 dark:text-gray-400">管理會員、任務、禮品與系統設定</p>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <!-- 頂部：統計卡片 + 按鈕 -->
+    <div class="mb-4 flex items-center gap-3">
+      <!-- 統計卡片 -->
+      <div class="flex-1 grid grid-cols-4 gap-3">
+        <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center">
+            <svg class="w-4 h-4 text-sky-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ users.length }}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">會員</p>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+            <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ taskList.length }}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">任務</p>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+            <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ giftList.length }}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">禮品</p>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ pendingOrderCount }}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">待處理</p>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-3">
+
+      <!-- 右側按鈕 -->
+      <div class="flex items-center gap-2">
         <button @click="refreshAllData"
           class="p-2 text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 hover:scale-110 active:scale-95 transition-all duration-300">
           <svg class="w-4 h-4" :class="{ 'animate-spin': isRefreshing }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -14,7 +62,7 @@
           </svg>
         </button>
         <button @click="handleLogout"
-          class="px-4 py-2 rounded-full bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm backdrop-blur-xl">
+          class="px-3 py-2 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>
@@ -23,60 +71,9 @@
       </div>
     </div>
 
-    <!-- 統計卡片（精簡版） -->
-    <div class="grid grid-cols-4 gap-3 mb-6">
-      <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center">
-          <svg class="w-4 h-4 text-sky-500" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-          </svg>
-        </div>
-        <div>
-          <p class="text-xl font-bold text-gray-900 dark:text-white">{{ users.length }}</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400">會員</p>
-        </div>
-      </div>
-
-      <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-          <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-        </div>
-        <div>
-          <p class="text-xl font-bold text-gray-900 dark:text-white">{{ taskList.length }}</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400">任務</p>
-        </div>
-      </div>
-
-      <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-          <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/>
-          </svg>
-        </div>
-        <div>
-          <p class="text-xl font-bold text-gray-900 dark:text-white">{{ giftList.length }}</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400">禮品</p>
-        </div>
-      </div>
-
-      <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-          <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-          </svg>
-        </div>
-        <div>
-          <p class="text-xl font-bold text-gray-900 dark:text-white">{{ pendingOrderCount }}</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400">訂單確認中</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 標籤頁 + 內容區塊（黏在一起） -->
+    <!-- 標籤頁 + 內容區塊 -->
     <div class="bg-white dark:bg-gray-700/70 rounded-2xl border dark:border-gray-600/30 overflow-hidden">
-      <!-- 頁籤列（五等分） -->
+      <!-- 頁籤列 -->
       <div class="p-1.5 border-b border-gray-100 dark:border-gray-600/30">
         <div class="flex">
           <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id"
@@ -149,20 +146,20 @@
         <table class="w-full table-fixed">
           <thead class="bg-gray-50 dark:bg-gray-800/50">
             <tr>
-              <th class="w-[6%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-              <th class="w-[24%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
-              <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">等級</th>
-              <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">升級積分</th>
-              <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">兌換積分</th>
-              <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
-              <th class="w-[12%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">註冊日期</th>
-              <th class="w-[18%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+              <th class="w-[5%] pl-4 pr-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
+              <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
+              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">等級</th>
+              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">升級積分</th>
+              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">兌換積分</th>
+              <th class="w-[8%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
+              <th class="w-[15%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">註冊日期</th>
+              <th class="w-[22%] pl-2 pr-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
             <tr v-for="(user, index) in paginatedUsers" :key="user.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
-              <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (userCurrentPage - 1) * 10 + index + 1 }}</td>
-              <td class="px-4 py-3">
+              <td class="pl-4 pr-2 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ filteredUsers.length - (userCurrentPage - 1) * 10 - index }}</td>
+              <td class="px-2 py-3">
                 <div class="flex items-center gap-3">
                   <img :src="user.avatar" class="w-8 h-8 rounded-full object-cover bg-gray-200">
                   <div>
@@ -171,26 +168,26 @@
                   </div>
                 </div>
               </td>
-              <td class="px-4 py-3">
+              <td class="px-2 py-3">
                 <span :class="getLevelBadgeClass(user.level)" class="px-2 py-1 text-xs font-medium rounded-full">
                   {{ user.level }}
                 </span>
               </td>
-              <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ user.levelPoints }}</td>
-              <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ user.rewardPoints }}</td>
-              <td class="px-4 py-3">
+              <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ user.levelPoints }}</td>
+              <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ user.rewardPoints }}</td>
+              <td class="px-2 py-3">
                 <span :class="user.enabled !== false ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'" class="px-2 py-1 text-xs font-medium rounded-full">
                   {{ user.enabled !== false ? '啟用' : '停用' }}
                 </span>
               </td>
-              <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ user.createdAt }}</td>
-              <td class="px-4 py-3">
-                <div class="flex items-center gap-4">
-                  <button @click="openUserModal(user)" class="text-sky-600 dark:text-sky-400 hover:underline text-sm">編輯</button>
-                  <button @click="viewLoginHistory(user)" class="text-amber-600 dark:text-amber-400 hover:underline text-sm">紀錄</button>
-                  <button @click="toggleUserStatus(user)" :class="user.enabled !== false ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'" class="hover:underline text-sm">
+              <td class="px-2 py-3 text-sm text-gray-500 dark:text-gray-400">{{ user.createdAt }}</td>
+              <td class="pl-2 pr-4 py-3">
+                <div class="flex items-center gap-2">
+                  <button @click="openUserModal(user)" class="px-3 py-1 text-xs font-medium rounded bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 hover:bg-sky-200 dark:hover:bg-sky-900/60 transition-colors">編輯</button>
+                  <button @click="toggleUserStatus(user)" :class="user.enabled !== false ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/60' : 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/60'" class="px-3 py-1 text-xs font-medium rounded transition-colors">
                     {{ user.enabled !== false ? '停用' : '啟用' }}
                   </button>
+                  <button @click="deleteUser(user)" class="px-3 py-1 text-xs font-medium rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/60 transition-colors">刪除</button>
                 </div>
               </td>
             </tr>
@@ -290,38 +287,38 @@
           <table class="w-full table-fixed">
             <thead class="bg-gray-50 dark:bg-gray-800/50">
               <tr>
-                <th class="w-[6%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-                <th class="w-[24%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">任務名稱</th>
-                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">分類</th>
-                <th class="w-[20%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
-                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
-                <th class="w-[22%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+                <th class="w-[5%] pl-4 pr-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
+                <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">任務名稱</th>
+                <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">分類</th>
+                <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
+                <th class="w-[23%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
+                <th class="w-[22%] pl-2 pr-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
               <tr v-for="(task, index) in paginatedTasks" :key="task.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
-                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (taskCurrentPage - 1) * 10 + index + 1 }}</td>
-                <td class="px-4 py-3">
+                <td class="pl-4 pr-2 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (taskCurrentPage - 1) * 10 + index + 1 }}</td>
+                <td class="px-2 py-3">
                   <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ task.title }}</p>
                 </td>
-                <td class="px-4 py-3">
+                <td class="px-2 py-3">
                   <span :class="getCategoryBadgeClass(task.category)" class="px-2 py-1 text-xs font-medium rounded-full">
                     {{ getCategoryName(task.category) }}
                   </span>
                 </td>
-                <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">+{{ task.levelPoints }} / +{{ task.rewardPoints }}</td>
-                <td class="px-4 py-3">
+                <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">+{{ task.levelPoints }} / +{{ task.rewardPoints }}</td>
+                <td class="px-2 py-3">
                   <span :class="task.active !== false ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'" class="px-2 py-1 text-xs font-medium rounded-full">
                     {{ task.active !== false ? '啟用' : '停用' }}
                   </span>
                 </td>
-                <td class="px-4 py-3">
-                  <div class="flex items-center gap-4">
-                    <button @click="openTaskModal(task)" class="text-sky-600 dark:text-sky-400 hover:underline text-sm">編輯</button>
-                    <button @click="toggleTaskStatus(task)" class="text-amber-600 dark:text-amber-400 hover:underline text-sm">
+                <td class="pl-2 pr-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <button @click="openTaskModal(task)" class="px-3 py-1 text-xs font-medium rounded bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 hover:bg-sky-200 dark:hover:bg-sky-900/60 transition-colors">編輯</button>
+                    <button @click="toggleTaskStatus(task)" :class="task.active !== false ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/60' : 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/60'" class="px-3 py-1 text-xs font-medium rounded transition-colors">
                       {{ task.active !== false ? '停用' : '啟用' }}
                     </button>
-                    <button @click="confirmDelete('task', task)" class="text-red-600 dark:text-red-400 hover:underline text-sm">刪除</button>
+                    <button @click="confirmDelete('task', task)" class="px-3 py-1 text-xs font-medium rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/60 transition-colors">刪除</button>
                   </div>
                 </td>
               </tr>
@@ -361,16 +358,16 @@
         <!-- 篩選工具列 -->
         <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-600/30">
           <div class="flex items-end gap-4">
-            <!-- 系列篩選 -->
+            <!-- 分類篩選 -->
             <div class="w-40">
-              <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">系列</label>
+              <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">分類</label>
               <select v-model="giftFilter.series"
                 class="w-full h-[34px] px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 dark:text-white">
-                <option value="">全部系列</option>
-                <option value="eco">永續環保</option>
-                <option value="lifestyle">生活風格</option>
-                <option value="tech">3C 科技</option>
-                <option value="food">美食饗宴</option>
+                <option value="">全部分類</option>
+                <option value="sustainable">永續探索</option>
+                <option value="quality">質感創造</option>
+                <option value="aesthetic">美學先鋒</option>
+                <option value="premium">品味閃耀</option>
               </select>
             </div>
             <!-- 庫存篩選 -->
@@ -421,44 +418,44 @@
         <table class="w-full table-fixed">
           <thead class="bg-gray-50 dark:bg-gray-800/50">
             <tr>
-              <th class="w-[6%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-              <th class="w-[24%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
-              <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">系列</th>
-              <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
-              <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">庫存</th>
-              <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
-              <th class="w-[22%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+              <th class="w-[5%] pl-4 pr-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
+              <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
+              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">分類</th>
+              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
+              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">庫存</th>
+              <th class="w-[23%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
+              <th class="w-[22%] pl-2 pr-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
             <tr v-for="(gift, index) in paginatedGifts" :key="gift.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
-              <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (giftCurrentPage - 1) * 10 + index + 1 }}</td>
-              <td class="px-4 py-3">
+              <td class="pl-4 pr-2 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (giftCurrentPage - 1) * 10 + index + 1 }}</td>
+              <td class="px-2 py-3">
                 <div class="flex items-center gap-3">
                   <img :src="gift.image" class="w-10 h-10 rounded-lg object-cover bg-gray-200 flex-shrink-0">
                   <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ gift.title }}</p>
                 </div>
               </td>
-              <td class="px-4 py-3">
+              <td class="px-2 py-3">
                 <span :class="getSeriesBadgeClass(gift.series)" class="px-2 py-1 text-xs font-medium rounded-full">
                   {{ getSeriesName(gift.series) }}
                 </span>
               </td>
-              <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ gift.points }}</td>
-              <td class="px-4 py-3 text-sm" :class="gift.stock < 10 ? 'text-red-600 dark:text-red-400 font-bold' : 'text-gray-900 dark:text-white'">
+              <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ gift.points }}</td>
+              <td class="px-2 py-3 text-sm" :class="gift.stock < 10 ? 'text-red-600 dark:text-red-400 font-bold' : 'text-gray-900 dark:text-white'">
                 {{ gift.stock }}
               </td>
-              <td class="px-4 py-3">
+              <td class="px-2 py-3">
                 <span :class="gift.stock > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'"
                   class="px-2 py-1 text-xs font-medium rounded-full">
                   {{ gift.stock > 0 ? '有庫存' : '已售完' }}
                 </span>
               </td>
-              <td class="px-4 py-3">
-                <div class="flex items-center gap-4">
-                  <button @click="openGiftModal(gift)" class="text-sky-600 dark:text-sky-400 hover:underline text-sm">編輯</button>
-                  <button @click="openStockModal(gift)" class="text-amber-600 dark:text-amber-400 hover:underline text-sm">調整庫存</button>
-                  <button @click="confirmDelete('gift', gift)" class="text-red-600 dark:text-red-400 hover:underline text-sm">刪除</button>
+              <td class="pl-2 pr-4 py-3">
+                <div class="flex items-center gap-2">
+                  <button @click="openGiftModal(gift)" class="px-3 py-1 text-xs font-medium rounded bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 hover:bg-sky-200 dark:hover:bg-sky-900/60 transition-colors">編輯</button>
+                  <button @click="openStockModal(gift)" class="px-3 py-1 text-xs font-medium rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/60 transition-colors">庫存</button>
+                  <button @click="confirmDelete('gift', gift)" class="px-3 py-1 text-xs font-medium rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/60 transition-colors">刪除</button>
                 </div>
               </td>
             </tr>
@@ -553,30 +550,30 @@
           <table class="w-full table-fixed">
             <thead class="bg-gray-50 dark:bg-gray-800/50">
               <tr>
-                <th class="w-[4%] px-2 py-3"></th>
-                <th class="w-[6%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-                <th class="w-[12%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
-                <th class="w-[22%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
-                <th class="w-[10%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
-                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">進度</th>
-                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">日期</th>
-                <th class="w-[18%] px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+                <th class="w-[3%] pl-4 pr-1 py-3"></th>
+                <th class="w-[5%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
+                <th class="w-[12%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
+                <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
+                <th class="w-[8%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
+                <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">進度</th>
+                <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">日期</th>
+                <th class="w-[22%] pl-2 pr-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
               <template v-for="(order, index) in paginatedRedemptions" :key="order.id">
                 <!-- 主要列 -->
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12 cursor-pointer" @click="toggleOrderExpand(order.id)">
-                  <td class="px-2 py-3 text-center">
+                  <td class="pl-4 pr-2 py-3 text-center">
                     <svg class="w-4 h-4 text-gray-400 transition-transform duration-200 mx-auto"
                       :class="{ 'rotate-90': expandedOrders.includes(order.id) }"
                       fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                   </td>
-                  <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (currentPage - 1) * 10 + index + 1 }}</td>
-                  <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ order.user?.name || '-' }}</td>
-                  <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                  <td class="px-2 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ filteredRedemptions.length - (currentPage - 1) * 10 - index }}</td>
+                  <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ order.user?.name || '-' }}</td>
+                  <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">
                     <div v-if="order.items && order.items.length > 0" class="truncate">
                       <span v-for="(item, idx) in order.items" :key="item.id">
                         {{ item.gift?.title }}<span v-if="item.quantity > 1"> x{{ item.quantity }}</span><span v-if="idx < order.items.length - 1">、</span>
@@ -584,23 +581,32 @@
                     </div>
                     <span v-else class="truncate">{{ order.gift?.title || '-' }}</span>
                   </td>
-                  <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ order.totalPoints }}</td>
-                  <td class="px-4 py-3">
+                  <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ order.totalPoints }}</td>
+                  <td class="px-2 py-3">
                     <span :class="getStatusBadgeClass(order.status)" class="px-2 py-1 text-xs font-medium rounded-full">
                       {{ getStatusText(order.status) }}
                     </span>
                   </td>
-                  <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ formatDate(order.createdAt) }}</td>
-                  <td class="px-4 py-3" @click.stop>
-                    <div class="flex items-center gap-4">
-                      <select :value="order.status" @change="updateOrderStatus(order, $event.target.value)"
-                        class="text-sm bg-transparent border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-500/50 dark:text-white">
-                        <option value="PENDING">訂單確認中</option>
-                        <option value="SHIPPED">已出貨</option>
-                        <option value="DELIVERED">已送達</option>
-                        <option value="COMPLETED">取貨完成</option>
-                        <option value="CANCELLED">已取消</option>
-                      </select>
+                  <td class="px-2 py-3 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ formatDate(order.createdAt) }}</td>
+                  <td class="pl-2 pr-4 py-3" @click.stop>
+                    <div class="relative">
+                      <button @click="toggleStatusDropdown(order.id)"
+                        :class="getStatusSelectClass(order.status)"
+                        class="w-28 text-xs font-medium rounded px-2 py-1.5 flex items-center justify-between gap-1">
+                        <span>{{ getStatusText(order.status) }}</span>
+                        <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      <div v-if="openStatusDropdown === order.id"
+                        class="absolute z-50 mt-1 w-28 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800">
+                        <button v-for="status in orderStatuses" :key="status.value"
+                          @click="selectOrderStatus(order, status.value)"
+                          :class="getStatusSelectClass(status.value)"
+                          class="w-full px-2 py-1.5 text-xs font-medium text-left hover:opacity-80 transition-opacity">
+                          {{ status.label }}
+                        </button>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -789,9 +795,9 @@
                   <p class="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap line-clamp-3">{{ reply.reply }}</p>
                 </div>
               </div>
-              <div class="flex items-center gap-4 flex-shrink-0">
-                <button @click="openReplyModal(reply)" class="text-sky-600 dark:text-sky-400 hover:underline text-sm">編輯</button>
-                <button @click="confirmDeleteReply(reply)" class="text-red-600 dark:text-red-400 hover:underline text-sm">刪除</button>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button @click="openReplyModal(reply)" class="px-3 py-1 text-xs font-medium rounded bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 hover:bg-sky-200 dark:hover:bg-sky-900/60 transition-colors">編輯</button>
+                <button @click="confirmDeleteReply(reply)" class="px-3 py-1 text-xs font-medium rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/60 transition-colors">刪除</button>
               </div>
             </div>
           </div>
@@ -936,7 +942,7 @@
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">系列</label>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">分類</label>
               <select v-model="editingGift.series" class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50">
                 <option value="sustainable">永續探索</option>
                 <option value="quality">質感創造</option>
@@ -1092,7 +1098,7 @@
             </svg>
           </div>
           <h3 class="text-lg font-bold text-gray-900 dark:text-white text-center mb-2">確認刪除</h3>
-          <p class="text-sm text-gray-500 dark:text-gray-400 text-center">確定要刪除「{{ deleteTarget?.title }}」嗎？此操作無法復原。</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 text-center">確定要刪除「{{ deleteTarget?.name || deleteTarget?.title }}」嗎？此操作無法復原。</p>
         </div>
         <div class="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-center gap-3">
           <button @click="showDeleteModal = false" class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">取消</button>
@@ -1104,7 +1110,7 @@
 </template>
 
 <script setup>
-import { ref, computed, reactive, onMounted, watch } from 'vue'
+import { ref, computed, reactive, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { mockTasks, mockRewards } from '../mock.js'
 import { useStore } from '@/store'
@@ -1138,27 +1144,6 @@ const refreshAllData = async () => {
     console.error('Refresh failed:', error)
   } finally {
     isRefreshing.value = false
-  }
-}
-
-// 重置功能
-const isResetting = ref(false)
-
-const handleResetUser = async () => {
-  if (isResetting.value) return
-
-  isResetting.value = true
-  try {
-    const result = await store.resetUser()
-    if (result.success) {
-      store.showToast('展示資料已重置', 'success')
-    } else {
-      store.showToast(result.message || '重置失敗', 'error')
-    }
-  } catch (error) {
-    store.showToast('重置失敗，請稍後再試', 'error')
-  } finally {
-    isResetting.value = false
   }
 }
 
@@ -1274,7 +1259,7 @@ const filteredUsers = computed(() => {
     }
   }
 
-  // 按 id 倒序排列（最新會員在最上）
+  // 按 id 倒序排列（最新會員在最上面）
   return [...result].sort((a, b) => b.id - a.id)
 })
 
@@ -1416,6 +1401,15 @@ watch([giftSearchQuery, () => giftFilter.series, () => giftFilter.stock], () => 
 const redemptions = ref([])
 const orderSearchQuery = ref('')
 const expandedOrders = ref([])
+const openStatusDropdown = ref(null)
+
+const orderStatuses = [
+  { value: 'PENDING', label: '訂單確認中' },
+  { value: 'SHIPPED', label: '已出貨' },
+  { value: 'DELIVERED', label: '已送達' },
+  { value: 'COMPLETED', label: '取貨完成' },
+  { value: 'CANCELLED', label: '已取消' }
+]
 
 // 展開/收合訂單詳情
 const toggleOrderExpand = (orderId) => {
@@ -1424,6 +1418,25 @@ const toggleOrderExpand = (orderId) => {
     expandedOrders.value.splice(index, 1)
   } else {
     expandedOrders.value.push(orderId)
+  }
+}
+
+// 狀態下拉選單控制
+const toggleStatusDropdown = (orderId) => {
+  openStatusDropdown.value = openStatusDropdown.value === orderId ? null : orderId
+}
+
+const selectOrderStatus = async (order, status) => {
+  openStatusDropdown.value = null
+  if (order.status !== status) {
+    await updateOrderStatus(order, status)
+  }
+}
+
+// 點擊外部關閉下拉選單
+const closeStatusDropdown = (e) => {
+  if (!e.target.closest('.relative')) {
+    openStatusDropdown.value = null
   }
 }
 
@@ -1493,7 +1506,7 @@ const filteredRedemptions = computed(() => {
     })
   }
 
-  // 按編號降序排列（最新的在最上面）
+  // 按 id 倒序排列（最新訂單在最上面）
   return result.sort((a, b) => b.id - a.id)
 })
 
@@ -1658,6 +1671,11 @@ onMounted(() => {
   fetchOrders()
   fetchChatbotReplies()
   fetchUsers()
+  document.addEventListener('click', closeStatusDropdown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', closeStatusDropdown)
 })
 
 // 任務 Modal
@@ -1786,23 +1804,6 @@ const saveUser = () => {
   showUserModal.value = false
 }
 
-// 查看登入紀錄
-const viewLoginHistory = async (user) => {
-  loginHistoryUser.value = user
-  loginHistoryList.value = []
-  loginHistoryLoading.value = true
-  showLoginHistoryModal.value = true
-  try {
-    const response = await userAPI.getLoginHistory(user.id)
-    loginHistoryList.value = response.data || []
-  } catch (error) {
-    console.error('Failed to fetch login history:', error)
-    store.showToast('無法載入登入紀錄', 'error')
-  } finally {
-    loginHistoryLoading.value = false
-  }
-}
-
 // 格式化日期時間
 const formatDateTime = (dateTime) => {
   if (!dateTime) return '-'
@@ -1833,6 +1834,11 @@ const toggleUserStatus = async (user) => {
   }
 }
 
+// 刪除會員
+const deleteUser = (user) => {
+  confirmDelete('user', user)
+}
+
 // 刪除確認
 const confirmDelete = (type, item) => {
   deleteType.value = type
@@ -1840,8 +1846,17 @@ const confirmDelete = (type, item) => {
   showDeleteModal.value = true
 }
 
-const executeDelete = () => {
-  if (deleteType.value === 'task') {
+const executeDelete = async () => {
+  if (deleteType.value === 'user') {
+    try {
+      await userAPI.delete(deleteTarget.value.id)
+      users.value = users.value.filter(u => u.id !== deleteTarget.value.id)
+      store.showToast('會員已刪除', 'success')
+    } catch (error) {
+      console.error('Failed to delete user:', error)
+      store.showToast('刪除失敗，請稍後再試', 'error')
+    }
+  } else if (deleteType.value === 'task') {
     taskList.value = taskList.value.filter(t => t.id !== deleteTarget.value.id)
     store.showToast('任務已刪除', 'success')
   } else if (deleteType.value === 'gift') {
@@ -1936,6 +1951,17 @@ const getStatusBadgeClass = (status) => {
     DELIVERED: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
     COMPLETED: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
     CANCELLED: 'bg-gray-100 dark:bg-gray-900/30 text-gray-700 dark:text-gray-400'
+  }
+  return classes[status] || classes.PENDING
+}
+
+const getStatusSelectClass = (status) => {
+  const classes = {
+    PENDING: 'bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 border border-pink-200 dark:border-pink-700/50',
+    SHIPPED: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700/50',
+    DELIVERED: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-700/50',
+    COMPLETED: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-700/50',
+    CANCELLED: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600'
   }
   return classes[status] || classes.PENDING
 }
