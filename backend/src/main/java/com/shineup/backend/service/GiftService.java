@@ -6,7 +6,6 @@ import com.shineup.backend.entity.User;
 import com.shineup.backend.repository.GiftRepository;
 import com.shineup.backend.repository.RedemptionOrderRepository;
 import com.shineup.backend.repository.UserRepository;
-import com.shineup.backend.repository.UserStatsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,7 @@ public class GiftService {
     private final GiftRepository giftRepository;
     private final UserRepository userRepository;
     private final RedemptionOrderRepository redemptionOrderRepository;
-    private final UserStatsRepository userStatsRepository;
+    private final UserService userService;
     private final ActivityRecordService activityRecordService;
 
     public List<Gift> findAll() {
@@ -95,10 +94,7 @@ public class GiftService {
         order.setStatus(RedemptionOrder.OrderStatus.COMPLETED);
 
         // 更新統計：兌換數 +1
-        userStatsRepository.findByUserId(userId).ifPresent(stats -> {
-            stats.setRewardsRedeemed(stats.getRewardsRedeemed() + 1);
-            userStatsRepository.save(stats);
-        });
+        userService.incrementRewardsRedeemed(userId);
 
         // 新增活動紀錄（負數表示消耗積分）
         activityRecordService.addRecord(userId, "reward", "兌換 " + gift.getTitle(), -gift.getRequiredPoints());

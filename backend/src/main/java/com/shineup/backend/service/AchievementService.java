@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -119,12 +117,7 @@ public class AchievementService {
         });
 
         // 標記完成
-        progress.setCompleted(true);
-        progress.setCompletionCount(progress.getCompletionCount() + 1);
-        progress.setLastCompletedAt(LocalDateTime.now());
-        if (progress.getCompletedAt() == null) {
-            progress.setCompletedAt(LocalDateTime.now());
-        }
+        progress.markCompleted();
         userTaskProgressRepository.save(progress);
 
         // 給予積分獎勵

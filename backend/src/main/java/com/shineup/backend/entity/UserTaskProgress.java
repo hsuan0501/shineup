@@ -37,4 +37,16 @@ public class UserTaskProgress {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    /**
+     * 標記任務完成
+     */
+    public void markCompleted() {
+        this.completed = true;
+        this.completionCount = (this.completionCount == null ? 0 : this.completionCount) + 1;
+        this.lastCompletedAt = LocalDateTime.now();
+        if (this.completedAt == null) {
+            this.completedAt = LocalDateTime.now();
+        }
+    }
 }

@@ -19,14 +19,34 @@ public class ChatService {
 
     private final ChatbotReplyRepository chatbotReplyRepository;
 
+    // 快取回覆設定
+    private List<ChatbotReply> cachedReplies = null;
+
+    /**
+     * 取得快取的回覆設定
+     */
+    private List<ChatbotReply> getCachedReplies() {
+        if (cachedReplies == null) {
+            cachedReplies = chatbotReplyRepository.findAll();
+        }
+        return cachedReplies;
+    }
+
+    /**
+     * 清除快取
+     */
+    private void clearCache() {
+        cachedReplies = null;
+    }
+
     /**
      * 常見問題快速回覆 - 從資料庫讀取設定
      */
     private String getQuickReply(String message) {
         String msg = message.toLowerCase();
 
-        // 從資料庫讀取所有快速回覆設定
-        List<ChatbotReply> replies = chatbotReplyRepository.findAll();
+        // 從快取讀取所有快速回覆設定
+        List<ChatbotReply> replies = getCachedReplies();
 
         for (ChatbotReply reply : replies) {
             String keyword = reply.getKeyword();
@@ -72,6 +92,7 @@ public class ChatService {
      * 儲存或更新快速回覆
      */
     public ChatbotReply saveReply(ChatbotReply reply) {
+        clearCache();
         return chatbotReplyRepository.save(reply);
     }
 
@@ -79,6 +100,7 @@ public class ChatService {
      * 批量儲存快速回覆
      */
     public List<ChatbotReply> saveAllReplies(List<ChatbotReply> replies) {
+        clearCache();
         return chatbotReplyRepository.saveAll(replies);
     }
 
@@ -86,6 +108,7 @@ public class ChatService {
      * 刪除快速回覆
      */
     public void deleteReply(String id) {
+        clearCache();
         chatbotReplyRepository.deleteById(id);
     }
 

@@ -9,7 +9,6 @@ import com.shineup.backend.repository.UserTaskProgressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,12 +83,7 @@ public class TaskService {
                 });
 
         // 更新完成紀錄
-        progress.setCompleted(true);
-        progress.setCompletionCount(progress.getCompletionCount() + 1);
-        progress.setLastCompletedAt(LocalDateTime.now());
-        if (progress.getCompletedAt() == null) {
-            progress.setCompletedAt(LocalDateTime.now());
-        }
+        progress.markCompleted();
         userTaskProgressRepository.save(progress);
 
         // 加積分

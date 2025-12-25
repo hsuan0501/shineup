@@ -10,6 +10,7 @@ import com.shineup.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -105,14 +106,21 @@ public class RedemptionService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // 預先載入所有禮品（避免 N+1 查詢）
+        Map<Long, Gift> giftCache = new HashMap<>();
+        for (Map<String, Object> item : items) {
+            Long giftId = ((Number) item.get("giftId")).longValue();
+            Gift gift = giftRepository.findById(giftId)
+                    .orElseThrow(() -> new RuntimeException("Gift not found: " + giftId));
+            giftCache.put(giftId, gift);
+        }
+
         // 計算總積分並驗證庫存
         int totalPoints = 0;
         for (Map<String, Object> item : items) {
             Long giftId = ((Number) item.get("giftId")).longValue();
             int quantity = ((Number) item.get("quantity")).intValue();
-
-            Gift gift = giftRepository.findById(giftId)
-                    .orElseThrow(() -> new RuntimeException("Gift not found: " + giftId));
+            Gift gift = giftCache.get(giftId);
 
             if (gift.getStock() < quantity) {
                 throw new RuntimeException("庫存不足: " + gift.getTitle());
@@ -146,8 +154,7 @@ public class RedemptionService {
         for (Map<String, Object> item : items) {
             Long giftId = ((Number) item.get("giftId")).longValue();
             int quantity = ((Number) item.get("quantity")).intValue();
-
-            Gift gift = giftRepository.findById(giftId).get();
+            Gift gift = giftCache.get(giftId);
 
             // 扣除庫存
             gift.setStock(gift.getStock() - quantity);
@@ -180,15 +187,13 @@ public class RedemptionService {
         for (Map<String, Object> item : items) {
             Long giftId = ((Number) item.get("giftId")).longValue();
             int quantity = ((Number) item.get("quantity")).intValue();
-            Gift gift = giftRepository.findById(giftId).orElse(null);
-            if (gift != null) {
-                int itemPoints = gift.getRequiredPoints() * quantity;
-                String title = "兌換 " + gift.getTitle();
-                if (quantity > 1) {
-                    title += " x" + quantity;
-                }
-                activityRecordService.addRecord(userId, "reward", title, -itemPoints);
+            Gift gift = giftCache.get(giftId);
+            int itemPoints = gift.getRequiredPoints() * quantity;
+            String title = "兌換 " + gift.getTitle();
+            if (quantity > 1) {
+                title += " x" + quantity;
             }
+            activityRecordService.addRecord(userId, "reward", title, -itemPoints);
         }
 
         return savedOrder;
