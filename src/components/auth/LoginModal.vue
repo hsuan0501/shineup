@@ -232,6 +232,20 @@
                             </div>
                         </div>
 
+                        <!-- 推薦碼欄位（可選） -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                推薦碼 <span class="text-gray-400 font-normal">(選填)</span>
+                            </label>
+                            <input v-model="referralCode" type="text" maxlength="8"
+                                class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all uppercase"
+                                :class="{ 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-600': referralCode }"
+                                placeholder="輸入朋友的推薦碼">
+                            <p v-if="referralCode" class="text-xs text-green-600 dark:text-green-400 mt-1">
+                                ✓ 已套用推薦碼，註冊後您的朋友將獲得獎勵
+                            </p>
+                        </div>
+
                         <button type="submit"
                             class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-lg hover:opacity-90 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                             註冊
@@ -251,8 +265,8 @@
 </template>
 
 <script setup>
-import { ref, watch, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watch, onUnmounted, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from '@/store'
 import ForgotPasswordModal from './ForgotPasswordModal.vue'
 import axios from 'axios'
@@ -264,9 +278,22 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const router = useRouter()
+const route = useRoute()
 const store = useStore()
 const activeTab = ref('login')
 const isLoading = ref(false)
+
+// 推薦碼（從 URL 讀取）
+const referralCode = ref('')
+
+// 讀取 URL 中的推薦碼參數
+onMounted(() => {
+    const refCode = route.query.ref
+    if (refCode) {
+        referralCode.value = refCode
+        activeTab.value = 'register'  // 自動切換到註冊頁
+    }
+})
 
 // 信箱驗證相關
 const showVerification = ref(false)
@@ -292,10 +319,16 @@ const refreshCaptcha = async () => {
     }
 }
 
-// 當 modal 打開時，取得驗證碼
+// 當 modal 打開時，取得驗證碼並檢查推薦碼
 watch(() => props.modelValue, (newVal) => {
     if (newVal) {
         refreshCaptcha()
+        // 檢查 URL 中的推薦碼參數
+        const refCode = route.query.ref
+        if (refCode) {
+            referralCode.value = refCode
+            activeTab.value = 'register'  // 自動切換到註冊頁
+        }
     }
 })
 
@@ -549,11 +582,16 @@ const handleRegister = async () => {
     isLoading.value = true
     try {
         // 直接呼叫 API，不經過 store
-        const response = await axios.post('http://localhost:8080/api/auth/register', {
+        const requestData = {
             name: registerForm.value.name,
             email: registerForm.value.email,
             password: registerForm.value.password
-        })
+        }
+        // 如果有推薦碼，加入請求
+        if (referralCode.value) {
+            requestData.referralCode = referralCode.value
+        }
+        const response = await axios.post('http://localhost:8080/api/auth/register', requestData)
 
         if (response.data.success) {
             // 註冊成功，顯示驗證碼輸入畫面

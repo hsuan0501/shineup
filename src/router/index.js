@@ -66,6 +66,11 @@ const routes = [
     name: 'LineCallback',
     component: () => import('../views/LineCallback.vue'),
   },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/RegisterPage.vue'),
+  },
 ]
 
 const router = createRouter({

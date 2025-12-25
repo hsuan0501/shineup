@@ -15,7 +15,7 @@
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-bold text-sm">ShineUp 智能客服</h3>
+                            <h3 class="font-bold text-sm">ShineUp 小幫手</h3>
                         </div>
                     </div>
                     <button @click="isOpen = false" class="text-white/80 hover:text-white transition-colors">
@@ -205,7 +205,7 @@ const toggleChat = async () => {
 
     // 如果未登入，提示先登入
     if (!isLoggedIn.value) {
-        store.showToast('請先登入以體驗智能客服功能！', 'info')
+        store.showToast('請先登入以使用小幫手功能！', 'info')
         return
     }
 

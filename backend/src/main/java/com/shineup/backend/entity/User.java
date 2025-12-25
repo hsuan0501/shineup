@@ -3,6 +3,7 @@ package com.shineup.backend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -27,6 +28,8 @@ public class User {
 
     private String address;
 
+    private LocalDate birthday;  // 生日
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberLevel level = MemberLevel.EXPLORER;
@@ -43,11 +46,20 @@ public class User {
     @Column(name = "is_admin")
     private boolean admin = false;
 
-    @Column(name = "enabled")
-    private boolean enabled = true;
+    @Column(name = "enabled", columnDefinition = "boolean default true")
+    private Boolean enabled = true;
 
     @Column(name = "line_id", unique = true)
     private String lineId;
+
+    @Column(name = "referral_code", unique = true)
+    private String referralCode;  // 自己的推薦碼
+
+    @Column(name = "referred_by_id")
+    private Long referredById;    // 推薦人的用戶 ID
+
+    @Column(name = "newsletter_subscribed")
+    private Boolean newsletterSubscribed = false;  // 是否訂閱電子報
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();

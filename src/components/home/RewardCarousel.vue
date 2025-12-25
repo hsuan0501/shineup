@@ -23,7 +23,8 @@
         <div class="flex gap-2 sm:gap-3 animate-scroll-right overflow-visible">
             <div v-for="gift in [...secondRowGifts, ...secondRowGifts]" :key="gift.id + '-row2'"
                 @click="openGiftModal(gift)"
-                class="relative flex-shrink-0 w-40 sm:w-48 md:w-52 lg:w-60 p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300 cursor-pointer">
+                class="relative flex-shrink-0 w-40 sm:w-48 md:w-52 lg:w-60 p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-white/70 to-white/40 dark:from-gray-600/90 dark:to-gray-600/50 backdrop-blur-sm hover:scale-105 hover:z-50 transition-all duration-300 cursor-pointer"
+                style="direction: ltr;">
                 <div class="aspect-[4/3] rounded-lg overflow-hidden mb-2">
                     <img :src="gift.image" :alt="gift.title" class="w-full h-full object-cover" />
                 </div>

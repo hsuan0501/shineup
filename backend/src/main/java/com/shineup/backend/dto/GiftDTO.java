@@ -1,7 +1,6 @@
 package com.shineup.backend.dto;
 
 import com.shineup.backend.entity.Gift;
-import com.shineup.backend.entity.User;
 import lombok.Data;
 
 @Data
@@ -10,7 +9,8 @@ public class GiftDTO {
     private String title;
     private String description;
     private String series;
-    private User.MemberLevel requiredLevel;
+    private String levelText;
+    private String levelRestriction;
     private Integer requiredPoints;
     private Integer stock;
     private String stockStatus;
@@ -44,7 +44,8 @@ public class GiftDTO {
         dto.setTitle(gift.getTitle());
         dto.setDescription(gift.getDescription());
         dto.setSeries(gift.getSeries());
-        dto.setRequiredLevel(gift.getRequiredLevel());
+        dto.setLevelText(gift.getLevelText());
+        dto.setLevelRestriction(gift.getLevelRestriction());
         dto.setRequiredPoints(gift.getRequiredPoints());
         dto.setStock(gift.getStock());
         dto.setStockStatus(calculateStockStatus(gift.getStock()));

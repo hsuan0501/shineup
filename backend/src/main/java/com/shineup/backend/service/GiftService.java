@@ -70,7 +70,7 @@ public class GiftService {
         }
 
         // 檢查用戶等級
-        if (user.getLevel().ordinal() < gift.getRequiredLevel().ordinal()) {
+        if (!isUserLevelSufficient(user.getLevel(), gift.getLevelText(), gift.getLevelRestriction())) {
             throw new RuntimeException("等級不足，無法兌換此禮品");
         }
 
@@ -104,5 +104,36 @@ public class GiftService {
         activityRecordService.addRecord(userId, "reward", "兌換 " + gift.getTitle(), -gift.getRequiredPoints());
 
         return redemptionOrderRepository.save(order);
+    }
+
+    // 檢查用戶等級是否符合禮品要求
+    private boolean isUserLevelSufficient(User.MemberLevel userLevel, String levelText, String levelRestriction) {
+        // 先檢查 levelRestriction (如 "lv1_only", "lv2_plus", "lv3_plus", "lv4_only")
+        if (levelRestriction != null && !levelRestriction.isEmpty()) {
+            int userOrdinal = userLevel.ordinal();
+            if (levelRestriction.equals("lv1_only")) {
+                return userOrdinal == 0; // 只限 EXPLORER
+            } else if (levelRestriction.equals("lv2_plus")) {
+                return userOrdinal >= 1; // CREATOR 以上
+            } else if (levelRestriction.equals("lv3_plus")) {
+                return userOrdinal >= 2; // VISIONARY 以上
+            } else if (levelRestriction.equals("lv4_only")) {
+                return userOrdinal == 3; // 只限 LUMINARY
+            }
+        }
+
+        // 備用：根據 levelText 判斷 (如 "EXPLORER", "CREATOR", "VISIONARY", "LUMINARY")
+        if (levelText == null || levelText.isEmpty()) {
+            return true;
+        }
+        int requiredLevel = 0;
+        if (levelText.equals("CREATOR")) {
+            requiredLevel = 1;
+        } else if (levelText.equals("VISIONARY")) {
+            requiredLevel = 2;
+        } else if (levelText.equals("LUMINARY")) {
+            requiredLevel = 3;
+        }
+        return userLevel.ordinal() >= requiredLevel;
     }
 }

@@ -17,12 +17,14 @@ public class Task {
 
     private String description;
 
+    @Column(columnDefinition = "TEXT")
+    private String details;
+
     @Column(nullable = false)
     private String category;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "required_level", nullable = false)
-    private User.MemberLevel requiredLevel = User.MemberLevel.EXPLORER;
+    @Column(name = "level_text")
+    private String levelText; // "全等級", "Lv2+", "Lv3+" 等
 
     @Column(name = "upgrade_points")
     private Integer upgradePoints = 0;
@@ -31,6 +33,10 @@ public class Task {
     private Integer rewardPoints = 0;
 
     private String image;
+
+    private String icon;
+
+    private String frequency;
 
     private Boolean active = true;
 }

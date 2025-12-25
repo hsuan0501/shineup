@@ -28,7 +28,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
     private static final int LOGIN_LIMIT = 5;          // 登入：每分鐘 5 次
     private static final int REGISTER_LIMIT = 3;       // 註冊：每小時 3 次
     private static final int PASSWORD_RESET_LIMIT = 3; // 密碼重設：每小時 3 次
-    private static final int GENERAL_LIMIT = 100;      // 一般 API：每分鐘 100 次
 
     private static final long ONE_MINUTE = 60 * 1000;
     private static final long ONE_HOUR = 60 * 60 * 1000;

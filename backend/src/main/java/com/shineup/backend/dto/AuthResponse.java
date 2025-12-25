@@ -31,6 +31,7 @@ public class AuthResponse {
         private Integer rewardPoints;
         private boolean emailVerified;
         private boolean admin;
+        private String referralCode;  // 推薦碼
     }
 
     public static AuthResponse success(String token, User user) {
@@ -48,6 +49,7 @@ public class AuthResponse {
                         .rewardPoints(user.getRewardPoints())
                         .emailVerified(user.isEmailVerified())
                         .admin(user.isAdmin())
+                        .referralCode(user.getReferralCode())
                         .build())
                 .build();
     }

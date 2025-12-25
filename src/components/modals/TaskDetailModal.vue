@@ -55,6 +55,12 @@
             </p>
           </div>
 
+          <!-- 邀請好友任務專用：推薦連結（僅顯示） -->
+          <div v-if="isInviteTask && referralLink" class="mb-4">
+            <input type="text" readonly :value="referralLink"
+              class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300" />
+          </div>
+
           <!-- 底部區域：積分 + 按鈕（同行） -->
           <div class="flex gap-2.5">
             <!-- 積分顯示 -->
@@ -67,16 +73,15 @@
 
             <!-- 完成按鈕 -->
             <button
+              @click="handleButtonClick"
               :disabled="task.completed || isAutoCompleteTask(task.title)"
               :class="[
                 'flex-1 px-5 py-2.5 rounded-lg font-medium shadow-md transition-all duration-300',
-                task.completed
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : isAutoCompleteTask(task.title)
-                    ? 'bg-gray-200 text-gray-500 cursor-default'
-                    : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-[1.02]'
+                task.completed || isAutoCompleteTask(task.title)
+                  ? 'bg-gray-200 text-gray-500 cursor-default'
+                  : 'bg-gradient-to-br from-cyan-400 to-blue-500 text-white hover:opacity-90 hover:scale-[1.02]'
               ]">
-              {{ task.completed ? '已完成' : isAutoCompleteTask(task.title) ? '自動完成' : '立即完成' }}
+              {{ getButtonText }}
             </button>
           </div>
         </div>
@@ -86,7 +91,13 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { formatPoints } from '../../utils/formatPoints'
+import { useStore } from '@/store'
+
+const store = useStore()
+const router = useRouter()
 
 const props = defineProps({
   isOpen: {
@@ -103,6 +114,62 @@ const emit = defineEmits(['close'])
 
 const closeModal = () => {
   emit('close')
+}
+
+// 判斷是否為邀請朋友相關任務
+const isInviteTask = computed(() => {
+  const inviteTitles = ['邀請朋友完成註冊', '累積邀請5位朋友完成註冊', '累積邀請10位朋友完成註冊']
+  return inviteTitles.includes(props.task.title)
+})
+
+// 判斷是否為需要導航的任務
+const isProfileTask = computed(() => props.task.title === '完成個人檔案設置')
+const isBankTask = computed(() => props.task.title === '綁定銀行帳戶')
+const isNewsletterTask = computed(() => props.task.title === '訂閱電子報')
+
+// 導航到對應頁面
+const navigateToTask = () => {
+  closeModal()
+  if (isProfileTask.value || isBankTask.value || isNewsletterTask.value) {
+    router.push('/settings')
+  }
+}
+
+// 按鈕文字
+const getButtonText = computed(() => {
+  if (props.task.completed) return '已完成'
+  if (isAutoCompleteTask(props.task.title)) return '自動完成'
+  if (isProfileTask.value || isBankTask.value || isNewsletterTask.value) return '前往設定'
+  if (isInviteTask.value) return '複製推薦連結'
+  return '立即完成'
+})
+
+// 按鈕點擊處理
+const handleButtonClick = () => {
+  if (props.task.completed || isAutoCompleteTask(props.task.title)) return
+
+  if (isProfileTask.value || isBankTask.value || isNewsletterTask.value) {
+    navigateToTask()
+  } else if (isInviteTask.value) {
+    copyReferralLink()
+  }
+}
+
+// 推薦連結（使用推薦碼產生，導向專屬註冊頁）
+const referralLink = computed(() => {
+  const code = store.currentUser?.referralCode
+  if (!code) return ''
+  return `${window.location.origin}/register?ref=${code}`
+})
+
+// 複製推薦連結
+const copyReferralLink = async () => {
+  try {
+    await navigator.clipboard.writeText(referralLink.value)
+    store.showToast('推薦連結已複製！', 'success')
+  } catch (err) {
+    store.showToast('複製失敗，請手動複製', 'error')
+  }
 }
 
 // Helper functions matching TaskGrid.vue styling

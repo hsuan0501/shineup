@@ -29,6 +29,7 @@ export const authAPI = {
 export const userAPI = {
   getAll: () => api.get('/users'),
   getById: (id) => api.get(`/users/${id}`),
+  update: (id, userData) => api.put(`/users/${id}`, userData),
   reset: (id) => api.post(`/users/${id}/reset`),
   getStats: (id) => api.get(`/users/${id}/stats`),
   recordLogin: (id) => api.post(`/users/${id}/record-login`),
@@ -41,6 +42,11 @@ export const taskAPI = {
   getAll: () => api.get('/tasks'),
   getActive: () => api.get('/tasks/active'),
   getById: (id) => api.get(`/tasks/${id}`),
+  getWithProgress: (userId) => api.get(`/tasks/user/${userId}`),  // 帶用戶完成狀態
+  create: (task) => api.post('/tasks', task),
+  update: (id, task) => api.put(`/tasks/${id}`, task),
+  delete: (id) => api.delete(`/tasks/${id}`),
+  toggle: (id) => api.post(`/tasks/${id}/toggle`),
   complete: (taskId, userId) => api.post(`/tasks/${taskId}/complete`, { userId })
 }
 
@@ -48,6 +54,10 @@ export const taskAPI = {
 export const giftAPI = {
   getAll: () => api.get('/gifts'),
   getById: (id) => api.get(`/gifts/${id}`),
+  create: (gift) => api.post('/gifts', gift),
+  update: (id, gift) => api.put(`/gifts/${id}`, gift),
+  delete: (id) => api.delete(`/gifts/${id}`),
+  adjustStock: (id, adjustment) => api.post(`/gifts/${id}/adjust-stock?adjustment=${adjustment}`),
   redeem: (giftId, userId) => api.post(`/gifts/${giftId}/redeem`, { userId })
 }
 
@@ -72,6 +82,13 @@ export const chatAPI = {
   saveReply: (reply) => api.post('/chat/replies', reply),
   saveAllReplies: (replies) => api.put('/chat/replies', replies),
   deleteReply: (id) => api.delete(`/chat/replies/${id}`)
+}
+
+// 銀行帳戶 API
+export const bankAccountAPI = {
+  getByUserId: (userId) => api.get(`/bank-accounts/user/${userId}`),
+  add: (data) => api.post('/bank-accounts', data),
+  delete: (accountId) => api.delete(`/bank-accounts/${accountId}`)
 }
 
 export default api

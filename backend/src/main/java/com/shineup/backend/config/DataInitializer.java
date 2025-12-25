@@ -4,20 +4,25 @@ import com.shineup.backend.entity.ActivityRecord;
 import com.shineup.backend.entity.ChatbotReply;
 import com.shineup.backend.entity.Gift;
 import com.shineup.backend.entity.RedemptionOrder;
+import com.shineup.backend.entity.Task;
 import com.shineup.backend.entity.User;
 import com.shineup.backend.entity.UserStats;
 import com.shineup.backend.repository.ActivityRecordRepository;
 import com.shineup.backend.repository.ChatbotReplyRepository;
 import com.shineup.backend.repository.GiftRepository;
 import com.shineup.backend.repository.RedemptionOrderRepository;
+import com.shineup.backend.repository.TaskRepository;
 import com.shineup.backend.repository.UserRepository;
 import com.shineup.backend.repository.UserStatsRepository;
+import com.shineup.backend.repository.UserTaskProgressRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,11 +37,14 @@ import java.time.LocalDateTime;
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final JdbcTemplate jdbcTemplate;
     private final ActivityRecordRepository activityRecordRepository;
     private final UserStatsRepository userStatsRepository;
     private final RedemptionOrderRepository redemptionOrderRepository;
     private final GiftRepository giftRepository;
+    private final TaskRepository taskRepository;
     private final ChatbotReplyRepository chatbotReplyRepository;
+    private final UserTaskProgressRepository userTaskProgressRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${admin.email:admin@shineup.com}")
@@ -53,10 +61,24 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        // 修復舊資料的 NULL enabled 值
+        fixNullEnabledUsers();
         createDefaultAdmin();
         createDefaultUsers();
+        createDefaultTasks();
+        createDefaultGifts();
         createMockActivityRecords();
         createDefaultChatbotReplies();
+    }
+
+    /**
+     * 修復舊資料中 enabled 欄位為 NULL 的用戶（使用 JDBC）
+     */
+    private void fixNullEnabledUsers() {
+        int updated = jdbcTemplate.update("UPDATE users SET enabled = true WHERE enabled IS NULL");
+        if (updated > 0) {
+            log.info("已修復 {} 位用戶的 enabled 欄位", updated);
+        }
     }
 
     private void createDefaultAdmin() {
@@ -80,7 +102,8 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createDefaultUsers() {
-        // Hsuan - CREATOR 等級（宅配）- 11/23 註冊
+        // Hsuan - CREATOR 等級（宅配）- 11/20 註冊
+        // 活動紀錄從 30 天前開始，所以註冊日期要在那之前
         createUserIfNotExists(
             "hsuan0501@outlook.com",
             "Hsuan",
@@ -89,12 +112,12 @@ public class DataInitializer implements CommandLineRunner {
             User.MemberLevel.CREATOR,
             700,
             600,
-            LocalDateTime.of(2024, 11, 23, 10, 30)
+            LocalDateTime.of(2025, 11, 20, 10, 30)
         );
 
-        // Matcha - CREATOR 等級（超商取貨：全家 江寧店）- 11/27 註冊
-        // 兌換過 250 積分（120+130），目前剩餘 80，表示曾賺過 330 兌換積分
-        // 升級積分 280（已達 CREATOR 門檻 250）
+        // Matcha - CREATOR 等級（超商取貨：全家 江寧店）- 12/15 註冊
+        // 兌換過 250 積分（120+130），升級積分 = 獎勵積分 = 280
+        // 剩餘獎勵積分 = 280 - 250 = 30
         createUserIfNotExists(
             "matcha1108@example.com",
             "Matcha",
@@ -102,22 +125,22 @@ public class DataInitializer implements CommandLineRunner {
             null,
             User.MemberLevel.CREATOR,
             280,
-            80,
-            LocalDateTime.of(2024, 11, 27, 14, 15)
+            30,
+            LocalDateTime.of(2025, 12, 15, 14, 15)
         );
 
-        // May - EXPLORER 等級（超商取貨：7-11 復錦門市）- 12/6 註冊
-        // 兌換過 200 積分，目前剩餘 50，表示曾賺過 250 兌換積分
-        // 升級積分維持 180（新手狀態）
+        // May - EXPLORER 等級（超商取貨：7-11 復錦門市）- 12/20 註冊
+        // 待處理訂單 200 積分，升級積分 = 獎勵積分 = 250
+        // 剩餘獎勵積分 = 250 - 200 = 50
         createUserIfNotExists(
             "may0529@example.com",
             "May",
             "0912345678",
             null,
             User.MemberLevel.EXPLORER,
-            180,
+            250,
             50,
-            LocalDateTime.of(2024, 12, 6, 9, 45)
+            LocalDateTime.of(2025, 12, 20, 9, 45)
         );
     }
 
@@ -136,7 +159,16 @@ public class DataInitializer implements CommandLineRunner {
             user.setRewardPoints(rewardPoints);
             user.setCreatedAt(createdAt);
             user.setAdmin(false);
+            // 清除生日和電子報訂閱狀態（確保任務可重新完成）
+            user.setBirthday(null);
+            user.setNewsletterSubscribed(false);
             userRepository.save(user);
+
+            // 清除該用戶的任務進度（讓任務可重新完成）
+            userTaskProgressRepository.deleteAll(
+                userTaskProgressRepository.findByUserId(user.getId())
+            );
+
             log.info("會員帳號已重設: {}", email);
             return;
         }
@@ -156,6 +188,145 @@ public class DataInitializer implements CommandLineRunner {
 
         userRepository.save(user);
         log.info("預設會員帳號已建立: {} / {}", email, DEFAULT_PASSWORD);
+    }
+
+    /**
+     * 建立預設任務資料
+     */
+    private void createDefaultTasks() {
+        if (taskRepository.count() > 0) {
+            log.info("任務資料已存在，跳過初始化");
+            return;
+        }
+
+        // 📱 日常互動任務 (6個)
+        createTask("每日登入", "每日登入一次即可完成", "每天登入一次完成此任務。後端將記錄您的登入時間至用戶活動日誌表，用於計算日活躍度。系統自動檢測新登入記錄並更新用戶的最後登入時間欄位。完成後立即獲得基礎積分獎勵，後端同步更新用戶的積分餘額。", "daily", "全等級", 1, 1, "🌅", "每日", "/images/tasks/task-1.jpg");
+        createTask("連續登入七天", "連續七天每日登入", "連續七天每日登入即可完成此任務。後端將記錄您的連續登入天數至用戶活動日誌表，當達到七天連續登入時自動發放獎勵積分。系統會在每日登入時檢查連續登入狀態，中斷登入將重新計算。", "daily", "全等級", 5, 5, "📅", "每週", "/images/tasks/task-2.jpg");
+        createTask("完成個人檔案設置", "設定個人檔案完整性", "填寫頭像、暱稱、個性標籤、風險偏好等檔案資訊。後端驗證並存儲至用戶檔案表。系統計算檔案完整度百分比，完整度達80%以上時自動發放「檔案完善」成就徽章。所有檔案資訊都可透過個人頁面API查詢和更新。", "daily", "全等級", 5, 5, "📲", "一次性", "/images/tasks/task-3.jpg");
+        createTask("訂閱電子報", "訂閱平台理財週報", "在設定頁面啟用電子報訂閱功能。後端將您的訂閱偏好存儲至用戶通知設定表，並將您的信箱加入電子報發送名單。系統每週自動發送理財週報至您的信箱，內容包含市場趨勢、投資建議和平台最新消息。", "daily", "全等級", 10, 10, "📧", "一次性", "/images/tasks/task-4.jpg");
+        createTask("設定理財目標", "建立個人理財目標", "在理財面板輸入目標名稱（如購房、教育基金）、目標金額、完成期限。後端將目標資料存儲至用戶目標表，並計算每月需儲蓄額度。系統自動生成目標進度追蹤記錄。目標可重複設定，每筆目標記錄都有唯一ID便於查詢和更新。", "daily", "全等級", 10, 10, "🎯", "每月", "/images/tasks/task-5.jpg");
+        createTask("綁定銀行帳戶", "關聯銀行帳戶資訊", "填寫銀行名稱、帳戶號碼等資訊並提交。後端驗證帳戶號碼格式（16-17碼），將銀行資訊加密存儲至用戶銀行帳戶表。綁定成功後自動更新用戶的綁定狀態欄位，解鎖「提現」和「自動扣款」功能。", "daily", "全等級", 15, 15, "🏦", "無限", "/images/tasks/task-6.jpg");
+
+        // 💰 理財學習任務 (6個)
+        createTask("完成金融知識測驗", "通過基礎理財知識測試", "完成10題金融知識測驗題目。後端計算測驗得分，若達70分以上則記錄「已通過測驗」狀態至用戶資料表。系統在用戶檔案中保存最高成績和測驗參加次數（每月限3次）。通過者的財務素養等級會被更新至檔案中，用於後續個性化推薦。", "financial", "全等級", 5, 8, "📝", "每月", "/images/tasks/task-7.jpg");
+        createTask("觀看線上課程視頻", "完成理財教育課程學習", "在課程平台觀看理財教育視頻（「基金投資入門」、「資產配置原理」等），每個課程15分鐘。後端追蹤您的觀看進度，完成率達90%以上時自動標記課程為「已完成」並存儲至用戶學習紀錄表。系統自動計算您的學習時數統計。", "financial", "全等級", 10, 15, "🎓", "每週", "/images/tasks/task-8.jpg");
+        createTask("參與線上學習論壇", "在討論區發表理財心得", "在學習論壇發表理財相關心得文章或評論（至少150字）。後端驗證內容後將其存儲至論壇貼文表，並與用戶帳戶關聯。系統記錄發文者和評論互動數據。活躍參與者的發言將顯示在社群推薦版面。", "financial", "全等級", 20, 30, "🎤", "每週", "/images/tasks/task-9.jpg");
+        createTask("設定投資提醒規則", "配置投資市場提醒", "設定投資提醒規則，如「當指定股票價格下跌5%時提醒我」。後端將提醒規則存儲至用戶提醒配置表。系統每日檢查市場數據（使用模擬數據），若觸發規則條件則在用戶帳戶中生成通知記錄。提醒可被啟用、禁用或刪除。", "financial", "Lv2+", 30, 45, "⚙️", "一次性", "/images/tasks/task-10.jpg");
+        createTask("建立投資組合記錄", "記錄您的首個虛擬投資組合", "在投資組合面板建立一個虛擬投資組合（選擇3-5檔基金，虛擬分配資金比例）。後端存儲該組合至投資組合表，並為其生成唯一的組合ID。系統定期計算該組合的虛擬淨值變化，用於教學演示目的。組合資料可被查詢、編輯和刪除。", "financial", "Lv2+", 40, 60, "📈", "一次性", "/images/tasks/task-11.jpg");
+        createTask("建立借貸需求檔案", "填寫貸款需求基本資訊", "在借貸評估頁面填寫年收入、負債情況、借貸目的等資訊。後端驗證並將資訊存儲至用戶借貸檔案表。系統根據您提供的資料計算簡單的借貸風險評分（0-100分），並將評分存儲供後續查詢。此資料用於個性化的借貸產品推薦。填完後續會有專人聯絡。", "financial", "Lv2+", 50, 75, "💳", "一次性", "/images/tasks/task-12.jpg");
+
+        // 📊 投資實踐任務 (6個)
+        createTask("完成風險承受能力評估", "填寫投資風險問卷", "完成15題風險評估問卷。後端根據您的答案計算風險等級（低/中/高），並將結果存儲至用戶風險檔案表。系統根據風險等級在資料庫中記錄對應的推薦產品類型。評估結果可隨時被查詢和更新。", "investment", "全等級", 10, 15, "⚖️", "每月", "/images/tasks/task-13.jpg");
+        createTask("建立個人投資日誌", "記錄投資心得和分析", "在投資日誌區域撰寫投資心得、市場分析或交易總結（至少200字）。後端驗證內容後存儲至用戶投資日誌表，並與相關交易記錄關聯。系統記錄日誌建立日期、最後編輯時間，並支援日誌的搜尋和標籤分類功能。", "investment", "Lv2+", 20, 30, "🤝", "每月", "/images/tasks/task-14.jpg");
+        createTask("建立投資帳戶記錄", "在系統中註冊投資帳戶", "填寫並提交投資帳戶資訊（帳戶類型、帳戶號碼、金融機構）。後端驗證帳戶號碼格式，將帳戶資訊加密存儲至用戶帳戶表。系統為帳戶產生唯一編號和建立日期戳記。帳戶狀態被設定為「已驗證」，解鎖交易記錄功能。", "investment", "Lv2+", 30, 45, "📊", "每月", "/images/tasks/task-15.jpg");
+        createTask("記錄虛擬投資交易", "記錄一筆虛擬投資交易", "在交易記錄頁面輸入虛擬交易資訊（買入股票代號、數量、虛擬價格、交易日期）。後端驗證輸入資料並存儲至用戶交易紀錄表。系統根據買入和當前虛擬市價計算虛擬損益，並將損益資料存儲至投資績效表供統計查詢。", "investment", "Lv2+", 40, 60, "📈", "每月", "/images/tasks/task-16.jpg");
+        createTask("設定投資限制和額度", "配置個人投資風險限制", "設定您的投資限制參數，如「單次最大投資額NT$100,000」、「單一股票最高持股比例30%」。後端將限制規則存儲至用戶風控規則表。系統在用戶進行交易時檢查這些規則，若違反規則則拒絕交易並提示原因。所有規則修改記錄保留在稽核日誌中。", "investment", "Lv3+", 50, 75, "💳", "每月", "/images/tasks/task-17.jpg");
+        createTask("建立定期定額投資計畫", "設定月定投計畫參數", "在投資計畫頁面設定月定投參數（每月金額、投資週期、目標資產等）。後端將計畫資料存儲至用戶投資計畫表，產生計畫ID。系統根據計畫生成預期投資時程表並存儲至排程表。計畫可被隨時修改或停止，所有修改記錄保留於審計日誌。", "investment", "Lv3+", 60, 90, "💰", "每月", "/images/tasks/task-18.jpg");
+
+        // 🌱 永續行動任務 (6個)
+        createTask("完成ESG價值觀評估", "填寫永續投資偏好問卷", "完成ESG相關問卷（涵蓋環保態度、社會責任偏好、公司治理認知）。後端根據答案計算ESG偏好評分並存儲至用戶ESG檔案表。系統根據評分在資料庫中關聯推薦的永續投資產品類型供使用者後續查詢。", "esg", "全等級", 10, 15, "🌱", "每月", "/images/tasks/task-19.jpg");
+        createTask("記錄永續投資組合", "建立永續主題投資組合記錄", "在投資組合頁面建立一個永續主題虛擬投資組合（選擇環保、社會責任或治理相關基金）。後端存儲該永續組合至投資組合表，標籤標記為「ESG」。系統定期計算該組合的虛擬績效並存儲至績效歷史表，便於追蹤永續投資成果。", "esg", "Lv2+", 20, 30, "🌿", "每月", "/images/tasks/task-20.jpg");
+        createTask("設定永續投資目標", "建立個人永續投資目標", "設定個人永續投資目標（如「未來2年投資淨值100萬至永續基金」）。後端將目標存儲至用戶永續目標表，產生進度追蹤ID。系統定期比對您的永續投資額度與目標，計算進度百分比並存儲至目標進度表供查詢。", "esg", "Lv2+", 30, 45, "🌍", "每月", "/images/tasks/task-21.jpg");
+        createTask("建立慈善捐款記錄", "記錄個人慈善捐款計畫", "在慈善管理頁面建立捐款記錄（選擇慈善機構、捐款金額、捐款目的）。後端將捐款記錄存儲至用戶捐款表，產生捐款收據編號。系統累計用戶的年度捐款總額並存儲統計數據，供用戶查詢捐款歷史和稅務申報之用。", "esg", "Lv2+", 40, 60, "❤️", "無限", "/images/tasks/task-22.jpg");
+        createTask("參與永續投資討論", "在論壇參與ESG投資討論", "在永續投資討論區提出見解、評論或提問（至少150字），參與關於ESG投資的社群討論。後端驗證內容後存儲至論壇評論表。系統記錄您的參與次數和互動評分，積極參與者將被邀請為社群版主或參與特別活動。", "esg", "Lv2+", 50, 75, "🎓", "每月", "/images/tasks/task-23.jpg");
+        createTask("撰寫永續投資文章", "發表ESG投資心得文章", "在永續投資論壇撰寫文章分享您的ESG投資心得（至少300字）。後端驗證內容後將其存儲至論壇貼文表，並標籤標記為「ESG」。系統記錄文章點擊數、按讚數、評論數等互動指標，定期統計最受歡迎的文章作者。", "esg", "Lv3+", 60, 90, "📢", "每月", "/images/tasks/task-24.jpg");
+
+        // 🎁 社群成就任務 (6個)
+        createTask("邀請朋友完成註冊", "成功推薦朋友註冊帳戶", "透過邀請碼邀請朋友完成帳戶註冊和身份驗證。後端在用戶推薦關係表中記錄被邀請者的資訊。當被邀請者完成首筆交易後，系統自動為您和被邀請者各增加積分獎勵。", "social", "全等級", 50, 75, "👥", "無限", "/images/tasks/task-25.jpg");
+        createTask("累積邀請5位朋友完成註冊", "成功推薦5位朋友註冊帳戶", "透過邀請碼邀請5位朋友完成帳戶註冊和身份驗證。後端在用戶推薦關係表中記錄這5位被邀請者的資訊。系統自動為您記錄「推薦人數：5」成就。當被邀請者完成首筆交易後，系統自動為您和被邀請者各增加積分獎勵。", "social", "全等級", 100, 150, "💎", "一次性", "/images/tasks/task-26.jpg");
+        createTask("累積邀請10位朋友完成註冊", "成功推薦10位朋友註冊帳戶", "透過邀請碼邀請10位朋友完成帳戶註冊和身份驗證。後端在用戶推薦關係表中記錄這10位被邀請者的資訊。系統自動為您記錄「推薦人數：10」成就。當被邀請者完成首筆交易後，系統自動為您和被邀請者各增加積分獎勵。", "social", "全等級", 150, 225, "🏆", "一次性", "/images/tasks/task-27.jpg");
+        createTask("達成 Lv3 Visionary 等級升級", "累積升級積分至750點", "通過持續完成各類任務，特別是理財和投資任務，累積升級點數達750點。後端自動檢測升級點數並確認所有升級條件。達成750點時，系統自動更新用戶等級為「Visionary」，並在檔案中記錄升級時間戳記。Visionary等級用戶可解鎖進階投資功能。", "social", "全等級", 200, 300, "🌟", "一次性", "/images/tasks/task-28.jpg");
+        createTask("達成 Lv4 Luminary 等級升級", "累積升級積分至1,500點", "通過長期投資參與和高頻交易，累積升級點數達1500點。後端自動驗證升級點數並檢查所有先決條件。達成1500點時，系統自動將用戶等級升級至「Luminary」（最高等級），並在檔案中記錄升級成就。Luminary等級用戶將獲得特殊的VIP功能標籤。", "social", "全等級", 250, 375, "👑", "一次性", "/images/tasks/task-29.jpg");
+        createTask("累積達到5,000積分", "累積升級積分至5,000點", "通過持續完成各類任務，累積升級積分達到5,000點。後端自動檢測用戶累積積分並記錄達成時間。達成5,000積分時，系統自動在用戶成就表中記錄「積分達人」成就，並在檔案中標記此身份供應用展示。", "social", "全等級", 300, 450, "🏅", "一次性", "/images/tasks/task-30.jpg");
+
+        log.info("已建立 {} 筆預設任務", taskRepository.count());
+    }
+
+    private void createTask(String title, String description, String details, String category,
+                            String levelText, int upgradePoints, int rewardPoints,
+                            String icon, String frequency, String image) {
+        Task task = new Task();
+        task.setTitle(title);
+        task.setDescription(description);
+        task.setDetails(details);
+        task.setCategory(category);
+        task.setLevelText(levelText);
+        task.setUpgradePoints(upgradePoints);
+        task.setRewardPoints(rewardPoints);
+        task.setIcon(icon);
+        task.setFrequency(frequency);
+        task.setImage(image);
+        task.setActive(true);
+        taskRepository.save(task);
+    }
+
+    /**
+     * 建立預設禮品資料
+     */
+    private void createDefaultGifts() {
+        if (giftRepository.count() > 0) {
+            log.info("禮品資料已存在，跳過初始化");
+            return;
+        }
+
+        // 🌱 永續探索系列 - Lv1 Explorer (8個)
+        createGift("LIFE PEN 種子鉛筆組", "市價NT$280", "100%回收報紙製成，一支可畫55公里直線、約一萬個中文字，但通常剩下1/3就被丟棄。將永續環保放入日常書寫，使用回收報紙製作，沒有一棵樹減少。鉛筆用到不方便書寫時，回歸土壤還能孕育新生命。每組包含5支種子鉛筆：辣椒、蘿蔔、芥末、香菜、番茄。完全可生物分解，是永續生活的最佳選擇。", "sustainable", "EXPLORER", 100, 99, "/images/gifts/gift-1.jpg", "NT$280", "lv1_only");
+        createGift("UiU 環保便攜吸管組", "市價NT$300", "採用316不鏽鋼搭配鉑金級食品矽膠製成，前端不鏽鋼隨戳隨飲，矽膠抗沾好清洗。組合包含粗細兩種口徑吸管，三秒輕折收納不費力，迷你外盒小巧便攜。耐用性強，可重複使用超過3年。榮獲德國紅點設計大獎。", "sustainable", "EXPLORER", 100, 73, "/images/gifts/gift-2.jpg", "NT$300", "lv1_only");
+        createGift("印花樂 實用環保包袋", "市價NT$390", "大容量設計可裝環保杯、錢包等日常用品，兩側分層口袋輕鬆收納卡片、鑰匙小物。100%有機棉布料，圖案由台灣設計師手繪，每件獨一無二。鐵花窗圖案靈感來自台灣老房子的生活美學，重新詮釋在布料上，賦予當代色彩配置。", "sustainable", "EXPLORER", 120, 65, "/images/gifts/gift-3.jpg", "NT$390", "lv1_only");
+        createGift("HappyEarth 回收紙筆記本", "市價NT$400", "100%回收紙漿製造，採用原色牛皮紙與回收紙板貼合而成，封面以植物性染料著色。獨家專利結構可將A5紙張作為內頁。附贈長尾夾與說明書，簡單3步驟打造專屬筆記本。每本購買支持全球廢紙回收計畫。", "sustainable", "EXPLORER", 130, 35, "/images/gifts/gift-4.jpg", "NT$400", "lv1_only");
+        createGift("沐muhair 無塑固態洗髮精", "市價NT$400", "無塑包裝固態洗髮精蘊含天然植物萃取成分，溫和不刺激頭皮。每塊重量約80克，相當於400ml液態洗髮精使用量。固態設計方便攜帶，適合旅行或健身使用。泡沫豐富細緻，清潔力佳且易沖洗，零塑膠包裝，實踐無塑生活理念。", "sustainable", "EXPLORER", 130, 85, "/images/gifts/gift-5.jpg", "NT$400", "lv1_only");
+        createGift("簡約托特包", "市價NT$450", "採用厚磅環保帆布製作，耐磨耐用、容量充足，足以容納日常通勤或購物所需。加厚提把設計減輕長時間揹負的負擔，內層簡易口袋便於整理小物。簡約百搭的風格，從通勤到休閒外出都能輕鬆駕馭。", "sustainable", "EXPLORER", 150, 99, "/images/gifts/gift-6.jpg", "NT$450", "lv1_only");
+        createGift("Re-ing 天然竹纖維便當盒", "市價NT$450", "天然竹纖維便當盒，採用環保竹纖維製成，無塑膠成分，可完全生物降解。雙層設計附密封蓋與分隔餐盤，容量約800ml，耐熱120℃可微波加熱。輕量便攜，通過衛生安全檢驗。", "sustainable", "EXPLORER", 150, 58, "/images/gifts/gift-7.jpg", "NT$450", "lv1_only");
+        createGift("SUCCULAND 多肉植物", "市價NT$590", "精選多肉植物盆栽，包含陶瓷盆器與培養土。易於照顧適合辦公桌或居家擺設，能淨化空氣增添綠意。附贈養護說明卡，新手也能輕鬆上手。多肉植物長年生長變化，作為禮物讓收禮人在日常中欣賞其成長，兼具美觀與實用。", "sustainable", "EXPLORER", 200, 23, "/images/gifts/gift-8.jpg", "NT$590", "lv1_only");
+
+        // 🪴 質感創造系列 - Lv2 Creator (8個)
+        createGift("ekax 雲朵筆電包", "市價NT$650", "採用防潑水尼龍布料外層，內裡為加厚柔軟絨布保護層，具有緩衝防護設計。適用13-14吋筆電，輕量化設計僅重208克。內夾層設計可收納滑鼠、充電線等各式小物與線材。柔軟蓬鬆似雲朵般的手感，搭配簡約圓潤外型與多色選擇，兼具實用性與時尚感。", "quality", "CREATOR", 220, 99, "/images/gifts/gift-9.jpg", "NT$650", "lv2_plus");
+        createGift("smellscape 擴香石香氛禮盒", "市價NT$700", "擴香石採吸水性陶瓷材質，滴入精油後無需插電點火，安全環保。能在車子、浴室、衣櫃等小空間慢慢擴散香氛療癒環境。可重複使用，水洗後晾乾即可更換香味。禮盒內含香氛擴香瓶10ml×2、陶瓷擴香石×1。", "quality", "CREATOR", 230, 53, "/images/gifts/gift-10.jpg", "NT$700", "lv2_plus");
+        createGift("MOFT 磁吸感應卡包支架", "市價NT$890", "MOVAS™純素皮革磁吸設計，可貼附於手機背面收納3-5張卡片。內建隱藏式支架提供直立與漂浮2種角度。厚度僅5mm、重量60克，不影響握感。適用於iPhone 12/13/14系列（mini除外），需搭配MagSafe兼容手機殼。輕鬆一翻快速展示證件，刷卡時直接取出使用。", "quality", "CREATOR", 300, 24, "/images/gifts/gift-11.jpg", "NT$890", "lv2_plus");
+        createGift("手工皮革名片夾", "市價NT$930", "職人手工縫製的真皮名片夾，嚴選義大利植鞣牛皮製作，隨使用時間呈現獨特光澤與色澤變化。內部雙層設計可收納約30張名片，另有暗袋放置重要卡片。精緻車縫線展現工藝細節，適合商務場合使用，彰顯專業品味與個人風格。", "quality", "CREATOR", 310, 9, "/images/gifts/gift-12.jpg", "NT$930", "lv2_plus");
+        createGift("Umbra 臘腸狗戒指收納座", "市價NT$930", "可愛臘腸狗造型，身體各部位設計為戒指收納柱，可同時收納多枚戒指、手鍊等飾品。絨布底座呵護珍貴戒指，避免刮傷。表面拋光質感溫潤，療癒造型兼具實用功能，擺放梳妝台或床頭櫃，為生活空間增添趣味與溫度。", "quality", "CREATOR", 310, 88, "/images/gifts/gift-13.jpg", "NT$930", "lv2_plus");
+        createGift("ROOMMI 充電感應垃圾桶", "市價NT$959", "創新折疊滑蓋設計，不佔空間、不打手。首創「自動鋪袋」科技，省力又衛生。紅外線感應0.1秒快速反應，雙重開蓋模式可感應或常開自由切換。Type-C充電加電池雙重供電，充電一次可用約60天。12公升大容量防水易清潔。", "quality", "CREATOR", 320, 28, "/images/gifts/gift-14.jpg", "NT$959", "lv2_plus");
+        createGift("KINTO 提式輕巧保溫瓶", "市價NT$1,148", "圓潤手柄蓋搭配啞光色外觀，讓OFF TIME格外輕鬆自在。18-8雙層真空不鏽鋼結構，連續6小時保溫69℃以上、保冷7℃以下。寬口徑便於清洗、放入茶包或冰塊。粉體塗裝防滑防刮傷，500ml容量滿足一日補水需求。", "quality", "CREATOR", 400, 99, "/images/gifts/gift-15.jpg", "NT$1,148", "lv2_plus");
+        createGift("MOMOCONCEPT 保溫杯", "市價NT$1,501", "來自日本東京的設計品牌，源自健康自然、可持續的生活哲學。食品級PP防燙杯口搭配304不鏽鋼杯體，保溫保冷效果俱佳。硅膠密封圈與防滑底墊設計，400ml容量單手可握，溫潤質感展現美學品味，為生活注入怦然心動的力量。", "quality", "CREATOR", 500, 55, "/images/gifts/gift-16.jpg", "NT$1,501", "lv2_plus");
+
+        // 🕯️ 美學先鋒系列 - Lv3 Visionary (8個)
+        createGift("mordeco 轉轉零錢筒", "市價NT$1,580", "採用山毛櫸木與鋁合金製成，內部設有螺旋軌道。投入硬幣後沿著軌道旋轉滑落，過程療癒有趣。上方開口方便投幣，底部可旋轉開啟取出零錢。容量可存放約3000元零錢，不僅是實用的儲蓄工具，更是桌面趣味擺飾。", "aesthetic", "VISIONARY", 530, 36, "/images/gifts/gift-17.jpg", "NT$1,580", "lv3_plus");
+        createGift("Vana 香氛蠟燭暖燈", "市價NT$1,790", "瑞典設計香氛蠟燭暖燈，北歐極簡風格搭配春夏粉嫩色系。採鹵素燈加熱，無煙無焰無火方式融化蠟燭，避免隧道現象並延長蠟燭壽命(+20%)。可調光功能營造氛圍，適用高度11cm、直徑10cm以內的蠟燭。輕量金屬設計耐用易用，內附2顆鹵素燈泡，為居家增添溫馨與香氛享受。", "aesthetic", "VISIONARY", 600, 19, "/images/gifts/gift-18.jpg", "NT$1,790", "lv3_plus");
+        createGift("MUJI 超音波芬香噴霧器", "市價NT$1,790", "超音波震盪技術將水與精油霧化噴出，適用3～4坪空間。可調式定時功能(180/120/60/30分鐘)，自動斷電安全設計。續航約3小時，簡約圓潤白色外型適合各種居家風格。適用於客廳、寢室、邊桌擺放，內附專用AC轉接器，為空間帶來舒適香氛與濕度調節。", "aesthetic", "VISIONARY", 600, 16, "/images/gifts/gift-19.jpg", "NT$1,790", "lv3_plus");
+        createGift("MOMAX 無線充電行動電源", "市價NT$1,980", "容量10,000mAh，支援Qi無線充電(10W)與USB-C/USB-A有線充電。可同時為3台裝置充電，支援快充協議。輕薄設計厚度19mm，重量231克。LED電量顯示清楚易讀，內建多重安全保護機制，是外出必備的充電利器。", "aesthetic", "VISIONARY", 660, 18, "/images/gifts/gift-20.jpg", "NT$1,980", "lv3_plus");
+        createGift("JWAY 砧板刀具烘乾消毒機", "市價NT$2,480", "紫外線UV-C、巴氏殺菌(65度120分鐘)與24小時循環殺菌，三重殺菌率達99.9%。配有三款TPU防霉砧板(生/熟食/蔬果分類)與刀具收納架，砧板可彎折倒菜、凹槽防汁液外流。獨立不銹鋼架設計便於清潔，底部滑水盤防漬檯面。為廚房食安與衛生的最佳把關。", "aesthetic", "VISIONARY", 830, 13, "/images/gifts/gift-21.jpg", "NT$2,480", "lv3_plus");
+        createGift("Oakywood 無線充電盤", "市價NT$3,200", "實木與不銹鋼手工製作，達30W無線快充，相容所有Qi設備。三色選擇——橡木、胡桃木、黑色，每件木紋獨一無二。支援大多數4mm以下手機殼，內附2米USB-C編織線與電源適配器。尺寸20x11x1.5cm，兼具藝術與功能，將科技轉化為桌面美學。", "aesthetic", "VISIONARY", 1100, 49, "/images/gifts/gift-22.jpg", "NT$3,200", "lv3_plus");
+        createGift("Bellwood 雨傘收納架", "市價NT$3,385", "源自加拿大多倫多的Umbra，產品線以居家為主軸，從日常生活中汲取設計靈感。採用樹脂、鋼、桉木、白蠟木材質，高約67公分，可收納8-10把傘。防生鏽樹脂底座耐用時尚，圓形底座搭配弧形木飾面手柄。底部附可拆卸接水盤，木製配件予人溫馨恬靜感，適合玄關或營業空間使用。", "aesthetic", "VISIONARY", 1100, 22, "/images/gifts/gift-23.jpg", "NT$3,385", "lv3_plus");
+        createGift("Wanu 銜月床頭燈", "市價NT$3,500", "創新月型燈設計靈感來自月相變化，可360度旋轉調整照明角度。LED光源，三段式色溫調節（暖光/自然光/白光），亮度無段調整。觸控式開關操作便利，底座採實木與金屬材質，穩固質感佳，為臥室營造溫馨柔和的閱讀光線。", "aesthetic", "VISIONARY", 1200, 7, "/images/gifts/gift-24.jpg", "NT$3,500", "lv3_plus");
+
+        // 💼 品味閃耀系列 - Lv4 Luminary (8個)
+        createGift("夏慕尼星級饗宴餐券", "市價NT$4,818", "精選頂級食材現場鐵板料理，融合台灣在地食材與經典法式料理。主餐台灣櫻桃鴨胸低溫舒肥搭配大明蝦與特調醬汁，專業鐵板燒師傅展現精湛廚藝，提供五感饗宴體驗。法式可麗餅佐香草冰淇淋鐵板點火壓軸，提供葡萄酒或精選茶飲搭配。適合慶祝紀念日，創造難忘美食回憶。", "premium", "LUMINARY", 1600, 14, "/images/gifts/gift-25.jpg", "NT$4,818", "lv4_only");
+        createGift("Porter 真皮公事包", "市價NT$5,850", "PORTER INTERNATIONAL突破常規設計，傳遞自由不羈的生活態度。手提織帶延伸包身，袋型堅實硬挺，搭載剛強面料為商務、旅行人士提供堅實支撐。織帶附D環可吊掛個人小物，可拆式背帶提供斜背、肩背兩用背法。隨性與都會風格完美融合，精密車工展現工藝，無論前往何處，始終陪伴您探索旅程。", "premium", "LUMINARY", 1950, 18, "/images/gifts/gift-26.jpg", "NT$5,850", "lv4_only");
+        createGift("LAMY 2000 鋼筆", "市價NT$7,020", "筆身不鏽鋼刷紋材質，霧面處理質感細膩，搭配14K金鍍鉑筆尖，書寫流利滑順。活塞式供墨系統墨水容量大，是鋼筆玩家級的經典筆款。完美弧形設計握感舒適，長時間書寫不疲累，是書寫愛好者與收藏家的夢幻逸品。", "premium", "LUMINARY", 2300, 26, "/images/gifts/gift-27.jpg", "NT$7,020", "lv4_only");
+        createGift("AirPods Pro 3", "市價NT$7,490", "入耳主動式降噪效果，相比前代提升最高可達2倍。心率感測功能協助體能訓練追蹤心率，消耗卡路里數據清晰。H2晶片驅動帶來撼動心弦的3D音訊體驗，適應性等化與個人化空間音訊根據耳形與頭部結構量身打造。支援即時翻譯、語音隔離，8小時聆聽時間，IP57防塵防水適合各種運動。", "premium", "LUMINARY", 2500, 21, "/images/gifts/gift-28.jpg", "NT$7,490", "lv4_only");
+        createGift("Dyson Supersonic Nural™ 吹風機", "市價NT$9,999", "智能調溫55°C恆溫呵護頭皮，自動調整增強自然光澤。三段式氣流與四段式溫度設定靈活切換，避免熱傷害同時秀髮水潤光澤。配備五款智能配件適合各種髮質，1,400W高效能馬達搭配800克輕量化設計，創新科技融入每個細節。", "premium", "LUMINARY", 3300, 5, "/images/gifts/gift-29.jpg", "NT$9,999", "lv4_only");
+        createGift("Apple Watch Series 11", "市價NT$12,900", "搭載S10晶片驅動，隨顯Retina顯示器亮度最高達2,000尼特，陽光下清晰可見。進階健康監測功能包含心電圖、血氧濃度、體溫感測，全面監測心率、呼吸速率與睡眠數據。心律不整、睡眠呼吸中止症通知讓健康無所遁形。防水50公尺適合游泳浮潛，GPS與行動網路選項提供完整定位。SOS緊急服務與跌倒偵測保障安全，最長24小時電池續航，低耗電模式可達38小時。", "premium", "LUMINARY", 4300, 4, "/images/gifts/gift-30.jpg", "NT$12,900", "lv4_only");
+        createGift("LOJEL 30吋前開式行李箱", "市價NT$15,800", "前開式行李箱最熱門品牌之一，免將行李箱放倒即可取物，車站機場使用超便利。30吋大尺寸配備上蓋內側多口袋設計方便收納。100%德國拜耳PC材質堅固耐撞擊且輕盈，雙齒防盜防爆拉鍊防潑水，360度靜音飛機輪推行順暢。", "premium", "LUMINARY", 5300, 3, "/images/gifts/gift-31.jpg", "NT$15,800", "lv4_only");
+        createGift("雲品尊榮湖景客房住宿券", "市價NT$18,888", "平日雙人入住一晚，含自助餐廳晚餐與翌日早餐。坐擁日月潭絕美湖景第一排視野，房內配備獨立大理石溫泉浴池，邊泡湯邊欣賞湖光山色。飯店設施包含健身房、溫泉SPA與室內泳池，入住期間享雲水行政酒廊禮遇，打造奢華放鬆的度假體驗。", "premium", "LUMINARY", 6300, 3, "/images/gifts/gift-32.jpg", "NT$18,888", "lv4_only");
+
+        log.info("已建立 {} 筆預設禮品", giftRepository.count());
+    }
+
+    private void createGift(String title, String description, String details, String series,
+                            String levelText, int points, int stock, String image,
+                            String marketPrice, String levelRestriction) {
+        Gift gift = new Gift();
+        gift.setTitle(title);
+        gift.setDescription(description);
+        gift.setDetails(details);
+        gift.setSeries(series);
+        gift.setLevelText(levelText);
+        gift.setRequiredPoints(points);
+        gift.setStock(stock);
+        gift.setImage(image);
+        gift.setMarketPrice(marketPrice);
+        gift.setLevelRestriction(levelRestriction);
+        giftRepository.save(gift);
     }
 
     private void createMockActivityRecords() {
@@ -356,55 +527,75 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     /**
-     * 建立預設的客服快速回覆設定
+     * 建立預設的客服快速回覆設定（每次啟動都會重建，確保與程式碼同步）
      */
     private void createDefaultChatbotReplies() {
-        if (chatbotReplyRepository.count() > 0) {
-            log.info("客服快速回覆設定已存在，跳過初始化");
-            return;
-        }
+        // 先刪除舊資料，確保每次啟動都使用最新設定
+        chatbotReplyRepository.deleteAll();
+        log.info("已清除舊的客服快速回覆設定，重新建立...");
 
-        // 出貨/物流
-        ChatbotReply shipping = new ChatbotReply();
-        shipping.setId("shipping");
-        shipping.setKeyword("出貨|寄送|物流|配送|多久會到|進度");
-        shipping.setReply("您好！禮品兌換後，我們會在 3-5 個工作天內處理出貨。實際到貨時間依配送地區而定，通常為出貨後 1-3 天。\n\n您可以在個人頁面的「兌換紀錄」查看目前的處理狀態喔！");
-        chatbotReplyRepository.save(shipping);
-
-        // 積分
+        // 如何獲得積分
         ChatbotReply points = new ChatbotReply();
         points.setId("points");
         points.setKeyword("積分.*怎麼|積分.*如何|積分.*獲得|積分.*賺|怎麼.*積分|如何.*積分");
-        points.setReply("獲得積分的方式有：\n\n📅 每日登入、連續登入\n✅ 完成任務獲得對應積分\n\n💡 前往「任務清單」領取任務，完成後即可獲得積分獎勵！\n\n升級積分用於提升等級，獎勵積分用於兌換禮品喔！");
+        points.setReply("📅 每日登入、連續登入七天都可獲得積分\n💡 前往「任務清單」領取任務，完成後即可獲得積分獎勵！\n\n升級積分 → 提升等級\n獎勵積分 → 兌換禮品");
         chatbotReplyRepository.save(points);
 
-        // 等級
-        ChatbotReply level = new ChatbotReply();
-        level.setId("level");
-        level.setKeyword("等級|level");
-        level.setReply("ShineUp 共有 4 個等級：\n\n⭐ Lv1 EXPLORER 探索者（0-299 升級積分）\n⭐ Lv2 CREATOR 創造者（300-599 升級積分）\n⭐ Lv3 VISIONARY 遠見者（600-999 升級積分）\n⭐ Lv4 LUMINARY 領航者（1000+ 升級積分）\n\n等級越高，可以兌換的禮品種類越多！");
-        chatbotReplyRepository.save(level);
-
-        // 兌換
+        // 如何兌換禮品
         ChatbotReply redeem = new ChatbotReply();
         redeem.setId("redeem");
         redeem.setKeyword("兌換.*怎麼|兌換.*如何|怎麼.*兌換|如何.*兌換");
-        redeem.setReply("兌換禮品的步驟：\n\n1️⃣ 前往「禮品總覽」頁面瀏覽禮品\n2️⃣ 選擇想要的禮品並加入購物車\n3️⃣ 確認兌換資訊後送出訂單\n4️⃣ 等待處理出貨\n\n📦 您可以在個人頁面的「兌換紀錄」查看訂單狀態喔！\n\n⚠️ 請注意：部分禮品有等級限制，需達到指定等級才能兌換。");
+        redeem.setReply("1️⃣ 前往「禮品總覽」挑選禮品\n2️⃣ 加入購物車，確認後送出訂單\n3️⃣ 等待出貨通知\n\n📋 可至「兌換紀錄」查詢訂單狀態，部分禮品設有等級限制，升級解鎖更多好禮！");
         chatbotReplyRepository.save(redeem);
+
+        // 等級制度說明
+        ChatbotReply level = new ChatbotReply();
+        level.setId("level");
+        level.setKeyword("等級|level");
+        level.setReply("ShineUp 共有 4 個等級，等級越高，能兌換的禮品越多！\n\n✨ Lv1 EXPLORER 0-299分\n🌟 Lv2 CREATOR 300-599分\n☄️ Lv3 VISIONARY 600-999分\n👑 Lv4 LUMINARY 1000+分");
+        chatbotReplyRepository.save(level);
+
+        // 出貨進度
+        ChatbotReply shipping = new ChatbotReply();
+        shipping.setId("shipping");
+        shipping.setKeyword("出貨|寄送|物流|配送|多久會到|進度");
+        shipping.setReply("📦 兌換成功後，我們會在 3-5 個工作天內完成出貨\n🚚 出貨後約 1-3 天送達，隨時到「兌換紀錄」查看最新狀態！");
+        chatbotReplyRepository.save(shipping);
 
         // 人工客服
         ChatbotReply support = new ChatbotReply();
         support.setId("support");
         support.setKeyword("真人|人工|客服|聯絡|聯繫|專員");
-        support.setReply("如需人工客服協助，請透過以下方式聯繫我們：\n\nEmail：support@shineup.com\n服務專線：(02) 1234-5678\n服務時間：週一至週五 9:00-18:00\n\n我們會盡快回覆您的問題！");
+        support.setReply("需要真人協助嗎？歡迎聯絡我們：\n\n📧 support@shineup.com\n📞 (02) 1234-5678\n⏰ 週一至週五 9:00-18:00\n\n我們會盡快回覆您的問題！");
         chatbotReplyRepository.save(support);
 
-        // 訂單查詢
+        // 訂單查詢（關鍵字自動回覆，非快速按鈕）
         ChatbotReply order = new ChatbotReply();
         order.setId("order");
-        order.setKeyword("訂單.*查|訂單.*哪裡|訂單.*看");
-        order.setReply("您可以在個人頁面的「訂單紀錄」區塊查看所有兌換訂單，包含處理中、已出貨、已完成等狀態。");
+        order.setKeyword("訂單.*查|訂單.*哪裡|訂單.*看|查.*訂單");
+        order.setReply("📋 您可以在個人頁面的「兌換紀錄」查看所有訂單狀態，包含處理中、已出貨、已完成等進度！");
         chatbotReplyRepository.save(order);
+
+        // 打招呼（關鍵字自動回覆）
+        ChatbotReply greeting = new ChatbotReply();
+        greeting.setId("greeting");
+        greeting.setKeyword("您好|你好|嗨|哈囉|hi|hello|hey|安安|早安|午安|晚安");
+        greeting.setReply("嗨！我是 ShineUp 小幫手 👋\n\n▼ 快速解答看這裡 ▼\n點選下方按鈕馬上找到答案！");
+        chatbotReplyRepository.save(greeting);
+
+        // 感謝（關鍵字自動回覆）
+        ChatbotReply thanks = new ChatbotReply();
+        thanks.setId("thanks");
+        thanks.setKeyword("謝謝|感謝|3q|thank|thx|感恩|多謝");
+        thanks.setReply("不客氣！很高興能幫上忙 😊");
+        chatbotReplyRepository.save(thanks);
+
+        // 任務相關（關鍵字自動回覆）
+        ChatbotReply task = new ChatbotReply();
+        task.setId("task");
+        task.setKeyword("任務.*怎麼|任務.*如何|任務.*哪裡|怎麼.*任務|如何.*任務|做.*任務|領.*任務");
+        task.setReply("📋 前往「任務清單」即可查看所有可領取的任務！\n\n💡 任務分為每日、每週、每月和一次性任務\n✅ 點擊任務卡片可查看詳細說明\n🎁 完成任務即可獲得升級積分和獎勵積分");
+        chatbotReplyRepository.save(task);
 
         log.info("已建立預設客服快速回覆設定");
     }

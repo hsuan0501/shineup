@@ -4,16 +4,6 @@ import { ref, computed } from 'vue'
 export const useCartStore = defineStore('cart', () => {
   const cartItems = ref([
     {
-      id: 1,
-      title: 'LIFE PEN 種子鉛筆組',
-      description: '市價NT$280',
-      image: '/images/gifts/gift-1.jpg',
-      points: 100,
-      level: 'EXPLORER',
-      series: 'sustainable',
-      quantity: 1
-    },
-    {
       id: 2,
       title: 'UiU 環保便攜吸管組',
       description: '市價NT$300',

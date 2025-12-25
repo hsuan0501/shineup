@@ -27,7 +27,7 @@
           </svg>
         </div>
         <div>
-          <h3 class="text-white font-semibold text-sm">ShineUp AI 客服</h3>
+          <h3 class="text-white font-semibold text-sm">ShineUp 小幫手</h3>
           <p class="text-white/80 text-xs">有問題隨時問我</p>
         </div>
       </div>
@@ -41,7 +41,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
           </div>
-          <p class="text-gray-600 dark:text-gray-300 text-sm">您好！我是 ShineUp AI 客服</p>
+          <p class="text-gray-600 dark:text-gray-300 text-sm">嗨！我是 ShineUp 小幫手 👋</p>
           <p class="text-gray-400 dark:text-gray-500 text-xs mt-1">有任何問題都可以問我</p>
         </div>
 

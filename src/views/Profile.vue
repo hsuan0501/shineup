@@ -113,6 +113,30 @@
                   <div class="text-sm text-purple-600 dark:text-purple-400 mt-1">用於兌換禮品</div>
                 </div>
               </div>
+
+              <!-- 推薦連結 -->
+              <div v-if="user.referralCode" class="mt-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl p-4 hover:scale-[1.02] transition-transform duration-300">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span class="text-sm font-medium">邀請好友</span>
+                  </div>
+                  <span class="text-xs text-amber-500 dark:text-amber-400">每位 +50 升級 / +75 兌換積分</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="text" readonly :value="referralLink"
+                    class="flex-1 px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-amber-200 dark:border-amber-800 rounded-lg text-gray-700 dark:text-gray-300 truncate" />
+                  <button @click="copyReferralLink"
+                    class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    複製
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -429,6 +453,22 @@ const levelProgress = computed(() => {
   const total = nextLevelPoints.value - currentLevelConfig.value.minPoints
   return Math.min((current / total) * 100, 100)
 })
+
+// 推薦連結（導向專屬註冊頁）
+const referralLink = computed(() => {
+  if (!user.value.referralCode) return ''
+  return `${window.location.origin}/register?ref=${user.value.referralCode}`
+})
+
+// 複製推薦連結
+const copyReferralLink = async () => {
+  try {
+    await navigator.clipboard.writeText(referralLink.value)
+    store.showToast('推薦連結已複製！', 'success')
+  } catch (err) {
+    store.showToast('複製失敗，請手動複製', 'error')
+  }
+}
 
 // 假資料（當後端沒資料時 Demo 用）
 const mockRecords = [

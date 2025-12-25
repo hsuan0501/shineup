@@ -32,6 +32,8 @@ public class AchievementService {
     private static final Long TASK_LEVEL_VISIONARY = 28L;  // 達成 Lv3 Visionary 等級升級
     private static final Long TASK_LEVEL_LUMINARY = 29L;   // 達成 Lv4 Luminary 等級升級
     private static final Long TASK_POINTS_5000 = 30L;      // 累積達到5,000積分
+    private static final Long TASK_INVITE_5 = 26L;         // 累積邀請 5 位好友
+    private static final Long TASK_INVITE_10 = 27L;        // 累積邀請 10 位好友
 
     /**
      * 檢查並自動完成等級/積分相關的成就任務
@@ -151,5 +153,26 @@ public class AchievementService {
 
         log.info("用戶 {} 自動完成成就任務: {}", user.getName(), task.getTitle());
         return true;
+    }
+
+    /**
+     * 檢查邀請成就（5人、10人）
+     * 在推薦成功時呼叫
+     */
+    @Transactional
+    public void checkInviteAchievements(User user, int friendsInvited) {
+        // 檢查邀請 5 位好友成就
+        if (friendsInvited >= 5) {
+            if (autoCompleteTaskIfNotDone(user, TASK_INVITE_5)) {
+                log.info("用戶 {} 達成邀請 5 位好友成就", user.getName());
+            }
+        }
+
+        // 檢查邀請 10 位好友成就
+        if (friendsInvited >= 10) {
+            if (autoCompleteTaskIfNotDone(user, TASK_INVITE_10)) {
+                log.info("用戶 {} 達成邀請 10 位好友成就", user.getName());
+            }
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.shineup.backend.repository;
 
 import com.shineup.backend.entity.Task;
-import com.shineup.backend.entity.User.MemberLevel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -10,5 +9,5 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByActiveTrue();
     List<Task> findByCategory(String category);
-    List<Task> findByRequiredLevel(MemberLevel level);
+    List<Task> findByLevelText(String levelText);
 }

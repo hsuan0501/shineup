@@ -17,11 +17,13 @@ public class Gift {
 
     private String description;
 
+    @Column(columnDefinition = "TEXT")
+    private String details;
+
     private String series;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "required_level", nullable = false)
-    private User.MemberLevel requiredLevel = User.MemberLevel.EXPLORER;
+    @Column(name = "level_text")
+    private String levelText; // "EXPLORER", "CREATOR", "VISIONARY", "LUMINARY"
 
     @Column(name = "required_points")
     private Integer requiredPoints = 0;
@@ -29,4 +31,10 @@ public class Gift {
     private Integer stock = 0;
 
     private String image;
+
+    @Column(name = "market_price")
+    private String marketPrice;
+
+    @Column(name = "level_restriction")
+    private String levelRestriction; // "lv1_only", "lv2_plus", "lv3_plus", "lv4_only"
 }

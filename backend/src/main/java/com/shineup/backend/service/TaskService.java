@@ -10,8 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +69,7 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("用戶不存在"));
 
         // 檢查用戶等級是否符合任務要求
-        if (user.getLevel().ordinal() < task.getRequiredLevel().ordinal()) {
+        if (!isUserLevelSufficient(user.getLevel(), task.getLevelText())) {
             throw new RuntimeException("等級不足，無法完成此任務");
         }
 
@@ -125,8 +129,62 @@ public class TaskService {
         }
     }
 
+    // 檢查用戶等級是否符合要求
+    private boolean isUserLevelSufficient(User.MemberLevel userLevel, String levelText) {
+        if (levelText == null || levelText.equals("全等級")) {
+            return true; // 全等級都可以
+        }
+        int requiredLevel = 0;
+        if (levelText.contains("Lv2") || levelText.contains("LV2")) {
+            requiredLevel = 1; // CREATOR
+        } else if (levelText.contains("Lv3") || levelText.contains("LV3")) {
+            requiredLevel = 2; // VISIONARY
+        } else if (levelText.contains("Lv4") || levelText.contains("LV4")) {
+            requiredLevel = 3; // LUMINARY
+        }
+        return userLevel.ordinal() >= requiredLevel;
+    }
+
     // 取得用戶已完成的任務
     public List<UserTaskProgress> getCompletedTasks(Long userId) {
         return userTaskProgressRepository.findByUserIdAndCompletedTrue(userId);
+    }
+
+    // 重置用戶的特定任務進度
+    @Transactional
+    public void resetTaskProgress(Long taskId, Long userId) {
+        userTaskProgressRepository.findByUserIdAndTaskId(userId, taskId)
+                .ifPresent(userTaskProgressRepository::delete);
+    }
+
+    // 取得所有任務並附上用戶的完成狀態
+    public List<Map<String, Object>> findAllWithUserProgress(Long userId) {
+        List<Task> allTasks = taskRepository.findByActiveTrue();
+
+        // 取得用戶已完成的任務 ID 集合
+        Set<Long> completedTaskIds = userTaskProgressRepository
+                .findByUserIdAndCompletedTrue(userId)
+                .stream()
+                .map(progress -> progress.getTask().getId())
+                .collect(Collectors.toSet());
+
+        // 將任務轉換為帶有 completed 狀態的 Map
+        return allTasks.stream().map(task -> {
+            Map<String, Object> taskMap = new HashMap<>();
+            taskMap.put("id", task.getId());
+            taskMap.put("title", task.getTitle());
+            taskMap.put("description", task.getDescription());
+            taskMap.put("details", task.getDetails());
+            taskMap.put("category", task.getCategory());
+            taskMap.put("upgradePoints", task.getUpgradePoints());
+            taskMap.put("rewardPoints", task.getRewardPoints());
+            taskMap.put("image", task.getImage());
+            taskMap.put("icon", task.getIcon());
+            taskMap.put("frequency", task.getFrequency());
+            taskMap.put("levelText", task.getLevelText());
+            taskMap.put("active", task.getActive());
+            taskMap.put("completed", completedTaskIds.contains(task.getId()));
+            return taskMap;
+        }).collect(Collectors.toList());
     }
 }

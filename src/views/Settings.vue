@@ -183,6 +183,93 @@
         </div>
       </div>
 
+      <!-- 銀行帳戶 -->
+      <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+            銀行帳戶
+          </h3>
+          <button @click="showAddBankForm = !showAddBankForm"
+            class="px-3 py-1.5 rounded-full text-sm font-medium transition-all hover:scale-105 active:scale-95"
+            :class="showAddBankForm
+              ? 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
+              : 'bg-emerald-500 text-white hover:bg-emerald-600'">
+            {{ showAddBankForm ? '取消' : '+ 新增帳戶' }}
+          </button>
+        </div>
+
+        <!-- 新增帳戶表單 -->
+        <div v-if="showAddBankForm" class="mb-4 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
+          <div class="space-y-3">
+            <!-- 銀行選擇 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">銀行</label>
+              <select v-model="bankForm.bankCode" @change="onBankSelect"
+                class="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+                <option value="">請選擇銀行</option>
+                <option v-for="bank in banks" :key="bank.code" :value="bank.code">
+                  {{ bank.code }} {{ bank.name }}
+                </option>
+              </select>
+            </div>
+            <!-- 帳號 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">帳號</label>
+              <input type="text" v-model="bankForm.accountNumber" placeholder="請輸入銀行帳號"
+                class="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+            </div>
+            <!-- 戶名 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">戶名</label>
+              <input type="text" v-model="bankForm.accountName" placeholder="請輸入戶名"
+                class="w-full px-4 py-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+            </div>
+            <!-- 錯誤訊息 -->
+            <p v-if="bankFormError" class="text-xs text-pink-600 dark:text-pink-400">{{ bankFormError }}</p>
+            <!-- 提交按鈕 -->
+            <button @click="addBankAccount"
+              class="w-full py-2.5 rounded-xl bg-emerald-500 text-white font-medium hover:bg-emerald-600 transition-all hover:scale-[1.02] active:scale-95">
+              綁定帳戶（可獲得 15 積分）
+            </button>
+          </div>
+        </div>
+
+        <!-- 已綁定帳戶列表 -->
+        <div class="space-y-3">
+          <div v-if="bankAccounts.length === 0" class="text-center py-6 text-gray-500 dark:text-gray-400">
+            <svg class="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+            <p class="text-sm">尚未綁定任何銀行帳戶</p>
+            <p class="text-xs mt-1">每綁定一個帳戶可獲得 15 升級積分 + 15 獎勵積分</p>
+          </div>
+
+          <div v-for="account in bankAccounts" :key="account.id"
+            class="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 dark:bg-gray-800/50">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">{{ account.bankCode }}</span>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ account.bankName }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ maskAccountNumber(account.accountNumber) }} · {{ account.accountName }}
+                </p>
+              </div>
+            </div>
+            <button @click="deleteBankAccount(account.id)"
+              class="p-2 rounded-full text-gray-400 hover:text-pink-500 hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- 通知設定 -->
       <div class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -249,6 +336,33 @@
               ]"></div>
             </button>
           </div>
+
+          <!-- 訂閱電子報（任務：+10積分） -->
+          <div class="flex items-center justify-between py-2 border-t border-gray-100 dark:border-gray-600/30 pt-4 mt-2">
+            <div>
+              <p class="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                訂閱電子報
+                <span v-if="!form.newsletterSubscribed" class="text-xs text-emerald-500 font-normal">+10 積分</span>
+                <span v-else class="text-xs text-gray-400 font-normal">已完成</span>
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">每週接收理財週報與平台最新消息</p>
+            </div>
+            <button @click="form.newsletterSubscribed = !form.newsletterSubscribed"
+              :disabled="store.currentUser?.newsletterSubscribed"
+              :class="[
+                'relative w-14 h-8 rounded-full shadow-inner border transition-all duration-300',
+                store.currentUser?.newsletterSubscribed
+                  ? 'bg-gray-300 dark:bg-gray-600 border-gray-300/50 cursor-not-allowed'
+                  : form.newsletterSubscribed
+                    ? 'bg-gradient-to-r from-emerald-400 to-teal-500 border-emerald-300/50 hover:scale-[1.02] active:scale-95'
+                    : 'bg-gray-200 dark:bg-gray-700 border-gray-300/30 dark:border-gray-600/30 hover:scale-[1.02] active:scale-95'
+              ]">
+              <div :class="[
+                'absolute top-1 w-6 h-6 rounded-full bg-white shadow-md transition-all duration-300',
+                form.newsletterSubscribed ? 'left-[calc(100%-1.75rem)]' : 'left-1'
+              ]"></div>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -272,6 +386,7 @@ import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore, useUIStore } from '@/store'
 import { storeToRefs } from 'pinia'
+import { userAPI, bankAccountAPI } from '@/api'
 import axios from 'axios'
 
 const router = useRouter()
@@ -289,6 +404,135 @@ const handleLogout = () => {
 // LINE 綁定狀態
 const isLineBound = computed(() => !!store.currentUser?.lineId)
 
+// ====== 銀行帳戶相關 ======
+const bankAccounts = ref([])
+const showAddBankForm = ref(false)
+const bankForm = reactive({
+  bankCode: '',
+  bankName: '',
+  accountNumber: '',
+  accountName: ''
+})
+const bankFormError = ref('')
+
+// 台灣常見銀行列表
+const banks = [
+  { code: '004', name: '臺灣銀行' },
+  { code: '005', name: '土地銀行' },
+  { code: '006', name: '合作金庫' },
+  { code: '007', name: '第一銀行' },
+  { code: '008', name: '華南銀行' },
+  { code: '009', name: '彰化銀行' },
+  { code: '011', name: '上海商銀' },
+  { code: '012', name: '台北富邦' },
+  { code: '013', name: '國泰世華' },
+  { code: '017', name: '兆豐銀行' },
+  { code: '021', name: '花旗銀行' },
+  { code: '048', name: '王道銀行' },
+  { code: '050', name: '臺灣企銀' },
+  { code: '052', name: '渣打銀行' },
+  { code: '053', name: '台中商銀' },
+  { code: '054', name: '京城銀行' },
+  { code: '081', name: '匯豐銀行' },
+  { code: '102', name: '華泰銀行' },
+  { code: '103', name: '臺灣新光' },
+  { code: '108', name: '陽信銀行' },
+  { code: '118', name: '板信銀行' },
+  { code: '147', name: '三信銀行' },
+  { code: '700', name: '中華郵政' },
+  { code: '803', name: '聯邦銀行' },
+  { code: '805', name: '遠東銀行' },
+  { code: '806', name: '元大銀行' },
+  { code: '807', name: '永豐銀行' },
+  { code: '808', name: '玉山銀行' },
+  { code: '809', name: '凱基銀行' },
+  { code: '810', name: '星展銀行' },
+  { code: '812', name: '台新銀行' },
+  { code: '816', name: '安泰銀行' },
+  { code: '822', name: '中國信託' }
+]
+
+// 載入銀行帳戶
+const loadBankAccounts = async () => {
+  if (!store.currentUser?.id) return
+  try {
+    const response = await bankAccountAPI.getByUserId(store.currentUser.id)
+    bankAccounts.value = response.data
+  } catch (error) {
+    console.error('Load bank accounts error:', error)
+  }
+}
+
+// 選擇銀行時自動填入銀行名稱
+const onBankSelect = () => {
+  const selected = banks.find(b => b.code === bankForm.bankCode)
+  if (selected) {
+    bankForm.bankName = selected.name
+  }
+}
+
+// 新增銀行帳戶
+const addBankAccount = async () => {
+  bankFormError.value = ''
+
+  // 驗證
+  if (!bankForm.bankCode || !bankForm.accountNumber || !bankForm.accountName) {
+    bankFormError.value = '請填寫所有必填欄位'
+    return
+  }
+
+  if (!/^\d{10,16}$/.test(bankForm.accountNumber)) {
+    bankFormError.value = '請輸入有效的帳號（10-16位數字）'
+    return
+  }
+
+  try {
+    const response = await bankAccountAPI.add({
+      bankCode: bankForm.bankCode,
+      bankName: bankForm.bankName,
+      accountNumber: bankForm.accountNumber,
+      accountName: bankForm.accountName
+    })
+
+    // 重新載入帳戶列表
+    await loadBankAccounts()
+
+    // 重置表單
+    bankForm.bankCode = ''
+    bankForm.bankName = ''
+    bankForm.accountNumber = ''
+    bankForm.accountName = ''
+    showAddBankForm.value = false
+
+    // 顯示成功訊息
+    store.showToast(response.data.message || '銀行帳戶綁定成功！', 'success')
+  } catch (error) {
+    console.error('Add bank account error:', error)
+    bankFormError.value = error.response?.data?.message || '新增失敗，請稍後再試'
+  }
+}
+
+// 刪除銀行帳戶
+const deleteBankAccount = async (accountId) => {
+  if (!confirm('確定要刪除此銀行帳戶嗎？')) return
+
+  try {
+    await bankAccountAPI.delete(accountId)
+    await loadBankAccounts()
+    store.showToast('銀行帳戶已刪除', 'success')
+  } catch (error) {
+    console.error('Delete bank account error:', error)
+    store.showToast(error.response?.data?.message || '刪除失敗', 'error')
+  }
+}
+
+// 帳號遮罩顯示
+const maskAccountNumber = (accountNumber) => {
+  if (!accountNumber || accountNumber.length < 4) return '****'
+  const len = accountNumber.length
+  return '*'.repeat(len - 4) + accountNumber.slice(-4)
+}
+
 // 錯誤訊息
 const errors = reactive({
   name: '',
@@ -297,9 +541,8 @@ const errors = reactive({
   address: ''
 })
 
-// 默認值
+// 默認值（不包含生日，生日必須由用戶自行填寫）
 const defaults = {
-  birthday: '2025-09-01',
   phone: '0912345678',
   city: '台北市',
   district: '中山區',
@@ -314,15 +557,16 @@ const form = reactive({
   phone: '',
   city: '',
   district: '',
-  address: ''
+  address: '',
+  newsletterSubscribed: false
 })
 
 // 載入現有資料
-onMounted(() => {
+onMounted(async () => {
   if (store.currentUser) {
     form.name = store.currentUser.name || ''
     form.email = store.currentUser.email || ''
-    form.birthday = store.currentUser.birthday || defaults.birthday
+    form.birthday = store.currentUser.birthday || ''  // 生日不使用預設值
     form.phone = store.currentUser.phone || defaults.phone
     // 地址解析或使用默認值
     if (store.currentUser.address) {
@@ -349,6 +593,12 @@ onMounted(() => {
       form.district = defaults.district
       form.address = defaults.address
     }
+
+    // 載入電子報訂閱狀態
+    form.newsletterSubscribed = store.currentUser.newsletterSubscribed || false
+
+    // 載入銀行帳戶
+    await loadBankAccounts()
   }
 })
 
@@ -427,7 +677,7 @@ const toggleNotification = async (key, label) => {
 }
 
 // 儲存設定
-const saveSettings = () => {
+const saveSettings = async () => {
   if (!validateForm()) {
     store.showToast('請填寫所有必填欄位', 'error')
     return
@@ -436,15 +686,41 @@ const saveSettings = () => {
   // 組合完整地址
   const fullAddress = `${form.city}${form.district}${form.address}`
 
-  // 更新 store.currentUser
-  if (store.currentUser) {
-    store.currentUser.name = form.name
-    store.currentUser.birthday = form.birthday
-    store.currentUser.phone = form.phone
-    store.currentUser.address = fullAddress
-  }
+  try {
+    // 準備更新資料
+    const userData = {
+      ...store.currentUser,
+      name: form.name,
+      phone: form.phone,
+      address: fullAddress,
+      birthday: form.birthday || null,
+      newsletterSubscribed: form.newsletterSubscribed
+    }
 
-  store.showToast('設定已儲存', 'success')
+    // 呼叫後端 API 更新用戶資料
+    const response = await userAPI.update(store.currentUser.id, userData)
+    const data = response.data
+
+    // 更新 store.currentUser
+    if (data.user) {
+      Object.assign(store.currentUser, data.user)
+    }
+
+    // 檢查是否有完成任務
+    if (data.taskCompleted) {
+      // 先顯示設定儲存成功
+      store.showToast('設定已儲存', 'success')
+      // 延遲顯示任務完成通知
+      setTimeout(() => {
+        store.showToast(data.taskCompleted.message, 'success')
+      }, 1500)
+    } else {
+      store.showToast('設定已儲存', 'success')
+    }
+  } catch (error) {
+    console.error('Update user error:', error)
+    store.showToast('儲存失敗，請稍後再試', 'error')
+  }
 }
 
 // LINE 綁定

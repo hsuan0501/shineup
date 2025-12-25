@@ -67,6 +67,12 @@ public class TaskController {
         return ResponseEntity.ok(taskService.toggleActive(id));
     }
 
+    // 取得所有任務（帶用戶完成狀態）
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getTasksWithProgress(@PathVariable Long userId) {
+        return ResponseEntity.ok(taskService.findAllWithUserProgress(userId));
+    }
+
     // 完成任務
     @PostMapping("/{id}/complete")
     public ResponseEntity<?> completeTask(@PathVariable Long id, @RequestBody Map<String, Long> request) {
@@ -79,6 +85,17 @@ public class TaskController {
             "message", "任務完成！",
             "upgradePoints", user.getUpgradePoints(),
             "rewardPoints", user.getRewardPoints()
+        ));
+    }
+
+    // 重置任務進度（用於測試或修正資料）
+    @DeleteMapping("/{id}/reset")
+    public ResponseEntity<?> resetTaskProgress(@PathVariable Long id, @RequestParam Long userId) {
+        taskService.resetTaskProgress(id, userId);
+        return ResponseEntity.ok(Map.of(
+            "message", "任務進度已重置",
+            "taskId", id,
+            "userId", userId
         ));
     }
 }

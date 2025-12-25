@@ -336,12 +336,15 @@ const showNotifications = computed({
 const notificationContainer = ref(null)
 const programmaticOpenTime = ref(0) // 記錄程式化開啟的時間戳
 const pendingOrder = ref(null) // 進行中的訂單
-const lastActivityTime = ref(null) // 最後一筆積分紀錄的時間
+const lastActivity = ref(null) // 最後一筆積分紀錄（完整資料）
 
-// 監聽 store 變化，當從外部開啟時記錄時間戳
+// 監聽 store 變化，當從外部開啟時記錄時間戳，並刷新資料
 watch(showNotificationPanel, (newVal) => {
   if (newVal) {
     programmaticOpenTime.value = Date.now()
+    // 打開通知面板時刷新最新資料
+    fetchLastActivity()
+    fetchPendingOrder()
   }
 })
 
@@ -398,17 +401,18 @@ const notifications = computed(() => {
     }
   }
 
-  // 2. 活動紀錄通知（顯示最後一筆積分紀錄的時間）
+  // 2. 活動紀錄通知（顯示最後一筆積分紀錄）
   if (settings.points) {
+    const activity = lastActivity.value
     list.push({
-      id: 'activity-login',
+      id: 'activity-record',
       title: '活動紀錄',
-      description: `每日登入 +10 積分`,
-      timestamp: lastActivityTime.value,
+      description: activity ? `${activity.title} +${activity.points} 積分` : '暫無活動紀錄',
+      timestamp: activity?.createdAt || null,
       link: '/history?tab=points',
       icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />',
-      iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-      iconColor: 'text-blue-500'
+      iconBg: activity ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-gray-100 dark:bg-gray-700/30',
+      iconColor: activity ? 'text-blue-500' : 'text-gray-400'
     })
   }
 
@@ -489,10 +493,10 @@ const fetchPendingOrder = async () => {
   }
 }
 
-// 查詢最後一筆獲得積分的時間（正積分）
-const fetchLastActivityTime = async () => {
+// 查詢最後一筆獲得積分的紀錄（正積分）
+const fetchLastActivity = async () => {
   if (!store.currentUser?.id) {
-    lastActivityTime.value = null
+    lastActivity.value = null
     return
   }
   try {
@@ -500,25 +504,21 @@ const fetchLastActivityTime = async () => {
     const records = response.data || []
     // 找最新一筆正積分的紀錄（獲得積分，不是兌換扣除）
     const lastEarned = records.find(r => r.points > 0)
-    if (lastEarned) {
-      lastActivityTime.value = lastEarned.createdAt
-    } else {
-      lastActivityTime.value = null
-    }
+    lastActivity.value = lastEarned || null
   } catch (error) {
-    console.error('Failed to fetch last activity time:', error)
-    lastActivityTime.value = null
+    console.error('Failed to fetch last activity:', error)
+    lastActivity.value = null
   }
 }
 
-// 監聽登入狀態變化，重新查詢訂單和活動紀錄
+// 監聯登入狀態變化，重新查詢訂單和活動紀錄
 watch(() => store.isAuthenticated, (newVal) => {
   if (newVal) {
     fetchPendingOrder()
-    fetchLastActivityTime()
+    fetchLastActivity()
   } else {
     pendingOrder.value = null
-    lastActivityTime.value = null
+    lastActivity.value = null
   }
 })
 
@@ -532,8 +532,13 @@ onMounted(async () => {
   isDarkMode.value = document.documentElement.classList.contains('dark')
   await store.checkAuth() // 檢查是否已登入
   fetchPendingOrder() // 查詢進行中訂單
-  fetchLastActivityTime() // 查詢最後活動時間
+  fetchLastActivity() // 查詢最後活動紀錄
   document.addEventListener('click', handleNotificationClickOutside)
+
+  // 檢查是否有推薦碼參數，若未登入則自動開啟登入彈窗
+  if (route.query.ref && !store.isAuthenticated) {
+    showLoginModal.value = true
+  }
 })
 
 onUnmounted(() => {

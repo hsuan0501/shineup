@@ -1,73 +1,107 @@
 <template>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-    <!-- 頂部：統計卡片 + 按鈕 -->
-    <div class="mb-4 flex items-center gap-3">
-      <!-- 統計卡片 -->
-      <div class="flex-1 grid grid-cols-4 gap-3">
-        <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center">
-            <svg class="w-4 h-4 text-sky-500" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+    <!-- 頂部：操作按鈕 -->
+    <div class="mb-4 flex items-center justify-end gap-2">
+      <button @click="refreshAllData"
+        class="p-2 text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 hover:scale-110 active:scale-95 transition-all duration-300"
+        :disabled="isRefreshing">
+        <svg class="w-4 h-4" :class="{ 'animate-spin': isRefreshing }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+      </button>
+      <button @click="handleLogout"
+        class="px-3 py-2 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        登出
+      </button>
+    </div>
+
+    <!-- 主要統計卡片（響應式：手機2欄，桌面4欄） -->
+    <div class="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      <!-- 會員總數 (sky - 對應會員管理) -->
+      <div class="bg-white dark:bg-gray-700/70 rounded-2xl p-4 border dark:border-gray-600/30 relative">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-sky-50 dark:bg-sky-900/20 flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
           <div>
-            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ users.length }}</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">會員</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">會員總數</p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ users.length }}</p>
           </div>
         </div>
+        <span v-if="newMembersThisMonth > 0" class="absolute bottom-2 right-3 px-2 py-0.5 rounded-full text-xs font-bold bg-sky-100 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400">
+          本月 +{{ newMembersThisMonth }}
+        </span>
+      </div>
 
-        <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-            <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-          </div>
-          <div>
-            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ taskList.length }}</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">任務</p>
-          </div>
+      <!-- 任務總數 (emerald - 對應任務管理) -->
+      <div class="bg-white dark:bg-gray-700/70 rounded-2xl p-4 border dark:border-gray-600/30 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
         </div>
-
-        <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-            <svg class="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/>
-            </svg>
-          </div>
-          <div>
-            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ giftList.length }}</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">禮品</p>
-          </div>
-        </div>
-
-        <div class="bg-white dark:bg-gray-700/70 rounded-xl px-4 py-3 border dark:border-gray-600/30 flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-            </svg>
-          </div>
-          <div>
-            <p class="text-xl font-bold text-gray-900 dark:text-white">{{ pendingOrderCount }}</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">待處理</p>
-          </div>
+        <div>
+          <p class="text-xs text-gray-500 dark:text-gray-400">任務總數</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ taskList.length }}</p>
         </div>
       </div>
 
-      <!-- 右側按鈕 -->
-      <div class="flex items-center gap-2">
-        <button @click="refreshAllData"
-          class="p-2 text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 hover:scale-110 active:scale-95 transition-all duration-300">
-          <svg class="w-4 h-4" :class="{ 'animate-spin': isRefreshing }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      <!-- 禮品總數 (purple - 對應禮品管理) -->
+      <div class="bg-white dark:bg-gray-700/70 rounded-2xl p-4 border dark:border-gray-600/30 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
           </svg>
-        </button>
-        <button @click="handleLogout"
-          class="px-3 py-2 rounded-lg bg-sky-50 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 hover:bg-sky-100 dark:hover:bg-sky-900/30 border border-sky-200 dark:border-sky-800 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 font-medium text-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          登出
-        </button>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 dark:text-gray-400">禮品總數</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ giftList.length }}</p>
+        </div>
+      </div>
+
+      <!-- 本月訂單 (amber - 對應兌換記錄) -->
+      <div class="bg-white dark:bg-gray-700/70 rounded-2xl p-4 border dark:border-gray-600/30 relative">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 dark:text-gray-400">本月訂單</p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ ordersThisMonth }}</p>
+          </div>
+        </div>
+        <span v-if="pendingOrderCount > 0" class="absolute bottom-2 right-3 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400">
+          {{ pendingOrderCount }} 待處理
+        </span>
+      </div>
+    </div>
+
+    <!-- 數據圖表區塊（響應式：手機1欄，平板2欄） -->
+    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+      <!-- 會員等級分布 -->
+      <div class="bg-white dark:bg-gray-700/70 rounded-2xl p-4 border dark:border-gray-600/30">
+        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">會員等級分布</h3>
+        <div class="h-40">
+          <Doughnut :data="memberLevelChartData" :options="doughnutOptions" />
+        </div>
+      </div>
+
+      <!-- 近期訂單狀態 -->
+      <div class="bg-white dark:bg-gray-700/70 rounded-2xl p-4 border dark:border-gray-600/30">
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">訂單狀態總覽</h3>
+          <span class="text-[10px] text-gray-400 dark:text-gray-500">{{ orderStatsDateRange }}</span>
+        </div>
+        <div class="h-40">
+          <Bar :data="orderStatusChartData" :options="barOptions" />
+        </div>
       </div>
     </div>
 
@@ -118,6 +152,26 @@
             </div>
             <!-- 彈性空間 -->
             <div class="flex-1"></div>
+            <!-- 操作按鈕 -->
+            <div>
+              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
+              <div class="flex gap-2">
+                <button @click="exportUsersCSV"
+                  class="h-[34px] px-3 py-1.5 rounded-lg text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:bg-emerald-50 dark:hover:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  匯出
+                </button>
+                <button @click="resetUserFilter"
+                  class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  重置
+                </button>
+              </div>
+            </div>
             <!-- 關鍵字搜尋 -->
             <div class="w-48">
               <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">關鍵字搜尋</label>
@@ -129,36 +183,25 @@
                 </svg>
               </div>
             </div>
-            <!-- 重置按鈕 -->
-            <div>
-              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
-              <button @click="resetUserFilter"
-                class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                重置篩選
-              </button>
-            </div>
           </div>
         </div>
       <div class="overflow-x-auto">
         <table class="w-full table-fixed">
           <thead class="bg-gray-50 dark:bg-gray-800/50">
             <tr>
-              <th class="w-[5%] pl-4 pr-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-              <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
-              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">等級</th>
-              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">升級積分</th>
-              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">兌換積分</th>
-              <th class="w-[8%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
-              <th class="w-[15%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">註冊日期</th>
-              <th class="w-[22%] pl-2 pr-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+              <th class="w-[5%] pl-4 pr-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
+              <th class="w-[20%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
+              <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">等級</th>
+              <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">升級積分</th>
+              <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">兌換積分</th>
+              <th class="w-[8%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
+              <th class="w-[17%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">註冊日期</th>
+              <th class="w-[20%] pl-2 pr-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
             <tr v-for="(user, index) in paginatedUsers" :key="user.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
-              <td class="pl-4 pr-2 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ filteredUsers.length - (userCurrentPage - 1) * 10 - index }}</td>
+              <td class="pl-4 pr-2 py-3 text-sm font-mono text-gray-900 dark:text-white text-center">#{{ filteredUsers.length - (userCurrentPage - 1) * 10 - index }}</td>
               <td class="px-2 py-3">
                 <div class="flex items-center gap-3">
                   <img :src="user.avatar" class="w-8 h-8 rounded-full object-cover bg-gray-200">
@@ -168,21 +211,21 @@
                   </div>
                 </div>
               </td>
-              <td class="px-2 py-3">
+              <td class="px-2 py-3 text-center">
                 <span :class="getLevelBadgeClass(user.level)" class="px-2 py-1 text-xs font-medium rounded-full">
                   {{ user.level }}
                 </span>
               </td>
-              <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ user.levelPoints }}</td>
-              <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ user.rewardPoints }}</td>
-              <td class="px-2 py-3">
+              <td class="px-2 py-3 text-sm text-gray-900 dark:text-white text-center">{{ formatNumber(user.levelPoints) }}</td>
+              <td class="px-2 py-3 text-sm text-gray-900 dark:text-white text-center">{{ formatNumber(user.rewardPoints) }}</td>
+              <td class="px-2 py-3 text-center">
                 <span :class="user.enabled !== false ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'" class="px-2 py-1 text-xs font-medium rounded-full">
                   {{ user.enabled !== false ? '啟用' : '停用' }}
                 </span>
               </td>
-              <td class="px-2 py-3 text-sm text-gray-500 dark:text-gray-400">{{ user.createdAt }}</td>
+              <td class="px-2 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">{{ user.createdAt }}</td>
               <td class="pl-2 pr-4 py-3">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center justify-end gap-2">
                   <button @click="openUserModal(user)" class="px-3 py-1 text-xs font-medium rounded bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 hover:bg-sky-200 dark:hover:bg-sky-900/60 transition-colors">編輯</button>
                   <button @click="toggleUserStatus(user)" :class="user.enabled !== false ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/60' : 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/60'" class="px-3 py-1 text-xs font-medium rounded transition-colors">
                     {{ user.enabled !== false ? '停用' : '啟用' }}
@@ -252,12 +295,21 @@
             </div>
             <!-- 彈性空間 -->
             <div class="flex-1"></div>
-            <!-- 新增按鈕 -->
+            <!-- 操作按鈕 -->
             <div>
-              <label class="block text-xs font-medium text-transparent mb-1">新增</label>
-              <button @click="openTaskModal()" class="h-[34px] px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-700/50 transition-colors">
-                + 新增
-              </button>
+              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
+              <div class="flex gap-2">
+                <button @click="openTaskModal()" class="h-[34px] px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-700/50 transition-colors">
+                  + 新增
+                </button>
+                <button @click="resetTaskFilter"
+                  class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  重置
+                </button>
+              </div>
             </div>
             <!-- 關鍵字搜尋 -->
             <div class="w-48">
@@ -270,50 +322,43 @@
                 </svg>
               </div>
             </div>
-            <!-- 重置按鈕 -->
-            <div>
-              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
-              <button @click="resetTaskFilter"
-                class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                重置篩選
-              </button>
-            </div>
           </div>
         </div>
-        <div class="overflow-x-auto ">
+        <div class="overflow-x-auto">
           <table class="w-full table-fixed">
             <thead class="bg-gray-50 dark:bg-gray-800/50">
               <tr>
-                <th class="w-[5%] pl-4 pr-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-                <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">任務名稱</th>
-                <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">分類</th>
-                <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
-                <th class="w-[23%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
-                <th class="w-[22%] pl-2 pr-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+                <th class="w-[5%] pl-4 pr-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
+                <th class="w-[20%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">任務名稱</th>
+                <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">分類</th>
+                <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">升級積分</th>
+                <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">兌換積分</th>
+                <th class="w-[8%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
+                <th class="w-[17%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">建立日期</th>
+                <th class="w-[20%] pl-2 pr-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
               <tr v-for="(task, index) in paginatedTasks" :key="task.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
-                <td class="pl-4 pr-2 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (taskCurrentPage - 1) * 10 + index + 1 }}</td>
+                <td class="pl-4 pr-2 py-3 text-sm font-mono text-gray-900 dark:text-white text-center">#{{ (taskCurrentPage - 1) * 10 + index + 1 }}</td>
                 <td class="px-2 py-3">
                   <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ task.title }}</p>
                 </td>
-                <td class="px-2 py-3">
+                <td class="px-2 py-3 text-center">
                   <span :class="getCategoryBadgeClass(task.category)" class="px-2 py-1 text-xs font-medium rounded-full">
                     {{ getCategoryName(task.category) }}
                   </span>
                 </td>
-                <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">+{{ task.levelPoints }} / +{{ task.rewardPoints }}</td>
-                <td class="px-2 py-3">
+                <td class="px-2 py-3 text-sm text-gray-900 dark:text-white text-center">{{ formatNumber(task.levelPoints) }}</td>
+                <td class="px-2 py-3 text-sm text-gray-900 dark:text-white text-center">{{ formatNumber(task.rewardPoints) }}</td>
+                <td class="px-2 py-3 text-center">
                   <span :class="task.active !== false ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'" class="px-2 py-1 text-xs font-medium rounded-full">
                     {{ task.active !== false ? '啟用' : '停用' }}
                   </span>
                 </td>
+                <td class="px-2 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">{{ task.createdAt || '-' }}</td>
                 <td class="pl-2 pr-4 py-3">
-                  <div class="flex items-center gap-2">
+                  <div class="flex items-center justify-end gap-2">
                     <button @click="openTaskModal(task)" class="px-3 py-1 text-xs font-medium rounded bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 hover:bg-sky-200 dark:hover:bg-sky-900/60 transition-colors">編輯</button>
                     <button @click="toggleTaskStatus(task)" :class="task.active !== false ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/60' : 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/60'" class="px-3 py-1 text-xs font-medium rounded transition-colors">
                       {{ task.active !== false ? '停用' : '啟用' }}
@@ -327,7 +372,7 @@
         </div>
 
         <!-- 任務分頁控制 -->
-        <div v-if="taskTotalPages > 1" class="px-4 py-3 border-t border-gray-200 dark:border-gray-600 flex items-center justify-between">
+        <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-600 flex items-center justify-between">
           <div class="text-sm text-gray-500 dark:text-gray-400">
             共 {{ filteredTasks.length }} 筆，第 {{ taskCurrentPage }} / {{ taskTotalPages }} 頁
           </div>
@@ -383,12 +428,21 @@
             </div>
             <!-- 彈性空間 -->
             <div class="flex-1"></div>
-            <!-- 新增按鈕 -->
+            <!-- 操作按鈕 -->
             <div>
-              <label class="block text-xs font-medium text-transparent mb-1">新增</label>
-              <button @click="openGiftModal()" class="h-[34px] px-3 py-1.5 rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-sm font-medium hover:bg-purple-100 dark:hover:bg-purple-900/50 border border-purple-200 dark:border-purple-700/50 transition-colors">
-                + 新增
-              </button>
+              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
+              <div class="flex gap-2">
+                <button @click="openGiftModal()" class="h-[34px] px-3 py-1.5 rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-sm font-medium hover:bg-purple-100 dark:hover:bg-purple-900/50 border border-purple-200 dark:border-purple-700/50 transition-colors">
+                  + 新增
+                </button>
+                <button @click="resetGiftFilter"
+                  class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  重置
+                </button>
+              </div>
             </div>
             <!-- 關鍵字搜尋 -->
             <div class="w-48">
@@ -401,58 +455,49 @@
                 </svg>
               </div>
             </div>
-            <!-- 重置按鈕 -->
-            <div>
-              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
-              <button @click="resetGiftFilter"
-                class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                重置篩選
-              </button>
-            </div>
           </div>
         </div>
-        <div class="overflow-x-auto ">
+        <div class="overflow-x-auto">
         <table class="w-full table-fixed">
           <thead class="bg-gray-50 dark:bg-gray-800/50">
             <tr>
-              <th class="w-[5%] pl-4 pr-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-              <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
-              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">分類</th>
-              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
-              <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">庫存</th>
-              <th class="w-[23%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
-              <th class="w-[22%] pl-2 pr-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+              <th class="w-[5%] pl-4 pr-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
+              <th class="w-[20%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
+              <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">分類</th>
+              <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
+              <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">庫存</th>
+              <th class="w-[8%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">狀態</th>
+              <th class="w-[17%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">建立日期</th>
+              <th class="w-[20%] pl-2 pr-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
             <tr v-for="(gift, index) in paginatedGifts" :key="gift.id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50 h-12">
-              <td class="pl-4 pr-2 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ (giftCurrentPage - 1) * 10 + index + 1 }}</td>
+              <td class="pl-4 pr-2 py-3 text-sm font-mono text-gray-900 dark:text-white text-center">#{{ (giftCurrentPage - 1) * 10 + index + 1 }}</td>
               <td class="px-2 py-3">
                 <div class="flex items-center gap-3">
                   <img :src="gift.image" class="w-10 h-10 rounded-lg object-cover bg-gray-200 flex-shrink-0">
                   <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ gift.title }}</p>
                 </div>
               </td>
-              <td class="px-2 py-3">
+              <td class="px-2 py-3 text-center">
                 <span :class="getSeriesBadgeClass(gift.series)" class="px-2 py-1 text-xs font-medium rounded-full">
                   {{ getSeriesName(gift.series) }}
                 </span>
               </td>
-              <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ gift.points }}</td>
-              <td class="px-2 py-3 text-sm" :class="gift.stock < 10 ? 'text-red-600 dark:text-red-400 font-bold' : 'text-gray-900 dark:text-white'">
-                {{ gift.stock }}
+              <td class="px-2 py-3 text-sm text-gray-900 dark:text-white text-center">{{ formatNumber(gift.points) }}</td>
+              <td class="px-2 py-3 text-sm text-center" :class="gift.stock < 10 ? 'text-red-600 dark:text-red-400 font-bold' : 'text-gray-900 dark:text-white'">
+                {{ formatNumber(gift.stock) }}
               </td>
-              <td class="px-2 py-3">
+              <td class="px-2 py-3 text-center">
                 <span :class="gift.stock > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'"
                   class="px-2 py-1 text-xs font-medium rounded-full">
                   {{ gift.stock > 0 ? '有庫存' : '已售完' }}
                 </span>
               </td>
+              <td class="px-2 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">{{ gift.createdAt || '-' }}</td>
               <td class="pl-2 pr-4 py-3">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center justify-end gap-2">
                   <button @click="openGiftModal(gift)" class="px-3 py-1 text-xs font-medium rounded bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 hover:bg-sky-200 dark:hover:bg-sky-900/60 transition-colors">編輯</button>
                   <button @click="openStockModal(gift)" class="px-3 py-1 text-xs font-medium rounded bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/60 transition-colors">庫存</button>
                   <button @click="confirmDelete('gift', gift)" class="px-3 py-1 text-xs font-medium rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/60 transition-colors">刪除</button>
@@ -464,7 +509,7 @@
         </div>
 
         <!-- 禮品分頁控制 -->
-        <div v-if="giftTotalPages > 1" class="px-4 py-3 border-t border-gray-200 dark:border-gray-600 flex items-center justify-between">
+        <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-600 flex items-center justify-between">
           <div class="text-sm text-gray-500 dark:text-gray-400">
             共 {{ filteredGifts.length }} 筆，第 {{ giftCurrentPage }} / {{ giftTotalPages }} 頁
           </div>
@@ -522,6 +567,26 @@
             </div>
             <!-- 彈性空間 -->
             <div class="flex-1"></div>
+            <!-- 操作按鈕 -->
+            <div>
+              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
+              <div class="flex gap-2">
+                <button @click="exportOrdersCSV"
+                  class="h-[34px] px-3 py-1.5 rounded-lg text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:bg-emerald-50 dark:hover:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  匯出
+                </button>
+                <button @click="resetOrderFilter"
+                  class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  重置
+                </button>
+              </div>
+            </div>
             <!-- 關鍵字搜尋 -->
             <div class="w-48">
               <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">關鍵字搜尋</label>
@@ -533,31 +598,20 @@
                 </svg>
               </div>
             </div>
-            <!-- 重置按鈕 -->
-            <div>
-              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
-              <button @click="resetOrderFilter"
-                class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                重置篩選
-              </button>
-            </div>
           </div>
         </div>
-        <div class="overflow-x-auto ">
+        <div class="overflow-x-auto overflow-y-visible">
           <table class="w-full table-fixed">
             <thead class="bg-gray-50 dark:bg-gray-800/50">
               <tr>
                 <th class="w-[3%] pl-4 pr-1 py-3"></th>
-                <th class="w-[5%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
-                <th class="w-[12%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
-                <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
-                <th class="w-[8%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
-                <th class="w-[10%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">進度</th>
-                <th class="w-[20%] px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">日期</th>
-                <th class="w-[22%] pl-2 pr-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
+                <th class="w-[5%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">編號</th>
+                <th class="w-[15%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">會員</th>
+                <th class="w-[20%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">禮品</th>
+                <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">積分</th>
+                <th class="w-[10%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">進度</th>
+                <th class="w-[17%] px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">日期</th>
+                <th class="w-[20%] pl-2 pr-4 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">操作</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
@@ -571,9 +625,9 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                   </td>
-                  <td class="px-2 py-3 text-sm font-mono text-gray-900 dark:text-white">#{{ filteredRedemptions.length - (currentPage - 1) * 10 - index }}</td>
+                  <td class="px-2 py-3 text-sm font-mono text-gray-900 dark:text-white text-center">#{{ filteredRedemptions.length - (currentPage - 1) * 10 - index }}</td>
                   <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ order.user?.name || '-' }}</td>
-                  <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">
+                  <td class="px-2 py-3 text-sm text-gray-900 dark:text-white text-center">
                     <div v-if="order.items && order.items.length > 0" class="truncate">
                       <span v-for="(item, idx) in order.items" :key="item.id">
                         {{ item.gift?.title }}<span v-if="item.quantity > 1"> x{{ item.quantity }}</span><span v-if="idx < order.items.length - 1">、</span>
@@ -581,15 +635,15 @@
                     </div>
                     <span v-else class="truncate">{{ order.gift?.title || '-' }}</span>
                   </td>
-                  <td class="px-2 py-3 text-sm text-gray-900 dark:text-white">{{ order.totalPoints }}</td>
-                  <td class="px-2 py-3">
+                  <td class="px-2 py-3 text-sm text-gray-900 dark:text-white text-center">{{ formatNumber(order.totalPoints) }}</td>
+                  <td class="px-2 py-3 text-center">
                     <span :class="getStatusBadgeClass(order.status)" class="px-2 py-1 text-xs font-medium rounded-full">
                       {{ getStatusText(order.status) }}
                     </span>
                   </td>
-                  <td class="px-2 py-3 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ formatDate(order.createdAt) }}</td>
+                  <td class="px-2 py-3 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap text-center">{{ formatDate(order.createdAt) }}</td>
                   <td class="pl-2 pr-4 py-3" @click.stop>
-                    <div class="relative">
+                    <div class="relative flex justify-end">
                       <button @click="toggleStatusDropdown(order.id)"
                         :class="getStatusSelectClass(order.status)"
                         class="w-28 text-xs font-medium rounded px-2 py-1.5 flex items-center justify-between gap-1">
@@ -599,7 +653,7 @@
                         </svg>
                       </button>
                       <div v-if="openStatusDropdown === order.id"
-                        class="absolute z-50 mt-1 w-28 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800">
+                        class="absolute right-0 top-full z-50 mt-1 w-28 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800">
                         <button v-for="status in orderStatuses" :key="status.value"
                           @click="selectOrderStatus(order, status.value)"
                           :class="getStatusSelectClass(status.value)"
@@ -664,16 +718,16 @@
                           <template v-if="order.items && order.items.length > 0">
                             <div v-for="item in order.items" :key="item.id" class="flex justify-between">
                               <span class="text-gray-900 dark:text-white">{{ item.gift?.title }} <span class="text-gray-500">x{{ item.quantity }}</span></span>
-                              <span class="text-purple-600 dark:text-purple-400 font-medium">{{ item.subtotalPoints }} 積分</span>
+                              <span class="text-purple-600 dark:text-purple-400 font-medium">{{ formatNumber(item.subtotalPoints) }} 積分</span>
                             </div>
                           </template>
                           <div v-else class="flex justify-between">
                             <span class="text-gray-900 dark:text-white">{{ order.gift?.title }} <span class="text-gray-500">x{{ order.quantity }}</span></span>
-                            <span class="text-purple-600 dark:text-purple-400 font-medium">{{ order.totalPoints }} 積分</span>
+                            <span class="text-purple-600 dark:text-purple-400 font-medium">{{ formatNumber(order.totalPoints) }} 積分</span>
                           </div>
                           <div class="border-t border-gray-200 dark:border-gray-600 pt-2 mt-2 flex justify-between font-semibold">
                             <span class="text-gray-700 dark:text-gray-300">總計</span>
-                            <span class="text-purple-600 dark:text-purple-400">{{ order.totalPoints }} 積分</span>
+                            <span class="text-purple-600 dark:text-purple-400">{{ formatNumber(order.totalPoints) }} 積分</span>
                           </div>
                         </div>
                         <!-- 時間軸 -->
@@ -746,12 +800,21 @@
             </div>
             <!-- 彈性空間 -->
             <div class="flex-1"></div>
-            <!-- 新增按鈕 -->
+            <!-- 操作按鈕 -->
             <div>
-              <label class="block text-xs font-medium text-transparent mb-1">新增</label>
-              <button @click="openReplyModal()" class="h-[34px] px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 text-sm font-medium hover:bg-pink-100 dark:hover:bg-pink-900/50 border border-pink-200 dark:border-pink-700/50 transition-colors">
-                + 新增
-              </button>
+              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
+              <div class="flex gap-2">
+                <button @click="openReplyModal()" class="h-[34px] px-3 py-1.5 rounded-lg bg-pink-50 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 text-sm font-medium hover:bg-pink-100 dark:hover:bg-pink-900/50 border border-pink-200 dark:border-pink-700/50 transition-colors">
+                  + 新增
+                </button>
+                <button @click="resetFaqFilter"
+                  class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  重置
+                </button>
+              </div>
             </div>
             <!-- 關鍵字搜尋 -->
             <div class="w-48">
@@ -764,22 +827,11 @@
                 </svg>
               </div>
             </div>
-            <!-- 重設篩選 -->
-            <div>
-              <label class="block text-xs font-medium text-transparent mb-1">操作</label>
-              <button @click="resetFaqFilter"
-                class="h-[34px] px-3 py-1.5 rounded-lg text-sky-600 dark:text-sky-400 text-sm font-medium hover:bg-sky-50 dark:hover:bg-sky-900/20 border border-sky-200 dark:border-sky-700/50 transition-colors flex items-center gap-1.5 whitespace-nowrap">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                重設篩選
-              </button>
-            </div>
           </div>
         </div>
         <!-- FAQ 列表 -->
         <div class="divide-y divide-gray-200 dark:divide-gray-600">
-          <div v-for="reply in paginatedFaqs" :key="reply.id" class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+          <div v-for="reply in paginatedFaqs" :key="reply.id" class="p-4 hover:bg-sky-50/30 dark:hover:bg-sky-900/10 transition-colors">
             <div class="flex items-center gap-4">
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 mb-2">
@@ -791,7 +843,7 @@
                   <span class="text-xs text-gray-500 dark:text-gray-400">關鍵字：</span>
                   <span class="text-sm text-gray-700 dark:text-gray-300 font-mono">{{ reply.keyword }}</span>
                 </div>
-                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+                <div class="bg-sky-50/50 dark:bg-sky-900/20 rounded-lg p-3 border border-sky-100 dark:border-sky-800/30">
                   <p class="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap line-clamp-3">{{ reply.reply }}</p>
                 </div>
               </div>
@@ -991,7 +1043,7 @@
           <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ editingGift.title }}</p>
         </div>
         <div class="p-6">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">目前庫存: {{ editingGift.stock }}</label>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">目前庫存: {{ formatNumber(editingGift.stock) }}</label>
           <div class="flex items-center gap-3 mt-3">
             <button @click="stockAdjustment -= 10" class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600">-10</button>
             <button @click="stockAdjustment -= 1" class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600">-1</button>
@@ -999,7 +1051,7 @@
             <button @click="stockAdjustment += 1" class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600">+1</button>
             <button @click="stockAdjustment += 10" class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600">+10</button>
           </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mt-3 text-center">調整後: {{ editingGift.stock + stockAdjustment }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-3 text-center">調整後: {{ formatNumber(editingGift.stock + stockAdjustment) }}</p>
         </div>
         <div class="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
           <button @click="showStockModal = false" class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">取消</button>
@@ -1112,12 +1164,31 @@
 <script setup>
 import { ref, computed, reactive, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { mockTasks, mockRewards } from '../mock.js'
 import { useStore } from '@/store'
-import { orderAPI, chatAPI, userAPI } from '@/api'
+import { orderAPI, chatAPI, userAPI, taskAPI, giftAPI } from '@/api'
+
+// Chart.js
+import { Doughnut, Bar } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+} from 'chart.js'
+
+ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
 const router = useRouter()
 const store = useStore()
+
+// 數字格式化（千分號）
+const formatNumber = (num) => {
+  if (num === null || num === undefined) return '0'
+  return Number(num).toLocaleString('zh-TW')
+}
 
 // 登出功能
 const handleLogout = () => {
@@ -1134,16 +1205,23 @@ const isRefreshing = ref(false)
 const refreshAllData = async () => {
   if (isRefreshing.value) return
   isRefreshing.value = true
+
   try {
+    // 同時刷新所有資料
     await Promise.all([
       fetchOrders(),
       fetchChatbotReplies(),
       fetchUsers()
     ])
+    store.showToast('資料已更新', 'success')
   } catch (error) {
     console.error('Refresh failed:', error)
+    store.showToast('重新整理失敗', 'error')
   } finally {
-    isRefreshing.value = false
+    // 確保動畫至少顯示 0.5 秒
+    setTimeout(() => {
+      isRefreshing.value = false
+    }, 500)
   }
 }
 
@@ -1228,9 +1306,9 @@ const loginHistoryLoading = ref(false)
 const defaultAvatar = 'https://api.dicebear.com/9.x/thumbs/svg?seed=Sarah&radius=50&backgroundColor=69d2e7&translateX=-10'
 
 const users = ref([
-  { id: 1, name: 'Hsuan', email: 'hsuan0501@outlook.com', avatar: defaultAvatar, level: 'CREATOR', levelPoints: 700, rewardPoints: 600, createdAt: '2025-12-15' },
-  { id: 2, name: 'Matcha', email: 'matcha1108@example.com', avatar: defaultAvatar, level: 'EXPLORER', levelPoints: 120, rewardPoints: 80, createdAt: '2025-12-18' },
-  { id: 3, name: 'May', email: 'may0529@example.com', avatar: defaultAvatar, level: 'EXPLORER', levelPoints: 100, rewardPoints: 50, createdAt: '2025-12-20' }
+  { id: 1, name: 'Hsuan', email: 'hsuan0501@outlook.com', avatar: defaultAvatar, level: 'CREATOR', levelPoints: 700, rewardPoints: 600, createdAt: '2025-11-20' },
+  { id: 2, name: 'Matcha', email: 'matcha1108@example.com', avatar: defaultAvatar, level: 'CREATOR', levelPoints: 280, rewardPoints: 30, createdAt: '2025-12-15' },
+  { id: 3, name: 'May', email: 'may0529@example.com', avatar: defaultAvatar, level: 'EXPLORER', levelPoints: 250, rewardPoints: 50, createdAt: '2025-12-20' }
 ])
 
 const filteredUsers = computed(() => {
@@ -1277,8 +1355,8 @@ const paginatedUsers = computed(() => {
 // 會員篩選變化時重置分頁
 watch([searchQuery, () => userFilter.level, () => userFilter.status], () => { userCurrentPage.value = 1 })
 
-// 任務資料 (使用完整的 30 個任務)
-const taskList = ref([...mockTasks])
+// 任務資料 (從後端載入)
+const taskList = ref([])
 const taskSearchQuery = ref('')
 
 // 任務篩選條件
@@ -1336,8 +1414,8 @@ const paginatedTasks = computed(() => {
 // 篩選條件變化時重置分頁
 watch([taskSearchQuery, () => taskFilter.category, () => taskFilter.status], () => { taskCurrentPage.value = 1 })
 
-// 禮品資料 (使用完整的 32 個禮品)
-const giftList = ref([...mockRewards])
+// 禮品資料 (從後端載入)
+const giftList = ref([])
 const giftSearchQuery = ref('')
 
 // 禮品篩選條件
@@ -1467,6 +1545,74 @@ const resetOrderFilter = () => {
   currentPage.value = 1
 }
 
+// ==================== CSV 匯出功能 ====================
+
+// 通用 CSV 下載函數
+const downloadCSV = (filename, headers, rows) => {
+  // 加入 BOM 讓 Excel 正確顯示中文
+  const BOM = '\uFEFF'
+  const csvContent = BOM + [
+    headers.join(','),
+    ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+  ].join('\n')
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = filename
+  link.click()
+  URL.revokeObjectURL(link.href)
+}
+
+// 匯出會員 CSV
+const exportUsersCSV = () => {
+  const headers = ['編號', '姓名', 'Email', '等級', '升級積分', '兌換積分', '狀態', '註冊日期']
+  const rows = filteredUsers.value.map((user, index) => [
+    index + 1,
+    user.name,
+    user.email,
+    user.level,
+    user.levelPoints,
+    user.rewardPoints,
+    user.enabled ? '啟用' : '停用',
+    user.createdAt
+  ])
+
+  const today = new Date().toISOString().split('T')[0]
+  downloadCSV(`會員名單_${today}.csv`, headers, rows)
+  store.showToast(`已匯出 ${rows.length} 筆會員資料`, 'success')
+}
+
+// 匯出訂單 CSV
+const exportOrdersCSV = () => {
+  const statusMap = {
+    'PENDING': '待處理',
+    'SHIPPED': '已出貨',
+    'DELIVERED': '已送達',
+    'COMPLETED': '已完成',
+    'CANCELLED': '已取消'
+  }
+
+  const headers = ['訂單編號', '會員', '禮品', '數量', '積分', '狀態', '寄送方式', '地址', '訂單日期']
+  const rows = filteredRedemptions.value.map(order => [
+    order.id,
+    order.user?.name || '-',
+    order.items?.map(i => i.gift?.title).join('、') || '-',
+    order.items?.reduce((sum, i) => sum + i.quantity, 0) || 0,
+    order.totalPoints,
+    statusMap[order.status] || order.status,
+    order.deliveryMethod === 'home' ? '宅配' : '超商取貨',
+    order.deliveryMethod === 'home'
+      ? order.deliveryAddress
+      : `${order.storeBrand || ''} ${order.storeName || ''}`.trim() || '-',
+    formatDate(order.createdAt)
+  ])
+
+  const today = new Date().toISOString().split('T')[0]
+  downloadCSV(`訂單紀錄_${today}.csv`, headers, rows)
+  store.showToast(`已匯出 ${rows.length} 筆訂單資料`, 'success')
+}
+
 // 過濾後的訂單（根據搜尋、日期、狀態）
 const filteredRedemptions = computed(() => {
   let result = redemptions.value
@@ -1529,6 +1675,176 @@ const paginatedRedemptions = computed(() => {
 const pendingOrderCount = computed(() => {
   return redemptions.value.filter(o => o.status === 'PENDING').length
 })
+
+// 本月新會員數量
+const newMembersThisMonth = computed(() => {
+  const now = new Date()
+  const thisMonth = now.getMonth()
+  const thisYear = now.getFullYear()
+  return users.value.filter(u => {
+    if (!u.rawCreatedAt) return false
+    const createdMonth = u.rawCreatedAt.getMonth()
+    const createdYear = u.rawCreatedAt.getFullYear()
+    return createdMonth === thisMonth && createdYear === thisYear
+  }).length
+})
+
+// 累計發放積分（所有正數活動紀錄的總和）
+const totalPointsIssued = computed(() => {
+  // 這裡我們用會員的升級積分總和來估算（因為沒有全域活動紀錄）
+  return users.value.reduce((sum, u) => sum + (u.levelPoints || 0), 0)
+})
+
+// 本月訂單數量
+const ordersThisMonth = computed(() => {
+  const now = new Date()
+  const thisMonth = now.getMonth()
+  const thisYear = now.getFullYear()
+  return redemptions.value.filter(order => {
+    if (!order.createdAt) return false
+    const orderDate = new Date(order.createdAt)
+    return orderDate.getMonth() === thisMonth && orderDate.getFullYear() === thisYear
+  }).length
+})
+
+// 本月已完成訂單數量（轉換率參考）
+const completedOrdersThisMonth = computed(() => {
+  const now = new Date()
+  const thisMonth = now.getMonth()
+  const thisYear = now.getFullYear()
+  return redemptions.value.filter(order => {
+    if (!order.createdAt || order.status !== 'COMPLETED') return false
+    const orderDate = new Date(order.createdAt)
+    return orderDate.getMonth() === thisMonth && orderDate.getFullYear() === thisYear
+  }).length
+})
+
+// 本月訂單完成率
+const completionRate = computed(() => {
+  if (ordersThisMonth.value === 0) return 0
+  return Math.round((completedOrdersThisMonth.value / ordersThisMonth.value) * 100)
+})
+
+// ==================== 圖表資料 ====================
+
+// 會員等級分布圖表
+const memberLevelChartData = computed(() => {
+  const levels = ['EXPLORER', 'CREATOR', 'VISIONARY', 'LUMINARY']
+  const levelLabels = ['  Lv1 EXPLORER', '  Lv2 CREATOR', '  Lv3 VISIONARY', '  Lv4 LUMINARY']
+  const counts = levels.map(level => users.value.filter(u => u.level === level).length)
+
+  return {
+    labels: levelLabels,
+    datasets: [{
+      data: counts,
+      backgroundColor: [
+        'rgba(56, 189, 248, 0.8)',   // sky
+        'rgba(52, 211, 153, 0.8)',   // emerald
+        'rgba(168, 85, 247, 0.8)',   // purple
+        'rgba(251, 191, 36, 0.8)'    // amber
+      ],
+      borderColor: [
+        'rgba(56, 189, 248, 1)',
+        'rgba(52, 211, 153, 1)',
+        'rgba(168, 85, 247, 1)',
+        'rgba(251, 191, 36, 1)'
+      ],
+      borderWidth: 2
+    }]
+  }
+})
+
+// 訂單狀態統計圖表（近 30 天）
+const orderStatusChartData = computed(() => {
+  const statuses = ['PENDING', 'SHIPPED', 'DELIVERED', 'COMPLETED']
+  const statusNames = ['訂單確認中', '已出貨', '已送達', '取貨完成']
+
+  // 計算 30 天前的日期
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+  // 只統計近 30 天的訂單
+  const recentOrders = redemptions.value.filter(o => {
+    if (!o.createdAt) return false
+    const orderDate = new Date(o.createdAt)
+    return orderDate >= thirtyDaysAgo
+  })
+
+  const counts = statuses.map(status => recentOrders.filter(o => o.status === status).length)
+
+  return {
+    labels: statusNames,
+    datasets: [{
+      label: '訂單數',
+      data: counts,
+      backgroundColor: [
+        'rgba(236, 72, 153, 0.8)',   // pink (訂單確認中)
+        'rgba(56, 189, 248, 0.8)',   // sky (已出貨)
+        'rgba(168, 85, 247, 0.8)',   // purple (已送達)
+        'rgba(52, 211, 153, 0.8)'    // emerald (取貨完成)
+      ],
+      borderColor: [
+        'rgba(236, 72, 153, 1)',
+        'rgba(56, 189, 248, 1)',
+        'rgba(168, 85, 247, 1)',
+        'rgba(52, 211, 153, 1)'
+      ],
+      borderWidth: 2,
+      borderRadius: 6
+    }]
+  }
+})
+
+// 訂單統計日期範圍
+const orderStatsDateRange = computed(() => {
+  const today = new Date()
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(today.getDate() - 30)
+
+  const formatDate = (date) => {
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, '0')
+    const d = String(date.getDate()).padStart(2, '0')
+    return `${y}/${m}/${d}`
+  }
+
+  return `${formatDate(thirtyDaysAgo)} - ${formatDate(today)}`
+})
+
+// 圖表選項
+const doughnutOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'right',
+      labels: {
+        boxWidth: 12,
+        padding: 12,
+        font: { size: 10 }
+      }
+    }
+  }
+}
+
+const barOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false }
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: { stepSize: 1, font: { size: 10 } },
+      grid: { color: 'rgba(0,0,0,0.05)' }
+    },
+    x: {
+      ticks: { font: { size: 10 } },
+      grid: { display: false }
+    }
+  }
+}
 
 // 篩選條件變化時重置分頁
 watch([orderSearchQuery, () => orderFilter.status, () => orderFilter.startDate, () => orderFilter.endDate], () => {
@@ -1621,6 +1937,36 @@ const fetchOrders = async () => {
   }
 }
 
+// 載入任務資料
+const fetchTasks = async () => {
+  try {
+    const response = await taskAPI.getAll()
+    // 映射後端欄位名稱到前端
+    taskList.value = (response.data || []).map(task => ({
+      ...task,
+      levelPoints: task.upgradePoints || 0,
+      level: task.levelText || '全等級'
+    }))
+  } catch (error) {
+    console.error('Failed to fetch tasks:', error)
+  }
+}
+
+// 載入禮品資料
+const fetchGifts = async () => {
+  try {
+    const response = await giftAPI.getAll()
+    // 映射後端欄位名稱到前端
+    giftList.value = (response.data || []).map(gift => ({
+      ...gift,
+      points: gift.requiredPoints || 0,
+      level: gift.levelText || 'EXPLORER'
+    }))
+  } catch (error) {
+    console.error('Failed to fetch gifts:', error)
+  }
+}
+
 // 格式化日期
 const formatDate = (dateString) => {
   if (!dateString) return ''
@@ -1632,6 +1978,25 @@ const formatDate = (dateString) => {
     hour: '2-digit',
     minute: '2-digit'
   })
+}
+
+// 解析 Java LocalDateTime 格式（可能是陣列 [2025,12,20,9,45] 或字串）
+const parseDate = (dateValue) => {
+  if (!dateValue) return null
+  // 如果是陣列格式 [year, month, day, hour, minute, ...]
+  if (Array.isArray(dateValue)) {
+    const [year, month, day, hour = 0, minute = 0, second = 0] = dateValue
+    return new Date(year, month - 1, day, hour, minute, second)
+  }
+  // 如果是字串格式
+  return new Date(dateValue)
+}
+
+// 格式化註冊日期
+const formatCreatedAt = (dateValue) => {
+  const date = parseDate(dateValue)
+  if (!date || isNaN(date.getTime())) return '-'
+  return date.toLocaleDateString('zh-TW')
 }
 
 // 載入客服回覆設定
@@ -1660,7 +2025,8 @@ const fetchUsers = async () => {
         levelPoints: u.upgradePoints || 0,
         rewardPoints: u.rewardPoints || 0,
         enabled: u.enabled !== false,
-        createdAt: u.createdAt ? new Date(u.createdAt).toLocaleDateString('zh-TW') : '-'
+        rawCreatedAt: parseDate(u.createdAt),
+        createdAt: formatCreatedAt(u.createdAt)
       }))
   } catch (error) {
     console.error('Failed to fetch users:', error)
@@ -1669,6 +2035,8 @@ const fetchUsers = async () => {
 
 onMounted(() => {
   fetchOrders()
+  fetchTasks()
+  fetchGifts()
   fetchChatbotReplies()
   fetchUsers()
   document.addEventListener('click', closeStatusDropdown)
@@ -1697,35 +2065,63 @@ const openTaskModal = (task = null) => {
   showTaskModal.value = true
 }
 
-const saveTask = () => {
+const saveTask = async () => {
   if (!editingTask.title) {
     store.showToast('請填寫任務名稱', 'error')
     return
   }
 
-  if (editingTask.id) {
-    // 編輯
-    const index = taskList.value.findIndex(t => t.id === editingTask.id)
-    if (index !== -1) {
-      taskList.value[index] = { ...editingTask }
+  try {
+    if (editingTask.id) {
+      // 編輯
+      await taskAPI.update(editingTask.id, {
+        title: editingTask.title,
+        description: editingTask.description,
+        details: editingTask.details,
+        category: editingTask.category,
+        levelText: editingTask.levelText || editingTask.level,
+        upgradePoints: editingTask.levelPoints || editingTask.upgradePoints,
+        rewardPoints: editingTask.rewardPoints,
+        icon: editingTask.icon,
+        frequency: editingTask.frequency,
+        image: editingTask.image,
+        active: editingTask.active
+      })
+      store.showToast('任務已更新', 'success')
+    } else {
+      // 新增
+      await taskAPI.create({
+        title: editingTask.title,
+        description: editingTask.description,
+        details: editingTask.details,
+        category: editingTask.category,
+        levelText: editingTask.levelText || editingTask.level,
+        upgradePoints: editingTask.levelPoints || editingTask.upgradePoints,
+        rewardPoints: editingTask.rewardPoints,
+        icon: editingTask.icon,
+        frequency: editingTask.frequency,
+        image: editingTask.image || '/images/tasks/task-1.jpg',
+        active: true
+      })
+      store.showToast('任務已新增', 'success')
     }
-    store.showToast('任務已更新', 'success')
-  } else {
-    // 新增
-    const newTask = {
-      ...editingTask,
-      id: Date.now(),
-      image: '/images/tasks/task-1.jpg'
-    }
-    taskList.value.unshift(newTask)
-    store.showToast('任務已新增', 'success')
+    await fetchTasks()
+    showTaskModal.value = false
+  } catch (error) {
+    console.error('Failed to save task:', error)
+    store.showToast('儲存失敗，請稍後再試', 'error')
   }
-  showTaskModal.value = false
 }
 
-const toggleTaskStatus = (task) => {
-  task.active = task.active === false ? true : false
-  store.showToast(`任務已${task.active ? '啟用' : '停用'}`, 'success')
+const toggleTaskStatus = async (task) => {
+  try {
+    await taskAPI.toggle(task.id)
+    task.active = task.active === false ? true : false
+    store.showToast(`任務已${task.active ? '啟用' : '停用'}`, 'success')
+  } catch (error) {
+    console.error('Failed to toggle task status:', error)
+    store.showToast('操作失敗，請稍後再試', 'error')
+  }
 }
 
 // 禮品 Modal
@@ -1747,29 +2143,50 @@ const openGiftModal = (gift = null) => {
   showGiftModal.value = true
 }
 
-const saveGift = () => {
+const saveGift = async () => {
   if (!editingGift.title) {
     store.showToast('請填寫禮品名稱', 'error')
     return
   }
 
-  if (editingGift.id) {
-    // 編輯
-    const index = giftList.value.findIndex(g => g.id === editingGift.id)
-    if (index !== -1) {
-      giftList.value[index] = { ...editingGift }
+  try {
+    if (editingGift.id) {
+      // 編輯
+      await giftAPI.update(editingGift.id, {
+        title: editingGift.title,
+        description: editingGift.description,
+        details: editingGift.details,
+        series: editingGift.series,
+        levelText: editingGift.levelText || editingGift.level,
+        requiredPoints: editingGift.points || editingGift.requiredPoints,
+        stock: editingGift.stock,
+        image: editingGift.image,
+        marketPrice: editingGift.marketPrice,
+        levelRestriction: editingGift.levelRestriction
+      })
+      store.showToast('禮品已更新', 'success')
+    } else {
+      // 新增
+      await giftAPI.create({
+        title: editingGift.title,
+        description: editingGift.description,
+        details: editingGift.details,
+        series: editingGift.series,
+        levelText: editingGift.levelText || editingGift.level,
+        requiredPoints: editingGift.points || editingGift.requiredPoints,
+        stock: editingGift.stock,
+        image: editingGift.image || '/images/gifts/gift-1.jpg',
+        marketPrice: editingGift.marketPrice,
+        levelRestriction: editingGift.levelRestriction
+      })
+      store.showToast('禮品已新增', 'success')
     }
-    store.showToast('禮品已更新', 'success')
-  } else {
-    // 新增
-    const newGift = {
-      ...editingGift,
-      id: Date.now()
-    }
-    giftList.value.unshift(newGift)
-    store.showToast('禮品已新增', 'success')
+    await fetchGifts()
+    showGiftModal.value = false
+  } catch (error) {
+    console.error('Failed to save gift:', error)
+    store.showToast('儲存失敗，請稍後再試', 'error')
   }
-  showGiftModal.value = false
 }
 
 // 庫存調整 Modal
@@ -1779,14 +2196,16 @@ const openStockModal = (gift) => {
   showStockModal.value = true
 }
 
-const saveStock = () => {
-  const index = giftList.value.findIndex(g => g.id === editingGift.id)
-  if (index !== -1) {
-    giftList.value[index].stock += stockAdjustment.value
-    if (giftList.value[index].stock < 0) giftList.value[index].stock = 0
+const saveStock = async () => {
+  try {
+    await giftAPI.adjustStock(editingGift.id, stockAdjustment.value)
+    await fetchGifts()
+    store.showToast('庫存已調整', 'success')
+    showStockModal.value = false
+  } catch (error) {
+    console.error('Failed to adjust stock:', error)
+    store.showToast('調整失敗，請稍後再試', 'error')
   }
-  store.showToast('庫存已調整', 'success')
-  showStockModal.value = false
 }
 
 // 會員 Modal
@@ -1847,23 +2266,25 @@ const confirmDelete = (type, item) => {
 }
 
 const executeDelete = async () => {
-  if (deleteType.value === 'user') {
-    try {
+  try {
+    if (deleteType.value === 'user') {
       await userAPI.delete(deleteTarget.value.id)
       users.value = users.value.filter(u => u.id !== deleteTarget.value.id)
       store.showToast('會員已刪除', 'success')
-    } catch (error) {
-      console.error('Failed to delete user:', error)
-      store.showToast('刪除失敗，請稍後再試', 'error')
+    } else if (deleteType.value === 'task') {
+      await taskAPI.delete(deleteTarget.value.id)
+      await fetchTasks()
+      store.showToast('任務已刪除', 'success')
+    } else if (deleteType.value === 'gift') {
+      await giftAPI.delete(deleteTarget.value.id)
+      await fetchGifts()
+      store.showToast('禮品已刪除', 'success')
     }
-  } else if (deleteType.value === 'task') {
-    taskList.value = taskList.value.filter(t => t.id !== deleteTarget.value.id)
-    store.showToast('任務已刪除', 'success')
-  } else if (deleteType.value === 'gift') {
-    giftList.value = giftList.value.filter(g => g.id !== deleteTarget.value.id)
-    store.showToast('禮品已刪除', 'success')
+    showDeleteModal.value = false
+  } catch (error) {
+    console.error('Failed to delete:', error)
+    store.showToast('刪除失敗，請稍後再試', 'error')
   }
-  showDeleteModal.value = false
 }
 
 // 訂單狀態更新
