@@ -24,7 +24,7 @@ INSERT INTO tasks (id, title, description, category, required_level, upgrade_poi
 (6, '綁定銀行帳戶', '前往「帳號設定」的銀行帳戶區塊，新增一組銀行帳戶資訊。', 'daily', 'EXPLORER', 15, 15, '/images/tasks/task-6.jpg', true),
 -- 理財學習
 (7, '完成金融知識測驗', '參加基礎理財知識測驗，答對 80% 以上即可通過並獲得積分。', 'financial', 'EXPLORER', 5, 8, '/images/tasks/task-7.jpg', true),
-(8, '觀看線上課程視頻', '選擇任一理財課程影片並完整觀看至結束。', 'financial', 'EXPLORER', 10, 15, '/images/tasks/task-8.jpg', true),
+(8, '觀看線上課程影片', '選擇任一理財課程影片並完整觀看至結束。', 'financial', 'EXPLORER', 10, 15, '/images/tasks/task-8.jpg', true),
 (9, '參與線上學習論壇', '前往「社群討論區」，發表一則與理財學習相關的貼文或心得分享。', 'financial', 'EXPLORER', 20, 30, '/images/tasks/task-9.jpg', true),
 (10, '設定投資提醒規則', '設定價格提醒或定期檢視通知，幫助您掌握投資時機。', 'financial', 'CREATOR', 30, 45, '/images/tasks/task-10.jpg', true),
 (11, '建立投資組合記錄', '記錄您目前持有或計畫持有的投資標的配置與比例。', 'financial', 'CREATOR', 40, 60, '/images/tasks/task-11.jpg', true),
