@@ -70,4 +70,20 @@ public class User {
     public enum MemberLevel {
         EXPLORER, CREATOR, VISIONARY, LUMINARY
     }
+
+    /**
+     * 根據升級積分自動更新等級
+     */
+    public void updateLevelFromPoints() {
+        int points = this.upgradePoints != null ? this.upgradePoints : 0;
+        if (points >= 1500) {
+            this.level = MemberLevel.LUMINARY;
+        } else if (points >= 750) {
+            this.level = MemberLevel.VISIONARY;
+        } else if (points >= 250) {
+            this.level = MemberLevel.CREATOR;
+        } else {
+            this.level = MemberLevel.EXPLORER;
+        }
+    }
 }

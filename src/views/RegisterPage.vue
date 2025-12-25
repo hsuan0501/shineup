@@ -1,24 +1,37 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-cyan-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
-    <!-- 背景裝飾 -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute -top-40 -right-40 w-80 h-80 bg-cyan-200/30 dark:bg-cyan-900/20 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-200/30 dark:bg-purple-900/20 rounded-full blur-3xl"></div>
+  <!-- 背景：主頁內容 + 模糊 -->
+  <div class="fixed inset-0 overflow-hidden">
+    <div class="absolute inset-0 filter blur-xl scale-105">
+      <Home />
     </div>
+  </div>
 
-    <!-- 註冊卡片 -->
-    <div class="relative w-full max-w-md">
-      <!-- Logo -->
-      <div class="text-center mb-8">
-        <router-link to="/" class="inline-flex items-center gap-2">
-          <img src="/images/logo.png" alt="ShineUp" class="h-12">
-        </router-link>
-        <h1 class="mt-4 text-2xl font-bold text-gray-800 dark:text-white">加入 ShineUp</h1>
-        <p class="mt-2 text-gray-600 dark:text-gray-400">建立帳號，開始您的理財之旅</p>
+  <!-- Modal Overlay -->
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-saturate-150 px-4">
+    <!-- Modal Card -->
+    <div class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+      <!-- Close Button - 返回首頁 -->
+      <router-link to="/"
+        class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors z-10">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </router-link>
+
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-cyan-500 to-blue-500 p-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+            <svg class="w-6 h-6" viewBox="0 0 24 24">
+              <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="white" />
+            </svg>
+          </div>
+          <h2 class="text-xl font-bold text-white tracking-wider">開始您的旅程</h2>
+        </div>
       </div>
 
-      <!-- 註冊表單 -->
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+      <!-- Form Content -->
+      <div class="p-6">
         <form @submit.prevent="handleRegister" class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">姓名</label>
@@ -82,7 +95,7 @@
               :class="{ 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-600': referralCode }"
               placeholder="輸入朋友的推薦碼">
             <p v-if="referralCode" class="text-xs text-green-600 dark:text-green-400 mt-1">
-              ✓ 已套用推薦碼，註冊後您的朋友將獲得獎勵
+              ✓ 已套用推薦碼，註冊後您和朋友將獲得積分獎勵
             </p>
           </div>
 
@@ -99,7 +112,7 @@
         <div class="mt-6 text-center">
           <p class="text-sm text-gray-600 dark:text-gray-400">
             已有帳號？
-            <router-link to="/" class="text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 font-medium">
+            <router-link to="/" class="text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 font-medium underline">
               返回登入
             </router-link>
           </p>
@@ -114,6 +127,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from '@/store'
 import axios from 'axios'
+import Home from './Home.vue'
 
 const route = useRoute()
 const router = useRouter()

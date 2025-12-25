@@ -123,7 +123,7 @@
                     </svg>
                     <span class="text-sm font-medium">邀請好友</span>
                   </div>
-                  <span class="text-xs text-amber-500 dark:text-amber-400">每位 +50 升級 / +75 兌換積分</span>
+                  <span class="text-xs text-amber-500 dark:text-amber-400">每位好友 +50 積分</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <input type="text" readonly :value="referralLink"
@@ -235,14 +235,14 @@
       <div class="lg:col-span-2">
         <!-- 等級說明 -->
         <div
-          class="bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
+          class="h-full flex flex-col bg-white dark:bg-gray-700/70 dark:backdrop-blur-xl rounded-2xl p-6 dark:shadow-2xl border dark:border-gray-600/30">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">等級權益說明</h3>
 
-          <div class="space-y-3">
+          <div class="flex-1 flex flex-col gap-3">
             <div v-for="levelInfo in levelConfig" :key="levelInfo.level"
-              class="px-4 py-4 rounded-xl transition-all border hover:scale-[1.02]"
+              class="flex-1 px-4 py-3 rounded-xl transition-all border hover:scale-[1.02] flex items-center"
               :class="levelInfo.level === user.level ? 'bg-gradient-to-r from-sky-50 to-indigo-50 dark:from-sky-900/20 dark:to-indigo-900/20 border-sky-200 dark:border-sky-800' : 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600'">
-              <div class="flex items-start gap-3">
+              <div class="flex items-start gap-4 w-full">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                   :class="`bg-gradient-to-br ${levelInfo.gradientFrom} ${levelInfo.gradientTo}`">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24">

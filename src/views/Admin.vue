@@ -1780,13 +1780,13 @@ const orderStatusChartData = computed(() => {
       backgroundColor: [
         'rgba(236, 72, 153, 0.8)',   // pink (訂單確認中)
         'rgba(56, 189, 248, 0.8)',   // sky (已出貨)
-        'rgba(168, 85, 247, 0.8)',   // purple (已送達)
+        'rgba(245, 158, 11, 0.8)',   // amber (已送達)
         'rgba(52, 211, 153, 0.8)'    // emerald (取貨完成)
       ],
       borderColor: [
         'rgba(236, 72, 153, 1)',
         'rgba(56, 189, 248, 1)',
-        'rgba(168, 85, 247, 1)',
+        'rgba(245, 158, 11, 1)',
         'rgba(52, 211, 153, 1)'
       ],
       borderWidth: 2,

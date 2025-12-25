@@ -63,6 +63,8 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         // 修復舊資料的 NULL enabled 值
         fixNullEnabledUsers();
+        // 修復訂單狀態欄位（新增 DELIVERED）
+        fixOrderStatusEnum();
         createDefaultAdmin();
         createDefaultUsers();
         createDefaultTasks();
@@ -74,6 +76,15 @@ public class DataInitializer implements CommandLineRunner {
     /**
      * 修復舊資料中 enabled 欄位為 NULL 的用戶（使用 JDBC）
      */
+    private void fixOrderStatusEnum() {
+        try {
+            jdbcTemplate.execute("ALTER TABLE redemption_orders MODIFY COLUMN status ENUM('PENDING', 'SHIPPED', 'DELIVERED', 'COMPLETED', 'CANCELLED')");
+            log.info("已更新訂單狀態欄位（新增 DELIVERED）");
+        } catch (Exception e) {
+            // 忽略錯誤（可能已經是正確的格式）
+        }
+    }
+
     private void fixNullEnabledUsers() {
         int updated = jdbcTemplate.update("UPDATE users SET enabled = true WHERE enabled IS NULL");
         if (updated > 0) {
@@ -464,11 +475,11 @@ public class DataInitializer implements CommandLineRunner {
             );
         }
 
-        // === Matcha 的訂單（#3）- 已出貨，超商取貨 ===
+        // === Matcha 的訂單（#3）- 已送達，超商取貨 ===
         if (matchaUser.isPresent()) {
             createOrderWithDelivery(
                 matchaUser.get(), "HappyEarth 回收紙筆記本", 130,
-                RedemptionOrder.OrderStatus.SHIPPED,
+                RedemptionOrder.OrderStatus.DELIVERED,
                 now.minusDays(2).withHour(11).withMinute(15),
                 now.minusDays(1).withHour(9).withMinute(30),
                 null,

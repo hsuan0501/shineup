@@ -24,7 +24,7 @@
                                 <path d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z" fill="white" />
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold text-white">
+                        <h2 class="text-xl font-bold text-white tracking-wider">
                             開始您的旅程
                         </h2>
                     </div>

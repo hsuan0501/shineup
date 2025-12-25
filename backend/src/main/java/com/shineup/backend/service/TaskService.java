@@ -97,7 +97,7 @@ public class TaskService {
         user.setRewardPoints(user.getRewardPoints() + task.getRewardPoints());
 
         // 檢查等級升級
-        checkLevelUp(user);
+        user.updateLevelFromPoints();
 
         // 更新統計：任務完成數 +1
         userService.incrementTasksCompleted(userId);
@@ -112,21 +112,6 @@ public class TaskService {
         achievementService.checkAndCompleteAchievements(savedUser);
 
         return savedUser;
-    }
-
-    // 檢查等級升級
-    private void checkLevelUp(User user) {
-        int points = user.getUpgradePoints();
-        // 等級門檻：0-249 EXPLORER, 250-749 CREATOR, 750-1499 VISIONARY, 1500+ LUMINARY
-        if (points >= 1500) {
-            user.setLevel(User.MemberLevel.LUMINARY);
-        } else if (points >= 750) {
-            user.setLevel(User.MemberLevel.VISIONARY);
-        } else if (points >= 250) {
-            user.setLevel(User.MemberLevel.CREATOR);
-        } else {
-            user.setLevel(User.MemberLevel.EXPLORER);
-        }
     }
 
     // 檢查用戶等級是否符合要求

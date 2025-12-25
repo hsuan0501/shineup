@@ -49,7 +49,7 @@ public class AchievementService {
                 break; // 沒有新完成的成就，不需要再檢查
             }
             // 重新更新等級（因為積分可能增加）
-            updateUserLevel(user);
+            user.updateLevelFromPoints();
         }
     }
 
@@ -84,22 +84,6 @@ public class AchievementService {
         }
 
         return anyCompleted;
-    }
-
-    /**
-     * 更新用戶等級
-     */
-    private void updateUserLevel(User user) {
-        int points = user.getUpgradePoints();
-        if (points >= 1500) {
-            user.setLevel(User.MemberLevel.LUMINARY);
-        } else if (points >= 750) {
-            user.setLevel(User.MemberLevel.VISIONARY);
-        } else if (points >= 250) {
-            user.setLevel(User.MemberLevel.CREATOR);
-        } else {
-            user.setLevel(User.MemberLevel.EXPLORER);
-        }
     }
 
     /**

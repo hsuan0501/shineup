@@ -86,6 +86,6 @@ public class BankAccountService {
      * 取得用戶綁定的銀行帳戶數量
      */
     public int getAccountCount(Long userId) {
-        return bankAccountRepository.findByUser_Id(userId).size();
+        return (int) bankAccountRepository.countByUser_Id(userId);
     }
 }
