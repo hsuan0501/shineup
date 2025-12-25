@@ -10,6 +10,9 @@
 - 四階等級制度 (Lv1 Explorer → Lv2 Creator → Lv3 Visionary → Lv4 Luminary)
 - LINE OAuth 登入與帳號綁定
 - 密碼重設與信箱驗證
+- 推薦碼系統（邀請好友獲得積分獎勵）
+- 用戶統計追蹤（登入天數、任務完成數、兌換次數）
+- 多銀行帳戶綁定
 
 **任務系統**
 - 五大類別：日常互動、理財學習、投資實踐、永續行動、社群成就
@@ -18,11 +21,16 @@
 **兌換系統**
 - 禮品瀏覽與購物車
 - 訂單管理與兌換紀錄
+- 禮品等級限制（不同等級可兌換不同禮品）
+- 完整訂單狀態追蹤（確認中 → 已出貨 → 已送達 → 取貨完成）
+- 多收貨地址管理
 
 **其他**
 - 圖形驗證碼 / 庫存狀態標示
 - 深色模式 / RWD 響應式設計
 - 後台管理頁面
+- FAQ 客服機器人（關鍵字自動回覆）
+- 通知系統（系統公告、訂單更新通知）
 
 ## 快速開始
 
@@ -47,22 +55,27 @@ npm install && npm run dev
 cd backend && ./mvnw spring-boot:run
 ```
 
-### 測試帳號
+### 體驗帳號
 
-```
-一般會員：hsuan0501@outlook.com / Qwe1234
-管理員：admin@shineup.com / Admin123
-```
+| 角色 | 帳號 | 密碼 |
+|------|------|------|
+| 一般會員 | hsuan0501@outlook.com | Qwe1234 |
+| 管理員 | admin@shineup.com | Admin123 |
 
 <details>
 <summary><strong>API 端點</strong></summary>
 
-- **認證** `/api/auth` - 註冊、登入、取得用戶資訊
-- **LINE** `/api/line` - OAuth 回調、帳號綁定
-- **會員** `/api/users` - 會員列表、資料重置
-- **任務** `/api/tasks` - 任務列表、完成任務
-- **禮品** `/api/gifts` - 禮品列表、兌換禮品
-- **訂單** `/api/orders` - 兌換紀錄
+| 模組 | 端點 | 說明 |
+|------|------|------|
+| 認證 | `/api/auth` | 註冊、登入、密碼重設 |
+| LINE | `/api/line` | OAuth 回調、帳號綁定 |
+| 會員 | `/api/users` | 會員管理、推薦碼 |
+| 任務 | `/api/tasks` | 任務列表、完成任務 |
+| 禮品 | `/api/gifts` | 禮品瀏覽、兌換 |
+| 訂單 | `/api/orders` | 訂單管理、狀態追蹤 |
+| 銀行 | `/api/bank-accounts` | 帳戶綁定 |
+| 通知 | `/api/notifications` | 系統通知 |
+| 客服 | `/api/chat` | FAQ 機器人 |
 
 </details>
 
