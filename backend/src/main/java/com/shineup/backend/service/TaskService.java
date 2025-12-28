@@ -1,8 +1,10 @@
 package com.shineup.backend.service;
 
+import com.shineup.backend.entity.LevelConfig;
 import com.shineup.backend.entity.Task;
 import com.shineup.backend.entity.User;
 import com.shineup.backend.entity.UserTaskProgress;
+import com.shineup.backend.repository.LevelConfigRepository;
 import com.shineup.backend.repository.TaskRepository;
 import com.shineup.backend.repository.UserRepository;
 import com.shineup.backend.repository.UserTaskProgressRepository;
@@ -23,6 +25,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final UserTaskProgressRepository userTaskProgressRepository;
+    private final LevelConfigRepository levelConfigRepository;
     private final UserService userService;
     private final ActivityRecordService activityRecordService;
     private final AchievementService achievementService;
@@ -86,9 +89,18 @@ public class TaskService {
         progress.markCompleted();
         userTaskProgressRepository.save(progress);
 
+        // 取得用戶等級倍率
+        double multiplier = levelConfigRepository.findByLevelCode(user.getLevel().name())
+                .map(LevelConfig::getMultiplier)
+                .orElse(1.0);
+
+        // 計算實際獲得的積分（套用倍率）
+        int earnedUpgradePoints = (int) Math.round(task.getUpgradePoints() * multiplier);
+        int earnedRewardPoints = (int) Math.round(task.getRewardPoints() * multiplier);
+
         // 加積分
-        user.setUpgradePoints(user.getUpgradePoints() + task.getUpgradePoints());
-        user.setRewardPoints(user.getRewardPoints() + task.getRewardPoints());
+        user.setUpgradePoints(user.getUpgradePoints() + earnedUpgradePoints);
+        user.setRewardPoints(user.getRewardPoints() + earnedRewardPoints);
 
         // 檢查等級升級
         user.updateLevelFromPoints();
@@ -96,8 +108,8 @@ public class TaskService {
         // 更新統計：任務完成數 +1
         userService.incrementTasksCompleted(userId);
 
-        // 新增活動紀錄
-        activityRecordService.addRecord(userId, "task", task.getTitle(), task.getUpgradePoints());
+        // 新增活動紀錄（記錄實際獲得的積分）
+        activityRecordService.addRecord(userId, "task", task.getTitle(), earnedUpgradePoints);
 
         // 儲存用戶
         User savedUser = userRepository.save(user);

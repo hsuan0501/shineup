@@ -64,3 +64,6 @@ backend/src/main/resources/application-local.properties
 
 # Claude Code
 .claude/
+
+# 簡報資料（不上傳）
+簡報資料/
